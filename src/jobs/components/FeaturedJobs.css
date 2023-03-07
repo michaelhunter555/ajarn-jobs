@@ -1,0 +1,12 @@
+.container {
+  display: grid;
+  grid-template-columns: 2fr;
+}
+
+.left {
+  grid-column: 1/2;
+}
+
+.right {
+  grid-column: 2/3;
+}

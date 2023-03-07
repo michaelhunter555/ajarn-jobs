@@ -1,0 +1,24 @@
+.card {
+  position: relative;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  padding: 10px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid transparent;
+}
+
+.home-column__urgent-jobs {
+  margin: 5px 0;
+  font-size: 12px;
+  color: #2573d6;
+}
+
+.home-column-right__urgent-container {
+  background-color: transparent;
+  margin: 0 auto;
+  max-width: 95%;
+  box-shadow: 0 2px 8px rgba(123, 126, 128, 0.205);
+  border: 1px solid rgba(100, 100, 100, 0.26);
+}

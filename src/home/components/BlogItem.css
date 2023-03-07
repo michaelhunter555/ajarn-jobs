@@ -1,0 +1,22 @@
+.blog-item {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5rem;
+  border-top: 2px solid rgb(212, 235, 236);
+}
+
+.first-post {
+  border: 1px solid rgb(223, 223, 223);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.blog-item__title {
+  color: black;
+}
+
+.blog-item__author {
+  color: black;
+  line-height: 1px;
+}

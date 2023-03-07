@@ -1,0 +1,80 @@
+a {
+  text-decoration: none;
+}
+
+.job-ad__container {
+  border: 1px solid gold;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+}
+.job-ad__container:hover {
+  border: 1px solid rgb(180, 180, 180);
+  transform: translate3d(0px, -2px, 0px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-color: rgba(0, 128, 255, 0.8);
+}
+
+.job-ad__container p {
+  color: rgb(110, 110, 110);
+  line-height: 1rem;
+}
+
+.job-ad__container p:hover {
+  color: rgb(0, 0, 0);
+}
+
+.job-ad__container h3 {
+  color: rgb(37, 115, 204);
+}
+
+.job-ad__container h3:hover {
+  color: rgb(24, 83, 150);
+}
+
+/*
+.job-ad__container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  background: linear-gradient(
+    135deg,
+    hsla(0, 0%, 100%, 0.15),
+    hsla(0, 0%, 100%, 0.1125) 9.37%,
+    hsla(0, 0%, 100%, 0.0375) 54.69%,
+    hsla(0, 0%, 100%, 0.0394911) 66.15%,
+    hsla(0, 0%, 100%, 0.15)
+  );
+}
+
+.job-ad__container:before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 6px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    hsla(0, 0%, 100%, 0.5),
+    hsla(0, 0%, 100%, 0.15) 9.37%,
+    hsla(0, 0%, 100%, 0.05) 54.69%,
+    hsla(0, 0%, 100%, 0.05) 66.15%,
+    hsla(0, 0%, 100%, 0.5)
+  );
+  -webkit-mask: linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+  mask: linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
+  -webkit-mask-composite: source-out;
+  mask-composite: exclude;
+  mix-blend-mode: soft-light;
+  border: 1px solid;
+}
+
+*/
