@@ -10,6 +10,7 @@
 .home-column__jobs {
   background-color: rgb(255, 255, 255);
   display: grid;
+  text-align: center;
   grid-column: 1/2;
   height: auto;
   border-radius: 5px;

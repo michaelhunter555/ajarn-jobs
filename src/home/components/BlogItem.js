@@ -34,3 +34,19 @@ const BlogItem = (props) => {
 };
 
 export default BlogItem;
+
+/**
+ * <Paper
+ * sx={{
+        position: 'relative',
+        backgroundColor: 'grey.800',
+        color: '#fff',
+        mb: 4,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundImage: `url(${post.image})`,
+      }}>
+      {img style={{display: 'none'}} src={props.image}
+ * </Paper>
+ */

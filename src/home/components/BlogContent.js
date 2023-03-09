@@ -1,18 +1,22 @@
 import React from "react";
 
+import BlogPost from "../../dummyblog.jpg";
 import Logo from "../../logo.svg";
-import BlogItem from "./BlogItem";
+//import BlogItem from "./BlogItem";
+import MainFeaturedPost from "./MainFeaturedPost";
 
 const DUMMY_BLOG = [
   {
+    id: "1",
     title: "Top 10 Tips for New Teachers",
     author: "Mi ke Hun",
-    image: Logo,
+    image: BlogPost,
     datePosted: "2023-03-28",
     content:
-      "Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.",
+      "Teaching is not easy and probably the most common job in Thailand however, it is not easy at all.",
   },
   {
+    id: "2",
     title: "5 Ways to Engage Students in Online Learning",
     author: "Jane Doe",
     image: Logo,
@@ -21,6 +25,7 @@ const DUMMY_BLOG = [
       "Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.",
   },
   {
+    id: "3",
     title: "How to Manage a Classroom Effectively",
     author: "John Smith",
     image: Logo,
@@ -31,7 +36,7 @@ const DUMMY_BLOG = [
 ];
 
 const BlogContent = () => {
-  return <BlogItem posts={DUMMY_BLOG} />;
+  return <MainFeaturedPost post={DUMMY_BLOG} />;
 };
 
 export default BlogContent;

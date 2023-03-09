@@ -6,6 +6,8 @@ import { GiDiploma } from "react-icons/gi";
 import { GrCircleAlert } from "react-icons/gr";
 import { Link } from "react-router-dom";
 
+import { IconButton, Tooltip } from "@mui/material";
+
 import Logo from "../../logo.svg";
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
@@ -99,8 +101,12 @@ const Home = () => {
         {/* top-right column*/}
         <Card className="home-column-right__urgent-container">
           <SolanaGlassCard className="home-column__urgent-container">
-            Urgent
-            <GrCircleAlert />
+            Priority Hire
+            <Tooltip title="replacements needed~">
+              <IconButton>
+                <GrCircleAlert />
+              </IconButton>
+            </Tooltip>
           </SolanaGlassCard>
           <Card className="home-column__urgent-jobs">
             1. English Teacher - BKK - 50k THB
