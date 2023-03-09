@@ -5,7 +5,7 @@ import React from "react";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-import RecentJobsItem from "./RecentJobsItem";
+import RecentJobItems from "./RecentJobItems";
 
 const RecentJobs = (props) => {
   if (props.homeJobs.length === 0) {
@@ -22,17 +22,18 @@ const RecentJobs = (props) => {
         <MdOutlineFiberNew style={{ color: "green" }} />
       </h2>
       <ul className="recent-jobs__list">
-        {props.homeJobs.map((job) => (
-          <Link key={job.id} to={`/jobs/${job.id}`}>
-            <RecentJobsItem
-              location={job.location}
-              salary={job.salary}
-              datePosted={job.datePosted}
-              logo={job.creator.logoUrl}
-              title={job.title}
-            />
-          </Link>
-        ))}
+        {props.homeJobs &&
+          props.homeJobs.map((job) => (
+            <Link key={job.id} to={`/jobs/${job.id}`}>
+              <RecentJobItems
+                location={job.location}
+                salary={job.salary}
+                datePosted={job.datePosted}
+                logo={job.creator.logoUrl}
+                title={job.title}
+              />
+            </Link>
+          ))}
       </ul>
     </div>
   );

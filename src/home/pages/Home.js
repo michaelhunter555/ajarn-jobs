@@ -63,7 +63,9 @@ const dummy_jobs = [
 const Home = () => {
   return (
     <>
+      {/* */}
       <div className="grid-container">
+        {/* top-left column*/}
         <GlassCard
           style={{
             display: "flex",
@@ -75,21 +77,26 @@ const Home = () => {
           }}
         >
           Get TEFL Certified?
-          <GiDiploma size={50} style={{ margin: "1rem 0" }} />
+          <GiDiploma size={30} style={{ margin: "1rem 0" }} />
           <Button inverse>start here</Button>
         </GlassCard>
         <div className="home-column__featured-top">
+          <JobAd job={dummy_jobs[0]} />
+          {/* top-middle column 3/3
           <Card>
             <JobAd job={dummy_jobs[0]} />
           </Card>
+          {/*middle*
           <Card>
             <JobAd job={dummy_jobs[1]} />
           </Card>
+          {/*End *
           <Card>
             <JobAd job={dummy_jobs[0]} />
-          </Card>
+        </Card> */}
         </div>
 
+        {/* top-right column*/}
         <Card className="home-column-right__urgent-container">
           <SolanaGlassCard className="home-column__urgent-container">
             Urgent
@@ -103,7 +110,7 @@ const Home = () => {
             3. University ESL teacher - BKK - 55k
           </Card>
         </Card>
-
+        {/*lower-left column */}
         <div className="home-column__jobs">
           <RecentJobs homeJobs={dummy_jobs} />
           <Link
@@ -116,9 +123,11 @@ const Home = () => {
             View All Jobs
           </Link>
         </div>
+        {/* lower middle-column*/}
         <div className="home-column__content">
           <BlogContent />
         </div>
+        {/* lower-right column*/}
         <div className="home-column__sponsors">
           <Sponsors />
         </div>

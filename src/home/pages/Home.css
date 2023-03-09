@@ -4,12 +4,12 @@
   grid-template-columns: 15% 45% 20%;
   grid-auto-rows: auto;
   margin: 6rem 0;
-  text-align: center;
   gap: 6px;
 }
 
 .home-column__jobs {
   background-color: rgb(255, 255, 255);
+  display: grid;
   grid-column: 1/2;
   height: auto;
   border-radius: 5px;
@@ -32,7 +32,7 @@
 
 .home-column__featured-top {
   display: grid;
-  grid-template-columns: 33% 33% 33%;
+  grid-template-columns: 1fr;
   grid-auto-rows: auto;
   align-items: stretch;
   gap: 5px;

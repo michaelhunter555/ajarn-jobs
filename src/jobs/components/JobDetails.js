@@ -31,6 +31,7 @@ const JobDetails = (props) => {
     //     );
     // };
   };
+
   return (
     <>
       <div className="job-details">
@@ -85,6 +86,7 @@ const JobDetails = (props) => {
         </div>
       </div>
       <div className="">
+        {/*auth.login && auth.isSchool */}
         <Button to={`/jobs/${job.id}/update`}> update Job </Button>
       </div>
     </>
