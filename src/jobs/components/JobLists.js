@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import JobItem from "./JobItem";
 
 const JobLists = (props) => {
@@ -38,7 +39,7 @@ const JobLists = (props) => {
                 title={job.title}
                 salary={job.salary}
                 description={job.description}
-                datePosted={job.datePosted}
+                datePosted={getTimeDifference(job.datePosted)}
                 requirements={job.requirements}
                 company={job.creator.company}
                 jobType={job.jobType.featured}

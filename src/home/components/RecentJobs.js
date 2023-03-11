@@ -5,37 +5,43 @@ import React from "react";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import RecentJobItems from "./RecentJobItems";
 
 const RecentJobs = (props) => {
-  if (props.homeJobs.length === 0) {
+  if (props.homeJobs?.length === 0) {
     return (
       <div>
         <p>...no jobs bro</p>
       </div>
     );
   }
+
   return (
-    <div className="recent-jobs">
+    <>
       <h2>
         Recent Jobs
         <MdOutlineFiberNew style={{ color: "green" }} />
       </h2>
-      <ul className="recent-jobs__list">
-        {props.homeJobs &&
-          props.homeJobs.map((job) => (
-            <Link key={job.id} to={`/jobs/${job.id}`}>
-              <RecentJobItems
-                location={job.location}
-                salary={job.salary}
-                datePosted={job.datePosted}
-                logo={job.creator.logoUrl}
-                title={job.title}
-              />
-            </Link>
-          ))}
-      </ul>
-    </div>
+      {props.homeJobs &&
+        props.homeJobs?.map((job) => (
+          <Link
+            style={{ color: "rgb(92, 92, 92)" }}
+            key={job.id}
+            to={`/jobs/${job.id}`}
+          >
+            <RecentJobItems
+              location={job.location}
+              salary={job.salary}
+              datePosted={job.datePosted}
+              logo={job.creator.logoUrl}
+              title={job.title}
+              id={job.id}
+              creationDate={getTimeDifference(job.creationDate)}
+            />
+          </Link>
+        ))}
+    </>
   );
 };
 

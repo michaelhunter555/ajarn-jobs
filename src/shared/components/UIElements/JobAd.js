@@ -39,7 +39,7 @@ const JobAd = (props) => {
 
               <Grid item xs={8.5} sm={8} md={8} lg={9} xl={10}>
                 <Typography
-                  gutterButton
+                  gutterBottom
                   color="primary"
                   variant="h5"
                   component="div"
@@ -49,6 +49,7 @@ const JobAd = (props) => {
                     ? job.title.substring(0, 40) + "..."
                     : job.title}
                 </Typography>
+                {/*need to validate domNesting wit p-tags here... */}
                 <Typography variant="body2" color="text.secondary">
                   <p>
                     <MdLocationPin />

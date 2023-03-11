@@ -5,7 +5,7 @@ import React from "react";
 const SolanaGlassCard = (props) => {
   return (
     <div
-      pnClick={props.onClick}
+      onClick={props.onClick}
       className={`solana ${props.className}`}
       style={props.style}
     >

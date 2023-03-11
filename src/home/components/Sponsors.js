@@ -1,41 +1,55 @@
 import React from "react";
 
+import { MdVerified } from "react-icons/md";
+
 import {
   Avatar,
   Divider,
+  IconButton,
   List,
-  ListItem,
   ListItemAvatar,
+  ListItemButton,
   ListItemText,
-  Typography,
+  Stack,
+  Tooltip,
 } from "@mui/material";
 
-const Sponsors = () => {
+const Sponsors = (props) => {
   return (
-    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Brunch this weekend?"
-          secondary={
-            <React.Fragment>
-              <Typography
-                sx={{ display: "inline" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Ali Connors
-              </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-    </List>
+    <>
+      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+        <ListItemButton alignItems="flex-start">
+          <ListItemAvatar>
+            <Avatar
+              alt={props.companyId}
+              src={props.logo}
+              sx={{ border: "1px solid #e5e5e5", borderRadius: "6px" }}
+              variant="square"
+            />
+          </ListItemAvatar>
+          <Stack spacing={0}>
+            <ListItemText
+              primary={
+                <>
+                  {props.company}
+                  <Tooltip title={`${props.company} has been verified!`}>
+                    <IconButton small>
+                      <MdVerified style={{ color: "#85c3fd" }} size={16} />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              }
+              secondary={
+                <>
+                  {props.salary} - {props.location}
+                </>
+              }
+            />
+          </Stack>
+        </ListItemButton>
+        <Divider />
+      </List>
+    </>
   );
 };
 

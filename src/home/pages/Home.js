@@ -16,12 +16,13 @@ import JobAd from "../../shared/components/UIElements/JobAd";
 import SolanaGlassCard from "../../shared/components/UIElements/SolanaGlassCard";
 import BlogContent from "../components/BlogContent";
 import RecentJobs from "../components/RecentJobs";
-import Sponsors from "../components/Sponsors";
+import SponsorsList from "../components/SponsorsList";
 
 const dummy_jobs = [
   {
-    id: 1,
+    id: "1",
     title: "Native ESL Teacher",
+    creationDate: "2023-03-10",
     location: "Bangkok",
     salary: "50,000THB p/m",
     requirements: "Bachelor's degree, TEFL certification",
@@ -40,8 +41,9 @@ const dummy_jobs = [
     },
   },
   {
-    id: 2,
+    id: "2",
     title: "Math Teacher for K9 Kids",
+    creationDate: "2023-03-02",
     location: "Chiang Mai",
     salary: "80,000THB p/m",
     requirements:
@@ -84,25 +86,14 @@ const Home = () => {
         </GlassCard>
         <div className="home-column__featured-top">
           <JobAd job={dummy_jobs[0]} />
-          {/* top-middle column 3/3
-          <Card>
-            <JobAd job={dummy_jobs[0]} />
-          </Card>
-          {/*middle*
-          <Card>
-            <JobAd job={dummy_jobs[1]} />
-          </Card>
-          {/*End *
-          <Card>
-            <JobAd job={dummy_jobs[0]} />
-        </Card> */}
+          {/* top-middle column */}
         </div>
 
         {/* top-right column*/}
         <Card className="home-column-right__urgent-container">
           <SolanaGlassCard className="home-column__urgent-container">
             Priority Hire
-            <Tooltip title="replacements needed~">
+            <Tooltip title="actively hiring!">
               <IconButton>
                 <GrCircleAlert />
               </IconButton>
@@ -135,7 +126,7 @@ const Home = () => {
         </div>
         {/* lower-right column*/}
         <div className="home-column__sponsors">
-          <Sponsors />
+          <SponsorsList sponsor={dummy_jobs} />
         </div>
       </div>
     </>

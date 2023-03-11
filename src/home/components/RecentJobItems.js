@@ -1,39 +1,42 @@
 import React from "react";
 
-import { Card, CardMedia, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Divider,
+  List,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Stack,
+} from "@mui/material";
 
 const RecentJobItems = (props) => {
-  return (
-    <Card sx={{ margin: "0.7rem" }}>
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <CardMedia
-            component="img"
-            src={props.logo}
-            alt={props.id}
-            sx={{
-              height: "auto",
-              width: "50px",
-              borderRight: "1px solid #cecece",
-            }}
-          />
-        </Grid>
+  // logo, id, salary, location, hours;
 
-        <Grid item xs={8}>
-          <Grid conainer direction="column" spacing={1}>
-            <Grid item>
-              <Typography color="primary">{props.salary}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography color="text.secondary">
-                {props.location}
-                {props.hours}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Card>
+  return (
+    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+      <ListItemButton alignItems="flex-start">
+        <ListItemAvatar>
+          <Avatar
+            alt={props.id}
+            src={props.logo}
+            sx={{ border: "1px solid #e5e5e5", borderRadius: "6px" }}
+            variant="square"
+          />
+        </ListItemAvatar>
+        <Stack spacing={0}>
+          <ListItemText
+            primary={props.salary}
+            secondary={
+              <>
+                {props.location} - {props.creationDate}
+              </>
+            }
+          />
+        </Stack>
+      </ListItemButton>
+      <Divider />
+    </List>
   );
 };
 
