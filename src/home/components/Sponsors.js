@@ -33,7 +33,7 @@ const Sponsors = (props) => {
                 <>
                   {props.company}
                   <Tooltip title={`${props.company} has been verified!`}>
-                    <IconButton small>
+                    <IconButton small="true">
                       <MdVerified style={{ color: "#85c3fd" }} size={16} />
                     </IconButton>
                   </Tooltip>

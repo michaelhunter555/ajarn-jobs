@@ -48,7 +48,7 @@ const TeacherItem = ({ teachers }) => {
       >
         {teacher && (
           <ListItemButton>
-            <ListItemText>Teacher</ListItemText>
+            <ListItemText>{teacher.name}</ListItemText>
           </ListItemButton>
         )}
 

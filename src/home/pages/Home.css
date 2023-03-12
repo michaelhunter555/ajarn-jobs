@@ -12,6 +12,7 @@
 
   margin-top: 1rem;
   box-shadow: 0 0 20px rgba(112, 180, 247, 0.5);
+  overflow: auto;
 }
 .home-column__content {
   background-color: rgb(255, 255, 255);

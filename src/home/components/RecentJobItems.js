@@ -14,7 +14,13 @@ const RecentJobItems = (props) => {
   // logo, id, salary, location, hours;
 
   return (
-    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+    <List
+      sx={{
+        width: "100%",
+        maxWidth: 360,
+        bgcolor: "background.paper",
+      }}
+    >
       <ListItemButton alignItems="flex-start">
         <ListItemAvatar>
           <Avatar

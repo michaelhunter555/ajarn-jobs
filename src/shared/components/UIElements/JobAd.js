@@ -2,15 +2,18 @@ import "./JobAd.css";
 
 import React from "react";
 
-import { FaMoneyBillWave } from "react-icons/fa";
-import { MdAvTimer, MdLocationPin } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+import PaymentsIcon from "@mui/icons-material/Payments";
+import PlaceIcon from "@mui/icons-material/Place";
+import PunchClockIcon from "@mui/icons-material/PunchClock";
 import {
+  Button,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
+  Chip,
   Grid,
   Typography,
 } from "@mui/material";
@@ -24,12 +27,17 @@ const JobAd = (props) => {
         <CardActionArea>
           <CardContent>
             <Grid container direction="row">
-              <Grid item xs={3.5} sm={4} lg={3} xl={2}>
+              <Grid item xs={4} sm={4} lg={3} xl={2}>
                 <CardMedia
                   component="img"
                   sx={{
-                    width: 100,
+                    width: "75%",
                     border: "1px solid #a5a5a5",
+                    transition: "all 0.3s ease-in-out",
+                    "&:hover": {
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      borderColor: "rgba(0, 128, 255, 0.8)",
+                    },
                     borderRadius: 3,
                   }}
                   image={job.creator.logoUrl}
@@ -37,7 +45,7 @@ const JobAd = (props) => {
                 />
               </Grid>
 
-              <Grid item xs={8.5} sm={8} md={8} lg={9} xl={10}>
+              <Grid item xs={8} sm={8} md={8} lg={9} xl={10}>
                 <Typography
                   gutterBottom
                   color="primary"
@@ -50,22 +58,47 @@ const JobAd = (props) => {
                     : job.title}
                 </Typography>
                 {/*need to validate domNesting wit p-tags here... */}
+                <Typography
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "5px",
+                  }}
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  <Chip
+                    label={job.location}
+                    size={"small"}
+                    icon={<PlaceIcon />}
+                  />
+                  <Chip
+                    label={job.salary}
+                    size={"small"}
+                    icon={<PaymentsIcon />}
+                  />
+                  <Chip
+                    label={job.hours}
+                    size={"small"}
+                    icon={<PunchClockIcon />}
+                  />
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  <p>
-                    <MdLocationPin />
-                    {job.location} - <FaMoneyBillWave />
-                    {job.salary} - <MdAvTimer />
-                    {job.hours}
-                  </p>
-                  <p>
-                    {job.description.length > 60
-                      ? job.description.substring(0, 60) + "..."
-                      : job.description}
-                  </p>
+                  {job.description.length > 60
+                    ? job.description.substring(0, 60) + "..."
+                    : job.description}
                 </Typography>
               </Grid>
             </Grid>
           </CardContent>
+          <Button
+            sx={{
+              flex: 1,
+              alignItems: "center",
+            }}
+          >
+            see job
+          </Button>
         </CardActionArea>
       </Card>
     </Link>
@@ -73,21 +106,3 @@ const JobAd = (props) => {
 };
 
 export default JobAd;
-
-/**
- * <Link to={`/jobs/${job.id}`} className="job-ad__link">
- * <Card sx={{ backgroundColor: 'transparent' component="div" }}>
- * <CardActionArea>
- * <CardContent>
- * <Typography gutterButton variant="h5" component="div">
- * {job.title.length > 25
- * ? job.title.substring(0,40) + '...' : job.title}
- * </Typography>
- * <Typography variant="body2" color="text.secondary">
- * {job.location}
- * </Typography>
- * </CardContent>
- * </CardActionArea>
- * </Card>
- * </Link>
- */

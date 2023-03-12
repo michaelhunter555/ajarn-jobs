@@ -2,21 +2,18 @@ import "./Home.css";
 
 import React from "react";
 
-import { GiDiploma } from "react-icons/gi";
-import { GrCircleAlert } from "react-icons/gr";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
-import { IconButton, Tooltip } from "@mui/material";
+import { Button } from "@mui/material";
 
 import Logo from "../../logo.svg";
-import Button from "../../shared/components/FormElements/Button";
-import Card from "../../shared/components/UIElements/Card";
-import GlassCard from "../../shared/components/UIElements/GlassCard";
+//import GlassCard from "../../shared/components/UIElements/GlassCard";
 import JobAd from "../../shared/components/UIElements/JobAd";
-import SolanaGlassCard from "../../shared/components/UIElements/SolanaGlassCard";
 import BlogContent from "../components/BlogContent";
 import RecentJobs from "../components/RecentJobs";
 import SponsorsList from "../components/SponsorsList";
+import Tefl from "../components/Tefl";
+import UrgentJobs from "../components/UrgentJobs";
 
 const dummy_jobs = [
   {
@@ -70,55 +67,21 @@ const Home = () => {
       {/* */}
       <div className="grid-container">
         {/* top-left column*/}
-        <GlassCard
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            padding: "1rem",
-            alignItems: "center",
-            color: "black",
-            border: "1px solid #a7e7e1",
-          }}
-        >
-          Get TEFL Certified?
-          <GiDiploma size={30} style={{ margin: "1rem 0" }} />
-          <Button inverse>start here</Button>
-        </GlassCard>
+        <Tefl />
         <div className="home-column__featured-top">
           <JobAd job={dummy_jobs[0]} />
           {/* top-middle column */}
         </div>
 
         {/* top-right column*/}
-        <Card className="home-column-right__urgent-container">
-          <SolanaGlassCard className="home-column__urgent-container">
-            Priority Hire
-            <Tooltip title="actively hiring!">
-              <IconButton>
-                <GrCircleAlert />
-              </IconButton>
-            </Tooltip>
-          </SolanaGlassCard>
-          <Card className="home-column__urgent-jobs">
-            1. English Teacher - BKK - 50k THB
-            <br />
-            2. Jamaican Teacher - Koh Samui - 20k
-            <br />
-            3. University ESL teacher - BKK - 55k
-          </Card>
-        </Card>
+        <UrgentJobs job={dummy_jobs} />
+
         {/*lower-left column */}
         <div className="home-column__jobs">
           <RecentJobs homeJobs={dummy_jobs} />
-          <Link
-            style={{
-              textDecoration: "underline",
-              color: "gray",
-            }}
-            to="/jobs"
-          >
+          <Button component={RouterLink} to="/jobs">
             View All Jobs
-          </Link>
+          </Button>
         </div>
         {/* lower middle-column*/}
         <div className="home-column__content">

@@ -29,7 +29,7 @@ const FeaturedJobs = (props) => {
       <ListItemButton sx={styles.button} alignItems="flex-start">
         <ListItemAvatar>
           <Avatar
-            alt={props.id}
+            alt={props.id.toString()}
             src={props.logo}
             sx={{ border: "1px solid #e5e5e5", borderRadius: "6px" }}
             variant="square"
