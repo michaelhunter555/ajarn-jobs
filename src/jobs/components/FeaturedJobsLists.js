@@ -20,6 +20,7 @@ const FeaturedJobsLists = (props) => {
         .filter((listing) => listing.jobType.featured)
         .map((school) => (
           <FeaturedJobs
+            key={school.id}
             id={school?.id}
             logo={school.creator?.logoUrl}
             company={school.creator?.company}

@@ -41,7 +41,7 @@ const Tefl = (props) => {
             size="small"
             label="sponsored"
             icon={
-              <Tooltip title={`why this ad? ${link}`}>
+              <Tooltip title={`why this ad?`}>
                 <InfoIcon />
               </Tooltip>
             }

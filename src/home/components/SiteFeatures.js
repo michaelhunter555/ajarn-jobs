@@ -13,7 +13,7 @@ const stylesSiteFeatures = {
     margin: "0.2rem",
     minWidth: 100,
     display: "flex",
-    alignItems: "center",
+    justifyContent: "center",
     "&:hover": {
       boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
     },
@@ -23,6 +23,7 @@ const stylesSiteFeatures = {
     margin: "0 0 1rem 0",
     flexDirection: "row",
     justifyContent: "center",
+    gap: "1rem",
     overflowX: "auto",
   },
   text: {
@@ -41,6 +42,10 @@ const stylesSiteFeatures = {
   },
 
   "@media(max-width: 959.95px)": {
+    box: {
+      display: "flex",
+      flexDirection: "column",
+    },
     card: {
       mindWidth: "unset",
     },
@@ -56,102 +61,47 @@ const stylesSiteFeatures = {
 };
 
 const SiteFeatures = () => {
+  let items = [
+    "Jobs",
+    "School",
+    "Thai Life",
+    "Skills Tests",
+    "Interviews",
+    "Contribute",
+  ];
   return (
-    <Box sx={{ ...stylesSiteFeatures.box, ...stylesSiteFeatures.boxContainer }}>
-      <Card
-        sx={{
-          ...stylesSiteFeatures.background,
-          ...stylesSiteFeatures.card,
-          ...stylesSiteFeatures.cardFirst,
-        }}
-        raised={true}
-      >
-        <CardContent>
-          <Typography
-            sx={{ ...stylesSiteFeatures.text }}
-            variant="subtitle1"
-            color="text.secondary"
+    <Box sx={{ ...stylesSiteFeatures.box }}>
+      {items.map((item, i) => {
+        let featuredIcons = [
+          <WorkIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
+          <SchoolIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
+          <TempleBuddhistIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
+          <QuizIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
+          <ChatIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
+          <VolunteerActivismIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
+        ];
+        return (
+          <Card
+            key={i}
+            sx={{
+              ...stylesSiteFeatures.background,
+              ...stylesSiteFeatures.card,
+              ...stylesSiteFeatures.cardFirst,
+            }}
+            raised={true}
           >
-            <WorkIcon sx={{ ...stylesSiteFeatures.iconBox }} />
-            Jobs
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card
-        sx={{ ...stylesSiteFeatures.background, ...stylesSiteFeatures.card }}
-        raised={true}
-      >
-        <CardContent>
-          <Typography
-            sx={{ ...stylesSiteFeatures.text }}
-            variant="subtitle1"
-            color="text.secondary"
-          >
-            <SchoolIcon sx={{ ...stylesSiteFeatures.iconBox }} />
-            Schools
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card
-        sx={{ ...stylesSiteFeatures.background, ...stylesSiteFeatures.card }}
-        raised={true}
-      >
-        <CardContent>
-          <Typography
-            sx={{ ...stylesSiteFeatures.text }}
-            variant="subtitle1"
-            color="text.secondary"
-          >
-            <TempleBuddhistIcon sx={{ ...stylesSiteFeatures.iconBox }} />
-            Thai Life
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card
-        sx={{ ...stylesSiteFeatures.background, ...stylesSiteFeatures.card }}
-        raised={true}
-      >
-        <CardContent>
-          <Typography
-            sx={{ ...stylesSiteFeatures.text }}
-            variant="subtitle1"
-            color="text.secondary"
-          >
-            <QuizIcon sx={{ ...stylesSiteFeatures.iconBox }} />
-            Skills Tests
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card
-        sx={{ ...stylesSiteFeatures.background, ...stylesSiteFeatures.card }}
-        raised={true}
-      >
-        <CardContent>
-          <Typography
-            sx={{ ...stylesSiteFeatures.text }}
-            variant="subtitle1"
-            color="text.secondary"
-          >
-            <ChatIcon sx={{ ...stylesSiteFeatures.iconBox }} />
-            Interviews
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card
-        sx={{ ...stylesSiteFeatures.background, ...stylesSiteFeatures.card }}
-        raised={true}
-      >
-        <CardContent>
-          <Typography
-            sx={{ ...stylesSiteFeatures.text }}
-            variant="subtitle1"
-            color="text.secondary"
-          >
-            <VolunteerActivismIcon sx={{ ...stylesSiteFeatures.iconBox }} />
-            Contribute
-          </Typography>
-        </CardContent>
-      </Card>
+            <CardContent>
+              <Typography
+                sx={{ ...stylesSiteFeatures.text }}
+                variant="subtitle1"
+                color="text.secondary"
+              >
+                {featuredIcons[i]} {item}
+              </Typography>
+            </CardContent>
+          </Card>
+        );
+      })}
     </Box>
   );
 };
