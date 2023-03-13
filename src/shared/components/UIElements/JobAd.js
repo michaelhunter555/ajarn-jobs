@@ -32,7 +32,7 @@ const JobAd = (props) => {
                   component="img"
                   sx={{
                     width: "75%",
-                    border: "1px solid #a5a5a5",
+                    border: "1px solid #e5e5e5",
                     transition: "all 0.3s ease-in-out",
                     "&:hover": {
                       boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",

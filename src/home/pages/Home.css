@@ -3,7 +3,7 @@
   justify-content: center;
   grid-template-columns: 20% 45% 20%;
   grid-auto-rows: auto;
-  margin: 6rem 0;
+  margin: 6rem 0 2rem 0;
   gap: 6px;
 }
 

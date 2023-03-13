@@ -10,7 +10,9 @@ import Logo from "../../logo.svg";
 //import GlassCard from "../../shared/components/UIElements/GlassCard";
 import JobAd from "../../shared/components/UIElements/JobAd";
 import BlogContent from "../components/BlogContent";
+import BottomFeatured from "../components/BottomFeatured";
 import RecentJobs from "../components/RecentJobs";
+import SiteFeatures from "../components/SiteFeatures";
 import SponsorsList from "../components/SponsorsList";
 import Tefl from "../components/Tefl";
 import UrgentJobs from "../components/UrgentJobs";
@@ -92,6 +94,8 @@ const Home = () => {
           <SponsorsList sponsor={dummy_jobs} />
         </div>
       </div>
+      <SiteFeatures />
+      <BottomFeatured />
     </>
   );
 };
