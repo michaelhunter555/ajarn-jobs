@@ -23,9 +23,13 @@ const thaiCities = [
 
 const jobSalaryRange = ["at least 20,000", "+25,000", "+30,000"];
 
-const LocationFilter = ({ onFilterChange }) => {
+const JobFilters = ({ onFilterChange }) => {
   const [salaryRange, setSalaryRange] = useState("");
   const [location, setLocation] = useState("");
+  const [checked, setChecked] = useState({
+    partTime: false,
+    fullTime: false,
+  });
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
@@ -38,6 +42,8 @@ const LocationFilter = ({ onFilterChange }) => {
   };
 
   const handleHoursChange = (event) => {
+    const { name, checked } = event.target;
+    setChecked((prev) => ({ ...prev, [name]: checked }));
     onFilterChange({ location, salaryRange, hours: event.target.value });
   };
 
@@ -76,15 +82,17 @@ const LocationFilter = ({ onFilterChange }) => {
           ))}
         </Select>
         <FormControlLabel
-          control={<Checkbox checked={false} />}
+          control={<Checkbox checked={checked.fullTime} />}
           label="Full-time"
           value="Full-time"
+          name="fullTime"
           onChange={handleHoursChange}
         />
         <FormControlLabel
-          control={<Checkbox checked={false} />}
+          control={<Checkbox checked={checked.partTime} />}
           label="Part-time"
           value="Part-time"
+          name="partTime"
           onChange={handleHoursChange}
         />
       </FormControl>
@@ -92,4 +100,4 @@ const LocationFilter = ({ onFilterChange }) => {
   );
 };
 
-export default LocationFilter;
+export default JobFilters;

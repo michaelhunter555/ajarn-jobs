@@ -15,7 +15,6 @@ const FeaturedJobsLists = (props) => {
 
   return (
     <>
-      {props?.hello && <div></div>}
       <h2>Featured jobs:</h2>
       {props?.sponsors
         .filter((listing) => listing.jobType?.featured)
