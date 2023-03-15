@@ -11,7 +11,6 @@ import { Box, Card, CardContent, Typography } from "@mui/material";
 const stylesSiteFeatures = {
   background: {
     margin: "0.2rem",
-    minWidth: 100,
     display: "flex",
     justifyContent: "center",
     "&:hover": {
@@ -19,6 +18,7 @@ const stylesSiteFeatures = {
     },
   },
   box: {
+    minWidth: 100,
     display: "flex",
     margin: "0 0 1rem 0",
     flexDirection: "row",
@@ -63,7 +63,7 @@ const stylesSiteFeatures = {
 const SiteFeatures = () => {
   let items = [
     "Jobs",
-    "School",
+    "Schools",
     "Thai Life",
     "Skills Tests",
     "Interviews",

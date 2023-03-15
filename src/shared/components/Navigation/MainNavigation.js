@@ -1,6 +1,6 @@
 import "./MainNavigation.css";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -10,7 +10,23 @@ import NavLinks from "./NavLinks";
 import SideDrawer from "./SideDrawer";
 
 const MainNavigation = (props) => {
+  const [navIsScrolled, setNavIsScrolled] = useState(false);
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+
+  const navScrollHandler = () => {
+    if (window.scrollY >= 100) {
+      setNavIsScrolled(true);
+    } else {
+      setNavIsScrolled(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", navScrollHandler);
+    return () => {
+      window.removeEventListener("scroll", navScrollHandler);
+    };
+  }, []);
 
   const openDrawerHandler = () => {
     setDrawerIsOpen(true);
@@ -18,6 +34,17 @@ const MainNavigation = (props) => {
 
   const closeDrawerHandler = () => {
     setDrawerIsOpen(false);
+  };
+
+  const styles = {
+    glass: {
+      background: "rgba(255, 255, 255, 0.24)",
+      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+      backdropFilter: "blur(5px)",
+      WebkitBackdropFilter: "blur(5px)",
+      border: "1px solid rgba(255, 255, 255, 0.3)",
+      transition: "all 0.5s ease-in",
+    },
   };
 
   return (
@@ -29,7 +56,7 @@ const MainNavigation = (props) => {
         </nav>
       </SideDrawer>
 
-      <MainHeader>
+      <MainHeader navScroll={!navIsScrolled ? null : styles.glass}>
         <button
           className="main-navigation__menu-btn"
           onClick={openDrawerHandler}

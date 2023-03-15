@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Link as RouterLink } from "react-router-dom";
-
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Button,
@@ -9,7 +7,6 @@ import {
   CardActions,
   CardContent,
   Chip,
-  Link,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -26,15 +23,9 @@ const teflStyles = {
   },
 };
 
-const link = (
-  <Link component={RouterLink} to={`/ads`}>
-    View
-  </Link>
-);
-
 const Tefl = (props) => {
   return (
-    <Card sx={teflStyles.container}>
+    <Card sx={{ ...teflStyles.container }}>
       <CardContent>
         <Typography sx={teflStyles.text} color="text.secondary" gutterBottom>
           <Chip

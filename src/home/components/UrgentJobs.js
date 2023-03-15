@@ -34,6 +34,8 @@ const UrgentJobs = (props) => {
   const date = new Date();
   const today = date.toLocaleDateString();
 
+  const urgentJobLimit = job.slice(0, 2);
+
   return (
     <Card sx={urgentJobStyles.background}>
       <CardContent>
@@ -46,7 +48,7 @@ const UrgentJobs = (props) => {
           />
         </Typography>
         <List>
-          {job.map((jobs, i) => (
+          {urgentJobLimit.map((jobs, i) => (
             <Link key={jobs.id} component={RouterLink} to={`/jobs/${jobs.id}`}>
               <ListItem key={jobs.id}>
                 <Typography

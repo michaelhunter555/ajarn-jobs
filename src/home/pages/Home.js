@@ -7,10 +7,11 @@ import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@mui/material";
 
 import Logo from "../../logo.svg";
-//import GlassCard from "../../shared/components/UIElements/GlassCard";
+import Footer from "../../shared/components/UIElements/Footer";
 import JobAd from "../../shared/components/UIElements/JobAd";
 import BlogContent from "../components/BlogContent";
 import BottomFeatured from "../components/BottomFeatured";
+import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
 import RecentJobs from "../components/RecentJobs";
 import SiteFeatures from "../components/SiteFeatures";
 import SponsorsList from "../components/SponsorsList";
@@ -61,6 +62,27 @@ const dummy_jobs = [
       companySize: "10-20",
     },
   },
+  {
+    id: "3",
+    title: "Filipino Teacher",
+    creationDate: "2023-03-02",
+    location: "Bangkok",
+    salary: "50,000THB p/m",
+    requirements: "Bachelor's degree in Life, teaching experience preferred",
+    description: "Teach Philosphy to university students in bangkok",
+    datePosted: "2023-02-27",
+    hours: "Full-time",
+    jobType: {
+      basic: false,
+      flare: false,
+      featured: false,
+    },
+    creator: {
+      company: "St. Johns Intl'",
+      logoUrl: Logo,
+      companySize: "10-20",
+    },
+  },
 ];
 
 const Home = () => {
@@ -94,8 +116,19 @@ const Home = () => {
           <SponsorsList sponsor={dummy_jobs} />
         </div>
       </div>
-      <SiteFeatures />
-      <BottomFeatured />
+      <div>
+        <SiteFeatures />
+      </div>
+      <div>
+        <BottomFeatured />
+      </div>
+      <div>
+        <h2 style={{ textAlign: "center" }}>Jobs You may like:</h2>{" "}
+        {/*auth.isLoggedIn && auth.isSchool ? 'teachers' : 'jobs'*/}
+        {/*  {auth.isLoggedIn && auth.isTeacher} && <BottomFeaturedAdsList /> */}
+        <BottomFeaturedAdsList footerJobs={dummy_jobs} />
+      </div>
+      <Footer />
     </>
   );
 };

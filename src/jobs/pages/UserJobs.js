@@ -2,12 +2,18 @@ import "./UserJobs.css";
 
 import { useState } from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
+import { Button, Divider, Stack } from "@mui/material";
+
 import Logo from "../../logo.svg";
-import Button from "../../shared/components/FormElements/Button";
+//import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
+import Footer from "../../shared/components/UIElements/Footer";
+//import JobLists from "../components/JobLists";
+import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
-import JobFilter from "../components/JobFilter";
-import JobLists from "../components/JobLists";
+import JobFilters from "../components/JobFilters";
 
 const dummy_jobs = [
   {
@@ -72,22 +78,32 @@ const UserJobs = () => {
   });
 
   return (
-    <div className="user-jobs">
-      <div className="add-job__div">
-        <Button className="add-job__btn" to="/job/new">
-          Add a Job +
-        </Button>
+    <>
+      <div className="user-jobs">
+        <div className="add-job__div">
+          <Stack spacing={2} direction="row">
+            <Button variant="contained" component={RouterLink} to="/job/new">
+              Add a Job +
+            </Button>{" "}
+            <Divider orientation="vertical" />
+            {/**auth.isLoggedIn && () */}
+            <Button variant="text" component={RouterLink} to="/auth">
+              Login/Join
+            </Button>
+          </Stack>
+        </div>
+        <div className="user-jobs__filter">
+          <JobFilters onFilterChange={handleFilterChange} />
+        </div>
+        <div className="user-jobs__list">
+          <JobAdsList job={filteredJobs} />
+        </div>
+        <Card className="featured-jobs__list" style={{ marginTop: "1rem" }}>
+          <FeaturedJobsLists sponsors={dummy_jobs} />
+        </Card>
       </div>
-      <div className="user-jobs__filter">
-        <JobFilter onFilterChange={handleFilterChange} />
-      </div>
-      <div className="user-jobs__list">
-        <JobLists items={filteredJobs} />
-      </div>
-      <Card className="featured-jobs__list" style={{ marginTop: "1rem" }}>
-        <FeaturedJobsLists sponsors={dummy_jobs} />
-      </Card>
-    </div>
+      <Footer />
+    </>
   );
 };
 

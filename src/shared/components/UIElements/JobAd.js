@@ -23,7 +23,10 @@ const JobAd = (props) => {
 
   return (
     <Link to={`/jobs/${job.id}`} className="job-ad__link">
-      <Card sx={{ backgroundColor: "#fffef9" }} component="div">
+      <Card
+        sx={{ backgroundColor: "#fffef9", border: "1px solid #faea92" }}
+        component="div"
+      >
         <CardActionArea>
           <CardContent>
             <Grid container direction="row">
