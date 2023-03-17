@@ -11,6 +11,7 @@ import UpdateJob from "./jobs/pages/UpdateJob";
 import UserJobs from "./jobs/pages/UserJobs";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
+import UserDashboard from "./users/pages/UserDashboard";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,6 +50,7 @@ function App() {
         <MainNavigation />
         <Routes>
           <Route path="/" element={<Home />} exact="true" />
+          <Route path="/users" element={<UserDashboard />} />
           <Route path="/jobs" element={<UserJobs />} />
           <Route path="/job/new" element={<NewJob />} />
           <Route path="/jobs/:jid" element={<JobDetailsPage />} />

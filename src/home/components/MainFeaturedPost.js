@@ -38,12 +38,7 @@ const MainFeaturedPost = (props) => {
               pr: { md: 0 },
             }}
           >
-            <Typography
-              component="h1"
-              variant="h3"
-              color="inherit"
-              gutterBottom
-            >
+            <Typography variant="h3" color="inherit" gutterBottom>
               {post[0].title}
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>

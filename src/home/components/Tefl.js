@@ -27,21 +27,18 @@ const Tefl = (props) => {
   return (
     <Card sx={{ ...teflStyles.container }}>
       <CardContent>
-        <Typography sx={teflStyles.text} color="text.secondary" gutterBottom>
-          <Chip
-            size="small"
-            label="sponsored"
-            icon={
-              <Tooltip title={`why this ad?`}>
-                <InfoIcon />
-              </Tooltip>
-            }
-          />
-        </Typography>
+        <Chip
+          sx={teflStyles.text}
+          size="small"
+          label="sponsored"
+          icon={
+            <Tooltip title={`why this ad?`}>
+              <InfoIcon />
+            </Tooltip>
+          }
+        />
 
-        <Typography variant="h5" component="div">
-          125-Hour TEFL Course
-        </Typography>
+        <Typography variant="h5">125-Hour TEFL Course</Typography>
 
         <Typography variant="subtitle2" color="text.secondary">
           Get Qualified and start Teaching.

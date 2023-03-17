@@ -1,5 +1,5 @@
 //current list of cities
-export const ThaiCities = [
+export const thaiCities = [
   "Bangkok",
   "Chiang Mai",
   "Phuket",
@@ -34,7 +34,7 @@ export const ThaiCities = [
 ];
 
 //list of fulltime incomes
-export const FullTimeSalaries = [
+export const fullTimeSalaries = [
   "at least THB 20k/mo.",
   "THB 30k/mo.",
   "THB 40k/mo.",

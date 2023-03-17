@@ -1,4 +1,6 @@
 .user-jobs {
+  max-width: 85%;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;

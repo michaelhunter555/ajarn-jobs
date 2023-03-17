@@ -1,5 +1,3 @@
-import "./UpdateJob.css";
-
 import React, { useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
@@ -47,6 +45,19 @@ const dummy_jobs = [
     },
   },
 ];
+
+const updateJobStyles = {
+  "job-form": {
+    listStyle: "none",
+    margin: "6rem auto",
+    padding: "1rem",
+    width: "90%",
+    maxWidth: "40rem",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.26)",
+    borderRadius: "6px",
+    background: "white",
+  },
+};
 
 const UpdateJob = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -128,7 +139,10 @@ const UpdateJob = () => {
 
   return (
     <>
-      <form className="job-update__form" onSubmit={jobUpdateHandler}>
+      <form
+        style={{ ...updateJobStyles["job-form"] }}
+        onSubmit={jobUpdateHandler}
+      >
         <Input
           id="title"
           element="input"

@@ -43,7 +43,9 @@ const MainNavigation = (props) => {
       backdropFilter: "blur(5px)",
       WebkitBackdropFilter: "blur(5px)",
       border: "1px solid rgba(255, 255, 255, 0.3)",
-      transition: "all 0.5s ease-in",
+    },
+    normal: {
+      background: "white",
     },
   };
 
@@ -56,7 +58,7 @@ const MainNavigation = (props) => {
         </nav>
       </SideDrawer>
 
-      <MainHeader navScroll={!navIsScrolled ? null : styles.glass}>
+      <MainHeader navScroll={!navIsScrolled ? styles.normal : styles.glass}>
         <button
           className="main-navigation__menu-btn"
           onClick={openDrawerHandler}

@@ -8,7 +8,6 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import PlaceIcon from "@mui/icons-material/Place";
 import PunchClockIcon from "@mui/icons-material/PunchClock";
 import {
-  Button,
   Card,
   CardActionArea,
   CardContent,
@@ -69,6 +68,7 @@ const JobAd = (props) => {
                   }}
                   variant="body2"
                   color="text.secondary"
+                  component="div"
                 >
                   <Chip
                     label={job.location}
@@ -94,14 +94,6 @@ const JobAd = (props) => {
               </Grid>
             </Grid>
           </CardContent>
-          <Button
-            sx={{
-              flex: 1,
-              alignItems: "center",
-            }}
-          >
-            see job
-          </Button>
         </CardActionArea>
       </Card>
     </Link>

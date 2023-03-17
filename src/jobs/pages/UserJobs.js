@@ -1,19 +1,23 @@
-import "./UserJobs.css";
+import './UserJobs.css';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Button, Divider, Stack } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Stack,
+} from '@mui/material';
 
-import Logo from "../../logo.svg";
+import Logo from '../../logo.svg';
 //import Button from "../../shared/components/FormElements/Button";
-import Card from "../../shared/components/UIElements/Card";
-import Footer from "../../shared/components/UIElements/Footer";
+import Card from '../../shared/components/UIElements/Card';
+import Footer from '../../shared/components/UIElements/Footer';
 //import JobLists from "../components/JobLists";
-import JobAdsList from "../../shared/components/UIElements/JobAdsList";
-import FeaturedJobsLists from "../components/FeaturedJobsLists";
-import JobFilters from "../components/JobFilters";
+import JobAdsList from '../../shared/components/UIElements/JobAdsList';
+import FeaturedJobsLists from '../components/FeaturedJobsLists';
+import JobFilters from '../components/JobFilters';
 
 const dummy_jobs = [
   {
@@ -76,6 +80,8 @@ const UserJobs = () => {
       (!filter.hours || job.hours === filter.hours)
     );
   });
+
+  //if not filter.location or dummyjobs[lowercase][includes] + (filter[location][lowercase])
 
   return (
     <>

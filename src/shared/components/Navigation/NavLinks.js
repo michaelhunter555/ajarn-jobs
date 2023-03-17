@@ -22,7 +22,7 @@ const NavLinks = (props) => {
       </li>
 
       <li>
-        <NavLink to="/users">Teachers</NavLink>
+        <NavLink to="/users">Users</NavLink>
       </li>
 
       <li>

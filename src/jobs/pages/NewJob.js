@@ -1,5 +1,3 @@
-import "./NewJob.css";
-
 import React from "react";
 
 //import { useNavigate } from 'react-router-dom';
@@ -11,6 +9,19 @@ import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
+
+const newJobstyles = {
+  newJobForm: {
+    listStyle: "none",
+    margin: "6rem auto",
+    padding: "1rem",
+    width: "90%",
+    maxWidth: "40rem",
+    boxShadow: " 0 2px 8px rgba(0, 0, 0, 0.26)",
+    borderRadius: "6px",
+    background: "white",
+  },
+};
 
 const NewJob = () => {
   //our onInput props(1,2,3) takes 3 arguments(Refer to Input.js). these values will be used to locate the id, value and validate.
@@ -52,12 +63,21 @@ const NewJob = () => {
   };
 
   return (
-    <form className="new-job__form" onSubmit={jobSubmitHandler}>
+    <form style={{ ...newJobstyles.newJobForm }} onSubmit={jobSubmitHandler}>
       <Input
         id="title"
         element="input"
         type="text"
         label="Title"
+        validators={[VALIDATOR_REQUIRE()]}
+        errorText="please enter a valid title"
+        onInput={inputHandler}
+      />
+      <Input
+        id="salary"
+        element="salary"
+        type="number"
+        label="Salary"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="please enter a valid title"
         onInput={inputHandler}

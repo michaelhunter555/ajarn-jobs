@@ -1,35 +1,23 @@
 import React, { useState } from "react";
 
 import {
-  Card,
-  Checkbox,
   FormControl,
   FormControlLabel,
   FormLabel,
   MenuItem,
+  Paper,
+  Radio,
+  RadioGroup,
   Select,
   Typography,
 } from "@mui/material";
 
-const thaiCities = [
-  "bangkok",
-  "pattaya",
-  "chiang mai",
-  "nakhon nayok",
-  "rangsit",
-  "sukothai",
-  "nontaburi",
-];
-
-const jobSalaryRange = ["at least 20,000", "+25,000", "+30,000"];
+import { fullTimeSalaries, thaiCities } from "../../shared/util/ThaiData";
 
 const JobFilters = ({ onFilterChange }) => {
   const [salaryRange, setSalaryRange] = useState("");
   const [location, setLocation] = useState("");
-  const [checked, setChecked] = useState({
-    partTime: false,
-    fullTime: false,
-  });
+  const [checked, setChecked] = useState("Full-Time");
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
@@ -42,17 +30,23 @@ const JobFilters = ({ onFilterChange }) => {
   };
 
   const handleHoursChange = (event) => {
-    const { name, checked } = event.target;
-    setChecked((prev) => ({ ...prev, [name]: checked }));
+    setChecked(event.target.value);
     onFilterChange({ location, salaryRange, hours: event.target.value });
   };
 
   return (
-    <Card>
-      <Typography component="div" color="primary">
+    <Paper
+      sx={{
+        border: "1px solid #ddd",
+        padding: "1.5rem",
+        borderRadius: "6px",
+        background: "#fff",
+      }}
+    >
+      <Typography sx={{ fontSize: 30 }} component="h2">
         Filter Jobs
       </Typography>
-      <FormControl fullWidth>
+      <FormControl fullWidth={true}>
         <FormLabel component="legend">Select city</FormLabel>
         <Select
           labelId="location"
@@ -67,7 +61,9 @@ const JobFilters = ({ onFilterChange }) => {
             </MenuItem>
           ))}
         </Select>
-        <FormLabel component="legend">Select Salary</FormLabel>
+      </FormControl>
+      <FormControl fullWidth={true}>
+        <FormLabel component="legend">Full-Time Salary</FormLabel>
         <Select
           labelId="salary"
           id="salary"
@@ -75,28 +71,37 @@ const JobFilters = ({ onFilterChange }) => {
           onChange={handleSalaryRangeChange}
         >
           <MenuItem value="">any</MenuItem>
-          {jobSalaryRange.map((item, i) => (
+          {fullTimeSalaries.map((item, i) => (
             <MenuItem key={i} value={item}>
               {item}
             </MenuItem>
           ))}
         </Select>
-        <FormControlLabel
-          control={<Checkbox checked={checked.fullTime} />}
-          label="Full-time"
-          value="Full-time"
-          name="fullTime"
-          onChange={handleHoursChange}
-        />
-        <FormControlLabel
-          control={<Checkbox checked={checked.partTime} />}
-          label="Part-time"
-          value="Part-time"
-          name="partTime"
-          onChange={handleHoursChange}
-        />
       </FormControl>
-    </Card>
+
+      <FormControl fullWidth={true}>
+        <FormLabel component="legend">hours</FormLabel>
+        <RadioGroup
+          aria-labelledby="demo-controlled-radio-buttons-group"
+          name="controlled-radio-buttons-group"
+          value={checked}
+          onChange={handleHoursChange}
+        >
+          <FormControlLabel
+            control={<Radio />}
+            label="Full-time"
+            value="Full-time"
+            name="fullTime"
+          />
+          <FormControlLabel
+            control={<Radio />}
+            label="Part-time"
+            value="Part-time"
+            name="partTime"
+          />
+        </RadioGroup>
+      </FormControl>
+    </Paper>
   );
 };
 

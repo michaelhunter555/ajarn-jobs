@@ -89,7 +89,7 @@ const JobAdsList = (props) => {
                           ? school.title.substring(0, 40) + "..."
                           : school.title}
                       </Typography>
-                      {/*need to validate domNesting wit p-tags here... */}
+
                       <Typography
                         sx={{
                           display: "flex",
@@ -98,6 +98,7 @@ const JobAdsList = (props) => {
                         }}
                         variant="body2"
                         color="text.secondary"
+                        component="div"
                       >
                         <Chip
                           label={school.location}
@@ -123,14 +124,6 @@ const JobAdsList = (props) => {
                     </Grid>
                   </Grid>
                 </CardContent>
-                <Button
-                  sx={{
-                    flex: 1,
-                    alignItems: "center",
-                  }}
-                >
-                  see job
-                </Button>
               </CardActionArea>
             </Card>
           </Link>

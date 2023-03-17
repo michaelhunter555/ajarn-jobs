@@ -1,5 +1,3 @@
-import "./FeaturedJobsList.css";
-
 import React from "react";
 
 import FeaturedJobs from "./FeaturedJobs";
