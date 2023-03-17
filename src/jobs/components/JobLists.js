@@ -9,6 +9,16 @@ import Card from "../../shared/components/UIElements/Card";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import JobItem from "./JobItem";
 
+const jobListstyles = {
+  ".job-list": {
+    listStyle: " none",
+    margin: "1rem auto",
+    padding: "0",
+    width: "100%",
+    maxWidth: "50rem",
+  },
+};
+
 const JobLists = (props) => {
   if (props.items.length === 0) {
     return (
@@ -24,7 +34,7 @@ const JobLists = (props) => {
   }
 
   return (
-    <ul className="job-list">
+    <ul className={jobListstyles["job-list"]}>
       {props.items.map((job) => {
         return (
           <li key={job.id}>
