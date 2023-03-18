@@ -1,5 +1,3 @@
-import "./JobAd.css";
-
 import React from "react";
 
 import { Link } from "react-router-dom";
@@ -16,33 +14,47 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledJobAdCard = styled(
+  Card,
+  "div"
+)({
+  backgroundColor: "#fffef9",
+  border: "1px solid #faea92",
+});
+
+const StyledMediaCard = styled(CardMedia)({
+  width: "75%",
+  border: "1px solid #e5e5e5",
+  transition: "all 0.3s ease-in-out",
+  "&:hover": {
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+    borderColor: "rgba(0, 128, 255, 0.8)",
+  },
+  borderRadius: 3,
+});
+
+const StyledChipDiv = styled(Typography)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "5px",
+  color: theme.palette.text.secondary,
+}));
 
 const JobAd = (props) => {
   const { job } = props;
 
   return (
-    <Link to={`/jobs/${job.id}`} className="job-ad__link">
-      <Card
-        sx={{ backgroundColor: "#fffef9", border: "1px solid #faea92" }}
-        component="div"
-      >
+    <Link to={`/jobs/${job.id}`}>
+      <StyledJobAdCard>
         <CardActionArea>
           <CardContent>
             <Grid container direction="row">
               <Grid item xs={4} sm={4} lg={3} xl={2}>
-                <CardMedia
+                <StyledMediaCard
                   component="img"
-                  sx={{
-                    width: "75%",
-                    border: "1px solid #e5e5e5",
-                    transition: "all 0.3s ease-in-out",
-                    "&:hover": {
-                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                      borderColor: "rgba(0, 128, 255, 0.8)",
-                    },
-                    borderRadius: 3,
-                  }}
-                  image={job.creator.logoUrl}
+                  src={job.creator.logoUrl}
                   alt={job.id}
                 />
               </Grid>
@@ -59,17 +71,8 @@ const JobAd = (props) => {
                     ? job.title.substring(0, 40) + "..."
                     : job.title}
                 </Typography>
-                {/*need to validate domNesting wit p-tags here... */}
-                <Typography
-                  sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "5px",
-                  }}
-                  variant="body2"
-                  color="text.secondary"
-                  component="div"
-                >
+
+                <StyledChipDiv variant="body2" component="div">
                   <Chip
                     label={job.location}
                     size={"small"}
@@ -85,7 +88,7 @@ const JobAd = (props) => {
                     size={"small"}
                     icon={<PunchClockIcon />}
                   />
-                </Typography>
+                </StyledChipDiv>
                 <Typography variant="body2" color="text.secondary">
                   {job.description.length > 60
                     ? job.description.substring(0, 60) + "..."
@@ -95,7 +98,7 @@ const JobAd = (props) => {
             </Grid>
           </CardContent>
         </CardActionArea>
-      </Card>
+      </StyledJobAdCard>
     </Link>
   );
 };

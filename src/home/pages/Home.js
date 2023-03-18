@@ -124,7 +124,6 @@ const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
   backgroundColor: "rgb(255, 255, 255)",
   gridColumn: "2/3",
   height: "auto",
-  marginTop: "1rem",
   [theme.breakpoints.down("md")]: {
     gridColumn: 1,
     gridRow: 2,
@@ -137,7 +136,6 @@ const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
 
 const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
   textAlign: "center",
-  marginTop: "1rem",
   boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
   overflow: "auto",
   [theme.breakpoints.down("md")]: {
@@ -151,6 +149,7 @@ const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
 }));
 
 const StyledHomeFeaturedSponsors = styled("div")(({ theme }) => ({
+  marginTop: "",
   [theme.breakpoints.down("md")]: {
     gridcolumn: 1,
     gridRow: 4,

@@ -1,16 +1,33 @@
-import './Avatar.css';
+import "./Avatar.css";
 
-import React from 'react';
+import React from "react";
+
+import { styled } from "@mui/material/styles";
+
+const StyledAvatar = styled("div")({
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  "&:img": {
+    display: "block",
+    borderRadius: "50%",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+});
 
 const Avatar = (props) => {
   return (
-    <div className={`avatar ${props.className}`} style={props.style}>
+    <StyledAvatar className={`${props.className}`} style={props.style}>
       <img
         src={props.image}
         alt={props.alt}
         style={{ width: props.width, height: props.width }}
       />
-    </div>
+    </StyledAvatar>
   );
 };
 

@@ -1,9 +1,13 @@
-import './Map.css';
+import "./Map.css";
 
-import React, {
-  useEffect,
-  useRef,
-} from 'react';
+import React, { useEffect, useRef } from "react";
+
+import { styled } from "@mui/material/styles";
+
+const StyledDivImage = styled("div")(({ theme }) => ({
+  width: "100%",
+  height: "100%",
+}));
 
 const Map = (props) => {
   const mapRef = useRef();
@@ -20,11 +24,11 @@ const Map = (props) => {
   }, [center, zoom]);
 
   return (
-    <div
+    <StyledDivImage
       ref={mapRef}
-      className={`map ${props.className}`}
+      className={`${props.className}`}
       style={props.style}
-    ></div>
+    ></StyledDivImage>
   );
 };
 
