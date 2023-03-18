@@ -13,17 +13,28 @@ import {
   Stack,
   Tooltip,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledList = styled(List)(({ theme }) => ({
+  width: "100%",
+  maxWidth: 360,
+  backgroundColor: theme.palette.background.paper,
+}));
+
+const StyledAvatar = styled(Avatar)({
+  border: "1px solid #e5e5e5",
+  borderRadius: "6px",
+});
 
 const Sponsors = (props) => {
   return (
     <>
-      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+      <StyledList>
         <ListItemButton alignItems="flex-start">
           <ListItemAvatar>
-            <Avatar
+            <StyledAvatar
               alt={props.companyId}
               src={props.logo}
-              sx={{ border: "1px solid #e5e5e5", borderRadius: "6px" }}
               variant="square"
             />
           </ListItemAvatar>
@@ -48,7 +59,7 @@ const Sponsors = (props) => {
           </Stack>
         </ListItemButton>
         <Divider />
-      </List>
+      </StyledList>
     </>
   );
 };

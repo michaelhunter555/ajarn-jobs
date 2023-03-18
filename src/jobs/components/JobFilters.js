@@ -11,8 +11,16 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { fullTimeSalaries, thaiCities } from "../../shared/util/ThaiData";
+
+const StyledPaperContainer = styled(Paper)({
+  border: "1px solid #ddd",
+  padding: "1.5rem",
+  borderRadius: "6px",
+  background: "#fff",
+});
 
 const JobFilters = ({ onFilterChange }) => {
   const [salaryRange, setSalaryRange] = useState("");
@@ -35,14 +43,7 @@ const JobFilters = ({ onFilterChange }) => {
   };
 
   return (
-    <Paper
-      sx={{
-        border: "1px solid #ddd",
-        padding: "1.5rem",
-        borderRadius: "6px",
-        background: "#fff",
-      }}
-    >
+    <StyledPaperContainer>
       <Typography sx={{ fontSize: 30 }} component="h2">
         Filter Jobs
       </Typography>
@@ -101,7 +102,7 @@ const JobFilters = ({ onFilterChange }) => {
           />
         </RadioGroup>
       </FormControl>
-    </Paper>
+    </StyledPaperContainer>
   );
 };
 

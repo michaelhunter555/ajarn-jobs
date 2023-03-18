@@ -1,23 +1,18 @@
-import './UserJobs.css';
+import { useState } from "react";
 
-import { useState } from 'react';
+import { Link as RouterLink } from "react-router-dom";
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Button, Divider, Stack } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import {
-  Button,
-  Divider,
-  Stack,
-} from '@mui/material';
-
-import Logo from '../../logo.svg';
+import Logo from "../../logo.svg";
 //import Button from "../../shared/components/FormElements/Button";
-import Card from '../../shared/components/UIElements/Card';
-import Footer from '../../shared/components/UIElements/Footer';
+import Card from "../../shared/components/UIElements/Card";
+import Footer from "../../shared/components/UIElements/Footer";
 //import JobLists from "../components/JobLists";
-import JobAdsList from '../../shared/components/UIElements/JobAdsList';
-import FeaturedJobsLists from '../components/FeaturedJobsLists';
-import JobFilters from '../components/JobFilters';
+import JobAdsList from "../../shared/components/UIElements/JobAdsList";
+import FeaturedJobsLists from "../components/FeaturedJobsLists";
+import JobFilters from "../components/JobFilters";
 
 const dummy_jobs = [
   {
@@ -63,6 +58,32 @@ const dummy_jobs = [
   },
 ];
 
+const StyledUserJobsDiv = styled("div")({
+  maxWidth: "85%",
+  margin: "0 auto",
+  display: "grid",
+  gridTemplateColumns: "repeat(4, 1fr)",
+  gap: "15px",
+});
+
+const StyledAdJobDiv = styled("div")({
+  display: "grid",
+  gridColumn: "2 /4",
+  textalign: "center",
+  margin: "0 auto",
+});
+
+const UsersJobFilterDiv = styled("div")({
+  gridColumn: "1 / 2",
+});
+const UserJobListDiv = styled("div")({
+  gridColumn: "2 / 4",
+});
+const FeaturedJobListDiv = styled(Card)({
+  gridColumn: "4 / 5",
+  marginTop: "1rem",
+});
+
 const UserJobs = () => {
   const [filter, setFilter] = useState(dummy_jobs);
   //const userId = useParams().userId;
@@ -85,8 +106,8 @@ const UserJobs = () => {
 
   return (
     <>
-      <div className="user-jobs">
-        <div className="add-job__div">
+      <StyledUserJobsDiv>
+        <StyledAdJobDiv>
           <Stack spacing={2} direction="row">
             <Button variant="contained" component={RouterLink} to="/job/new">
               Add a Job +
@@ -97,17 +118,17 @@ const UserJobs = () => {
               Login/Join
             </Button>
           </Stack>
-        </div>
-        <div className="user-jobs__filter">
+        </StyledAdJobDiv>
+        <UsersJobFilterDiv>
           <JobFilters onFilterChange={handleFilterChange} />
-        </div>
-        <div className="user-jobs__list">
+        </UsersJobFilterDiv>
+        <UserJobListDiv>
           <JobAdsList job={filteredJobs} />
-        </div>
-        <Card className="featured-jobs__list" style={{ marginTop: "1rem" }}>
+        </UserJobListDiv>
+        <FeaturedJobListDiv>
           <FeaturedJobsLists sponsors={dummy_jobs} />
-        </Card>
-      </div>
+        </FeaturedJobListDiv>
+      </StyledUserJobsDiv>
       <Footer />
     </>
   );

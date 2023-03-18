@@ -14,20 +14,20 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const urgentJobStyles = {
-  background: {
-    backgroundColor: "rgba(255, 255, 255, 0.38)",
-    borderRadius: "16px",
-    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-    backdropFilter: "blur(8.5px)",
-    webkitBackdropFilter: "blur(8.5px)",
-    border: "1px solid rgba(79, 185, 255, 0.3)",
-  },
-  jobText: {
-    fontSize: "13px",
-  },
-};
+const StyledUrgentJobCard = styled(Card)(({ theme }) => ({
+  backgroundColor: "rgba(255, 255, 255, 0.38)",
+  borderRadius: "16px",
+  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+  backdropFilter: "blur(8.5px)",
+  webkitBackdropFilter: "blur(8.5px)",
+  border: "1px solid rgba(79, 185, 255, 0.3)",
+}));
+
+const StyledJobText = styled(Typography)({
+  fontSize: "13px",
+});
 
 const UrgentJobs = (props) => {
   const { job } = props;
@@ -37,7 +37,7 @@ const UrgentJobs = (props) => {
   const urgentJobLimit = job.slice(0, 2);
 
   return (
-    <Card sx={urgentJobStyles.background}>
+    <StyledUrgentJobCard>
       <CardContent>
         <Typography variant="h5" component="div">
           <Chip
@@ -51,13 +51,9 @@ const UrgentJobs = (props) => {
           {urgentJobLimit.map((jobs, i) => (
             <Link key={jobs.id} component={RouterLink} to={`/jobs/${jobs.id}`}>
               <ListItem key={jobs.id}>
-                <Typography
-                  sx={urgentJobStyles.jobText}
-                  variant="subtitle"
-                  color="text.secondary"
-                >
+                <StyledJobText variant="subtitle" color="text.secondary">
                   {i + 1}. {jobs.title}
-                </Typography>
+                </StyledJobText>
               </ListItem>
             </Link>
           ))}
@@ -73,7 +69,7 @@ const UrgentJobs = (props) => {
           see More
         </Button>
       </CardActions>
-    </Card>
+    </StyledUrgentJobCard>
   );
 };
 

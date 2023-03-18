@@ -1,10 +1,9 @@
-import "./Home.css";
-
 import React from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
 import { Button } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import Logo from "../../logo.svg";
 import Footer from "../../shared/components/UIElements/Footer";
@@ -85,37 +84,140 @@ const dummy_jobs = [
   },
 ];
 
+const StyledGridContainer = styled("div")(({ theme }) => ({
+  display: "grid",
+  justifyContent: "center",
+  gridTemplateColumns: "20% 45% 20%",
+  gridAutoRows: "auto",
+  margin: "6rem 0 2rem 0",
+  gap: "6px",
+  "& > *": {
+    flexBasis: "80%",
+  },
+  [theme.breakpoints.down("md")]: {
+    gridTemplateColumns: "100%",
+    gridAutoColumns: "auto",
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridTemplateColumns: "100%",
+    gridAutoColumns: "auto",
+  },
+}));
+
+const StyledHomeFeaturedTop = styled("div")(({ theme }) => ({
+  display: "grid",
+  gridTemplateColumns: "1fr",
+  gridAutoRows: "auto",
+  alignItems: "stretch",
+  gap: "5px",
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 1,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 1,
+  },
+}));
+
+const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
+  backgroundColor: "rgb(255, 255, 255)",
+  gridColumn: "2/3",
+  height: "auto",
+  marginTop: "1rem",
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 2,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridrow: 2,
+  },
+}));
+
+const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
+  textAlign: "center",
+  marginTop: "1rem",
+  boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
+  overflow: "auto",
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 3,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 3,
+  },
+}));
+
+const StyledHomeFeaturedSponsors = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    gridcolumn: 1,
+    gridRow: 4,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 4,
+  },
+}));
+
+const StyledUrgentJobsWrapper = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 5,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 5,
+  },
+}));
+
+const StyledTeflWrapper = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 6,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 6,
+  },
+}));
+
 const Home = () => {
   return (
     <>
       {/* */}
-      <div className="grid-container">
+      <StyledGridContainer>
         {/* top-left column*/}
-        <Tefl />
-        <div className="home-column__featured-top">
+        <StyledTeflWrapper>
+          <Tefl />
+        </StyledTeflWrapper>
+        <StyledHomeFeaturedTop>
           <JobAd job={dummy_jobs[0]} />
           {/* top-middle column */}
-        </div>
+        </StyledHomeFeaturedTop>
 
         {/* top-right column*/}
-        <UrgentJobs job={dummy_jobs} />
+        <StyledUrgentJobsWrapper>
+          <UrgentJobs job={dummy_jobs} />
+        </StyledUrgentJobsWrapper>
 
         {/*lower-left column */}
-        <div className="home-column__jobs">
+        <StyledHomeFeaturedJobs>
           <RecentJobs homeJobs={dummy_jobs} />
           <Button component={RouterLink} to="/jobs">
             View All Jobs
           </Button>
-        </div>
+        </StyledHomeFeaturedJobs>
         {/* lower middle-column*/}
-        <div className="home-column__content">
+        <StyledHomeFeaturedContent>
           <BlogContent />
-        </div>
+        </StyledHomeFeaturedContent>
         {/* lower-right column*/}
-        <div className="home-column__sponsors">
+        <StyledHomeFeaturedSponsors>
           <SponsorsList sponsor={dummy_jobs} />
-        </div>
-      </div>
+        </StyledHomeFeaturedSponsors>
+      </StyledGridContainer>
       <div>
         <SiteFeatures />
       </div>

@@ -10,25 +10,21 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const teflStyles = {
-  container: {
-    minWidth: "auto",
-  },
-  text: {
-    fontSize: 11,
-  },
-  secondText: {
-    marginBottom: 1.5,
-  },
-};
+const StyledTeflCard = styled(Card)({
+  minWidth: "auto",
+});
+
+const StyledChip = styled(Chip)({
+  fontSize: 11,
+});
 
 const Tefl = (props) => {
   return (
-    <Card sx={{ ...teflStyles.container }}>
+    <StyledTeflCard>
       <CardContent>
-        <Chip
-          sx={teflStyles.text}
+        <StyledChip
           size="small"
           label="sponsored"
           icon={
@@ -47,7 +43,7 @@ const Tefl = (props) => {
       <CardActions>
         <Button size="small">Learn More</Button>
       </CardActions>
-    </Card>
+    </StyledTeflCard>
   );
 };
 

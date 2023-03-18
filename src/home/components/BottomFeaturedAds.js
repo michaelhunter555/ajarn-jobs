@@ -1,26 +1,42 @@
 import React from "react";
 
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-/**
- *
- * @returns return a dynamic object of current jobs being featured//
- * -horizontal list (3);
- * -job title, logo, salary, location and hours
- *
- */
+const StyledCard = styled(Card)(({ theme }) => ({
+  display: "flex",
+  minWidth: "auto",
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+}));
+
+const StyledBox = styled(Box)({
+  display: "flex",
+  flexDirection: "row",
+});
+
+const StyledMediaImage = styled(CardMedia)({
+  width: 100,
+});
+
+const StyledCardContent = styled(CardContent)({
+  flex: "1 0 auto",
+});
 
 const BottomFeaturedAds = (props) => {
   return (
-    <Card sx={{ display: "flex" }}>
-      <CardMedia
+    <StyledCard>
+      <StyledMediaImage
         component="img"
-        sx={{ width: 100 }}
         image={props.image}
         alt={props.school}
       />
-      <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <CardContent sx={{ flex: "1 0 auto" }}>
+      <StyledBox>
+        <StyledCardContent>
           <Typography component="div" variant="h5">
             {props.title.trim().length > 20
               ? props.title.substring(0, 20) + "..."
@@ -40,9 +56,9 @@ const BottomFeaturedAds = (props) => {
           >
             {props.salary} - {props.hours}
           </Typography>
-        </CardContent>
-      </Box>
-    </Card>
+        </StyledCardContent>
+      </StyledBox>
+    </StyledCard>
   );
 };
 

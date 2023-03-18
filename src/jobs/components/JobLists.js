@@ -4,20 +4,20 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
+import { styled } from "@mui/material/styles";
+
 import Button from "../../shared/components/FormElements/Button";
 import Card from "../../shared/components/UIElements/Card";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import JobItem from "./JobItem";
 
-const jobListstyles = {
-  ".job-list": {
-    listStyle: " none",
-    margin: "1rem auto",
-    padding: "0",
-    width: "100%",
-    maxWidth: "50rem",
-  },
-};
+const UnorderedJobListStyles = styled("ul")({
+  listStyle: "none",
+  margin: "1rem auto",
+  padding: "0",
+  width: "100%",
+  maxWidth: "50rem",
+});
 
 const JobLists = (props) => {
   if (props.items.length === 0) {
@@ -34,7 +34,7 @@ const JobLists = (props) => {
   }
 
   return (
-    <ul className={jobListstyles["job-list"]}>
+    <UnorderedJobListStyles>
       {props.items.map((job) => {
         return (
           <li key={job.id}>
@@ -60,7 +60,7 @@ const JobLists = (props) => {
           </li>
         );
       })}
-    </ul>
+    </UnorderedJobListStyles>
   );
 };
 

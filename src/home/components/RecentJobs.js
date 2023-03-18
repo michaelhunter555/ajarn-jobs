@@ -1,5 +1,3 @@
-import "./RecentJobs.css";
-
 import React from "react";
 
 import { MdOutlineFiberNew } from "react-icons/md";

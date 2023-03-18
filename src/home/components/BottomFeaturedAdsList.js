@@ -4,21 +4,30 @@ import { RiAdvertisementLine } from "react-icons/ri";
 import { Link as RouterLink } from "react-router-dom";
 
 import { Link, List, ListItem } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import BottomFeaturedAds from "./BottomFeaturedAds";
+
+const StyledList = styled(List)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  marginBottom: "5em",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    mindWidth: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+    minWidth: "100%",
+  },
+}));
 
 const BottomFeaturedAdsList = (props) => {
   const { footerJobs } = props;
 
   return (
-    <List
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        marginBottom: "5em",
-      }}
-    >
+    <StyledList>
       <RiAdvertisementLine style={{ color: "gray" }} size={20} />
 
       {footerJobs.map((job, i) => (
@@ -36,7 +45,7 @@ const BottomFeaturedAdsList = (props) => {
           </ListItem>
         </Link>
       ))}
-    </List>
+    </StyledList>
   );
 };
 

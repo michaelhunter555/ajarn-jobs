@@ -9,26 +9,25 @@ import {
   ListItemText,
   Stack,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledList = styled(List)(({ theme }) => ({
+  width: "100%",
+  maxWidth: 360,
+  backgroundColor: theme.palette.background.paper,
+}));
+
+const StyledAvatar = styled(Avatar)({
+  border: "1px solid #e5e5e5",
+  borderRadius: "6px",
+});
 
 const RecentJobItems = (props) => {
-  // logo, id, salary, location, hours;
-
   return (
-    <List
-      sx={{
-        width: "100%",
-        maxWidth: 360,
-        bgcolor: "background.paper",
-      }}
-    >
+    <StyledList>
       <ListItemButton alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar
-            alt={props.id}
-            src={props.logo}
-            sx={{ border: "1px solid #e5e5e5", borderRadius: "6px" }}
-            variant="square"
-          />
+          <StyledAvatar alt={props.id} src={props.logo} variant="square" />
         </ListItemAvatar>
         <Stack spacing={0}>
           <ListItemText
@@ -42,7 +41,7 @@ const RecentJobItems = (props) => {
         </Stack>
       </ListItemButton>
       <Divider />
-    </List>
+    </StyledList>
   );
 };
 

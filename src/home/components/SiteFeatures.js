@@ -7,102 +7,83 @@ import TempleBuddhistIcon from "@mui/icons-material/TempleBuddhist";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import WorkIcon from "@mui/icons-material/Work";
 import { Box, Card, CardContent, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const stylesSiteFeatures = {
-  background: {
-    margin: "0.2rem",
-    display: "flex",
-    justifyContent: "center",
-    "&:hover": {
-      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-    },
+const StyledBoxWrapper = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "nowrap",
+  minWidth: 100,
+  margin: "0 0 1rem 0",
+  flexDirection: "row",
+  justifyContent: "center",
+  gap: "1rem",
+  overflowX: "auto",
+  whiteSpace: "nowrap",
+  [theme.breakpoints.down("md")]: {
+    minWidth: "unset",
+    paddingLeft: "7.5rem",
   },
-  box: {
+  [theme.breakpoints.down("sm")]: {
+    minWidth: "unset",
+    paddingLeft: "22.5rem",
+  },
+}));
+
+const StyledCardBackground = styled(Card)(({ theme }) => ({
+  margin: "0.2rem",
+  display: "flex",
+  justifyContent: "center",
+  minWidth: 150,
+  "&:hover": {
+    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+  },
+  [theme.breakpoints.down("md")]: {
+    minWidth: 120,
+  },
+  [theme.breakpoints.down("sm")]: {
     minWidth: 100,
-    display: "flex",
-    margin: "0 0 1rem 0",
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: "1rem",
-    overflowX: "auto",
   },
-  text: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "column",
-  },
-  iconBox: {
-    border: "1px solid #e5e5e5",
-    borderRadius: "5px",
-    padding: "1rem",
-    "&:hover": {
-      transition: "all 0.3s ease-in",
-      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-    },
-  },
+}));
 
-  "@media(max-width: 959.95px)": {
-    box: {
-      display: "flex",
-      flexDirection: "column",
-    },
-    card: {
-      mindWidth: "unset",
-    },
-    cardFirst: {
-      mindWidth: 100,
-    },
+const IconBox = styled(Box)({
+  border: "1px solid #e5e5e5",
+  borderRadius: "5px",
+  padding: "1rem",
+  "&:hover": {
+    transition: "all 0.3s ease-in",
+    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
   },
-  "@media(max-width: 599.95px)": {
-    cardFirst: {
-      mindWidth: "unset",
-    },
-  },
-};
+});
 
 const SiteFeatures = () => {
-  let items = [
-    "Jobs",
-    "Schools",
-    "Thai Life",
-    "Skills Tests",
-    "Interviews",
-    "Contribute",
+  const items = [
+    { label: "Jobs", icon: <WorkIcon /> },
+    { label: "Schools", icon: <SchoolIcon /> },
+    { label: "Thai Life", icon: <TempleBuddhistIcon /> },
+    { label: "Skills Tests", icon: <QuizIcon /> },
+    { label: "Interviews", icon: <ChatIcon /> },
+    { label: "Contribute", icon: <VolunteerActivismIcon /> },
   ];
+
   return (
-    <Box sx={{ ...stylesSiteFeatures.box }}>
-      {items.map((item, i) => {
-        let featuredIcons = [
-          <WorkIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
-          <SchoolIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
-          <TempleBuddhistIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
-          <QuizIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
-          <ChatIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
-          <VolunteerActivismIcon sx={{ ...stylesSiteFeatures.iconBox }} />,
-        ];
+    <StyledBoxWrapper>
+      {items.map(({ label, icon }, i) => {
         return (
-          <Card
-            key={i}
-            sx={{
-              ...stylesSiteFeatures.background,
-              ...stylesSiteFeatures.card,
-              ...stylesSiteFeatures.cardFirst,
-            }}
-            raised={true}
-          >
+          <StyledCardBackground key={i} raised={true}>
             <CardContent>
               <Typography
-                sx={{ ...stylesSiteFeatures.text }}
+                align="center"
                 variant="subtitle1"
                 color="text.secondary"
               >
-                {featuredIcons[i]} {item}
+                <IconBox>{icon}</IconBox>
+                {label}
               </Typography>
             </CardContent>
-          </Card>
+          </StyledCardBackground>
         );
       })}
-    </Box>
+    </StyledBoxWrapper>
   );
 };
 

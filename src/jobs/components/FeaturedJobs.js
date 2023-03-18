@@ -9,38 +9,42 @@ import {
   ListItemText,
   Stack,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const styles = {
-  container: {
-    width: "100%",
-    maxWidth: 360,
-    bgcolor: "background.paper",
+const StyledList = styled(List)(({ theme }) => ({
+  width: "100%",
+  maxWidth: 360,
+  bgcolor: theme.palette.background.paper,
+}));
+
+const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: "rgb(255, 251, 228)",
   },
-  button: {
-    "&:hover": {
-      backgroundColor: "rgb(255, 251, 228)",
-    },
-  },
-};
+}));
+
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  border: "1px solid #e5e5e5",
+  borderRadius: "6px",
+}));
 
 const FeaturedJobs = (props) => {
   return (
-    <List sx={styles.container}>
-      <ListItemButton sx={styles.button} alignItems="flex-start">
+    <StyledList>
+      <StyledListItemButton alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar
+          <StyledAvatar
             alt={props.id.toString()}
             src={props.logo}
-            sx={{ border: "1px solid #e5e5e5", borderRadius: "6px" }}
             variant="square"
           />
         </ListItemAvatar>
         <Stack spacing={0}>
           <ListItemText primary={props.company} />
         </Stack>
-      </ListItemButton>
+      </StyledListItemButton>
       <Divider />
-    </List>
+    </StyledList>
   );
 };
 
