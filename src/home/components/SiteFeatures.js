@@ -34,6 +34,8 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   minWidth: 150,
+  border: "2px solid #c2e6ff",
+  borderRadius: "16px",
   "&:hover": {
     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
   },
@@ -48,6 +50,7 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
 const IconBox = styled(Box)({
   border: "1px solid #e5e5e5",
   borderRadius: "5px",
+  minWidth: "3rem",
   padding: "1rem",
   "&:hover": {
     transition: "all 0.3s ease-in",
@@ -69,7 +72,7 @@ const SiteFeatures = () => {
     <StyledBoxWrapper>
       {items.map(({ label, icon }, i) => {
         return (
-          <StyledCardBackground key={i} raised={true}>
+          <StyledCardBackground key={i} raised={false}>
             <CardContent>
               <Typography
                 align="center"

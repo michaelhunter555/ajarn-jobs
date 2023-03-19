@@ -20,7 +20,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 const StyledJobAdCard = styled(Card)(({ theme, featured }) => ({
-  backgroundColor: featured ? "#fffef9" : "#fafafa",
+  backgroundColor: featured === true ? "#fffef9" : "#fafafa",
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
 }));
 
@@ -65,7 +65,10 @@ const JobAdsList = (props) => {
       {job.map((school, i) => (
         <List key={school.id}>
           <Link to={`/jobs/${school.id}`}>
-            <StyledJobAdCard component="div" featured={school.jobType.featured}>
+            <StyledJobAdCard
+              component="div"
+              featured={school.jobType.featured ? true : false}
+            >
               <CardActionArea>
                 <CardContent>
                   <Grid container direction="row">

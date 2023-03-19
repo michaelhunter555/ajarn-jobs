@@ -2,6 +2,7 @@ import React from "react";
 
 import { useParams } from "react-router-dom";
 
+import Logo from "../../logo.svg";
 import JobDetails from "../components/JobDetails";
 
 const dummy_jobs = [
@@ -17,7 +18,7 @@ const dummy_jobs = [
     workPermit: false,
     creator: {
       company: "Sine Education",
-      logoUrl: "#",
+      logoUrl: Logo,
       companySize: "10-50",
     },
   },
@@ -33,7 +34,7 @@ const dummy_jobs = [
     workPermit: true,
     creator: {
       company: "BFits",
-      logoUrl: "#",
+      logoUrl: Logo,
       companySize: "10-20",
     },
   },
