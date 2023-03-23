@@ -24,7 +24,7 @@ const StyledJobAdCard = styled(Card)(({ theme, featured }) => ({
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
 }));
 
-const StyledChipDiv = styled(Typography)(({ theme }) => ({
+const StyledChipDiv = styled(Typography)(({ theme, featured }) => ({
   display: "flex",
   flexWrap: "wrap",
   gap: "5px",
@@ -41,6 +41,10 @@ const StyledMediaCard = styled(CardMedia)({
   },
   borderRadius: 3,
 });
+
+const StyledChip = styled(Chip)(({ theme, featured }) => ({
+  backgroundColor: featured ? "#faea92" : "#e5e5e5",
+}));
 
 const JobAdsList = (props) => {
   const { job } = props;
@@ -65,10 +69,7 @@ const JobAdsList = (props) => {
       {job.map((school, i) => (
         <List key={school.id}>
           <Link to={`/jobs/${school.id}`}>
-            <StyledJobAdCard
-              component="div"
-              featured={school.jobType.featured ? true : false}
-            >
+            <StyledJobAdCard component="div" featured={school.jobType.featured}>
               <CardActionArea>
                 <CardContent>
                   <Grid container direction="row">
@@ -94,20 +95,23 @@ const JobAdsList = (props) => {
                       </Typography>
 
                       <StyledChipDiv variant="body2" component="div">
-                        <Chip
+                        <StyledChip
                           label={school.location}
                           size={"small"}
                           icon={<PlaceIcon />}
+                          featured={school.jobType.featured}
                         />
-                        <Chip
+                        <StyledChip
                           label={school.salary}
                           size={"small"}
                           icon={<PaymentsIcon />}
+                          featured={school.jobType.featured}
                         />
-                        <Chip
+                        <StyledChip
                           label={school.hours}
                           size={"small"}
                           icon={<PunchClockIcon />}
+                          featured={school.jobType.featured}
                         />
                       </StyledChipDiv>
                       <Typography variant="body2" color="text.secondary">

@@ -8,7 +8,21 @@ import {
   FaMoneyBill,
 } from "react-icons/fa";
 
-import { Box, Button, CardMedia, Grid, Paper, Typography } from "@mui/material";
+import BusinessIcon from "@mui/icons-material/Business";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import {
+  Alert,
+  Box,
+  Button,
+  CardMedia,
+  Grid,
+  List,
+  ListItem,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 //job details layout container
@@ -84,7 +98,7 @@ const JobDetails = (props) => {
   // };
   // };
 
-  const items = [
+  const jobSpecifications = [
     { text: "Location", icon: <FaMapMarkerAlt />, data: job.location },
     { text: "Requirements", icon: <FaGraduationCap />, data: job.requirements },
     { text: "Salary", icon: <FaMoneyBill />, data: job.salary },
@@ -99,7 +113,7 @@ const JobDetails = (props) => {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ width: "calc(90% + 16)" }}>
           <Grid item xs={6} md={4}>
             <Item>
               <StyledJobTitle>{job.creator.company}</StyledJobTitle>
@@ -112,6 +126,69 @@ const JobDetails = (props) => {
                 alt={job.creator.company}
               />
               <Button variant="contained">Apply Now</Button>
+              <Grid
+                container
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  margin: "1rem 0 0.5rem 3rem",
+                }}
+              >
+                <LocationOnIcon />
+                <Typography>{job.creator.headquarters}</Typography>
+              </Grid>
+              <Grid
+                container
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  margin: "0 0 0.5rem 3rem",
+                }}
+              >
+                <BusinessIcon />
+                <Typography>{job.creator.companySize} employees</Typography>
+              </Grid>
+              <Grid
+                container
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  margin: "0 0 0.5rem 3rem",
+                }}
+              >
+                <EventAvailableIcon />
+                <Typography>Established: {job.creator.established} </Typography>
+              </Grid>
+              <Grid
+                container
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  margin: "0 0 0.5rem 3rem",
+                }}
+              >
+                <List
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: 0,
+                  }}
+                  color="text.secondary"
+                >
+                  <b>Works with schools in:</b>{" "}
+                  {job.creator.presence.map((item, i) => (
+                    <ListItem key={i}>{item}</ListItem>
+                  ))}{" "}
+                </List>
+              </Grid>
             </Item>
           </Grid>
           <Grid item xs={6} md={8}>
@@ -127,6 +204,12 @@ const JobDetails = (props) => {
                 margin: "1rem 0 0 0",
               }}
             >
+              <Alert
+                icon={<VerifiedUserIcon fontSize="inherit" />}
+                severity="success"
+              >
+                This was listing was vetted and approved by AjarnJobs.com staff.
+              </Alert>
               <Button variant="outlined">Apply Now</Button>
 
               <Button>Need Help?</Button>
@@ -140,7 +223,7 @@ const JobDetails = (props) => {
                 marginTop: 5,
               }}
             >
-              {items.map(({ text, icon, data }, i) => (
+              {jobSpecifications.map(({ text, icon, data }, i) => (
                 <Grid
                   key={i}
                   item
@@ -165,33 +248,25 @@ const JobDetails = (props) => {
                 </Grid>
               ))}
             </Item>
-            <Item
-              sx={{ textAlingn: "left", width: " 95%", margin: "1rem auto" }}
+            <Grid
+              item
+              sx={{ margin: "1rem auto", height: 300, overflowY: "auto" }}
             >
-              <h1>Job Details</h1>
-              {job.description}
-            </Item>
-          </Grid>
-
-          <Grid item xs={6} md={4}>
-            <Paper
-              sx={{
-                display: "flex",
-                alignItems: "left",
-                flexDirection: "column",
-              }}
-            >
-              <Typography variant="h3" sx={{ margin: "5px 0 0 0" }}>
-                About {job.creator.company}
-              </Typography>
-              <Typography paragraph color="text.secondary">
-                Short About School
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid item xs={6} md={8} sx={{ display: "flex", alignItems: "left" }}>
-            <Item>{job.description}</Item>
+              <Paper>
+                <Typography
+                  color="text.secondary"
+                  variant="h3"
+                  sx={{ margin: "5px 0 0 0" }}
+                >
+                  About {job.creator.company}
+                  <img src={job.creator.logoUrl} alt={job.creator.company} />
+                </Typography>
+                <Typography sx={{ margin: 1 }} paragraph color="text.secondary">
+                  {job.about}
+                  {job.description}
+                </Typography>
+              </Paper>
+            </Grid>
           </Grid>
         </Grid>
       </Box>
