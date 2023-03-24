@@ -1,11 +1,8 @@
-import './Input.css';
+import "./Input.css";
 
-import React, {
-  useEffect,
-  useReducer,
-} from 'react';
+import React, { useEffect, useReducer } from "react";
 
-import { validate } from '../../util/validators';
+import { validate } from "../../util/validators";
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -67,7 +64,7 @@ const Input = (props) => {
         onBlur={touchHandler}
         value={inputState.value}
       />
-    ) : (
+    ) : props.element === "textarea" ? (
       <textarea
         id={props.id}
         rows={props.rows || 3}
@@ -75,6 +72,22 @@ const Input = (props) => {
         onBlur={touchHandler}
         value={inputState.value}
       />
+    ) : (
+      props.element === "select" && (
+        <select
+          id={props.id}
+          onChange={changeHandler}
+          onBlur={touchHandler}
+          value={inputState.value}
+        >
+          {props.options &&
+            props.options.map((item, i) => (
+              <option key={i} value={item}>
+                {item}
+              </option>
+            ))}
+        </select>
+      )
     );
 
   return (

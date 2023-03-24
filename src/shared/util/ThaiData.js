@@ -58,3 +58,11 @@ export const partTimeSalaries = [
   "THB 900/hour",
   "over THB 1000/hour",
 ];
+
+export const coreJobRequirements = [
+  "bachelor's degree",
+  "master's degree",
+  "PGSCE",
+  "CELTA",
+  "DELTA",
+];

@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 //import { useNavigate } from 'react-router-dom';
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
 import { useForm } from "../../shared/hooks/form-hook";
 //import { AuthContext } from '../../shared/context/auth-context';
+import {
+  fullTimeSalaries,
+  partTimeSalaries,
+  thaiCities,
+} from "../../shared/util/ThaiData";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
@@ -37,16 +42,16 @@ const NewJob = () => {
         isValid: false,
       },
       salary: {
-        value: "",
-        isValid: false,
+        value: fullTimeSalaries[0],
+        isValid: true,
       },
       requirements: {
         value: "",
         isValid: false,
       },
       hours: {
-        value: "",
-        isValid: false,
+        value: "Full-time",
+        isValid: true,
       },
 
       description: {
@@ -56,6 +61,25 @@ const NewJob = () => {
     },
     false
   );
+  const [isFullTime, setIsFullTime] = useState(true);
+
+  useEffect(() => {
+    if (isFullTime) {
+      inputHandler("salary", fullTimeSalaries[0], true);
+    } else {
+      inputHandler("salary", partTimeSalaries[0], true);
+    }
+  }, [isFullTime, inputHandler]);
+
+  const jobIsFullTimeHandler = () => {
+    setIsFullTime(true);
+    inputHandler("hours", "Full-time", true);
+  };
+
+  const jobIsPartTimeHandler = () => {
+    setIsFullTime(false);
+    inputHandler("hours", "Part-time", true);
+  };
 
   const jobSubmitHandler = (event) => {
     event.preventDefault();
@@ -73,23 +97,43 @@ const NewJob = () => {
         errorText="please enter a valid title"
         onInput={inputHandler}
       />
+      <input
+        id="hours-fullTime"
+        type="radio"
+        name="jobType"
+        value="Full-time"
+        checked={isFullTime}
+        onChange={jobIsFullTimeHandler}
+      />{" "}
+      Full-Time
+      <input
+        id="hours-partTime"
+        type="radio"
+        name="jobType"
+        value="Part-time"
+        checked={!isFullTime}
+        onChange={jobIsPartTimeHandler}
+      />{" "}
+      Part-Time
       <Input
         id="salary"
-        element="salary"
+        element="select"
         type="number"
         label="Salary"
         validators={[VALIDATOR_REQUIRE()]}
-        errorText="please enter a valid title"
+        errorText="please select a valid salary"
         onInput={inputHandler}
+        options={isFullTime ? fullTimeSalaries : partTimeSalaries}
       />
       <Input
         id="location"
-        element="input"
-        type="text"
+        element="select"
         label="Location"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="please enter a valid location"
         onInput={inputHandler}
+        options={thaiCities}
+        selectType="location"
       />
       <Input
         id="requirements"
@@ -100,16 +144,6 @@ const NewJob = () => {
         errorText="please enter a valid requirements"
         onInput={inputHandler}
       />
-      <Input
-        id="hours"
-        element="input"
-        type="text"
-        label="Hours"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="please enter a valid hours"
-        onInput={inputHandler}
-      />
-
       <Input
         id="description"
         element="textarea"
