@@ -1,63 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
 
-import {
-  Avatar,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Chip, Divider, Paper, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+import { SINGLE_DUMMY_USERS } from "../../../shared/util/DummyUsers";
+import ProfileTabs from "./ProfileTabs";
+
+const StyledProfileContainer = styled(Paper)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  marginBottom: theme.spacing(5),
+}));
+
+const StyledProfileAvatar = styled(Avatar)(({ theme }) => ({
+  width: theme.spacing(15),
+  height: theme.spacing(15),
+  marginBottom: theme.spacing(2),
+  marginTop: theme.spacing(2),
+}));
 
 const ProfileInformation = () => {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [profileData, setProfileData] = useState({
-    name: "John",
-    profilePicture:
-      "https://images.unsplash.com/photo-1573166364524-d9dbfd8bbf83?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80",
-    bio: "I have 3 years of experience teaching in Thai international schools.",
-  });
-
-  const handleEditProfile = (event) => {
-    setProfileData({
-      name: event.target.value,
-      profilePicture: event.target.value,
-      bio: event.target.value,
-    });
-
-    setIsEditMode(!isEditMode);
-  };
+  const { id, location, education, WorkExperience, interests, name, bio } =
+    SINGLE_DUMMY_USERS[0];
 
   return (
-    <Card>
-      <CardContent>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item>
-            <Avatar src={profileData.profilePicture} alt={profileData.name} />
-          </Grid>
-          <Grid item>
-            <Typography variant="h5">
-              {isEditMode ? (
-                <TextField defaultValue={profileData.name} />
-              ) : (
-                profileData.name
-              )}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Typography variant="body1">
-          {isEditMode ? (
-            <TextField defaultValue={profileData.bio} multiline fullWidth />
-          ) : (
-            profileData.bio
-          )}
-        </Typography>
-        <Button onClick={handleEditProfile}>
-          {isEditMode ? "Save" : "Edit"}
-        </Button>
-      </CardContent>
-    </Card>
+    <StyledProfileContainer>
+      <StyledProfileAvatar
+        src="https://via.placeholder.com/150"
+        alt={`${id}-${name}`}
+      />
+      <Typography variant="h5">{name}</Typography>
+      <Typography variant="subtitle1">{location}</Typography>
+      <Typography variant="subtitle2">{education}</Typography>
+      <Typography variant="body1">{WorkExperience}</Typography>
+      <Box>
+        {interests.map((interest, i) => {
+          return <Chip key={i} label={interest} sx={{ margin: 0.5 }} />;
+        })}
+      </Box>
+
+      <Divider flexItem sx={{ marginTop: "1rem" }} />
+      <ProfileTabs />
+      <Typography paragraph>{bio}</Typography>
+    </StyledProfileContainer>
   );
 };
 

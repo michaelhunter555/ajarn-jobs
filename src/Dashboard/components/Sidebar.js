@@ -1,12 +1,10 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
-
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ListIcon from "@mui/icons-material/List";
 import {
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Paper,
@@ -17,6 +15,8 @@ const HorizontalSideBar = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   height: "100%",
+  minHeight: "50vh",
+  maxHeight: "50vh",
   maxWidth: 250,
   background: "white",
 }));
@@ -25,40 +25,47 @@ const menuItems = [
   {
     text: "Profile",
     icon: <DashboardIcon />,
-    link: "",
+    componentName: "profile",
   },
   {
     text: "Job Listings",
     icon: <ListIcon />,
-    link: "",
+    componentName: "job-listings",
   },
   {
     text: "Applications",
     icon: <DashboardIcon />,
-    link: "",
+    componentName: "applications",
   },
   {
     text: "Settings",
     icon: <DashboardIcon />,
-    link: "",
+    componentName: "settings",
   },
   {
     text: "Log out",
     icon: <DashboardIcon />,
-    link: "",
+    componentName: "logout",
   },
 ];
 
-const Sidebar = (props) => {
+const Sidebar = ({ onMenuItemClick }) => {
+  const handleSidebarClick = (componentName) => {
+    onMenuItemClick(componentName);
+    console.log(componentName);
+  };
+
   return (
-    <HorizontalSideBar elevated={true}>
+    <HorizontalSideBar elevated="true">
       <List>
         {menuItems.map((item, i) => (
-          <ListItem key={i}>
+          <ListItemButton
+            key={i}
+            onClick={() => handleSidebarClick(item.componentName)}
+          >
             <ListItemIcon>{item.icon}</ListItemIcon>
-            {item.link !== "" && <Link to={item.link}>{item.text}</Link>}
             <ListItemText primary={item.text} />
-          </ListItem>
+          </ListItemButton>
         ))}
       </List>
     </HorizontalSideBar>
