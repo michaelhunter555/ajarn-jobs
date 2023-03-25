@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { styled } from "@mui/material/styles";
+
 //import { useNavigate } from 'react-router-dom';
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
@@ -15,18 +17,16 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
 
-const newJobstyles = {
-  newJobForm: {
-    listStyle: "none",
-    margin: "6rem auto",
-    padding: "1rem",
-    width: "90%",
-    maxWidth: "40rem",
-    boxShadow: " 0 2px 8px rgba(0, 0, 0, 0.26)",
-    borderRadius: "6px",
-    background: "white",
-  },
-};
+const StyledForm = styled("form")({
+  listStyle: "none",
+  margin: "6rem auto",
+  padding: "1rem",
+  width: "90%",
+  maxWidth: "40rem",
+  boxShadow: " 0 2px 8px rgba(0, 0, 0, 0.26)",
+  borderRadius: "6px",
+  background: "white",
+});
 
 const NewJob = () => {
   //our onInput props(1,2,3) takes 3 arguments(Refer to Input.js). these values will be used to locate the id, value and validate.
@@ -87,7 +87,7 @@ const NewJob = () => {
   };
 
   return (
-    <form style={{ ...newJobstyles.newJobForm }} onSubmit={jobSubmitHandler}>
+    <StyledForm onSubmit={jobSubmitHandler}>
       <Input
         id="title"
         element="input"
@@ -156,7 +156,7 @@ const NewJob = () => {
       <Button type="submit" disabled={!formState.isValid}>
         Add Job
       </Button>
-    </form>
+    </StyledForm>
   );
 };
 

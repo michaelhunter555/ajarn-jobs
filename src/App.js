@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
 import JobDetailsPage from "./jobs/pages/JobDetailsPage";
 import NewJob from "./jobs/pages/NewJob";
@@ -11,7 +12,6 @@ import UpdateJob from "./jobs/pages/UpdateJob";
 import UserJobs from "./jobs/pages/UserJobs";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
-import UserDashboard from "./users/pages/UserDashboard";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,7 +50,7 @@ function App() {
         <MainNavigation />
         <Routes>
           <Route path="/" element={<Home />} exact="true" />
-          <Route path="/users" element={<UserDashboard />} />
+          <Route path="/users" element={<TeacherDashboard />} />
           <Route path="/jobs" element={<UserJobs />} />
           <Route path="/job/new" element={<NewJob />} />
           <Route path="/jobs/:jid" element={<JobDetailsPage />} />
