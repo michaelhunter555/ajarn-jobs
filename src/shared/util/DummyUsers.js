@@ -7,6 +7,17 @@ export const SINGLE_DUMMY_USERS = [
     workExperience: "5 years teaching experience",
     interests: ["Teaching", "Traveling", "Photography"],
     bio: "Hi, my name is John and I am originally from Bakalashaka, Minnesota. Never heard of it? Well, that's because it's a small town in bumbleF*&# minny SOTAAAA YEAH BOII",
+    skill: ["student-centered", "PPP", "lesson planning"],
+    resume: [
+      {
+        resumeId: 1,
+        schoolName: "Bright Future International",
+        role: "teach m1 and m2 conversational English",
+        jobTitle: "English Teacher",
+        from: 2004,
+        to: 2023,
+      },
+    ],
   },
 ];
 

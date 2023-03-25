@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Avatar, Box, Chip, Divider, Paper, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -21,8 +21,64 @@ const StyledProfileAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 const ProfileInformation = () => {
-  const { id, location, education, WorkExperience, interests, name, bio } =
-    SINGLE_DUMMY_USERS[0];
+  const [teacherProfileTab, setTeacherProfileTab] = useState("bio");
+  const {
+    id,
+    location,
+    education,
+    WorkExperience,
+    interests,
+    name,
+    bio,
+    skill,
+    resume,
+  } = SINGLE_DUMMY_USERS[0];
+
+  const handleMenuItemClick = (componentName) => {
+    setTeacherProfileTab(componentName);
+  };
+
+  const renderComponent = () => {
+    switch (teacherProfileTab) {
+      case "bio":
+        return <Typography paragraph>{bio}</Typography>;
+      case "skills":
+        return (
+          <Typography paragraph>
+            {skill.map((item, i) => (
+              <Chip key={i} label={item} />
+            ))}
+          </Typography>
+        );
+      case "resume":
+        return (
+          <table>
+            <thead>
+              <tr>
+                <th>School Name</th>
+                <th>Role</th>
+                <th>Job Title</th>
+                <th>From:</th>
+                <th>To:</th>
+              </tr>
+            </thead>
+            <tbody>
+              {resume.map((item, i) => (
+                <tr key={i}>
+                  <td>{item.schoolName}</td>
+                  <td>{item.role}</td>
+                  <td>{item.jobTitle}</td>
+                  <td>{item.from}</td>
+                  <td>{item.to}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      default:
+        return <Typography paragraph>{bio}</Typography>;
+    }
+  };
 
   return (
     <StyledProfileContainer>
@@ -41,8 +97,8 @@ const ProfileInformation = () => {
       </Box>
 
       <Divider flexItem sx={{ marginTop: "1rem" }} />
-      <ProfileTabs />
-      <Typography paragraph>{bio}</Typography>
+      <ProfileTabs onTabChange={handleMenuItemClick} />
+      {renderComponent()}
     </StyledProfileContainer>
   );
 };

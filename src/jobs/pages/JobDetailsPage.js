@@ -47,17 +47,10 @@ const dummy_jobs = [
     creator: {
       company: "BFits",
       logoUrl: Logo,
-      companySize: "10-20",
-      headquarters: "Bangkok, TH",
+      companySize: "100-120",
+      headquarters: "Chaing Mai, TH",
       established: "2006",
-      presence: [
-        "Bangkok",
-        "chiang mai",
-        "nontaburi",
-        "sisaket",
-        "Burriram",
-        "Nakhon Nayok",
-      ],
+      presence: ["Bangkok", "chiang mai"],
     },
   },
 ];

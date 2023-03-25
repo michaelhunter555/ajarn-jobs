@@ -2,20 +2,37 @@ import React, { useState } from "react";
 
 import { Box, Tab, Tabs } from "@mui/material";
 
-const ProfileTabs = (props) => {
+const menuItems = [
+  {
+    text: "Bio",
+    renderData: "bio",
+  },
+  {
+    text: "Skills",
+    renderData: "skills",
+  },
+  {
+    text: "Resume",
+    renderData: "resume",
+  },
+];
+
+const ProfileTabs = ({ onTabChange }) => {
   const [value, setValue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
+    onTabChange(menuItems[newValue].renderData);
   };
+
   return (
     <Box
       sx={{ width: "100%", bgcolor: "background.paper", margin: "1rem auto" }}
     >
       <Tabs value={value} onChange={handleTabChange} centered>
-        <Tab label="Bio" />
-        <Tab label="Skills" />
-        <Tab label="Resume" />
+        {menuItems.map((item, i) => (
+          <Tab key={i} label={item.renderData} />
+        ))}
       </Tabs>
     </Box>
   );

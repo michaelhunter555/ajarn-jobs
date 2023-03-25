@@ -17,6 +17,7 @@ import {
   Box,
   Button,
   CardMedia,
+  Divider,
   Grid,
   List,
   ListItem,
@@ -125,7 +126,10 @@ const JobDetails = (props) => {
                 image={job.creator.logoUrl}
                 alt={job.creator.company}
               />
-              <Button variant="contained">Apply Now</Button>
+              <Button sx={{ marginBottom: 1.5 }} variant="contained">
+                Apply Now
+              </Button>
+              <Divider flexItem />
               <Grid
                 container
                 sx={{
