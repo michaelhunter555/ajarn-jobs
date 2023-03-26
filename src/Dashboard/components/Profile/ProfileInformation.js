@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 
 import { SINGLE_DUMMY_USERS } from "../../../shared/util/DummyUsers";
 import ProfileTabs from "./ProfileTabs";
+import { CollapsibleTable } from "./Resume";
 
 const StyledProfileContainer = styled(Paper)(({ theme }) => ({
   display: "flex",
@@ -44,37 +45,21 @@ const ProfileInformation = () => {
         return <Typography paragraph>{bio}</Typography>;
       case "skills":
         return (
-          <Typography paragraph>
+          <Typography
+            paragraph
+            sx={{ display: "flex", flexDirection: "row", gap: "1rem" }}
+          >
             {skill.map((item, i) => (
-              <Chip key={i} label={item} />
+              <Chip
+                key={i}
+                label={item}
+                sx={{ color: "white", backgroundColor: "green" }}
+              />
             ))}
           </Typography>
         );
       case "resume":
-        return (
-          <table>
-            <thead>
-              <tr>
-                <th>School Name</th>
-                <th>Role</th>
-                <th>Job Title</th>
-                <th>From:</th>
-                <th>To:</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resume.map((item, i) => (
-                <tr key={i}>
-                  <td>{item.schoolName}</td>
-                  <td>{item.role}</td>
-                  <td>{item.jobTitle}</td>
-                  <td>{item.from}</td>
-                  <td>{item.to}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        );
+        return <CollapsibleTable />;
       default:
         return <Typography paragraph>{bio}</Typography>;
     }
