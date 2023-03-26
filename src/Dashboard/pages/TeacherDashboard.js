@@ -59,7 +59,17 @@ const TeacherDashboard = () => {
           </Grid>
         </Grid>
 
-        {renderComponent()}
+        <Grid
+          item
+          sx={{
+            maxWidth: "80%",
+            display: "flex",
+            justifyContet: "flex-start",
+            flexDirection: "column",
+          }}
+        >
+          {renderComponent()}
+        </Grid>
         {/**add other components here */}
       </Grid>
     </Grid>

@@ -16,14 +16,25 @@ import {
   Typography,
 } from "@mui/material";
 
+import { SINGLE_DUMMY_USERS } from "../../../shared/util/DummyUsers";
+
 //create data
-const createData = (company, schoolName, location, from, to, role) => {
+const createData = (
+  company,
+  schoolName,
+  location,
+  from,
+  to,
+  jobTitle,
+  role
+) => {
   return {
     company,
     schoolName,
     location,
     from,
     to,
+    jobTitle,
     role,
   };
 };
@@ -55,7 +66,7 @@ const Row = (props) => {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                Role
+                Role - {row.jobTitle}
               </Typography>
               <Table size="small" aria-label="role">
                 <TableHead>
@@ -63,7 +74,6 @@ const Row = (props) => {
                     <TableCell>{row.role}</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>{row.role}</TableBody>
               </Table>
             </Box>
           </Collapse>
@@ -73,32 +83,19 @@ const Row = (props) => {
   );
 };
 
-const rows = [
+const { resume } = SINGLE_DUMMY_USERS[0];
+
+const rows = resume.map((item, i) =>
   createData(
-    "Sine Education",
-    "SKR",
-    "Bangkok",
-    "2006",
-    "2008",
-    "teach conversational English to young adults 17-23"
-  ),
-  createData(
-    "Bright Future Int",
-    "Biggs Academy",
-    "Bangkok",
-    "2006",
-    "2008",
-    "teach conversational English to young adults 17-23"
-  ),
-  createData(
-    "Stamford University",
-    "ECC",
-    "Bangkok",
-    "2006",
-    "2008",
-    "teach conversational English to young adults 17-23"
-  ),
-];
+    item.company,
+    item.schoolName,
+    item.location,
+    item.from,
+    item.to,
+    item.jobTitle,
+    item.role
+  )
+);
 
 export const CollapsibleTable = () => {
   return (

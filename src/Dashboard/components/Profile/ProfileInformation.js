@@ -7,11 +7,23 @@ import { SINGLE_DUMMY_USERS } from "../../../shared/util/DummyUsers";
 import ProfileTabs from "./ProfileTabs";
 import { CollapsibleTable } from "./Resume";
 
+const profilepic =
+  "https://images.unsplash.com/photo-1573166364524-d9dbfd8bbf83?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80";
+
 const StyledProfileContainer = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  alignItems: "center",
+  justifyContent: "flex-start",
   marginBottom: theme.spacing(5),
+}));
+
+const StyledBackgroundBox = styled(Box)(({ theme }) => ({
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  width: "100%",
+  backgroundColor: "#f4fcff",
 }));
 
 const StyledProfileAvatar = styled(Avatar)(({ theme }) => ({
@@ -42,12 +54,21 @@ const ProfileInformation = () => {
   const renderComponent = () => {
     switch (teacherProfileTab) {
       case "bio":
-        return <Typography paragraph>{bio}</Typography>;
+        return (
+          <Typography paragraph sx={{ margin: "1.5rem" }}>
+            {bio}
+          </Typography>
+        );
       case "skills":
         return (
           <Typography
             paragraph
-            sx={{ display: "flex", flexDirection: "row", gap: "1rem" }}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "1rem",
+              justifyContent: "center",
+            }}
           >
             {skill.map((item, i) => (
               <Chip
@@ -67,22 +88,22 @@ const ProfileInformation = () => {
 
   return (
     <StyledProfileContainer>
-      <StyledProfileAvatar
-        src="https://via.placeholder.com/150"
-        alt={`${id}-${name}`}
-      />
-      <Typography variant="h5">{name}</Typography>
-      <Typography variant="subtitle1">{location}</Typography>
-      <Typography variant="subtitle2">{education}</Typography>
-      <Typography variant="body1">{WorkExperience}</Typography>
-      <Box>
-        {interests.map((interest, i) => {
-          return <Chip key={i} label={interest} sx={{ margin: 0.5 }} />;
-        })}
-      </Box>
+      <StyledBackgroundBox>
+        <StyledProfileAvatar src={profilepic} alt={`${id}-${name}`} />
+        <Typography variant="h5">{name}</Typography>
+        <Typography variant="subtitle1">{location}</Typography>
+        <Typography variant="subtitle2">{education}</Typography>
+        <Typography variant="body1">{WorkExperience}</Typography>
+        <Box>
+          {interests.map((interest, i) => {
+            return <Chip key={i} label={interest} sx={{ margin: 0.5 }} />;
+          })}
+        </Box>
+      </StyledBackgroundBox>
 
       <Divider flexItem sx={{ marginTop: "1rem" }} />
       <ProfileTabs onTabChange={handleMenuItemClick} />
+
       {renderComponent()}
     </StyledProfileContainer>
   );
