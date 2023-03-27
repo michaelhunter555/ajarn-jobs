@@ -3,6 +3,7 @@ import React from "react";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ListIcon from "@mui/icons-material/List";
 import {
+  Divider,
   List,
   ListItemButton,
   ListItemIcon,
@@ -59,13 +60,15 @@ const Sidebar = ({ onMenuItemClick }) => {
     <HorizontalSideBar elevated="true">
       <List>
         {menuItems.map((item, i) => (
-          <ListItemButton
-            key={i}
-            onClick={() => handleSidebarClick(item.componentName)}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItemButton>
+          <React.Fragment key={i}>
+            <ListItemButton
+              onClick={() => handleSidebarClick(item.componentName)}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+            {i - menuItems.length - 1 && <Divider light />}
+          </React.Fragment>
         ))}
       </List>
     </HorizontalSideBar>

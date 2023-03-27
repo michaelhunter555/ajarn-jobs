@@ -5,7 +5,9 @@ import { Grid } from "@mui/material";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
 import { dummy_jobs } from "../../shared/util/DummyJobs";
+import Applications from "../components/Profile/Applications";
 import ProfileInformation from "../components/Profile/ProfileInformation";
+import TeacherSettings from "../components/Profile/TeacherSettings";
 import Sidebar from "../components/Sidebar";
 
 const TeacherDashboard = () => {
@@ -21,13 +23,17 @@ const TeacherDashboard = () => {
         return <ProfileInformation />;
       case "job-listings":
         return <JobAdsList job={dummy_jobs} />;
+      case "applications":
+        return <Applications />;
+      case "settings":
+        return <TeacherSettings />;
       default:
         return <ProfileInformation />;
     }
   };
 
   return (
-    <Grid container spacing={2} sx={{ maxWidth: "90%", margin: "0 auto" }}>
+    <Grid container spacing={1} sx={{ maxWidth: "90%", margin: "0 auto" }}>
       <Grid item xs={12} md={3}>
         <Sidebar onMenuItemClick={handleMenuItemClick} />
       </Grid>
