@@ -60,11 +60,17 @@ export const partTimeSalaries = [
 ];
 
 export const coreJobRequirements = [
-  "bachelor's degree",
+  "BA",
+  "BSc",
+  "Certificate",
+  "Diploma",
   "master's degree",
-  "PGSCE",
+  "PGCE",
+  "Phd",
+  "bEd",
   "CELTA",
   "DELTA",
+  "MBA",
 ];
 
 export const nationalities = [
