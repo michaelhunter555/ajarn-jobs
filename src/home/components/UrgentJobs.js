@@ -4,9 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import {
-  Button,
   Card,
-  CardActions,
   CardContent,
   Chip,
   Link,
@@ -59,16 +57,6 @@ const UrgentJobs = (props) => {
           ))}
         </List>
       </CardContent>
-      <CardActions
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Button variant="outlined" size="small">
-          see More
-        </Button>
-      </CardActions>
     </StyledUrgentJobCard>
   );
 };

@@ -1,83 +1,100 @@
-import "./Button.css";
-
 import React from "react";
 
 import { Link } from "react-router-dom";
 
-// const StyledButton = styled("button")(({ theme, inverse, danger, size }) => ({
-//   font: "inherit",
-//   border: "1px solid #a7a7a7",
-//   borderRadius: "4px",
-//   backgroundColor: inverse
-//     ? "transparent"
-//     : danger
-//     ? theme.palette.error.main
-//     : "#36c7cc",
-//   "&:hover,active:": inverse
-//     ? "#3e9ec4"
-//     : danger
-//     ? theme.palette.error.dark
-//     : "#167f92",
-//   color: inverse ? "#969696" : "white",
-//   "&:hover,active": {
-//     color: inverse ? "white" : "",
-//   },
-//   fontSize: size === "big" ? "1.5rem" : "0.8rem",
-//   cursor: "pointer",
-//   marginRight: "0rem",
-//   textDecoration: "none",
-//   display: "inline-block",
-//   "&:disabled,&:hover:disabled,&:active:disable": {
-//     background: "#ccc",
-//     color: "#979797",
-//     borderColor: "#ccc",
-//     cursor: "not-allowed",
-//   },
-//   "&:focus": {
-//     display: "none",
-//   },
-// }));
+import { styled } from "@mui/material/styles";
+
+const StyledButton = styled("button")(({ theme }) => ({
+  font: "inherit",
+  padding: "0.5rem 1.5rem",
+  border: "1px solid #a7a7a7",
+  borderRadius: "4px",
+  backgroundColor: "#36c7cc",
+  color: "white",
+  cursor: "pointer",
+  marginRight: "0rem",
+  textDecoration: "none",
+  display: "inline-block",
+  "&:focus": {
+    outline: "none",
+  },
+  "&:hover, &:active": {
+    background: "#167f92",
+    borderColor: "#43aaff",
+  },
+  "&.button--inverse": {
+    background: "transparent",
+    color: "#969696",
+    "&:hover, &:active": {
+      color: "white",
+      background: "#3e9ec4",
+    },
+  },
+  "&.button--danger": {
+    background: "#830000",
+    borderColor: "#830000",
+    "&:hover, &:active": {
+      background: "#f34343",
+      borderColor: "#f34343",
+    },
+  },
+  "&:disabled, &:hover:disabled, &:active:disabled": {
+    background: "#ccc",
+    color: "#979797",
+    borderColor: "#ccc",
+    cursor: "not-allowed",
+  },
+  "&.button--small": {
+    fontSize: "0.8rem",
+  },
+  "&.button--big": {
+    fontSize: "1.5rem",
+  },
+}));
 
 const Button = (props) => {
+  const { size, inverse, danger } = props;
+
   if (props.href) {
     return (
-      <a
-        className={`button button--${props.size || "default"} ${
-          props.inverse && "button--inverse"
-        } ${props.danger && "button--danger"}`}
+      <StyledButton
+        className={`button--${size || "default"} ${
+          inverse && "button--inverse"
+        } ${danger && "button--danger"}`}
         href={props.href}
       >
         {props.children}
-      </a>
+      </StyledButton>
     );
   }
 
   if (props.to) {
     return (
-      <Link
+      <StyledButton
+        className={`button--${size || "default"} ${
+          inverse && "button--inverse"
+        } ${danger && "button--danger"}`}
+        as={Link}
         to={props.to}
         exact={props.exact}
-        className={`button button--${props.size || "default"} ${
-          props.inverse && "button--inverse"
-        } ${props.danger && "button--danger"}`}
       >
         {props.children}
-      </Link>
+      </StyledButton>
     );
   }
 
   return (
-    <button
-      className={`button button--${props.size || "default"} ${
-        props.inverse && "button--inverse"
-      } ${props.danger && "button--danger"}`}
+    <StyledButton
+      className={`button--${size || "default"} ${
+        inverse && "button--inverse"
+      } ${danger && "button--danger"}`}
       type={props.type}
       onClick={props.onClick}
       disabled={props.disabled}
       style={props.style}
     >
       {props.children}
-    </button>
+    </StyledButton>
   );
 };
 

@@ -15,6 +15,10 @@ const menuItems = [
     text: "Resume",
     renderData: "resume",
   },
+  {
+    text: "Education",
+    renderData: "education",
+  },
 ];
 
 const ProfileTabs = ({ onTabChange }) => {

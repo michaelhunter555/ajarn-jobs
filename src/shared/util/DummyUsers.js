@@ -2,6 +2,7 @@ export const SINGLE_DUMMY_USERS = [
   {
     id: "u1",
     name: "John Doe",
+    nationality: "United States",
     location: "Bangkok, Thailand",
     education: "Bachelor of Education, Chulalongkorn University",
     workExperience: "5 years teaching experience",

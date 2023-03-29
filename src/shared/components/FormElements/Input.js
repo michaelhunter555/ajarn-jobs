@@ -1,8 +1,38 @@
-import "./Input.css";
-
 import React, { useEffect, useReducer } from "react";
 
+import { styled } from "@mui/material/styles";
+
 import { validate } from "../../util/validators";
+
+const FormControl = styled("div")(({ theme }) => ({
+  margin: "1rem 0",
+  "& label, & input, & textarea": {
+    display: "block",
+  },
+  "& label": {
+    fontWeight: "bold",
+    marginBottom: "0.5rem",
+  },
+  "& input, & textarea": {
+    width: "100%",
+    font: "inherit",
+    border: "1px solid #ccc",
+    background: "#f8f8f8",
+    padding: "0.15rem 0.25rem",
+  },
+  "& input:focus, & textarea:focus": {
+    outline: "none",
+    background: "#ebebeb",
+    borderColor: "#510077",
+  },
+  "&.form-control--invalid label, &.form-control--invalid p": {
+    color: "red",
+  },
+  "&.form-control--invalid input, &.form-control--invalid textarea": {
+    borderColor: "red",
+    background: "#ffd1d1",
+  },
+}));
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -91,7 +121,7 @@ const Input = (props) => {
     );
 
   return (
-    <div
+    <FormControl
       className={`form-control ${
         !inputState.isValid && inputState.isTouched && "form-control--invalid"
       }`}
@@ -99,7 +129,7 @@ const Input = (props) => {
       <label htmlFor={props.id}>{props.label}</label>
       {element}
       {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
-    </div>
+    </FormControl>
   );
 };
 

@@ -85,7 +85,8 @@ const NewJob = () => {
     event.preventDefault();
     console.log(formState.inputs);
   };
-
+  console.log(formState.inputs);
+  console.log(jobSubmitHandler);
   return (
     <StyledForm onSubmit={jobSubmitHandler}>
       <Input
