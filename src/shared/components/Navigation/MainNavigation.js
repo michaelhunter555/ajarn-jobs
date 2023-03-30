@@ -1,8 +1,8 @@
-import "./MainNavigation.css";
-
 import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
+
+import { styled } from "@mui/material/styles";
 
 import Backdrop from "../UIElements/Backdrop";
 import MainHeader from "./MainHeader";
@@ -36,46 +36,94 @@ const MainNavigation = (props) => {
     setDrawerIsOpen(false);
   };
 
-  const styles = {
-    glass: {
-      background: "rgba(255, 255, 255, 0.24)",
-      boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-      backdropFilter: "blur(5px)",
-      WebkitBackdropFilter: "blur(5px)",
-      border: "1px solid rgba(255, 255, 255, 0.3)",
-    },
-    normal: {
-      background: "white",
-    },
-  };
-
   return (
     <React.Fragment>
       {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
       <SideDrawer show={drawerIsOpen} onClick={closeDrawerHandler}>
-        <nav className="main-navigation__drawer-nav">
+        <MainNavigationDrawer>
           <NavLinks />
-        </nav>
+        </MainNavigationDrawer>
       </SideDrawer>
 
-      <MainHeader navScroll={!navIsScrolled ? styles.normal : styles.glass}>
-        <button
-          className="main-navigation__menu-btn"
-          onClick={openDrawerHandler}
-        >
+      <MainHeader navIsScrolled={navIsScrolled}>
+        <MainNavigationButtonStyles onClick={openDrawerHandler}>
           <span />
           <span />
           <span />
-        </button>
-        <h1 className="main-navigation__title">
-          <Link to="/">Ajarn Jobs</Link>
-        </h1>
-        <nav className="main-navigation__header-nav">
+        </MainNavigationButtonStyles>
+        <MainNavTitleStyle>
+          <MainNavigationTitleStyle to="/">Ajarn Jobs</MainNavigationTitleStyle>
+        </MainNavTitleStyle>
+        <MainNavigationHeader>
           <NavLinks />
-        </nav>
+        </MainNavigationHeader>
       </MainHeader>
     </React.Fragment>
   );
 };
 
 export default MainNavigation;
+
+// const styles = {
+//   glass: {
+//     background: "rgba(255, 255, 255, 0.24)",
+//     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+//     backdropFilter: "blur(5px)",
+//     WebkitBackdropFilter: "blur(5px)",
+//     border: "1px solid rgba(255, 255, 255, 0.3)",
+//   },
+//   normal: {
+//     background: "white",
+//   },
+// };
+
+// const MainHeaderNavScroll = styled('header')(({theme, navIsScrolled}) => ({
+//   background: theme.navIsScrolled ? "rgba(255, 255, 255, 0.24)" : "white",
+//     boxShadow: theme.navIsScrolled ? "0 4px 30px rgba(0, 0, 0, 0.1)": "",
+//     backdropFilter: theme.navIsScrolled ? "blur(5px)" : "",
+//     WebkitBackdropFilter: theme.navIsScrolled ? "blur(5px)" : "",
+//     border: theme.navIsScrolled ? "1px solid rgba(255, 255, 255, 0.3)" : "",
+// }))
+
+const MainNavigationButtonStyles = styled("button")`
+  width: 3rem;
+  height: 3rem;
+  backgroundcolor: "transparent";
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-right: 2rem;
+  cursor: pointer;
+  &:span {
+    display: block;
+    width: 3rem;
+    height: 2.5px;
+    background: rgb(99, 99, 99);
+  }
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const MainNavigationTitleStyle = styled(Link)`
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+`;
+
+const MainNavTitleStyle = styled("h1")`
+  color: rgb(132, 86, 86);
+`;
+
+const MainNavigationHeader = styled("nav")`
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+    margin: 0 7rem 0 0;
+  }
+`;
+const MainNavigationDrawer = styled("nav")`
+  height: 100%;
+`;
