@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -10,6 +10,7 @@ import UpdateJob from "./jobs/pages/UpdateJob";
 import UserJobs from "./jobs/pages/UserJobs";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
+import Login from "./users/pages/Auth";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,7 +18,7 @@ function App() {
   const [isTeacher, setIsTeacher] = useState(false);
   const [isSchool, setIsSchool] = useState(false);
 
-  const login = (uid, userRole) => {
+  const login = useCallback((uid, userRole) => {
     setIsLoggedIn(true);
     setUserId(uid);
 
@@ -26,12 +27,12 @@ function App() {
     } else if (userRole === "school") {
       setIsSchool(true);
     }
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setIsLoggedIn(false);
     setUserId(null);
-  };
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -52,6 +53,7 @@ function App() {
           <Route path="/jobs" element={<UserJobs />} />
           <Route path="/job/new" element={<NewJob />} />
           <Route path="/jobs/:jid" element={<JobDetailsPage />} />
+          <Route path="/auth" element={<Login />} />
           <Route
             path="/jobs/:jid/update"
             element={<UpdateJob />}

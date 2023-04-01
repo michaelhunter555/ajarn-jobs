@@ -2,6 +2,9 @@ import React, { useContext, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import { Card } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -10,6 +13,10 @@ import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
+
+const StyledFormCard = styled(Card)`
+  padding: 1rem;
+`;
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -59,7 +66,7 @@ const Auth = () => {
   };
 
   return (
-    <>
+    <StyledFormCard>
       <form onSubmit={authSubmitHandler}>
         {!isLoginMode && (
           <Input
@@ -98,7 +105,7 @@ const Auth = () => {
       <Button inverse onClick={signUpOrLoginHandler}>
         Switch to {isLoginMode ? "Sign-up" : "Login"}
       </Button>
-    </>
+    </StyledFormCard>
   );
 };
 

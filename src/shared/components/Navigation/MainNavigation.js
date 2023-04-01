@@ -64,27 +64,6 @@ const MainNavigation = (props) => {
 
 export default MainNavigation;
 
-// const styles = {
-//   glass: {
-//     background: "rgba(255, 255, 255, 0.24)",
-//     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-//     backdropFilter: "blur(5px)",
-//     WebkitBackdropFilter: "blur(5px)",
-//     border: "1px solid rgba(255, 255, 255, 0.3)",
-//   },
-//   normal: {
-//     background: "white",
-//   },
-// };
-
-// const MainHeaderNavScroll = styled('header')(({theme, navIsScrolled}) => ({
-//   background: theme.navIsScrolled ? "rgba(255, 255, 255, 0.24)" : "white",
-//     boxShadow: theme.navIsScrolled ? "0 4px 30px rgba(0, 0, 0, 0.1)": "",
-//     backdropFilter: theme.navIsScrolled ? "blur(5px)" : "",
-//     WebkitBackdropFilter: theme.navIsScrolled ? "blur(5px)" : "",
-//     border: theme.navIsScrolled ? "1px solid rgba(255, 255, 255, 0.3)" : "",
-// }))
-
 const MainNavigationButtonStyles = styled("button")`
   width: 3rem;
   height: 3rem;
