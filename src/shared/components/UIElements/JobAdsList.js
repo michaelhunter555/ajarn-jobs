@@ -68,7 +68,7 @@ const JobAdsList = (props) => {
     <>
       {job.map((school, i) => (
         <List key={school.id}>
-          <Link to={`/jobs/${school.id}`}>
+          <Link to={`/jobs/${school.id}`} style={{ textDecoration: "none" }}>
             <StyledJobAdCard component="div" featured={school.jobType.featured}>
               <CardActionArea>
                 <CardContent>

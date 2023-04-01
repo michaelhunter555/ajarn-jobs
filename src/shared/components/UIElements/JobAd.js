@@ -46,7 +46,7 @@ const JobAd = (props) => {
   const { job } = props;
 
   return (
-    <Link to={`/jobs/${job.id}`}>
+    <Link to={`/jobs/${job.id}`} style={{ textDecoration: "none" }}>
       <StyledJobAdCard>
         <CardActionArea>
           <CardContent>
