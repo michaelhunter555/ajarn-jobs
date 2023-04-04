@@ -1,17 +1,24 @@
-import React from "react";
+import React from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import { Box, Grid, Paper, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Box,
+  Grid,
+  Paper,
+  Typography,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const StyledPaper = styled(Paper)({
   position: "relative",
   backgroundColor: "grey.800",
   color: "#fff",
-  backgroundSize: "cover",
+  height: "auto",
+  objectFit: "contain",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center",
+  verticalAlign: "bottom",
 });
 
 const StyledBoxOverlay = styled(Box)({

@@ -1,21 +1,21 @@
-import React from "react";
+import React from 'react';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Button } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import Logo from "../../logo.svg";
-import Footer from "../../shared/components/UIElements/Footer";
-import JobAd from "../../shared/components/UIElements/JobAd";
-import BlogContent from "../components/BlogContent";
-import BottomFeatured from "../components/BottomFeatured";
-import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
-import RecentJobs from "../components/RecentJobs";
-import SiteFeatures from "../components/SiteFeatures";
-import SponsorsList from "../components/SponsorsList";
-import Tefl from "../components/Tefl";
-import UrgentJobs from "../components/UrgentJobs";
+import Logo from '../../logo.svg';
+import Footer from '../../shared/components/UIElements/Footer';
+import JobAd from '../../shared/components/UIElements/JobAd';
+import BlogContent from '../components/BlogContent';
+import BottomFeatured from '../components/BottomFeatured';
+import BottomFeaturedAdsList from '../components/BottomFeaturedAdsList';
+import RecentJobs from '../components/RecentJobs';
+import SiteFeatures from '../components/SiteFeatures';
+import SponsorsList from '../components/SponsorsList';
+import Tefl from '../components/Tefl';
+import UrgentJobs from '../components/UrgentJobs';
 
 const dummy_jobs = [
   {
@@ -149,7 +149,9 @@ const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
 }));
 
 const StyledHomeFeaturedSponsors = styled("div")(({ theme }) => ({
-  marginTop: "",
+  textAlign: "center",
+  boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
+  overflow: "auto",
   [theme.breakpoints.down("md")]: {
     gridcolumn: 1,
     gridRow: 4,
@@ -215,6 +217,9 @@ const Home = () => {
         {/* lower-right column*/}
         <StyledHomeFeaturedSponsors>
           <SponsorsList sponsor={dummy_jobs} />
+          <Button component={RouterLink} to="/jobs">
+            Become a Sponsor
+          </Button>
         </StyledHomeFeaturedSponsors>
       </StyledGridContainer>
       <div>

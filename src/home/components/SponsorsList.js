@@ -1,15 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import { Paper } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Paper } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import Sponsors from "./Sponsors";
+import Sponsors from './Sponsors';
 
 const StyledPaper = styled(Paper)({
   maxHeight: "100%",
   overflow: "auto",
+  h2: {
+    display: "flex",
+    justifyContent: "center",
+  },
 });
 
 const StyledLink = styled(Link)({
@@ -20,19 +24,22 @@ const StyledLink = styled(Link)({
 const SponsorsList = (props) => {
   const { sponsor } = props;
   return (
-    <StyledPaper>
-      {sponsor.map((supporter, i) => (
-        <StyledLink key={supporter.id} to={`/jobs/${supporter.id}`}>
-          <Sponsors
-            logo={supporter.creator.logoUrl}
-            description={supporter.description.substring(0, 25) + "..."}
-            company={supporter.creator.company}
-            salary={supporter.salary}
-            location={supporter.location}
-          />
-        </StyledLink>
-      ))}
-    </StyledPaper>
+    <>
+      <h2>Sponsors</h2>
+      <StyledPaper>
+        {sponsor.map((supporter, i) => (
+          <StyledLink key={supporter.id} to={`/jobs/${supporter.id}`}>
+            <Sponsors
+              logo={supporter.creator.logoUrl}
+              description={supporter.description.substring(0, 25) + "..."}
+              company={supporter.creator.company}
+              salary={supporter.salary}
+              location={supporter.location}
+            />
+          </StyledLink>
+        ))}
+      </StyledPaper>
+    </>
   );
 };
 
