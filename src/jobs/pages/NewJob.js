@@ -1,21 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
-import { styled } from "@mui/material/styles";
+import { styled } from '@mui/material/styles';
 
 //import { useNavigate } from 'react-router-dom';
-import Button from "../../shared/components/FormElements/Button";
-import Input from "../../shared/components/FormElements/Input";
-import { useForm } from "../../shared/hooks/form-hook";
+import Button from '../../shared/components/FormElements/Button';
+import Input from '../../shared/components/FormElements/Input';
+import { useForm } from '../../shared/hooks/form-hook';
 //import { AuthContext } from '../../shared/context/auth-context';
 import {
   fullTimeSalaries,
   partTimeSalaries,
   thaiCities,
-} from "../../shared/util/ThaiData";
+} from '../../shared/util/ThaiData';
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
-} from "../../shared/util/validators";
+} from '../../shared/util/validators';
 
 const StyledForm = styled("form")({
   listStyle: "none",
@@ -53,7 +56,6 @@ const NewJob = () => {
         value: "Full-time",
         isValid: true,
       },
-
       description: {
         value: "",
         isValid: false,
@@ -85,8 +87,7 @@ const NewJob = () => {
     event.preventDefault();
     console.log(formState.inputs);
   };
-  console.log(formState.inputs);
-  console.log(jobSubmitHandler);
+
   return (
     <StyledForm onSubmit={jobSubmitHandler}>
       <Input

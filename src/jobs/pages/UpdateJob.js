@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
-import Button from "../../shared/components/FormElements/Button";
-import Input from "../../shared/components/FormElements/Input";
-import { useForm } from "../../shared/hooks/form-hook";
+import Button from '../../shared/components/FormElements/Button';
+import Input from '../../shared/components/FormElements/Input';
+import { useForm } from '../../shared/hooks/form-hook';
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
-} from "../../shared/util/validators";
+} from '../../shared/util/validators';
 
 //import JobUpdateForm from "../components/JobUpdateForm";
 
@@ -115,6 +118,10 @@ const UpdateJob = () => {
           },
           hours: {
             value: identifiedJob.hours,
+            isValid: true,
+          },
+          workPermit: {
+            value: identifiedJob.workPermit,
             isValid: true,
           },
         },

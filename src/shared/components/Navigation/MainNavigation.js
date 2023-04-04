@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import { styled } from "@mui/material/styles";
+import { styled } from '@mui/material/styles';
 
-import Backdrop from "../UIElements/Backdrop";
-import MainHeader from "./MainHeader";
-import NavLinks from "./NavLinks";
-import SideDrawer from "./SideDrawer";
+import Backdrop from '../UIElements/Backdrop';
+import MainHeader from './MainHeader';
+import NavLinks from './NavLinks';
+import SideDrawer from './SideDrawer';
 
 const MainNavigation = (props) => {
   const [navIsScrolled, setNavIsScrolled] = useState(false);
@@ -74,7 +77,8 @@ const MainNavigationButtonStyles = styled("button")`
   justify-content: space-around;
   margin-right: 2rem;
   cursor: pointer;
-  &:span {
+
+  span {
     display: block;
     width: 3rem;
     height: 2.5px;
@@ -89,6 +93,7 @@ const MainNavigationButtonStyles = styled("button")`
 const MainNavigationTitleStyle = styled(Link)`
   text-decoration: none;
   color: rgb(0, 0, 0);
+  padding: 0 2rem;
 `;
 
 const MainNavTitleStyle = styled("h1")`

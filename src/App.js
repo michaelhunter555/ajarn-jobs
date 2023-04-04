@@ -1,16 +1,23 @@
-import React, { useCallback, useState } from "react";
+import React, {
+  useCallback,
+  useState,
+} from 'react';
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+} from 'react-router-dom';
 
-import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
-import Home from "./home/pages/Home";
-import JobDetailsPage from "./jobs/pages/JobDetailsPage";
-import NewJob from "./jobs/pages/NewJob";
-import UpdateJob from "./jobs/pages/UpdateJob";
-import UserJobs from "./jobs/pages/UserJobs";
-import MainNavigation from "./shared/components/Navigation/MainNavigation";
-import { AuthContext } from "./shared/context/auth-context";
-import Login from "./users/pages/Auth";
+import TeacherDashboard from './Dashboard/pages/TeacherDashboard';
+import Home from './home/pages/Home';
+import JobDetailsPage from './jobs/pages/JobDetailsPage';
+import NewJob from './jobs/pages/NewJob';
+import UpdateJob from './jobs/pages/UpdateJob';
+import UserJobs from './jobs/pages/UserJobs';
+import MainNavigation from './shared/components/Navigation/MainNavigation';
+import { AuthContext } from './shared/context/auth-context';
+import Login from './users/pages/Auth';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,6 +41,33 @@ function App() {
     setUserId(null);
   }, []);
 
+  let routes;
+
+  if (login) {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Home />} exact="true" />
+        {/*user:uid || */}
+        <Route path="/users:uid" element={<TeacherDashboard />} />
+        <Route path="/jobs" element={<UserJobs />} />
+        <Route path="/job/new" element={<NewJob />} />
+        <Route path="/jobs/:jid" element={<JobDetailsPage />} />
+        <Route path="/auth" element={<Login />} />
+        <Route path="/jobs/:jid/update" element={<UpdateJob />} exact="true" />
+      </Routes>
+    );
+  } else {
+    routes = (
+      <Routes>
+        <Route path="/" element={<Home />} exact="true" />
+        <Route path="/jobs" element={<UserJobs />} />
+        <Route path="/job/new" element={<NewJob />} />
+        <Route path="/jobs/:jid" element={<JobDetailsPage />} />
+        <Route path="/auth" element={<Login />} />
+      </Routes>
+    );
+  }
+  //remember to update users to dynamic id
   return (
     <AuthContext.Provider
       value={{

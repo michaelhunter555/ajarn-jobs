@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
-import { styled } from "@mui/material/styles";
+import { styled } from '@mui/material/styles';
 
-import { AuthContext } from "../../context/auth-context";
+import { AuthContext } from '../../context/auth-context';
 
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
@@ -22,20 +22,24 @@ const NavLinks = (props) => {
       </li>
 
       <li>
-        <NavLink to="/users">Users</NavLink>
+        <NavLink to="/users">Dashboard</NavLink>
       </li>
 
       <li>
         <NavLink to="/job/new">Add Job</NavLink>
       </li>
 
-      <li>
-        <NavLink to="/auth">Login</NavLink>
-      </li>
+      {!auth.isLoggedIn && (
+        <li>
+          <NavLink to="/auth">Login</NavLink>
+        </li>
+      )}
 
-      <li>
-        <button onClick={auth.logout}>Logout</button>
-      </li>
+      {auth.isLoggedIn && (
+        <li>
+          <button onClick={auth.logout}>Logout</button>
+        </li>
+      )}
     </StyledNavLinks>
   );
 };
@@ -79,8 +83,8 @@ const StyledNavLinks = styled("ul")`
   button {
     cursor: pointer;
     border: 1px solid #292929;
-    color: #292929;
-    background: transparent;
+    color: #000;
+    background: white;
     padding: 0.5rem;
     font: inherit;
   }
@@ -109,9 +113,9 @@ const StyledNavLinks = styled("ul")`
   }
 
   button {
-    border: 1px solid white;
-    color: white;
-    background: transparent;
+    border: 1px solid black;
+    color: black;
+    background: white;
   }
   button:hover,
   button:active {

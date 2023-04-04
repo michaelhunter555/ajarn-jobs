@@ -1,22 +1,42 @@
-import React, { useContext, useState } from "react";
+import React, {
+  useContext,
+  useState,
+} from 'react';
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-import { Card } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Card } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import Button from "../../shared/components/FormElements/Button";
-import Input from "../../shared/components/FormElements/Input";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useForm } from "../../shared/hooks/form-hook";
+import Button from '../../shared/components/FormElements/Button';
+import Input from '../../shared/components/FormElements/Input';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useForm } from '../../shared/hooks/form-hook';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
-} from "../../shared/util/validators";
+} from '../../shared/util/validators';
 
-const StyledFormCard = styled(Card)`
-  padding: 1rem;
-`;
+const StyledFormCard = styled(Card)({
+  listStyle: "none",
+  margin: "6rem auto",
+  padding: "1rem",
+  width: "90%",
+  maxWidth: "40rem",
+  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.26)",
+  borderRadius: "6px",
+  background: "white",
+  "&:button": {
+    display: "flex",
+    justifyContent: "center",
+  },
+});
+
+const StyledButton = styled(Button)({
+  displaly: "flex",
+  justifyContent: "center",
+  margin: "1rem auto",
+});
 
 const Auth = () => {
   const auth = useContext(AuthContext);
@@ -98,13 +118,17 @@ const Auth = () => {
           errorText="please enter your password"
           onInput={inputHandler}
         />
-        <Button type="submit" disabled={!formState.isValid}>
+        <StyledButton type="submit" disabled={!formState.isValid}>
           {isLoginMode ? "Login" : "Sign-up"}
-        </Button>
+        </StyledButton>
       </form>
-      <Button inverse onClick={signUpOrLoginHandler}>
+      <StyledButton
+        sx={{ marginBottom: 10 }}
+        inverse
+        onClick={signUpOrLoginHandler}
+      >
         Switch to {isLoginMode ? "Sign-up" : "Login"}
-      </Button>
+      </StyledButton>
     </StyledFormCard>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   FaClipboardList,
@@ -6,12 +6,13 @@ import {
   FaGraduationCap,
   FaMapMarkerAlt,
   FaMoneyBill,
-} from "react-icons/fa";
+} from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-import BusinessIcon from "@mui/icons-material/Business";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import BusinessIcon from '@mui/icons-material/Business';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import {
   Alert,
   Box,
@@ -23,8 +24,8 @@ import {
   ListItem,
   Paper,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 //job details layout container
 // const StyledJobBoxContainer = styled(Box)(({ theme, jobTitle }) => ({
@@ -108,7 +109,7 @@ const JobDetails = (props) => {
       icon: <FaClipboardList />,
       data: job.workPermit ? "✅" : "⛔",
     },
-    { text: "Workload", icon: <FaClock />, data: job.hours },
+    { text: "Hours", icon: <FaClock />, data: job.hours },
   ];
 
   return (
@@ -273,10 +274,13 @@ const JobDetails = (props) => {
             </Grid>
           </Grid>
         </Grid>
+        <Button component={Link} to={`/jobs/${job.id}/update`}>
+          {" "}
+          update Job{" "}
+        </Button>
       </Box>
     </>
   );
 };
 
 export default JobDetails;
-//<Button to={`/jobs/${job.id}/update`}> update Job </Button>
