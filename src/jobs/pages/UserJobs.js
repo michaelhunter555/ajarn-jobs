@@ -1,18 +1,26 @@
-import { useState } from "react";
+import {
+  useContext,
+  useState,
+} from 'react';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Button, Divider, Stack } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Button,
+  Divider,
+  Stack,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import Logo from "../../logo.svg";
+import Logo from '../../logo.svg';
 //import Button from "../../shared/components/FormElements/Button";
-import Card from "../../shared/components/UIElements/Card";
-import Footer from "../../shared/components/UIElements/Footer";
+import Card from '../../shared/components/UIElements/Card';
+import Footer from '../../shared/components/UIElements/Footer';
 //import JobLists from "../components/JobLists";
-import JobAdsList from "../../shared/components/UIElements/JobAdsList";
-import FeaturedJobsLists from "../components/FeaturedJobsLists";
-import JobFilters from "../components/JobFilters";
+import JobAdsList from '../../shared/components/UIElements/JobAdsList';
+import { AuthContext } from '../../shared/context/auth-context';
+import FeaturedJobsLists from '../components/FeaturedJobsLists';
+import JobFilters from '../components/JobFilters';
 
 const dummy_jobs = [
   {
@@ -85,6 +93,7 @@ const FeaturedJobListDiv = styled(Card)({
 });
 
 const UserJobs = () => {
+  const authCtx = useContext(AuthContext);
   const [filter, setFilter] = useState(dummy_jobs);
   //const userId = useParams().userId;
   //const loadedJobs = dummy_jobs.map((job) => (job.creator = userId));
@@ -109,7 +118,12 @@ const UserJobs = () => {
       <StyledUserJobsDiv>
         <StyledAdJobDiv>
           <Stack spacing={2} direction="row">
-            <Button variant="contained" component={RouterLink} to="/job/new">
+            <Button
+              variant="contained"
+              disabled={!authCtx.isLoggedIn}
+              component={RouterLink}
+              to="/job/new"
+            >
               Add a Job +
             </Button>{" "}
             <Divider orientation="vertical" />

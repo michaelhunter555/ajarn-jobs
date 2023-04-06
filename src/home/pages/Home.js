@@ -87,13 +87,12 @@ const dummy_jobs = [
 const StyledGridContainer = styled("div")(({ theme }) => ({
   display: "grid",
   justifyContent: "center",
+  alignItems: "start",
   gridTemplateColumns: "20% 45% 20%",
   gridAutoRows: "auto",
   margin: "6rem 0 2rem 0",
   gap: "6px",
-  "& > *": {
-    flexBasis: "80%",
-  },
+
   [theme.breakpoints.down("md")]: {
     gridTemplateColumns: "100%",
     gridAutoColumns: "auto",
@@ -230,8 +229,6 @@ const Home = () => {
       </div>
       <div>
         <h2 style={{ textAlign: "center" }}>Jobs You may like:</h2>{" "}
-        {/*auth.isLoggedIn && auth.isSchool ? 'teachers' : 'jobs'*/}
-        {/*  {auth.isLoggedIn && auth.isTeacher} && <BottomFeaturedAdsList /> */}
         <BottomFeaturedAdsList footerJobs={dummy_jobs} />
       </div>
       <Footer />

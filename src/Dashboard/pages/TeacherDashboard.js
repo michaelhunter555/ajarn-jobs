@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, {
+  useContext,
+  useState,
+} from 'react';
 
-import { Grid } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 
-import JobAdsList from "../../shared/components/UIElements/JobAdsList";
-import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
-import { dummy_jobs } from "../../shared/util/DummyJobs";
-import Applications from "../components/Profile/Applications";
-import ProfileInformation from "../components/Profile/ProfileInformation";
-import TeacherSettings from "../components/Profile/TeacherSettings";
-import Sidebar from "../components/Sidebar";
+import { Grid } from '@mui/material';
+
+import JobAdsList from '../../shared/components/UIElements/JobAdsList';
+import UserProfileJobAd
+  from '../../shared/components/UIElements/UserProfileJobAd';
+import { AuthContext } from '../../shared/context/auth-context';
+import { dummy_jobs } from '../../shared/util/DummyJobs';
+import Applications from '../components/Profile/Applications';
+import ProfileInformation from '../components/Profile/ProfileInformation';
+import TeacherSettings from '../components/Profile/TeacherSettings';
+import Sidebar from '../components/Sidebar';
 
 const TeacherDashboard = () => {
+  const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
 
   const handleMenuItemClick = (componentName) => {
@@ -27,6 +36,10 @@ const TeacherDashboard = () => {
         return <Applications />;
       case "settings":
         return <TeacherSettings />;
+      case "logout":
+        authCtx.logout();
+        navigate("/");
+        break;
       default:
         return <ProfileInformation />;
     }

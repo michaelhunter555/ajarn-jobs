@@ -42,13 +42,12 @@ function App() {
   }, []);
 
   let routes;
-
-  if (login) {
+  if (isLoggedIn) {
     routes = (
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
         {/*user:uid || */}
-        <Route path="/users:uid" element={<TeacherDashboard />} />
+        <Route path="/users" element={<TeacherDashboard />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/job/new" element={<NewJob />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
@@ -81,19 +80,7 @@ function App() {
     >
       <Router>
         <MainNavigation />
-        <Routes>
-          <Route path="/" element={<Home />} exact="true" />
-          <Route path="/users" element={<TeacherDashboard />} />
-          <Route path="/jobs" element={<UserJobs />} />
-          <Route path="/job/new" element={<NewJob />} />
-          <Route path="/jobs/:jid" element={<JobDetailsPage />} />
-          <Route path="/auth" element={<Login />} />
-          <Route
-            path="/jobs/:jid/update"
-            element={<UpdateJob />}
-            exact="true"
-          />
-        </Routes>
+        <main>{routes}</main>
       </Router>
     </AuthContext.Provider>
   );

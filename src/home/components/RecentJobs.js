@@ -1,10 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { MdOutlineFiberNew } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { MdOutlineFiberNew } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
-import { getTimeDifference } from "../../shared/util/getTimeDifference";
-import RecentJobItems from "./RecentJobItems";
+import { styled } from '@mui/material/styles';
+
+import { getTimeDifference } from '../../shared/util/getTimeDifference';
+import RecentJobItems from './RecentJobItems';
 
 const RecentJobs = (props) => {
   if (props.homeJobs?.length === 0) {
@@ -14,13 +16,16 @@ const RecentJobs = (props) => {
       </div>
     );
   }
+  const StyledTitle = styled("h2")({
+    color: "#002379",
+  });
 
   return (
     <>
-      <h2>
+      <StyledTitle>
         Recent Jobs
         <MdOutlineFiberNew style={{ color: "green" }} />
-      </h2>
+      </StyledTitle>
       {props.homeJobs &&
         props.homeJobs?.map((job) => (
           <Link

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import {
   FaClipboardList,
@@ -26,6 +26,8 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
+import { AuthContext } from '../../shared/context/auth-context';
 
 //job details layout container
 // const StyledJobBoxContainer = styled(Box)(({ theme, jobTitle }) => ({
@@ -81,6 +83,7 @@ const Item = styled(Paper)(({ theme, button }) => ({
 }));
 
 const JobDetails = (props) => {
+  const authCtx = useContext(AuthContext);
   const { job } = props;
 
   // work permit?
@@ -89,9 +92,9 @@ const JobDetails = (props) => {
   // const sendApplicationHandler = (event, userId) => {
   //   event.preventDefault();
 
-  // const sendRequest = async () => {
+  // const sendRequest = async (jobId, userId) => {
   //   const responseData = await sendRequest(
-  //     "url",
+  //     "http://localhost:8080/job",
   //     "POST",
   //     JSON.stringify({})
   //     ,
@@ -127,9 +130,25 @@ const JobDetails = (props) => {
                 image={job.creator.logoUrl}
                 alt={job.creator.company}
               />
-              <Button sx={{ marginBottom: 1.5 }} variant="contained">
-                Apply Now
-              </Button>
+              {!authCtx.isLoggedIn && (
+                <Button
+                  sx={{ marginBottom: 1.5 }}
+                  component={Link}
+                  to="/auth"
+                  variant="contained"
+                >
+                  login/join
+                </Button>
+              )}
+              {authCtx.isLoggedIn && (
+                <Button
+                  sx={{ marginBottom: 1.5 }}
+                  onClick={() => console.log("POST request")}
+                  variant="contained"
+                >
+                  Apply Now
+                </Button>
+              )}
               <Divider flexItem />
               <Grid
                 container
@@ -215,7 +234,19 @@ const JobDetails = (props) => {
               >
                 This was listing was vetted and approved by AjarnJobs.com staff.
               </Alert>
-              <Button variant="outlined">Apply Now</Button>
+              {!authCtx.isLoggedIn && (
+                <Button component={Link} to="/auth" variant="outlined">
+                  login/join
+                </Button>
+              )}
+              {authCtx.isLoggedIn && (
+                <Button
+                  onClick={() => console.log("POST request")}
+                  variant="outlined"
+                >
+                  Apply Now
+                </Button>
+              )}
 
               <Button>Need Help?</Button>
             </Grid>

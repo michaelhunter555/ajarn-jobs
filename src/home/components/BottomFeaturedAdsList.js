@@ -1,12 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import { RiAdvertisementLine } from "react-icons/ri";
-import { Link as RouterLink } from "react-router-dom";
+import { RiAdvertisementLine } from 'react-icons/ri';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Link, List, ListItem } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Link,
+  List,
+  ListItem,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import BottomFeaturedAds from "./BottomFeaturedAds";
+import BottomFeaturedAds from './BottomFeaturedAds';
 
 const StyledList = styled(List)(({ theme }) => ({
   display: "flex",
@@ -41,6 +45,7 @@ const BottomFeaturedAdsList = (props) => {
               hours={job.hours}
               school={job.creator.company}
               location={job.location}
+              featured={job.jobType.featured}
             />
           </ListItem>
         </Link>

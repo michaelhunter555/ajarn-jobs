@@ -1,13 +1,18 @@
-import React from "react";
+import React from 'react';
 
-import ChatIcon from "@mui/icons-material/Chat";
-import QuizIcon from "@mui/icons-material/Quiz";
-import SchoolIcon from "@mui/icons-material/School";
-import TempleBuddhistIcon from "@mui/icons-material/TempleBuddhist";
-import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import WorkIcon from "@mui/icons-material/Work";
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import ChatIcon from '@mui/icons-material/Chat';
+import QuizIcon from '@mui/icons-material/Quiz';
+import SchoolIcon from '@mui/icons-material/School';
+import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import WorkIcon from '@mui/icons-material/Work';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -34,7 +39,6 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   minWidth: 150,
-  border: "2px solid #c2e6ff",
   borderRadius: "16px",
   "&:hover": {
     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
@@ -52,6 +56,8 @@ const IconBox = styled(Box)({
   borderRadius: "5px",
   minWidth: "3rem",
   padding: "1rem",
+  backgroundColor: "#c0f0f7",
+  color: "#002379",
   "&:hover": {
     transition: "all 0.3s ease-in",
     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
@@ -73,11 +79,18 @@ const SiteFeatures = () => {
       {items.map(({ label, icon }, i) => {
         return (
           <StyledCardBackground key={i} raised={false}>
-            <CardContent>
+            <CardContent
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <Typography
                 align="center"
-                variant="subtitle1"
+                variant="overline"
                 color="text.secondary"
+                paragraph
               >
                 <IconBox>{icon}</IconBox>
                 {label}

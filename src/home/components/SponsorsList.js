@@ -10,10 +10,6 @@ import Sponsors from './Sponsors';
 const StyledPaper = styled(Paper)({
   maxHeight: "100%",
   overflow: "auto",
-  h2: {
-    display: "flex",
-    justifyContent: "center",
-  },
 });
 
 const StyledLink = styled(Link)({
@@ -21,12 +17,16 @@ const StyledLink = styled(Link)({
   textDecoration: "none",
 });
 
+const StyledTitle = styled("h2")({
+  color: "#002379",
+});
+
 const SponsorsList = (props) => {
   const { sponsor } = props;
   return (
     <>
-      <h2>Sponsors</h2>
-      <StyledPaper>
+      <StyledTitle>Sponsors</StyledTitle>
+      <StyledPaper elevation={0}>
         {sponsor.map((supporter, i) => (
           <StyledLink key={supporter.id} to={`/jobs/${supporter.id}`}>
             <Sponsors
