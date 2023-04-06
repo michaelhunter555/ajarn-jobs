@@ -60,7 +60,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
         <Route path="/jobs" element={<UserJobs />} />
-        <Route path="/job/new" element={<NewJob />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
         <Route path="/auth" element={<Login />} />
       </Routes>
