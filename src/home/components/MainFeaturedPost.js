@@ -40,8 +40,9 @@ const StyledBoxContent = styled(Box)({
 });
 
 const StyledTitle = styled("h2")(({ theme }) => ({
-  color: "white",
+  color: "black",
   position: "relative",
+  fontSize: 10,
   p: { xs: 3, md: 6 },
   pr: { md: 0 },
   [theme.breakpoints.down("sm")]: {
@@ -49,10 +50,11 @@ const StyledTitle = styled("h2")(({ theme }) => ({
   },
 }));
 
-const StyledAuthor = styled("p")(({ theme }) => ({
-  color: "white",
+const StyledAuthor = styled("h3")(({ theme }) => ({
+  color: "black",
   lineHeight: "1px",
   position: "relative",
+  fontSize: 10,
   p: { xs: 3, md: 6 },
   pr: { md: 0 },
   [theme.breakpoints.down("sm")]: {
@@ -78,10 +80,15 @@ const MainFeaturedPost = (props) => {
         <Grid container>
           <Grid item md={6}>
             <StyledBoxContent>
-              <Typography variant="h3" color="inherit" gutterBottom>
+              <Typography
+                variant="h3"
+                component="h2"
+                color="inherit"
+                gutterBottom
+              >
                 {post[0].title}
               </Typography>
-              <Typography variant="h5" color="inherit" paragraph>
+              <Typography variant="h5" component="h3" color="inherit" paragraph>
                 {post[0].content}
               </Typography>
               <Button
@@ -98,14 +105,30 @@ const MainFeaturedPost = (props) => {
         <StyledDivider variant="middle">More Content</StyledDivider>
 
         <Box sx={{ padding: "0 0 2rem 0", margin: "0 0 0 1rem" }}>
-          {post.slice(1).map((posts, i) => (
-            <Link key={i} to="/">
-              <StyledTitle>{posts.title}</StyledTitle>
-              <StyledAuthor>
-                By {posts.author} on {posts.datePosted}
-              </StyledAuthor>
-            </Link>
-          ))}
+          <Grid container spacing={2}>
+            {post.slice(1).map((posts, i) => (
+              <Grid item key={i} xs={12} sm={6} md={4}>
+                <Link key={i} to="/">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      flexWrap: "wrap",
+                      justifyContent: "center",
+                      position: "relative",
+                    }}
+                  >
+                    <Paper raised={true}>
+                      <StyledTitle>{posts.title}</StyledTitle>
+                      <StyledAuthor>
+                        By {posts.author} on {posts.datePosted}
+                      </StyledAuthor>
+                    </Paper>
+                  </Box>
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
         </Box>
       </StyledPaper>
     </>

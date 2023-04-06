@@ -47,7 +47,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
         {/*user:uid || */}
-        <Route path="/users" element={<TeacherDashboard />} />
+        <Route path="/users/:uid" element={<TeacherDashboard />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/job/new" element={<NewJob />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />

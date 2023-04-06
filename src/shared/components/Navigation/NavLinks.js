@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/auth-context';
 
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
+  //const userId = useParams().uid
 
   return (
     <StyledNavLinks>

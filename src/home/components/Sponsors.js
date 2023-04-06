@@ -19,6 +19,19 @@ const StyledList = styled(List)(({ theme }) => ({
   width: "100%",
   maxWidth: 360,
   backgroundColor: theme.palette.background.paper,
+  borderBottom: "1px solid #e0e0e0",
+  [theme.breakpoints.down("md")]: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "0 auto",
+  },
+  [theme.breakpoints.up("sm")]: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "0 auto",
+  },
 }));
 
 const StyledAvatar = styled(Avatar)({

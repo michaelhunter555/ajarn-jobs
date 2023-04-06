@@ -19,7 +19,7 @@ const MainHeaderStyles = styled("header")(({ theme, navIsScrolled }) => ({
   zIndex: "5",
   border: navIsScrolled
     ? "1px solid rgba(255, 255, 255, 0.3)"
-    : "1px solid transparent",
+    : "1px solid #e0e0e0",
   backdropFilter: navIsScrolled ? "blur(5px)" : "none",
   WebkitBackdropFilter: navIsScrolled ? "blur(5px)" : "none",
   main: {
