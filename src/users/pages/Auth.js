@@ -5,7 +5,10 @@ import React, {
 
 import { useNavigate } from 'react-router-dom';
 
-import { Card } from '@mui/material';
+import {
+  Box,
+  Card,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import Button from '../../shared/components/FormElements/Button';
@@ -26,16 +29,14 @@ const StyledFormCard = styled(Card)({
   boxShadow: "0 2px 8px rgba(0, 0, 0, 0.26)",
   borderRadius: "6px",
   background: "white",
-  "&:button": {
-    display: "flex",
-    justifyContent: "center",
-  },
 });
 
-const StyledButton = styled(Button)({
-  displaly: "flex",
-  justifyContent: "center",
+const StyledBoxForButtons = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
   margin: "1rem auto",
+  justifyContent: "center",
+  alignItems: "center",
 });
 
 const Auth = () => {
@@ -113,22 +114,22 @@ const Auth = () => {
           element="input"
           type="password"
           id="password"
-          label="Your name"
+          label="Password"
           validators={[VALIDATOR_REQUIRE()]}
           errorText="please enter your password"
           onInput={inputHandler}
         />
-        <StyledButton type="submit" disabled={!formState.isValid}>
-          {isLoginMode ? "Login" : "Sign-up"}
-        </StyledButton>
+        <StyledBoxForButtons>
+          <Button type="submit" disabled={!formState.isValid}>
+            {isLoginMode ? "Login" : "Sign-up"}
+          </Button>
+        </StyledBoxForButtons>
       </form>
-      <StyledButton
-        sx={{ marginBottom: 10 }}
-        inverse
-        onClick={signUpOrLoginHandler}
-      >
-        Switch to {isLoginMode ? "Sign-up" : "Login"}
-      </StyledButton>
+      <StyledBoxForButtons>
+        <Button inverse onClick={signUpOrLoginHandler}>
+          Switch to {isLoginMode ? "Sign-up" : "Login"}
+        </Button>
+      </StyledBoxForButtons>
     </StyledFormCard>
   );
 };

@@ -39,7 +39,7 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   minWidth: 150,
-  borderRadius: "16px",
+  borderRadius: "6px",
   "&:hover": {
     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
   },
@@ -88,7 +88,7 @@ const SiteFeatures = () => {
             >
               <Typography
                 align="center"
-                variant="overline"
+                variant="body1"
                 color="text.secondary"
                 paragraph
               >
