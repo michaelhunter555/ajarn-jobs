@@ -212,6 +212,7 @@ const Home = () => {
         {/* lower middle-column*/}
         <StyledHomeFeaturedContent>
           <BlogContent />
+          {/** {state && <JobDetails />} */}
         </StyledHomeFeaturedContent>
         {/* lower-right column*/}
         <StyledHomeFeaturedSponsors>

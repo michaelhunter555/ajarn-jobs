@@ -29,26 +29,16 @@ import { styled } from '@mui/material/styles';
 
 import { AuthContext } from '../../shared/context/auth-context';
 
-//job details layout container
-// const StyledJobBoxContainer = styled(Box)(({ theme, jobTitle }) => ({
-//   display: "flex",
-//   flexDirection: "row",
-//   alignItems: "center",
-//   justifyContent: "flex-start",
-//   backgroundColor: "#fff",
-//   borderRadius: "5px",
-//   boxShadow: "0 2px 8px rgba(0, 0, 0, 0.26)",
-//   padding: "1rem",
-//   width: "100%",
-//   maxWidth: "80%",
-//   margin: "0 auto",
-// }));
-// //header for job
-// const StyledJobHeader = styled(Box)({
-//   display: "flex",
-//   flexDirection: "column",
-//   width: "300px",
-// });
+const StyledGridContainer = styled(Grid)(({ theme, alert, jobData }) => ({
+  display: "flex",
+  flexDirection: alert ? "" : jobData ? "column" : "row",
+  alignItems: "center",
+  justifyContent: alert ? "flex-end" : jobData ? "" : "flex-start",
+  margin: alert ? "1rem 0 0 0" : "1rem 0 0.5rem 3rem",
+  gap: alert ? "1rem" : "",
+  fontSize: jobData ? 17 : "",
+  padding: jobData ? 2 : "",
+}));
 
 //job title || school
 const StyledJobTitle = styled("div")({
@@ -64,11 +54,6 @@ const StyledCardMedia = styled(CardMedia)({
   borderRadius: "10px",
   width: "50%",
 });
-
-//job description
-// const StyledDescriptionBox = styled(Box)({
-//   border: "1px solid #e5e5e5",
-// });
 
 const Item = styled(Paper)(({ theme, button }) => ({
   backgroundColor:
@@ -115,6 +100,44 @@ const JobDetails = (props) => {
     { text: "Hours", icon: <FaClock />, data: job.hours },
   ];
 
+  let button;
+  let outlinedButton;
+
+  if (authCtx.isLoggedIn) {
+    button = (
+      <Button
+        sx={{ marginBottom: 1.5 }}
+        onClick={() => console.log("modal")}
+        variant="contained"
+      >
+        Apply Now
+      </Button>
+    );
+
+    outlinedButton = (
+      <Button onClick={() => console.log("POST request")} variant="outlined">
+        Apply Now
+      </Button>
+    );
+  } else {
+    button = (
+      <Button
+        sx={{ marginBottom: 1.5 }}
+        component={Link}
+        to="/auth"
+        variant="contained"
+      >
+        login/join
+      </Button>
+    );
+
+    outlinedButton = (
+      <Button component={Link} to="/auth" variant="outlined">
+        login/join
+      </Button>
+    );
+  }
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -130,75 +153,21 @@ const JobDetails = (props) => {
                 image={job.creator.logoUrl}
                 alt={job.creator.company}
               />
-              {!authCtx.isLoggedIn && (
-                <Button
-                  sx={{ marginBottom: 1.5 }}
-                  component={Link}
-                  to="/auth"
-                  variant="contained"
-                >
-                  login/join
-                </Button>
-              )}
-              {authCtx.isLoggedIn && (
-                <Button
-                  sx={{ marginBottom: 1.5 }}
-                  onClick={() => console.log("POST request")}
-                  variant="contained"
-                >
-                  Apply Now
-                </Button>
-              )}
+              {button}
               <Divider flexItem />
-              <Grid
-                container
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  margin: "1rem 0 0.5rem 3rem",
-                }}
-              >
+              <StyledGridContainer container>
                 <LocationOnIcon />
                 <Typography>{job.creator.headquarters}</Typography>
-              </Grid>
-              <Grid
-                container
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  margin: "0 0 0.5rem 3rem",
-                }}
-              >
+              </StyledGridContainer>
+              <StyledGridContainer container>
                 <BusinessIcon />
                 <Typography>{job.creator.companySize} employees</Typography>
-              </Grid>
-              <Grid
-                container
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  margin: "0 0 0.5rem 3rem",
-                }}
-              >
+              </StyledGridContainer>
+              <StyledGridContainer container>
                 <EventAvailableIcon />
                 <Typography>Established: {job.creator.established} </Typography>
-              </Grid>
-              <Grid
-                container
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  margin: "0 0 0.5rem 3rem",
-                }}
-              >
+              </StyledGridContainer>
+              <StyledGridContainer container>
                 <List
                   sx={{
                     display: "flex",
@@ -212,44 +181,26 @@ const JobDetails = (props) => {
                     <ListItem key={i}>{item}</ListItem>
                   ))}{" "}
                 </List>
-              </Grid>
+              </StyledGridContainer>
             </Item>
           </Grid>
           <Grid item xs={6} md={8}>
-            <Grid
+            <StyledGridContainer
               container
               direction="row"
               wrap="nowrap"
               spacing={1}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "1rem",
-                margin: "1rem 0 0 0",
-              }}
+              alert
             >
               <Alert
                 icon={<VerifiedUserIcon fontSize="inherit" />}
                 severity="success"
               >
-                This was listing was vetted and approved by AjarnJobs.com staff.
+                This listing was vetted and approved by AjarnJobs.com staff.
               </Alert>
-              {!authCtx.isLoggedIn && (
-                <Button component={Link} to="/auth" variant="outlined">
-                  login/join
-                </Button>
-              )}
-              {authCtx.isLoggedIn && (
-                <Button
-                  onClick={() => console.log("POST request")}
-                  variant="outlined"
-                >
-                  Apply Now
-                </Button>
-              )}
-
+              {outlinedButton}
               <Button>Need Help?</Button>
-            </Grid>
+            </StyledGridContainer>
             <Item
               sx={{
                 border: "1px solid #e5e5e5",
@@ -260,18 +211,7 @@ const JobDetails = (props) => {
               }}
             >
               {jobSpecifications.map(({ text, icon, data }, i) => (
-                <Grid
-                  key={i}
-                  item
-                  xs={6}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    fontSize: 17,
-                    padding: 2,
-                  }}
-                >
+                <StyledGridContainer key={i} item xs={6} jobData>
                   {icon} {text}
                   <Grid
                     sx={{
@@ -281,7 +221,7 @@ const JobDetails = (props) => {
                   >
                     {data}
                   </Grid>
-                </Grid>
+                </StyledGridContainer>
               ))}
             </Item>
             <Grid

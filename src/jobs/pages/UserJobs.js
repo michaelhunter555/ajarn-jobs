@@ -5,6 +5,7 @@ import {
 
 import { Link as RouterLink } from 'react-router-dom';
 
+import EastIcon from '@mui/icons-material/East';
 import {
   Button,
   Divider,
@@ -113,24 +114,46 @@ const UserJobs = () => {
 
   //if not filter.location or dummyjobs[lowercase][includes] + (filter[location][lowercase])
 
+  let button;
+  let actionItem;
+
+  if (authCtx.isLoggedIn) {
+    button = (
+      <Button variant="contained" component={RouterLink} to="/job/new">
+        Add a Job +
+      </Button>
+    );
+    actionItem = (
+      <Button variant="text" component={RouterLink} to="/auth">
+        Learn More
+      </Button>
+    );
+  } else if (!authCtx.isLoggedIn) {
+    button = (
+      <Button
+        variant="contained"
+        disabled={!authCtx.isLoggedIn}
+        component={RouterLink}
+        to="/auth"
+      >
+        Sign-up to create jobs! <EastIcon />
+      </Button>
+    );
+    actionItem = (
+      <Button variant="outlined" component={RouterLink} to="/auth">
+        Login/Join
+      </Button>
+    );
+  }
+
   return (
     <>
       <StyledUserJobsDiv>
         <StyledAdJobDiv>
           <Stack spacing={2} direction="row">
-            <Button
-              variant="contained"
-              disabled={!authCtx.isLoggedIn}
-              component={RouterLink}
-              to="/job/new"
-            >
-              Add a Job +
-            </Button>{" "}
-            <Divider orientation="vertical" />
-            {/**auth.isLoggedIn && () */}
-            <Button variant="text" component={RouterLink} to="/auth">
-              Login/Join
-            </Button>
+            {button}
+            {<Divider orientation="vertical" />}
+            {actionItem}
           </Stack>
         </StyledAdJobDiv>
         <UsersJobFilterDiv>

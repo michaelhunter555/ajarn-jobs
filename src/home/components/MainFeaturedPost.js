@@ -1,3 +1,5 @@
+import 'animate.css';
+
 import React from 'react';
 
 import { Link } from 'react-router-dom';
@@ -5,6 +7,9 @@ import { Link } from 'react-router-dom';
 import {
   Box,
   Button,
+  Card,
+  CardContent,
+  CardMedia,
   Divider,
   Grid,
   Paper,
@@ -39,27 +44,76 @@ const StyledBoxContent = styled(Box)({
   pr: { md: 0 },
 });
 
-const StyledTitle = styled("h2")(({ theme }) => ({
-  color: "black",
+// const StyledCard = styled(Card)(({ theme }) => ({
+//   display: "flex",
+//   flexDirection: "row",
+//   minWidth: "auto",
+//   [theme.breakpoints.down("md")]: {
+//     width: "100%",
+//   },
+//   [theme.breakpoints.down("sm")]: {
+//     width: "100%",
+//   },
+// }));
+
+const StyledGlassCard = styled(Card)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
   position: "relative",
-  fontSize: 10,
-  p: { xs: 3, md: 6 },
-  pr: { md: 0 },
+  border: "1px solid rgba(216, 216, 216, 0.5)",
+  backgroundColor: "#4b6cb7",
+  color: "white",
+  fontSize: "16px",
+  fontWeight: "bold",
+  padding: "0 20px 0 0",
+  borderRadius: "6px",
+  overflow: "hidden",
+  boxShadow: "0px 0px 20px rgba(255, 255, 255, 0.5)",
+  background:
+    "linear-gradient(135deg, hsla(0, 0%, 100%, 0.15), hsla(0, 0%, 100%, 0.1125) 9.37%, hsla(0, 0%, 100%, 0.0375) 54.69%, hsla(0, 0%, 100%, 0.0394911) 66.15%, hsla(0, 0%, 100%, 0.15))",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: "0",
+    left: "-200%",
+    width: "200%",
+    height: "100%",
+    transform: "skewX(-20deg)",
+    backgroundImage:
+      "linear-gradient(90deg, transparent, rgba(98, 250, 255, 0.219), transparent)",
+  },
+  "&:hover::after": {
+    animation: "shine 1s infinite alternate",
+    animationTimingFunction: "cubic-bezier(0, 0.6, 0.5, 0.4)",
+  },
+  "@keyframes shine": {
+    "0%": {
+      left: "-200%",
+    },
+    "60%": {
+      left: "100%",
+    },
+    "100%": {
+      left: "100%",
+    },
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "1rem auto 0",
+  },
   [theme.breakpoints.down("sm")]: {
-    display: "none",
+    margin: "1rem auto 0",
   },
 }));
 
-const StyledAuthor = styled("h3")(({ theme }) => ({
-  color: "black",
-  lineHeight: "1px",
-  position: "relative",
-  fontSize: 10,
-  p: { xs: 3, md: 6 },
-  pr: { md: 0 },
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
+const StyledBox = styled(Box)({
+  display: "flex",
+  flexDirection: "row",
+});
+
+const StyledCardContent = styled(CardContent)(({ theme }) => ({
+  flex: "1 0 auto",
+  background: theme.palette.background.glass,
 }));
 
 const StyledDivider = styled(Divider)(({ theme }) => ({
@@ -104,7 +158,7 @@ const MainFeaturedPost = (props) => {
 
         <StyledDivider variant="middle">More Content</StyledDivider>
 
-        <Box sx={{ padding: "0 0 2rem 0", margin: "0 0 0 1rem" }}>
+        <Box sx={{ padding: "0 0 1rem 0", margin: "0 0 0 0.5rem" }}>
           <Grid container spacing={2}>
             {post.slice(1).map((posts, i) => (
               <Grid item key={i} xs={12} sm={6} md={4}>
@@ -115,15 +169,50 @@ const MainFeaturedPost = (props) => {
                       flexDirection: "row",
                       flexWrap: "wrap",
                       justifyContent: "center",
+
                       position: "relative",
                     }}
                   >
-                    <Paper raised={true}>
-                      <StyledTitle>{posts.title}</StyledTitle>
-                      <StyledAuthor>
-                        By {posts.author} on {posts.datePosted}
-                      </StyledAuthor>
-                    </Paper>
+                    <StyledGlassCard raised="true">
+                      <CardMedia
+                        component="img"
+                        image={posts.image}
+                        alt={`${posts.author}-${posts.title}`}
+                        sx={{
+                          width: 70,
+                          borderRight: "1px solid #958f8f",
+                        }}
+                      />
+                      <StyledBox>
+                        <StyledCardContent>
+                          <Box sx={{ overflowWrap: "break-word" }}>
+                            <Typography
+                              component="h2"
+                              variant="h6"
+                              sx={{
+                                fontSize: 11,
+                                wordWrap: "break-word",
+                                maxWidth: "100%",
+                              }}
+                            >
+                              {posts.title.length > 30
+                                ? posts.title.substring(0, 30) + "..."
+                                : posts.title}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography
+                              variant="subtitle1"
+                              color="text.secondary"
+                              component="h3"
+                              sx={{ fontSize: 9, color: "white" }}
+                            >
+                              By {posts.author}
+                            </Typography>
+                          </Box>
+                        </StyledCardContent>
+                      </StyledBox>
+                    </StyledGlassCard>
                   </Box>
                 </Link>
               </Grid>

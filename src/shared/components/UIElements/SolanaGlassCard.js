@@ -1,6 +1,4 @@
-import "./SolanaGlassCard.css";
-
-import React from "react";
+import React from 'react';
 
 const SolanaGlassStyles = {
   ".solana": {
