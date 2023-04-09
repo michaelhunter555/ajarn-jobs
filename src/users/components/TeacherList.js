@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -9,9 +9,11 @@ import {
   Grid,
 } from '@mui/material';
 
+import { AuthContext } from '../../shared/context/auth-context';
 import TeacherItem from './TeacherItem';
 
 const TeacherList = ({ teachers }) => {
+  const authCtx = useContext(AuthContext);
   //userId = useParams().uid;
   //const teacher = teachers.find(teacher => teacher.id === userId);
   //const [teacher, setTeacher] =  useState(null)
@@ -21,7 +23,7 @@ const TeacherList = ({ teachers }) => {
 
   // }
 
-  if (teachers.length < 1) {
+  if (teachers.length === 0) {
     return (
       <Card>
         No teachers match your current search criteria. Please check back in the
@@ -39,7 +41,21 @@ const TeacherList = ({ teachers }) => {
     <Grid container spacing={2} wrap="wrap">
       {teachers.map((teacher, i) => (
         <Grid item key={teacher.id} xs={12} sm={6} md={3}>
-          <Link to={`/teachers/${teacher.id}`}>
+          {authCtx.isLoggedIn && (
+            <Link to={`/teachers/${teacher.id}`}>
+              <TeacherItem
+                id={teacher.id}
+                name={teacher.name}
+                currentLocation={teacher.location}
+                nationality={teacher.nationality}
+                workExperience={teacher.workExperience}
+                image={teacher.image}
+                degree={teacher.highestCertification}
+              />
+            </Link>
+          )}
+
+          {!authCtx.isLoggedIn && (
             <TeacherItem
               id={teacher.id}
               name={teacher.name}
@@ -49,7 +65,7 @@ const TeacherList = ({ teachers }) => {
               image={teacher.image}
               degree={teacher.highestCertification}
             />
-          </Link>
+          )}
         </Grid>
       ))}
     </Grid>

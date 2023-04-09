@@ -19,9 +19,50 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 import CustomModal from '../../shared/components/UIElements/CustomModal';
 import { AuthContext } from '../../shared/context/auth-context';
+
+const StyledGlassCard = styled(Card)(({ theme }) => ({
+  margin: "0 auto",
+  minWidth: "100%",
+  position: "relative",
+  overflow: "hidden",
+  background: "white",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: "0",
+    left: "-200%",
+    width: "200%",
+    height: "100%",
+    transform: "skewX(-20deg)",
+    backgroundImage:
+      "linear-gradient(90deg, transparent, rgba(98, 250, 255, 0.219), transparent)",
+  },
+  "&:hover::after": {
+    animation: "shine 1s alternate",
+    animationTimingFunction: "cubic-bezier(0, 0.6, 0.5, 0.4)",
+  },
+  "@keyframes shine": {
+    "0%": {
+      left: "-200%",
+    },
+    "60%": {
+      left: "100%",
+    },
+    "100%": {
+      left: "100%",
+    },
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "0.5rem 0.5rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "0.5rem 1rem 0",
+  },
+}));
 
 const TeacherItem = (props) => {
   const authCtx = useContext(AuthContext);
@@ -76,7 +117,7 @@ const TeacherItem = (props) => {
         <CustomModal open={openModal} handleClose={handleCloseModal} />
       )}
       <Grid container direction="row" item>
-        <Card sx={{ margin: "0 auto", minWidth: "100%" }}>
+        <StyledGlassCard>
           <CardContent sx={{ lineHeight: 1 }}>
             <CardMedia
               component="img"
@@ -134,7 +175,7 @@ const TeacherItem = (props) => {
             {viewProfileButton}
             <Divider orientation="vertical" flexItem /> {contactTeacherButton}
           </Grid>
-        </Card>
+        </StyledGlassCard>
       </Grid>
     </>
   );
