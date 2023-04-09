@@ -99,10 +99,10 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
     },
   },
   [theme.breakpoints.down("md")]: {
-    margin: "1rem auto 0",
+    margin: "0.5rem 0.5rem 0",
   },
   [theme.breakpoints.down("sm")]: {
-    margin: "1rem auto 0",
+    margin: "0.5rem 1rem 0",
   },
 }));
 
@@ -168,7 +168,7 @@ const MainFeaturedPost = (props) => {
                       display: "flex",
                       flexDirection: "row",
                       flexWrap: "wrap",
-                      justifyContent: "center",
+                      justifyContent: "flex-start",
 
                       position: "relative",
                     }}

@@ -1,64 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React from 'react';
+
+import { Link } from 'react-router-dom';
 
 import {
-  Avatar,
-  AvatarItem,
-  List,
-  ListItemButton,
-  ListItemText,
-  Paper,
-} from "@mui/material";
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+} from '@mui/material';
 
-const TeacherItem = ({ teachers }) => {
-  const [teacher, setTeacher] = useState([]);
-
-  const handleTeacherClick = (teacher) => {
-    setTeacher(teacher);
-  };
-
-  useEffect(() => {
-    setTeacher(teachers);
-  }, [teachers]);
-
+const TeacherItem = (props) => {
   return (
-    <div style={{ display: "flex" }}>
-      <Paper
-        sx={{ flex: 1, height: "500px", overflow: "scroll", margin: "10px" }}
-      >
-        <List>
-          {teachers.map((teacher) => (
-            <ListItemButton
-              key={teacher.id}
-              onClick={() => handleTeacherClick(teacher)}
-            >
-              <AvatarItem>
-                <Avatar
-                  src={teacher.image}
-                  alt={teacher.name}
-                  variant="square"
-                ></Avatar>
-              </AvatarItem>
-              <ListItemText>{teacher.name}</ListItemText>
-            </ListItemButton>
-          ))}
-        </List>
-      </Paper>
-      <Paper
-        sx={{ flex: 3, height: "500px", overflow: "scroll", margin: "10px" }}
-      >
-        {teacher && (
-          <ListItemButton>
-            <ListItemText>{teacher.name}</ListItemText>
-          </ListItemButton>
-        )}
-
-        {!teacher && (
-          <ListItemButton>
-            <ListItemText>Select a Teacher</ListItemText>
-          </ListItemButton>
-        )}
-      </Paper>
-    </div>
+    <Grid container direction="row" item>
+      <Card sx={{ margin: "0 auto" }}>
+        <CardContent sx={{ lineHeight: "5px" }}>
+          <CardMedia
+            component="img"
+            image={props.image}
+            alt={`${props.id}--${props.name}`}
+            sx={{
+              border: "1px solid #e5e5e5",
+              borderRadius: "20px",
+              height: 170,
+              width: 170,
+              margin: "0 auto",
+            }}
+          />
+          <Typography component="h2" variant="h6">
+            {props.name}
+          </Typography>
+          <Typography component="h3" color="text.secondary" paragraph>
+            {props.nationality}
+          </Typography>
+          <Typography component="h3" color="text.secondary" paragraph>
+            {props.workExperience}
+          </Typography>
+          <Typography component="h3" color="text.secondary" paragraph>
+            {props.currentLocation}
+          </Typography>
+        </CardContent>
+        <Button
+          component={Link}
+          to={`/teachers/${props.id}`}
+          sx={{ margin: "0 auto" }}
+        >
+          View Profile
+        </Button>
+      </Card>
+    </Grid>
   );
 };
 

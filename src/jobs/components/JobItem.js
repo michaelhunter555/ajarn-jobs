@@ -1,18 +1,24 @@
-import "./JobItem.css";
+import './JobItem.css';
 
-import React, { useContext, useState } from "react";
+import React, {
+  useContext,
+  useState,
+} from 'react';
 
-import { FaMoneyBillWave } from "react-icons/fa";
-import { MdAvTimer, MdLocationPin } from "react-icons/md";
+import { FaMoneyBillWave } from 'react-icons/fa';
+import {
+  MdAvTimer,
+  MdLocationPin,
+} from 'react-icons/md';
 
-import Button from "../../shared/components/FormElements/Button";
-import Card from "../../shared/components/UIElements/Card";
-import Modal from "../../shared/components/UIElements/Modal";
-import { AuthContext } from "../../shared/context/auth-context";
+import Button from '../../shared/components/FormElements/Button';
+import Card from '../../shared/components/UIElements/Card';
+import Modal from '../../shared/components/UIElements/Modal';
+import { AuthContext } from '../../shared/context/auth-context';
 
 const JobItem = (props) => {
   //create auth context
-  const auth = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
   //set state for confirm modal
   const [modalConfirm, setModalConfirm] = useState(false);
 
@@ -78,11 +84,9 @@ const JobItem = (props) => {
               {/*"30,000 - 50,000 THB/month" */}
             </div>
           </div>
-          {!auth.isLoggedIn && auth.isTeacher && (
-            <Button>Login to apply!</Button>
-          )}
-          {auth.isLoggedIn && <Button to={`/jobs/${props.id}`}>View</Button>}
-          {auth.isLoggedIn && auth.isSchool && (
+          {!authCtx.isLoggedIn && <Button>Login to apply!</Button>}
+          {authCtx.isLoggedIn && <Button to={`/jobs/${props.id}`}>View</Button>}
+          {authCtx.isLoggedIn && (
             <Button
               className="job-item__delete"
               onClick={ShowDeleteWarningHandler}

@@ -18,6 +18,8 @@ import UserJobs from './jobs/pages/UserJobs';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
 import Login from './users/pages/Auth';
+import TeacherDetails from './users/pages/TeacherDetails';
+import Teachers from './users/pages/Teachers';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,12 +49,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
         {/*user:uid || */}
-        <Route path="/users/:uid" element={<TeacherDashboard />} />
+        <Route path="/users/" element={<TeacherDashboard />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/job/new" element={<NewJob />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
-        <Route path="/auth" element={<Login />} />
         <Route path="/jobs/:jid/update" element={<UpdateJob />} exact="true" />
+        <Route path="/teachers/" element={<Teachers />} />
+        <Route path="/teachers/:uid" element={<TeacherDetails />} />
+        <Route path="/auth" element={<Login />} />
       </Routes>
     );
   } else {
@@ -61,6 +65,8 @@ function App() {
         <Route path="/" element={<Home />} exact="true" />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
+        <Route path="/teachers" element={<Teachers />} />
+        <Route path="/teachers/:uid" element={<TeacherDetails />} />
         <Route path="/auth" element={<Login />} />
       </Routes>
     );

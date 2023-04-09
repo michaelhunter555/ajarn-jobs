@@ -1,3 +1,9 @@
+import John from '../../assets/cdc-GDokEYnOfnE-unsplash.jpg';
+import Janitha
+  from '../../assets/christina-wocintechchat-com-7JGjoSVfIDM-unsplash.jpg';
+import Bob from '../../assets/sebastien-bonneval-UIpFY1Umamw-unsplash.jpg';
+import MichaelHunter from '../../assets/thisIsMe.jpg';
+
 export const SINGLE_DUMMY_USERS = [
   {
     id: "u1",
@@ -48,7 +54,9 @@ export const DUMMY_USERS_LIST = [
   {
     id: "u1",
     name: "John Doe",
+    image: John,
     location: "Bangkok, Thailand",
+    nationality: "American",
     education: "Bachelor of Education, Chulalongkorn University",
     workExperience: "5 years teaching experience",
     interests: ["Teaching", "Traveling", "Photography"],
@@ -56,24 +64,30 @@ export const DUMMY_USERS_LIST = [
   {
     id: "u2",
     name: "Michael Hunter",
+    image: MichaelHunter,
     location: "Bangkok, Thailand",
-    education: "Bachelor of Education, Chulalongkorn University",
+    nationality: "Jamaican",
+    education: "Bachelor of Arts, Temple University",
     workExperience: "9 years teaching experience",
     interests: ["Teaching", "Traveling", "Photography"],
   },
   {
     id: "u3",
     name: "Bob McFarland",
+    image: Bob,
     location: "Bangkok, Thailand",
-    education: "Bachelor of Education, Chulalongkorn University",
+    nationality: "Swiss",
+    education: "Bachelor of journalism, Harvard",
     workExperience: "2 years teaching experience",
     interests: ["Teaching", "Traveling", "Photography"],
   },
   {
     id: "u4",
     name: "Janitha Willdubs",
+    image: Janitha,
     location: "Bangkok, Thailand",
-    education: "Bachelor of Education, Chulalongkorn University",
+    nationality: "English",
+    education: "Bachelor of Education, Khao Saun University",
     workExperience: "1 years teaching experience",
     interests: ["Teaching", "Traveling", "Photography"],
   },
