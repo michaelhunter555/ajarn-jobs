@@ -7,16 +7,24 @@ import TeacherFilter from '../components/TeacherFilter';
 //filter, teachersList, pagination
 import TeacherList from '../components/TeacherList';
 
-const StyledUserJobsDiv = styled("div")({
+const StyledUserJobsDiv = styled("div")(({ theme }) => ({
   maxWidth: "85%",
   margin: "0 auto",
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "15px",
-});
+  [theme.breakpoints.down("sm")]: {
+    gridTemplateColumns: 1,
+  },
+}));
 
 const StyledTeacherFilter = styled("div")(({ theme }) => ({
   gridColumn: "1/2",
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: "1/5",
+    gridRow: 1,
+    width: "100%",
+  },
 }));
 
 const StyledTeacherList = styled("div")(({ theme }) => ({

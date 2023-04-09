@@ -65,7 +65,7 @@ const TeacherFilter = ({ onDataChange }) => {
         </Select>
       </FormControl>
       <FormControl fullWidth={true}>
-        <FormLabel component="legend">nationality</FormLabel>
+        <FormLabel component="legend">Nationality</FormLabel>
         <Select
           labelId="salary"
           id="salary"
@@ -82,7 +82,7 @@ const TeacherFilter = ({ onDataChange }) => {
       </FormControl>
 
       <FormControl fullWidth={true}>
-        <FormLabel component="legend">qualifications</FormLabel>
+        <FormLabel component="legend">Qualifications</FormLabel>
         <Select
           labelId="salary"
           id="salary"
