@@ -42,7 +42,7 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
       "linear-gradient(90deg, transparent, rgba(98, 250, 255, 0.219), transparent)",
   },
   "&:hover::after": {
-    animation: "shine 1s alternate",
+    animation: "shine 0.5s alternate",
     animationTimingFunction: "cubic-bezier(0, 0.6, 0.5, 0.4)",
   },
   "@keyframes shine": {
@@ -146,7 +146,7 @@ const TeacherItem = (props) => {
               variant="subtitle2"
             >
               <AssuredWorkloadIcon fontSize="inherit" /> {props.workExperience}{" "}
-              {props.workExperience === 2 ? "Year" : "Years"}
+              {props.workExperience > 1 ? "Years" : "Year"}
             </Typography>
             <Typography
               component="h3"
@@ -173,7 +173,8 @@ const TeacherItem = (props) => {
             }}
           >
             {viewProfileButton}
-            <Divider orientation="vertical" flexItem /> {contactTeacherButton}
+            <Divider orientation="vertical" flexItem />
+            {contactTeacherButton}
           </Grid>
         </StyledGlassCard>
       </Grid>

@@ -1,18 +1,21 @@
 import React from 'react';
 
-import ChatIcon from '@mui/icons-material/Chat';
-import QuizIcon from '@mui/icons-material/Quiz';
-import SchoolIcon from '@mui/icons-material/School';
-import TempleBuddhistIcon from '@mui/icons-material/TempleBuddhist';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
-import WorkIcon from '@mui/icons-material/Work';
 import {
   Box,
   Card,
   CardContent,
+  CardMedia,
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+
+import Contribute from '../../assets/contribute.png';
+import ThaiLifeTwo from '../../assets/geoff-greenwood-rH1aA4TqGms-unsplash.jpg';
+import Interviews from '../../assets/interviews.png';
+import Jobs from '../../assets/mario-heller-hXLkFpvKRys-unsplash.jpg';
+import SchoolImage
+  from '../../assets/sangga-rima-roman-selia-bgQgAKagQB4-unsplash.jpg';
+import SkillsTests from '../../assets/skillsTest.png';
 
 const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -37,7 +40,8 @@ const StyledBoxWrapper = styled(Box)(({ theme }) => ({
 const StyledCardBackground = styled(Card)(({ theme }) => ({
   margin: "0.2rem",
   display: "flex",
-  justifyContent: "center",
+  flexDirection: "column",
+  justifyContent: "flex-start",
   minWidth: 150,
   borderRadius: "6px",
   "&:hover": {
@@ -51,48 +55,41 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   },
 }));
 
-const IconBox = styled(Box)({
-  border: "1px solid #e5e5e5",
-  borderRadius: "5px",
-  minWidth: "3rem",
-  padding: "1rem",
-  backgroundColor: "#c0f0f7",
-  color: "#002379",
-  "&:hover": {
-    transition: "all 0.3s ease-in",
-    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-  },
-});
-
 const SiteFeatures = () => {
   const items = [
-    { label: "Jobs", icon: <WorkIcon /> },
-    { label: "Schools", icon: <SchoolIcon /> },
-    { label: "Thai Life", icon: <TempleBuddhistIcon /> },
-    { label: "Skills Tests", icon: <QuizIcon /> },
-    { label: "Interviews", icon: <ChatIcon /> },
-    { label: "Contribute", icon: <VolunteerActivismIcon /> },
+    { label: "Jobs", img: Jobs },
+    { label: "Schools", img: SchoolImage },
+    { label: "Thai Life", img: ThaiLifeTwo },
+    { label: "Skills Tests", img: SkillsTests },
+    { label: "Interviews", img: Interviews },
+    { label: "Contribute", img: Contribute },
   ];
 
   return (
     <StyledBoxWrapper>
-      {items.map(({ label, icon }, i) => {
+      {items.map(({ label, img }, i) => {
         return (
           <StyledCardBackground key={i} raised={false}>
+            <CardMedia
+              component="img"
+              image={img}
+              alt={`${label}-${Math.floor(Math.random(i ** i))}`}
+              sx={{ height: 100 }}
+            />
             <CardContent
               sx={{
                 display: "flex",
+                flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
               <Typography
                 align="center"
-                variant="body1"
+                component="h3"
+                variant="button"
                 color="text.secondary"
-                paragraph
               >
-                <IconBox>{icon}</IconBox>
                 {label}
               </Typography>
             </CardContent>

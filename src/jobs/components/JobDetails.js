@@ -245,10 +245,12 @@ const JobDetails = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Button component={Link} to={`/jobs/${job.id}/update`}>
-          {" "}
-          update Job{" "}
-        </Button>
+        {authCtx.isLoggedIn && (
+          <Button component={Link} to={`/jobs/${job.id}/update`}>
+            {" "}
+            update Job{" "}
+          </Button>
+        )}
       </Box>
     </>
   );
