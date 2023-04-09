@@ -1,19 +1,15 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import {
+  Button,
+  Card,
+  CardActions,
   Grid,
-  Paper,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 
 import TeacherItem from './TeacherItem';
-
-const StyledPaperContainer = styled(Paper)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "row",
-  height: "500px",
-  margin: "10px",
-}));
 
 const TeacherList = ({ teachers }) => {
   //userId = useParams().uid;
@@ -25,10 +21,24 @@ const TeacherList = ({ teachers }) => {
 
   // }
 
+  if (teachers.length < 1) {
+    return (
+      <Card>
+        No teachers match your current search criteria. Please check back in the
+        future or create a job.
+        <CardActions>
+          <Button component={Link} to="/job/new">
+            Create Job
+          </Button>
+        </CardActions>
+      </Card>
+    );
+  }
+
   return (
     <Grid container spacing={2} wrap="wrap">
       {teachers.map((teacher, i) => (
-        <Grid item key={teacher.id} xs={12} sm={6} md={2}>
+        <Grid item key={teacher.id} xs={12} sm={6} md={3}>
           <TeacherItem
             id={teacher.id}
             name={teacher.name}
@@ -36,6 +46,7 @@ const TeacherList = ({ teachers }) => {
             nationality={teacher.nationality}
             workExperience={teacher.workExperience}
             image={teacher.image}
+            degree={teacher.highestCertification}
           />
         </Grid>
       ))}

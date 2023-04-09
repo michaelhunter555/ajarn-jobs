@@ -173,7 +173,7 @@ const MainFeaturedPost = (props) => {
                       position: "relative",
                     }}
                   >
-                    <StyledGlassCard raised="true">
+                    <StyledGlassCard raised={true}>
                       <CardMedia
                         component="img"
                         image={posts.image}
