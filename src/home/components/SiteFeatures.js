@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import {
   Box,
   Card,
@@ -57,43 +59,45 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
 
 const SiteFeatures = () => {
   const items = [
-    { label: "Jobs", img: Jobs },
-    { label: "Schools", img: SchoolImage },
-    { label: "Thai Life", img: ThaiLifeTwo },
-    { label: "Skills Tests", img: SkillsTests },
-    { label: "Interviews", img: Interviews },
-    { label: "Contribute", img: Contribute },
+    { label: "Jobs", img: Jobs, link: `/jobs` },
+    { label: "Schools", img: SchoolImage, link: `/school` },
+    { label: "Thai Life", img: ThaiLifeTwo, link: `/thai-life` },
+    { label: "Skills Tests", img: SkillsTests, link: `skills-test` },
+    { label: "Interviews", img: Interviews, link: `/interviews` },
+    { label: "Contribute", img: Contribute, link: `/contribute` },
   ];
 
   return (
     <StyledBoxWrapper>
-      {items.map(({ label, img }, i) => {
+      {items.map(({ label, img, link }, i) => {
         return (
-          <StyledCardBackground key={i} raised={false}>
-            <CardMedia
-              component="img"
-              image={img}
-              alt={`${label}-${Math.floor(Math.random(i ** i))}`}
-              sx={{ height: 100 }}
-            />
-            <CardContent
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                align="center"
-                component="h3"
-                variant="button"
-                color="text.secondary"
+          <Link key={i} to={link}>
+            <StyledCardBackground raised={false}>
+              <CardMedia
+                component="img"
+                image={img}
+                alt={`${label}-card#-${i}`}
+                sx={{ height: 100 }}
+              />
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                {label}
-              </Typography>
-            </CardContent>
-          </StyledCardBackground>
+                <Typography
+                  align="center"
+                  component="h3"
+                  variant="button"
+                  color="text.secondary"
+                >
+                  {label}
+                </Typography>
+              </CardContent>
+            </StyledCardBackground>
+          </Link>
         );
       })}
     </StyledBoxWrapper>

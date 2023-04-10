@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
-import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import {
   Card,
   CardContent,
@@ -11,21 +11,13 @@ import {
   List,
   ListItem,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-const StyledUrgentJobCard = styled(Card)(({ theme }) => ({
-  backgroundColor: "rgba(255, 255, 255, 0.38)",
-  borderRadius: "16px",
-  boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-  backdropFilter: "blur(8.5px)",
-  webkitBackdropFilter: "blur(8.5px)",
-  border: "1px solid rgba(79, 185, 255, 0.3)",
+const StyledJobText = styled(Typography)(({ theme }) => ({
+  fontSize: "16px",
+  ...theme.typography.button,
 }));
-
-const StyledJobText = styled(Typography)({
-  fontSize: "13px",
-});
 
 const UrgentJobs = (props) => {
   const { job } = props;
@@ -35,7 +27,7 @@ const UrgentJobs = (props) => {
   const urgentJobLimit = job.slice(0, 2);
 
   return (
-    <StyledUrgentJobCard>
+    <Card>
       <CardContent>
         <Typography variant="h5" component="div">
           <Chip
@@ -49,7 +41,7 @@ const UrgentJobs = (props) => {
           {urgentJobLimit.map((jobs, i) => (
             <Link key={jobs.id} component={RouterLink} to={`/jobs/${jobs.id}`}>
               <ListItem key={jobs.id}>
-                <StyledJobText variant="subtitle" color="text.secondary">
+                <StyledJobText color="text.secondary">
                   {i + 1}. {jobs.title}
                 </StyledJobText>
               </ListItem>
@@ -57,7 +49,7 @@ const UrgentJobs = (props) => {
           ))}
         </List>
       </CardContent>
-    </StyledUrgentJobCard>
+    </Card>
   );
 };
 

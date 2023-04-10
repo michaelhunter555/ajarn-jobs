@@ -106,7 +106,7 @@ const TeacherItem = (props) => {
         sx={{ margin: "0 auto", paddingLeft: "0.5rem" }}
         onClick={() => console.log("MODAL")}
       >
-        Contact
+        <EmailIcon color="primary" sx={{ fontSize: 16 }} /> Contact
       </Button>
     );
   }
