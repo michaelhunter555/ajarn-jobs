@@ -1,38 +1,27 @@
 import React, { useState } from 'react';
 
-import { styled } from '@mui/material/styles';
+import { Grid } from '@mui/material/';
+import {
+  createTheme,
+  ThemeProvider,
+} from '@mui/material/styles';
 
 import { DUMMY_USERS_LIST } from '../../shared/util/DummyUsers';
 import TeacherFilter from '../components/TeacherFilter';
 //filter, teachersList, pagination
 import TeacherList from '../components/TeacherList';
 
-const StyledUserDiv = styled("div")(({ theme }) => ({
-  maxWidth: "85%",
-  margin: "0 auto",
-  display: "grid",
-  gridTemplateColumns: "repeat(4, 1fr)",
-  gap: "15px",
-  [theme.breakpoints.between("xl", 1807)]: {
-    gridTemplateColumns: "repeat (3, 1fr)",
+const customThemeForTeachers = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1807,
+    },
   },
-  [theme.breakpoints.down("sm")]: {
-    gridTemplateColumns: "repeat(1, 1fr)",
-  },
-}));
-
-const StyledTeacherFilter = styled("div")(({ theme }) => ({
-  gridColumn: "1/2",
-  [theme.breakpoints.down("sm")]: {
-    gridColumn: "1/5",
-    gridRow: 1,
-    width: "100%",
-  },
-}));
-
-const StyledTeacherList = styled("div")(({ theme }) => ({
-  gridColumn: "2/5",
-}));
+});
 
 const Teachers = () => {
   const [filter, setFilter] = useState(DUMMY_USERS_LIST);
@@ -59,14 +48,18 @@ const Teachers = () => {
   // import createTheme(), themeprovider
 
   return (
-    <StyledUserDiv>
-      <StyledTeacherFilter>
-        <TeacherFilter onDataChange={handleFilterChange} />
-      </StyledTeacherFilter>
-      <StyledTeacherList>
-        <TeacherList teachers={filteredTeachers} />
-      </StyledTeacherList>
-    </StyledUserDiv>
+    <ThemeProvider theme={customThemeForTeachers}>
+      <Grid container spacing={3} sx={{ width: "90%" }}>
+        <Grid item xs={12} xl={3}>
+          <TeacherFilter onDataChange={handleFilterChange} />
+        </Grid>
+        <Grid item xs={12} xl={9} sx={{ margin: "1rem auto" }}>
+          <Grid container spacing={2}>
+            <TeacherList teachers={filteredTeachers} />
+          </Grid>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 };
 
