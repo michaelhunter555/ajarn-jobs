@@ -51,6 +51,7 @@ const TeacherList = ({ teachers }) => {
                 workExperience={teacher.workExperience}
                 image={teacher.image}
                 degree={teacher.highestCertification}
+                about={teacher.about}
               />
             </Link>
           )}
@@ -64,6 +65,7 @@ const TeacherList = ({ teachers }) => {
               workExperience={teacher.workExperience}
               image={teacher.image}
               degree={teacher.highestCertification}
+              about={teacher.about}
             />
           )}
         </Grid>

@@ -11,6 +11,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import PublicIcon from '@mui/icons-material/Public';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -134,35 +135,56 @@ const TeacherItem = (props) => {
             <Typography component="h2" variant="h6">
               {props.name}
             </Typography>
-            <Typography
-              component="h3"
-              color="text.secondary"
-              variant="subtitle2"
-            >
-              <PublicIcon fontSize="inherit" /> {props.nationality}
-            </Typography>
-            <Typography
-              component="h3"
-              color="text.secondary"
-              variant="subtitle2"
-            >
-              <AssuredWorkloadIcon fontSize="inherit" /> {props.workExperience}{" "}
-              {props.workExperience > 1 ? "Years" : "Year"}
-            </Typography>
-            <Typography
-              component="h3"
-              color="text.secondary"
-              variant="subtitle2"
-            >
-              <PlaceIcon fontSize="inherit" /> {props.currentLocation}
-            </Typography>
-            <Typography
-              component="h3"
-              color="text.secondary"
-              variant="subtitle2"
-            >
-              <WorkspacePremiumIcon fontSize="inherit" /> {props.degree}
-            </Typography>
+            {/*2 x 2 */}
+            <Grid container spacing={2} direction="row">
+              <Grid item>
+                <Typography
+                  component="h3"
+                  color="text.secondary"
+                  variant="subtitle2"
+                >
+                  <PublicIcon fontSize="inherit" /> {props.nationality}
+                </Typography>
+                <Typography
+                  component="h3"
+                  color="text.secondary"
+                  variant="subtitle2"
+                >
+                  <AssuredWorkloadIcon fontSize="inherit" />{" "}
+                  {props.workExperience}{" "}
+                  {props.workExperience > 1 ? "Years" : "Year"}
+                </Typography>
+              </Grid>
+              {/*2 x 2 */}
+              <Grid item>
+                <Typography
+                  component="h3"
+                  color="text.secondary"
+                  variant="subtitle2"
+                >
+                  <PlaceIcon fontSize="inherit" /> {props.currentLocation}
+                </Typography>
+                <Typography
+                  component="h3"
+                  color="text.secondary"
+                  variant="subtitle2"
+                >
+                  <WorkspacePremiumIcon fontSize="inherit" /> {props.degree}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Divider sx={{ width: "75%" }} variant="left" />
+            <Box>
+              <Typography
+                sx={{ paddingTop: "3px" }}
+                variant="subtitle2"
+                color="text.secondary"
+              >
+                {props.about.length > 50
+                  ? props.about.substring(0, 50) + "..."
+                  : props.about}
+              </Typography>
+            </Box>
           </CardContent>
           <Grid
             container

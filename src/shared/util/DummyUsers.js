@@ -61,6 +61,8 @@ export const DUMMY_USERS_LIST = [
     workExperience: 5,
     interests: ["Teaching", "Traveling", "Photography"],
     highestCertification: "BA",
+    about:
+      "hello, my name is john and I have been teaching for over 5years. I love teaching English and creating fun and engaging lessons.",
   },
   {
     id: "u2",
@@ -72,6 +74,7 @@ export const DUMMY_USERS_LIST = [
     workExperience: 9,
     interests: ["Teaching", "Traveling", "Photography"],
     highestCertification: "master's degree",
+    about: "hello, my name is Michael and I love teaching and coding!",
   },
   {
     id: "u3",
@@ -83,6 +86,8 @@ export const DUMMY_USERS_LIST = [
     workExperience: 2,
     interests: ["Teaching", "Traveling", "Photography"],
     highestCertification: "master's degree",
+    about:
+      "hello, my name is Bob and I have been teaching for 2 years. I love teaching English and creating fun and engaging lessons.",
   },
   {
     id: "u4",
@@ -94,5 +99,7 @@ export const DUMMY_USERS_LIST = [
     workExperience: 1,
     interests: ["Teaching", "Traveling", "Photography"],
     highestCertification: "Phd",
+    about:
+      "Looking for a new challenge! I am certified Art Teacher having taugh in England, USA, Brazil and Morroco.",
   },
 ];

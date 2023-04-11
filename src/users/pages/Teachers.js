@@ -7,14 +7,17 @@ import TeacherFilter from '../components/TeacherFilter';
 //filter, teachersList, pagination
 import TeacherList from '../components/TeacherList';
 
-const StyledUserJobsDiv = styled("div")(({ theme }) => ({
+const StyledUserDiv = styled("div")(({ theme }) => ({
   maxWidth: "85%",
   margin: "0 auto",
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "15px",
+  [theme.breakpoints.between("xl", 1807)]: {
+    gridTemplateColumns: "repeat (3, 1fr)",
+  },
   [theme.breakpoints.down("sm")]: {
-    gridTemplateColumns: 1,
+    gridTemplateColumns: "repeat(1, 1fr)",
   },
 }));
 
@@ -51,15 +54,19 @@ const Teachers = () => {
     );
   });
 
+  //change to grid
+  //add custom breakpoints
+  // import createTheme(), themeprovider
+
   return (
-    <StyledUserJobsDiv>
+    <StyledUserDiv>
       <StyledTeacherFilter>
         <TeacherFilter onDataChange={handleFilterChange} />
       </StyledTeacherFilter>
       <StyledTeacherList>
         <TeacherList teachers={filteredTeachers} />
       </StyledTeacherList>
-    </StyledUserJobsDiv>
+    </StyledUserDiv>
   );
 };
 
