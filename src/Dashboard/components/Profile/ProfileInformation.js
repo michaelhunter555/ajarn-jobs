@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Avatar, Box, Chip, Divider, Paper, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Avatar,
+  Box,
+  Chip,
+  Divider,
+  Paper,
+  Typography,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import { SINGLE_DUMMY_USERS } from "../../../shared/util/DummyUsers";
-import ProfileTabs from "./ProfileTabs";
-import { CollapsibleTable } from "./Resume";
+import { SINGLE_DUMMY_USERS } from '../../../shared/util/DummyUsers';
+import ProfileTabs from './ProfileTabs';
+import { CollapsibleTable } from './Resume';
 
 const profilepic =
   "https://images.unsplash.com/photo-1573166364524-d9dbfd8bbf83?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80";
@@ -27,8 +34,8 @@ const StyledBackgroundBox = styled(Box)(({ theme }) => ({
 }));
 
 const StyledProfileAvatar = styled(Avatar)(({ theme }) => ({
-  width: theme.spacing(15),
-  height: theme.spacing(15),
+  width: theme.spacing(25),
+  height: theme.spacing(25),
   marginBottom: theme.spacing(2),
   marginTop: theme.spacing(2),
 }));
@@ -44,7 +51,6 @@ const ProfileInformation = () => {
     name,
     bio,
     skill,
-    resume,
   } = SINGLE_DUMMY_USERS[0];
 
   const handleMenuItemClick = (componentName) => {
@@ -94,7 +100,7 @@ const ProfileInformation = () => {
         <Typography variant="subtitle1">{location}</Typography>
         <Typography variant="subtitle2">{education}</Typography>
         <Typography variant="body1">{WorkExperience}</Typography>
-        <Box>
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
           {interests.map((interest, i) => {
             return <Chip key={i} label={interest} sx={{ margin: 0.5 }} />;
           })}
@@ -103,7 +109,6 @@ const ProfileInformation = () => {
 
       <Divider flexItem sx={{ marginTop: "1rem" }} />
       <ProfileTabs onTabChange={handleMenuItemClick} />
-
       {renderComponent()}
     </StyledProfileContainer>
   );

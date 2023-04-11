@@ -40,6 +40,7 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
     transform: "skewX(-20deg)",
     backgroundImage:
       "linear-gradient(90deg, transparent, rgba(98, 250, 255, 0.219), transparent)",
+    pointerEvents: "none",
   },
   "&:hover::after": {
     animation: "shine 0.5s alternate",

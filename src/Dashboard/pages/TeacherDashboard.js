@@ -13,6 +13,7 @@ import UserProfileJobAd
 import { AuthContext } from '../../shared/context/auth-context';
 import { dummy_jobs } from '../../shared/util/DummyJobs';
 import Applications from '../components/Profile/Applications';
+import FeaturedCard from '../components/Profile/FeaturedCard';
 import ProfileInformation from '../components/Profile/ProfileInformation';
 import TeacherSettings from '../components/Profile/TeacherSettings';
 import Sidebar from '../components/Sidebar';
@@ -47,10 +48,11 @@ const TeacherDashboard = () => {
 
   return (
     <Grid container spacing={1} sx={{ maxWidth: "90%", margin: "0 auto" }}>
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={2}>
         <Sidebar onMenuItemClick={handleMenuItemClick} />
       </Grid>
-      <Grid item xs={12} md={9}>
+
+      <Grid item xs={12} md={6}>
         <Grid
           item
           sx={{
@@ -68,6 +70,7 @@ const TeacherDashboard = () => {
               description={dummy_jobs[0].description}
             />
           </Grid>
+
           <Grid item>
             <UserProfileJobAd
               id={dummy_jobs[0].id}
@@ -81,7 +84,7 @@ const TeacherDashboard = () => {
         <Grid
           item
           sx={{
-            maxWidth: "80%",
+            maxWidth: "100%",
             display: "flex",
             justifyContet: "flex-start",
             flexDirection: "column",
@@ -89,7 +92,9 @@ const TeacherDashboard = () => {
         >
           {renderComponent()}
         </Grid>
-        {/**add other components here */}
+      </Grid>
+      <Grid item xs={12} md={3}>
+        <FeaturedCard />
       </Grid>
     </Grid>
   );
