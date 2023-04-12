@@ -12,6 +12,8 @@ import UserProfileJobAd
   from '../../shared/components/UIElements/UserProfileJobAd';
 import { AuthContext } from '../../shared/context/auth-context';
 import { dummy_jobs } from '../../shared/util/DummyJobs';
+import { DUMMY_USERS_LIST } from '../../shared/util/DummyUsers';
+import TeacherItem from '../../users/components/TeacherItem';
 import Applications from '../components/Profile/Applications';
 import FeaturedCard from '../components/Profile/FeaturedCard';
 import ProfileInformation from '../components/Profile/ProfileInformation';
@@ -22,9 +24,25 @@ const TeacherDashboard = () => {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
+  const [isTeacher, setIsTeacher] = useState(true);
+
+  const {
+    id,
+    name,
+    location,
+    nationality,
+    workExperience,
+    image,
+    highestCertification,
+    about,
+  } = DUMMY_USERS_LIST[0];
 
   const handleMenuItemClick = (componentName) => {
     setCurrentComponent(componentName);
+  };
+
+  const handleRoleChange = () => {
+    setIsTeacher((prev) => !prev);
   };
 
   const renderComponent = () => {
@@ -36,7 +54,12 @@ const TeacherDashboard = () => {
       case "applications":
         return <Applications />;
       case "settings":
-        return <TeacherSettings />;
+        return (
+          <TeacherSettings
+            isSchool={isTeacher}
+            onClickToggle={handleRoleChange}
+          />
+        );
       case "logout":
         authCtx.logout();
         navigate("/");
@@ -94,7 +117,20 @@ const TeacherDashboard = () => {
         </Grid>
       </Grid>
       <Grid item xs={12} md={3}>
-        <FeaturedCard />
+        {isTeacher ? (
+          <FeaturedCard />
+        ) : (
+          <TeacherItem
+            id={id}
+            name={name}
+            currentLocation={location}
+            nationality={nationality}
+            workExperience={workExperience}
+            image={image}
+            degree={highestCertification}
+            about={about}
+          />
+        )}
       </Grid>
     </Grid>
   );

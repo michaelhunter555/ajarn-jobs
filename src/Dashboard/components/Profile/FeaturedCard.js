@@ -26,15 +26,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
   position: "relative",
 }));
 
-const StyledBoxOverlay = styled(Box)({
-  position: "absolute",
-  top: 0,
-  bottom: 0,
-  right: 0,
-  left: 0,
-  backgroundColor: "rgba(0,0,0,.5)",
-});
-
 const StyledImageOverlay = styled(Box)(({ theme }) => ({
   position: "absolute",
   top: 0,
@@ -45,7 +36,7 @@ const StyledImageOverlay = styled(Box)(({ theme }) => ({
   zIndex: 2,
 }));
 
-const FeaturedCard = () => {
+const FeaturedCard = (props) => {
   const { id, title, location, salary, description, hours, creator } =
     dummy_jobs[0];
 

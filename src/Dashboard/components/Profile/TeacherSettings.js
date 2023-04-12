@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 import {
   Card,
@@ -10,21 +10,33 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Switch,
   TextField,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import { nationalities } from "../../../shared/util/ThaiData";
+import { nationalities } from '../../../shared/util/ThaiData';
 
-const TeacherSettings = () => {
+const TeacherSettings = (props) => {
   const [nationality, setNationality] = useState("");
+  const [isSchool, setIsSchool] = useState(props.isTeacher);
 
   const handleNationalityChange = (event) => {
     setNationality(event.target.value);
   };
 
+  const handleRoleToggle = () => {
+    setIsSchool((prev) => !prev);
+    props.onClickToggle();
+  };
+
   return (
     <Card>
+      <Typography>
+        <Switch checked={isSchool} onChange={handleRoleToggle} />
+        {isSchool ? "Employer looking to hire" : "Teacher looking for a job"}
+      </Typography>
+
       <Typography variant="h4" sx={{ margin: "1rem auto" }}>
         Update your profile
       </Typography>
@@ -36,7 +48,7 @@ const TeacherSettings = () => {
           <Grid item xs={12} sm={6}>
             <TextField fullWidth label="last name" variant="outlined" />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={5}>
             <FormControl fullWidth>
               <InputLabel htmlFor="my-input">Email address</InputLabel>
               <Input id="my-input" aria-describedby="my-helper-text" />
@@ -45,12 +57,12 @@ const TeacherSettings = () => {
               </FormHelperText>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6} md={9}>
+          <Grid item xs={12} sm={6} md={7}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Nationality</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                labelId="update-nationality"
+                id="nationality-select"
                 value={nationality}
                 label="Nationality"
                 onChange={handleNationalityChange}
