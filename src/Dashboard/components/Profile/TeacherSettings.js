@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import {
+  Button,
   Card,
   CardContent,
   FormControl,
@@ -19,7 +20,7 @@ import { nationalities } from '../../../shared/util/ThaiData';
 
 const TeacherSettings = (props) => {
   const [nationality, setNationality] = useState("");
-  const [isSchool, setIsSchool] = useState(props.isTeacher);
+  const [isSchool, setIsSchool] = useState(props.isSchool);
 
   const handleNationalityChange = (event) => {
     setNationality(event.target.value);
@@ -76,6 +77,9 @@ const TeacherSettings = (props) => {
             </FormControl>
           </Grid>
         </Grid>
+        <FormControl>
+          <Button type="submit">Save</Button>
+        </FormControl>
       </CardContent>
     </Card>
   );

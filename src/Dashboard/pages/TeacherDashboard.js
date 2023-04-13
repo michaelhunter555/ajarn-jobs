@@ -1,5 +1,6 @@
 import React, {
   useContext,
+  useEffect,
   useState,
 } from 'react';
 
@@ -25,6 +26,13 @@ const TeacherDashboard = () => {
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [isTeacher, setIsTeacher] = useState(true);
+  const [selectedCard, setSelectedCard] = useState(null);
+
+  useEffect(() => {
+    const randomUser =
+      DUMMY_USERS_LIST[Math.floor(Math.random() * DUMMY_USERS_LIST.length)];
+    setSelectedCard(randomUser);
+  }, []);
 
   const {
     id,
@@ -35,7 +43,7 @@ const TeacherDashboard = () => {
     image,
     highestCertification,
     about,
-  } = DUMMY_USERS_LIST[0];
+  } = selectedCard || {};
 
   const handleMenuItemClick = (componentName) => {
     setCurrentComponent(componentName);

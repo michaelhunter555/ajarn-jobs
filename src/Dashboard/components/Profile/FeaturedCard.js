@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -37,8 +40,13 @@ const StyledImageOverlay = styled(Box)(({ theme }) => ({
 }));
 
 const FeaturedCard = (props) => {
-  const { id, title, location, salary, description, hours, creator } =
-    dummy_jobs[0];
+  const [randomJob, setRandomJob] = useState(null);
+
+  useEffect(() => {
+    const randomJobData =
+      dummy_jobs[Math.floor(Math.random() * dummy_jobs.length)];
+    setRandomJob(randomJobData);
+  }, []);
 
   return (
     <StyledCard>
@@ -48,7 +56,7 @@ const FeaturedCard = (props) => {
             <CardMedia
               sx={{ height: 140 }}
               component="img"
-              alt={id}
+              alt={`${randomJob?.id}--${randomJob?.title}`}
               image={KidsInClassImg}
             />
 
@@ -66,12 +74,12 @@ const FeaturedCard = (props) => {
               border: "1px solid #e5e5e5",
               backgroundColor: "white",
             }}
-            src={creator.logoUrl}
+            src={randomJob?.creator?.logoUrl}
             variant="circular"
           />
           <Grid item>
             <Typography component="h1" variant="h6" color="white">
-              {creator.company}
+              {randomJob?.creator?.company}
             </Typography>
           </Grid>
         </Grid>
@@ -82,7 +90,7 @@ const FeaturedCard = (props) => {
             variant="h5"
             color="text.secondary"
           >
-            {title}
+            {randomJob?.title}
           </Typography>
         </Grid>
         <Grid
@@ -95,13 +103,13 @@ const FeaturedCard = (props) => {
           }}
         >
           <Grid item>
-            <Chip clickable={true} size="medium" label={location} />
+            <Chip clickable={true} size="medium" label={randomJob?.location} />
           </Grid>
           <Grid item>
-            <Chip clickable={true} size="medium" label={salary} />
+            <Chip clickable={true} size="medium" label={randomJob?.salary} />
           </Grid>
           <Grid item>
-            <Chip clickable={true} size="medium" label={hours} />
+            <Chip clickable={true} size="medium" label={randomJob?.hours} />
           </Grid>
         </Grid>
         <Typography
@@ -117,7 +125,7 @@ const FeaturedCard = (props) => {
             color="text.secondary"
             variant="subtitle2"
           >
-            {description.substring(0, 100) + "..."}
+            {randomJob?.description?.substring(0, 100) + "..."}
           </Typography>
         </Grid>
       </Grid>
