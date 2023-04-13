@@ -2,6 +2,7 @@ import {
   ADD_CREDITS,
   LOGIN,
   LOGOUT,
+  UPDATE_USER,
   USE_CREDITS,
 } from './authActions';
 
@@ -10,6 +11,7 @@ export const initialState = {
   userId: null,
   credits: 0,
   userHasCredits: false,
+  user: null,
 };
 
 export const authReducer = (state, action) => {
@@ -38,6 +40,11 @@ export const authReducer = (state, action) => {
         ...state,
         credits: remaingCredits,
         userHasCredits: remaingCredits > 0,
+      };
+    case UPDATE_USER:
+      return {
+        ...state,
+        user: action.user,
       };
     default:
       return state;

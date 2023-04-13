@@ -8,8 +8,8 @@ export const SINGLE_DUMMY_USERS = [
   {
     id: "u1",
     name: "John Doe",
-    nationality: "United States",
-    location: "Bangkok, Thailand",
+    nationality: "American",
+    location: "Bangkok",
     education: "Bachelor of Education, Chulalongkorn University",
     workExperience: "5 years teaching experience",
     interests: ["Teaching", "Traveling", "Photography"],

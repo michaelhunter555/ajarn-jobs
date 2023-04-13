@@ -42,6 +42,11 @@ const menuItems = [
     componentName: "applications",
   },
   {
+    text: "My Resume",
+    icon: <DashboardIcon />,
+    componentName: "resume",
+  },
+  {
     text: "Settings",
     icon: <DashboardIcon />,
     componentName: "settings",

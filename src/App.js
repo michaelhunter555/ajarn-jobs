@@ -21,6 +21,7 @@ import {
   ADD_CREDITS,
   LOGIN,
   LOGOUT,
+  UPDATE_USER,
   USE_CREDITS,
 } from './shared/context/authActions';
 import {
@@ -48,6 +49,10 @@ function App() {
 
   const useCredits = useCallback((amount) => {
     dispatch({ type: USE_CREDITS, amount });
+  }, []);
+
+  const updatedUser = useCallback((updatedUser) => {
+    dispatch({ type: UPDATE_USER, user: updatedUser });
   }, []);
 
   let routes;
@@ -90,6 +95,7 @@ function App() {
         logout: logout,
         addCredits: addCredits,
         useCredits: useCredits,
+        updateUser: updatedUser,
       }}
     >
       <Router>

@@ -9,4 +9,5 @@ export const AuthContext = createContext({
   logout: () => {},
   addCredits: (amount) => {},
   useCredits: (amount) => {},
+  updateUser: (updateUser) => {},
 });
