@@ -1,6 +1,6 @@
 import React, {
   useCallback,
-  useState,
+  useReducer,
 } from 'react';
 
 import {
@@ -17,34 +17,41 @@ import UpdateJob from './jobs/pages/UpdateJob';
 import UserJobs from './jobs/pages/UserJobs';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
+import {
+  ADD_CREDITS,
+  LOGIN,
+  LOGOUT,
+  USE_CREDITS,
+} from './shared/context/authActions';
+import {
+  authReducer,
+  initialState,
+} from './shared/context/authReducer';
 import Login from './users/pages/Auth';
 import TeacherDetails from './users/pages/TeacherDetails';
 import Teachers from './users/pages/Teachers';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setUserId] = useState(false);
-  const [isTeacher, setIsTeacher] = useState(false);
-  const [isSchool, setIsSchool] = useState(false);
+  const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const login = useCallback((uid, userRole) => {
-    setIsLoggedIn(true);
-    setUserId(uid);
-
-    if (userRole === "teacher") {
-      setIsTeacher(true);
-    } else if (userRole === "school") {
-      setIsSchool(true);
-    }
+  const login = useCallback((userId, credits) => {
+    dispatch({ type: LOGIN, userId, credits });
   }, []);
 
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
-    setUserId(null);
+    dispatch({ type: LOGOUT });
+  }, []);
+
+  const addCredits = useCallback((amount) => {
+    dispatch({ type: ADD_CREDITS, amount });
+  }, []);
+
+  const useCredits = useCallback((amount) => {
+    dispatch({ type: USE_CREDITS, amount });
   }, []);
 
   let routes;
-  if (isLoggedIn) {
+  if (state.isLoggedIn) {
     routes = (
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
@@ -75,12 +82,14 @@ function App() {
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: isLoggedIn,
-        userId: userId,
-        isTeacher: isTeacher,
-        isSchool: isSchool,
+        isLoggedIn: state.isLoggedIn,
+        userId: state.userId,
+        credits: state.credits,
+        userHasCredits: state.userHasCredits,
         login: login,
         logout: logout,
+        addCredits: addCredits,
+        useCredits: useCredits,
       }}
     >
       <Router>

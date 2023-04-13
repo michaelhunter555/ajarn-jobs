@@ -34,8 +34,8 @@ const TeacherSettings = (props) => {
   return (
     <Card>
       <Typography>
-        <Switch checked={isSchool} onChange={handleRoleToggle} />
-        {isSchool ? "Employer looking to hire" : "Teacher looking for a job"}
+        <Switch checked={!isSchool} onChange={handleRoleToggle} />
+        {isSchool ? "Teacher looking for a job" : "Employer looking to hire"}
       </Typography>
 
       <Typography variant="h4" sx={{ margin: "1rem auto" }}>
