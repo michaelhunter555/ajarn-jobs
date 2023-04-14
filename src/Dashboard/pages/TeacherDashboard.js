@@ -88,6 +88,7 @@ const TeacherDashboard = () => {
         return (
           <TeacherSettings
             isSchool={isTeacher}
+            user={user}
             onClickToggle={handleRoleChange}
           />
         );

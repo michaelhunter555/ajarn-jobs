@@ -3,12 +3,14 @@ import React from 'react';
 import LanguageIcon from '@mui/icons-material/Language';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import SchoolIcon from '@mui/icons-material/School';
+import WorkIcon from '@mui/icons-material/Work';
 import {
   Avatar,
   Box,
   Button,
   Card,
   Chip,
+  Divider,
   Grid,
   Typography,
 } from '@mui/material';
@@ -42,7 +44,13 @@ const TeacherDetailsItem = ({ teacher }) => {
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item container direction="row" spacing={1}>
+          <Grid
+            item
+            container
+            direction="row"
+            spacing={1}
+            sx={{ marginTop: 4 }}
+          >
             {/**grid item 1 */}
             <Grid item>
               <Avatar
@@ -79,18 +87,33 @@ const TeacherDetailsItem = ({ teacher }) => {
                 <SchoolIcon size="inherit" /> {teacher.education}
               </Typography>
 
-              <Typography variant="subtitle2" component="h3">
-                Teaching for: {teacher.workExperience}-
+              <Typography
+                color="text.secondary"
+                variant="subtitle2"
+                component="h3"
+              >
+                <WorkIcon size="inherit" /> Teaching for{" "}
+                {teacher.workExperience}-
                 {teacher.workExperience > 1 ? "years" : "year"}
               </Typography>
+              <Divider flexItem sx={{ margin: "0.5rem 0" }} />
               <Typography variant="subtitle2" component="h3">
+                <Typography
+                  color="text.secondary"
+                  variant="subtitle2"
+                  component="h3"
+                >
+                  Interests:
+                </Typography>
                 {teacher.skill.map((skills, i) => (
                   <Chip key={i} label={skills} />
                 ))}
               </Typography>
             </Grid>
             <Grid item>
-              <Button variant="outlined">Contact user</Button>
+              <Button variant="outlined" sx={{ borderRadius: "17px" }}>
+                Contact user
+              </Button>
             </Grid>
           </Grid>
 
@@ -110,7 +133,7 @@ const TeacherDetailsItem = ({ teacher }) => {
             </Card>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={6}>
+        <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
           <CollapsibleTable teacherResume={teacher.resume} />
         </Grid>
       </Grid>

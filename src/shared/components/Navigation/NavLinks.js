@@ -1,6 +1,9 @@
 import React, { useContext } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import {
+  NavLink,
+  useNavigate,
+} from 'react-router-dom';
 
 import { styled } from '@mui/material/styles';
 
@@ -8,7 +11,13 @@ import { AuthContext } from '../../context/auth-context';
 
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
   //const userId = useParams().uid
+
+  const logoutHandler = () => {
+    auth.logout();
+    navigate("/");
+  };
 
   return (
     <StyledNavLinks>
@@ -46,7 +55,7 @@ const NavLinks = (props) => {
 
       {auth.isLoggedIn && (
         <li>
-          <button onClick={auth.logout}>Logout</button>
+          <button onClick={logoutHandler}>Logout</button>
         </li>
       )}
     </StyledNavLinks>

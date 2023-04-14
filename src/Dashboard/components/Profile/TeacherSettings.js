@@ -21,7 +21,6 @@ import {
 
 import { AuthContext } from '../../../shared/context/auth-context';
 import { useForm } from '../../../shared/hooks/form-hook';
-import { SINGLE_DUMMY_USERS } from '../../../shared/util/DummyUsers';
 import {
   nationalities,
   thaiCities,
@@ -30,30 +29,31 @@ import {
 const TeacherSettings = (props) => {
   const { updateUser } = useContext(AuthContext);
   const [isSchool, setIsSchool] = useState(props.isSchool);
+  const user = props.user;
   const [formState, inputHandler] = useForm(
     {
       name: {
-        value: SINGLE_DUMMY_USERS[0].name,
+        value: user.name,
         isValid: true,
       },
       nationality: {
-        value: SINGLE_DUMMY_USERS[0].nationality,
+        value: user.nationality,
         isValid: true,
       },
       location: {
-        value: SINGLE_DUMMY_USERS[0].location,
+        value: user.location,
         isValid: true,
       },
       bio: {
-        value: SINGLE_DUMMY_USERS[0].bio,
+        value: user.about,
         isValid: true,
       },
       skill: {
-        value: SINGLE_DUMMY_USERS[0].skill,
+        value: user.skill,
         isValid: true,
       },
       interests: {
-        value: SINGLE_DUMMY_USERS[0].interests,
+        value: user.interests,
         isValid: true,
       },
     },
@@ -63,7 +63,7 @@ const TeacherSettings = (props) => {
   const updateProfileHandler = (event) => {
     event.preventDefault();
     const updatedUser = {
-      ...SINGLE_DUMMY_USERS[0],
+      ...user,
       name: formState.inputs.name.value,
       nationality: formState.inputs.nationality.value,
       location: formState.inputs.location.value,
