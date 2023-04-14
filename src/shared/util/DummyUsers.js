@@ -63,6 +63,7 @@ export const DUMMY_USERS_LIST = [
     highestCertification: "BA",
     about:
       "hello, my name is john and I have been teaching for over 5years. I love teaching English and creating fun and engaging lessons.",
+    skill: ["student-centered", "PPP", "lesson planning"],
     resume: [
       {
         resumeId: 1,
@@ -98,6 +99,7 @@ export const DUMMY_USERS_LIST = [
     interests: ["Teaching", "Traveling", "Photography"],
     highestCertification: "master's degree",
     about: "hello, my name is Michael and I love teaching and coding!",
+    skill: ["student-centered", "PPP", "lesson planning"],
     resume: [
       {
         resumeId: 1,
@@ -123,6 +125,7 @@ export const DUMMY_USERS_LIST = [
     highestCertification: "master's degree",
     about:
       "hello, my name is Bob and I have been teaching for 2 years. I love teaching English and creating fun and engaging lessons.",
+    skill: ["student-centered", "PPP", "lesson planning"],
     resume: [
       {
         resumeId: 1,
@@ -158,6 +161,7 @@ export const DUMMY_USERS_LIST = [
     highestCertification: "Phd",
     about:
       "Looking for a new challenge! I am certified Art Teacher having taugh in England, USA, Brazil and Morroco.",
+    skill: ["student-centered", "PPP", "lesson planning"],
     resume: [
       {
         resumeId: 1,

@@ -4,6 +4,7 @@ import {
   Avatar,
   Box,
   Card,
+  Chip,
   Grid,
   Typography,
 } from '@mui/material';
@@ -46,6 +47,26 @@ const TeacherDetailsItem = ({ teacher }) => {
           </Typography>
           <Typography variant="subtitle2" component="h3">
             {teacher.location}
+          </Typography>
+          <Typography variant="subtitle2" component="h3">
+            {teacher.nationality}
+          </Typography>
+          <Typography variant="subtitle2" component="h3">
+            {teacher.education}
+          </Typography>
+          <Typography variant="subtitle2" component="h3">
+            {teacher.skill.map((skills, i) => (
+              <Chip key={i} label={skills} />
+            ))}
+          </Typography>
+          <Typography variant="subtitle2" component="h3">
+            Teaching for: {teacher.workExperience}-
+            {teacher.workExperience > 1 ? "years" : "year"}
+          </Typography>
+          <Typography variant="subtitle2" component="h3">
+            {teacher.interests.map((interest, i) => (
+              <Chip key={i} label={interest} />
+            ))}
           </Typography>
         </Grid>
         <Grid container>
