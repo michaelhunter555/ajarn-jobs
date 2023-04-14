@@ -1,71 +1,121 @@
-import React from "react";
+import React, { useState } from 'react';
 
-import Button from "../../shared/components/FormElements/Button";
-import Input from "../../shared/components/FormElements/Input";
-import Card from "../../shared/components/UIElements/Card";
-import { useForm } from "../../shared/hooks/form-hook";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import {
+  Box,
+  Collapse,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 
-const ResumeItem = (props) => {
-  const [formState, inputHandler] = useForm(
-    {
-      name: {
-        value: "",
-        isValid: false,
-      },
-      nationality: {
-        value: "",
-        isvalid: false,
-      },
-      education: {
-        value: "",
-        isValid: false,
-      },
-      qualifications: {
-        value: "",
-        isValid: false,
-      },
-      workExperience: {
-        value: "",
-        isValid: false,
-      },
-      recommendationsUponRequest: {
-        isValid: true,
-      },
-      additionalSkills: {
-        value: "",
-        isValid: false,
-      },
-    },
-    false
-  );
+import { DUMMY_USERS_LIST } from '../../shared/util/DummyUsers';
 
-  const saveResumeHandler = () => {
-    console.log(formState.inputs);
-    props.onSubmit();
+//create data
+const createData = (
+  company,
+  schoolName,
+  location,
+  from,
+  to,
+  jobTitle,
+  role
+) => {
+  return {
+    company,
+    schoolName,
+    location,
+    from,
+    to,
+    jobTitle,
+    role,
   };
-
-  return (
-    <Card className="resume-profile__container">
-      <form onSubmit={saveResumeHandler}>
-        <div className="resume-field">
-          <label htmlFor="name">Name</label>
-          <Input type="text" id="name" element="input" onInput={inputHandler} />
-        </div>
-        <div className="resume-field">
-          <label htmlFor="nationality">Nationality</label>
-          <Input
-            type="text"
-            id="nationality"
-            element="input"
-            onInput={inputHandler}
-          />
-        </div>
-        <Button disabled={!formState.isvalid} type="submit">
-          Save Resume
-        </Button>
-      </form>
-    </Card>
-  );
 };
 
-export default ResumeItem;
+const Row = (props) => {
+  const [open, setOpen] = useState(false);
+  const { row } = props;
+
+  return (
+    <>
+      <TableRow>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell align="left">{row.company}</TableCell>
+        <TableCell align="left">{row.schoolName}</TableCell>
+        <TableCell align="left">{row.location}</TableCell>
+        <TableCell align="left">{row.from}</TableCell>
+        <TableCell align="left">{row.to}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Role - {row.jobTitle}
+              </Typography>
+              <Table size="small" aria-label="role">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{row.role}</TableCell>
+                  </TableRow>
+                </TableHead>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
+  );
+};
+const { resume } = DUMMY_USERS_LIST;
+
+const rows = resume.map((item, i) =>
+  createData(
+    item.company,
+    item.schoolName,
+    item.location,
+    item.from,
+    item.to,
+    item.jobTitle,
+    item.role
+  )
+);
+
+export const CollapsibleTable = () => {
+  return (
+    <TableContainer component={Paper}>
+      <Table aria-label="collapsible-table">
+        <TableHead sx={{ backgroundColor: "#e8f0f7" }}>
+          <TableRow>
+            <TableCell align="left">View Role</TableCell>
+            <TableCell align="left">Company</TableCell>
+            <TableCell align="left">School Name</TableCell>
+            <TableCell align="left">Location</TableCell>
+            <TableCell align="left">from</TableCell>
+            <TableCell align="left">To</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row, i) => (
+            <Row key={i} row={row} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};

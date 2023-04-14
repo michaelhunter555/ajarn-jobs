@@ -86,7 +86,7 @@ const ProfileInformation = () => {
           </Typography>
         );
       case "resume":
-        return <CollapsibleTable />;
+        return <CollapsibleTable isSingleUser={true} />;
       default:
         return <Typography paragraph>{bio}</Typography>;
     }

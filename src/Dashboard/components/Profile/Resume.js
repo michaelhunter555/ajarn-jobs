@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
   Box,
   Collapse,
@@ -14,9 +14,12 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import { SINGLE_DUMMY_USERS } from "../../../shared/util/DummyUsers";
+import {
+  DUMMY_USERS_LIST,
+  SINGLE_DUMMY_USERS,
+} from '../../../shared/util/DummyUsers';
 
 //create data
 const createData = (
@@ -39,7 +42,7 @@ const createData = (
   };
 };
 
-const Row = (props) => {
+export const Row = (props) => {
   const [open, setOpen] = useState(false);
   const { row } = props;
 
@@ -83,21 +86,25 @@ const Row = (props) => {
   );
 };
 
-const { resume } = SINGLE_DUMMY_USERS[0];
+export const CollapsibleTable = (props) => {
+  const { isSingleUser, teacherResume } = props;
+  const { resume } = SINGLE_DUMMY_USERS[0];
 
-const rows = resume.map((item, i) =>
-  createData(
-    item.company,
-    item.schoolName,
-    item.location,
-    item.from,
-    item.to,
-    item.jobTitle,
-    item.role
-  )
-);
+  const singleResume = resume.map((item, i) =>
+    createData(
+      item.company,
+      item.schoolName,
+      item.location,
+      item.from,
+      item.to,
+      item.jobTitle,
+      item.role
+    )
+  );
 
-export const CollapsibleTable = () => {
+  const resumeData =
+    teacherResume || (isSingleUser ? singleResume : DUMMY_USERS_LIST);
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible-table">
@@ -112,8 +119,8 @@ export const CollapsibleTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
+          {resumeData.map((row, i) => (
+            <Row key={i} row={row} />
           ))}
         </TableBody>
       </Table>

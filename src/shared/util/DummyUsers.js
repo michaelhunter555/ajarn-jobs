@@ -63,7 +63,30 @@ export const DUMMY_USERS_LIST = [
     highestCertification: "BA",
     about:
       "hello, my name is john and I have been teaching for over 5years. I love teaching English and creating fun and engaging lessons.",
+    resume: [
+      {
+        resumeId: 1,
+        company: "Bright Future",
+        schoolName: "Bright Future International",
+        role: "teach m1 and m2 conversational English",
+        location: "Bangkok, Thailand",
+        jobTitle: "English Teacher",
+        from: 2004,
+        to: 2012,
+      },
+      {
+        resumeId: 2,
+        company: "GunChunk GooJang",
+        schoolName: "Korea University English Pg",
+        role: "Teach university students business English",
+        location: "Seoul, South korea",
+        jobTitle: "English Teacher",
+        from: 2002,
+        to: 2004,
+      },
+    ],
   },
+
   {
     id: "u2",
     name: "Michael Hunter",
@@ -75,6 +98,18 @@ export const DUMMY_USERS_LIST = [
     interests: ["Teaching", "Traveling", "Photography"],
     highestCertification: "master's degree",
     about: "hello, my name is Michael and I love teaching and coding!",
+    resume: [
+      {
+        resumeId: 1,
+        company: "Bright Future",
+        schoolName: "Bright Future International",
+        role: "teach m1 and m2 conversational English",
+        location: "Bangkok, Thailand",
+        jobTitle: "English Teacher",
+        from: 2004,
+        to: 2012,
+      },
+    ],
   },
   {
     id: "u3",
@@ -88,6 +123,28 @@ export const DUMMY_USERS_LIST = [
     highestCertification: "master's degree",
     about:
       "hello, my name is Bob and I have been teaching for 2 years. I love teaching English and creating fun and engaging lessons.",
+    resume: [
+      {
+        resumeId: 1,
+        company: "Bright Future",
+        schoolName: "Bright Future International",
+        role: "teach m1 and m2 conversational English",
+        location: "Bangkok, Thailand",
+        jobTitle: "English Teacher",
+        from: 2004,
+        to: 2012,
+      },
+      {
+        resumeId: 2,
+        company: "GunChunk GooJang",
+        schoolName: "Korea University English Pg",
+        role: "Teach university students business English",
+        location: "Seoul, South korea",
+        jobTitle: "English Teacher",
+        from: 2002,
+        to: 2004,
+      },
+    ],
   },
   {
     id: "u4",
@@ -101,5 +158,27 @@ export const DUMMY_USERS_LIST = [
     highestCertification: "Phd",
     about:
       "Looking for a new challenge! I am certified Art Teacher having taugh in England, USA, Brazil and Morroco.",
+    resume: [
+      {
+        resumeId: 1,
+        company: "Bright Future",
+        schoolName: "Bright Future International",
+        role: "teach m1 and m2 conversational English",
+        location: "Bangkok, Thailand",
+        jobTitle: "English Teacher",
+        from: 2004,
+        to: 2012,
+      },
+      {
+        resumeId: 2,
+        company: "GunChunk GooJang",
+        schoolName: "Korea University English Pg",
+        role: "Teach university students business English",
+        location: "Seoul, South korea",
+        jobTitle: "English Teacher",
+        from: 2002,
+        to: 2004,
+      },
+    ],
   },
 ];
