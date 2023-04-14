@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Box, Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Tab,
+  Tabs,
+} from '@mui/material';
 
 const menuItems = [
   {

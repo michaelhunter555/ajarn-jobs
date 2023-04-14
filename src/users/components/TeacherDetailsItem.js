@@ -1,5 +1,8 @@
 import React from 'react';
 
+import LanguageIcon from '@mui/icons-material/Language';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import SchoolIcon from '@mui/icons-material/School';
 import {
   Avatar,
   Box,
@@ -54,14 +57,26 @@ const TeacherDetailsItem = ({ teacher }) => {
               <Typography variant="h5" component="h2">
                 {teacher.name}
               </Typography>
-              <Typography variant="subtitle2" component="h3">
-                {teacher.location}
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                component="h3"
+              >
+                <LocationOnIcon size="inherit" /> {teacher.location}
               </Typography>
-              <Typography variant="subtitle2" component="h3">
-                {teacher.nationality}
+              <Typography
+                color="text.secondary"
+                variant="subtitle2"
+                component="h3"
+              >
+                <LanguageIcon size="inherit" /> {teacher.nationality}
               </Typography>
-              <Typography variant="subtitle2" component="h3">
-                {teacher.education}
+              <Typography
+                color="text.secondary"
+                variant="subtitle2"
+                component="h3"
+              >
+                <SchoolIcon size="inherit" /> {teacher.education}
               </Typography>
 
               <Typography variant="subtitle2" component="h3">

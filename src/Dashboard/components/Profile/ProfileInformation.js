@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import { SINGLE_DUMMY_USERS } from '../../../shared/util/DummyUsers';
 import ProfileTabs from './ProfileTabs';
 import { CollapsibleTable } from './Resume';
 
@@ -40,18 +39,20 @@ const StyledProfileAvatar = styled(Avatar)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-const ProfileInformation = () => {
+const ProfileInformation = ({ user }) => {
   const [teacherProfileTab, setTeacherProfileTab] = useState("bio");
   const {
     id,
     location,
+    image,
     education,
     WorkExperience,
     interests,
     name,
-    bio,
+    about,
     skill,
-  } = SINGLE_DUMMY_USERS[0];
+    resume,
+  } = user;
 
   const handleMenuItemClick = (componentName) => {
     setTeacherProfileTab(componentName);
@@ -62,7 +63,7 @@ const ProfileInformation = () => {
       case "bio":
         return (
           <Typography paragraph sx={{ margin: "1.5rem" }}>
-            {bio}
+            {about}
           </Typography>
         );
       case "skills":
@@ -86,16 +87,16 @@ const ProfileInformation = () => {
           </Typography>
         );
       case "resume":
-        return <CollapsibleTable isSingleUser={true} />;
+        return <CollapsibleTable teacherResume={resume} />;
       default:
-        return <Typography paragraph>{bio}</Typography>;
+        return <Typography paragraph>{about}</Typography>;
     }
   };
 
   return (
     <StyledProfileContainer>
       <StyledBackgroundBox>
-        <StyledProfileAvatar src={profilepic} alt={`${id}-${name}`} />
+        <StyledProfileAvatar src={image} alt={`${id}-${name}`} />
         <Typography variant="h5">{name}</Typography>
         <Typography variant="subtitle1">{location}</Typography>
         <Typography variant="subtitle2">{education}</Typography>

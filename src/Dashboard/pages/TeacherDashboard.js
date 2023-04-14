@@ -16,10 +16,7 @@ import UserProfileJobAd
   from '../../shared/components/UIElements/UserProfileJobAd';
 import { AuthContext } from '../../shared/context/auth-context';
 import { dummy_jobs } from '../../shared/util/DummyJobs';
-import {
-  DUMMY_USERS_LIST,
-  SINGLE_DUMMY_USERS,
-} from '../../shared/util/DummyUsers';
+import { DUMMY_USERS_LIST } from '../../shared/util/DummyUsers';
 import TeacherItem from '../../users/components/TeacherItem';
 import Applications from '../components/Profile/Applications';
 import FeaturedCard from '../components/Profile/FeaturedCard';
@@ -29,8 +26,9 @@ import UpdateResumeItem from '../components/Profile/UpdateResumeItem';
 import Sidebar from '../components/Sidebar';
 
 const TeacherDashboard = () => {
-  const userId = useParams().uid;
-  const userDashboard = DUMMY_USERS_LIST.find((user) => user.id === userId);
+  const userId = useParams().id;
+  const user = DUMMY_USERS_LIST.find((user) => user.id === userId);
+  console.log(user);
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
@@ -69,7 +67,7 @@ const TeacherDashboard = () => {
   const renderComponent = () => {
     switch (currentComponent) {
       case "profile":
-        return <ProfileInformation />;
+        return <ProfileInformation user={user} />;
       case "job-listings":
         return <JobAdsList job={dummy_jobs} />;
       case "applications":
@@ -77,7 +75,7 @@ const TeacherDashboard = () => {
       case "resume":
         return (
           <>
-            {SINGLE_DUMMY_USERS[0].resume.map((resumeItem) => (
+            {user.resume.map((resumeItem) => (
               <UpdateResumeItem
                 key={resumeItem.resumeId}
                 resumeItem={resumeItem}
@@ -98,7 +96,7 @@ const TeacherDashboard = () => {
         navigate("/");
         break;
       default:
-        return <ProfileInformation />;
+        return <ProfileInformation user={user} />;
     }
   };
 
