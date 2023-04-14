@@ -136,7 +136,11 @@ const FeaturedCard = (props) => {
         sx={{ justifyContent: "center", margin: "0 0 1rem 0" }}
       >
         <Grid item>
-          <Button variant="contained" component={Link} to="/jobs">
+          <Button
+            variant="contained"
+            component={Link}
+            to={`/jobs/${randomJob?.id}`}
+          >
             Apply Now
           </Button>
         </Grid>

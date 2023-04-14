@@ -78,12 +78,13 @@ function App() {
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
         <Route path="/teachers" element={<Teachers />} />
-        <Route path="/teachers/:uid" element={<TeacherDetails />} />
         <Route path="/auth" element={<Login />} />
       </Routes>
     );
   }
   //remember to update users to dynamic id
+  console.log(state);
+  console.log("App state credits:", state.credits);
   return (
     <AuthContext.Provider
       value={{

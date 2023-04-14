@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Avatar,
   Box,
+  Button,
   Card,
   Chip,
   Grid,
@@ -17,66 +18,85 @@ const TeacherDetailsItem = ({ teacher }) => {
       sx={{
         display: "flex",
         justifyContent: "center",
-        alignItem: "center",
-        width: "90%",
+        alignItems: "center",
+        width: "80%",
+        margin: "0 auto",
       }}
     >
       <Grid
         spacing={2}
         container
         direction="row"
-        sx={{ justifyContent: "center", alignItem: "center" }}
+        sx={{ justifyContent: "flex-start" }}
       >
         <Grid
           item
           xs={12}
           sm={6}
           md={6}
-          sx={{ display: "flex", justifyContent: "flex-end" }}
+          container
+          direction="column"
+          justifyContent="flex-start"
+          spacing={2}
         >
-          <Avatar
-            variant="circular"
-            src={teacher.image}
-            sx={{ height: 200, width: 200 }}
-            alt={`${teacher.id}--${teacher.name}`}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={6}>
-          <Typography variant="h5" component="h2">
-            {teacher.name}
-          </Typography>
-          <Typography variant="subtitle2" component="h3">
-            {teacher.location}
-          </Typography>
-          <Typography variant="subtitle2" component="h3">
-            {teacher.nationality}
-          </Typography>
-          <Typography variant="subtitle2" component="h3">
-            {teacher.education}
-          </Typography>
-          <Typography variant="subtitle2" component="h3">
-            {teacher.skill.map((skills, i) => (
-              <Chip key={i} label={skills} />
-            ))}
-          </Typography>
-          <Typography variant="subtitle2" component="h3">
-            Teaching for: {teacher.workExperience}-
-            {teacher.workExperience > 1 ? "years" : "year"}
-          </Typography>
-          <Typography variant="subtitle2" component="h3">
-            {teacher.interests.map((interest, i) => (
-              <Chip key={i} label={interest} />
-            ))}
-          </Typography>
-        </Grid>
-        <Grid container>
-          <Grid item xs={12} sm={6} md={6}>
-            <Card>{teacher.about}</Card>
+          <Grid item container direction="row" spacing={1}>
+            {/**grid item 1 */}
+            <Grid item>
+              <Avatar
+                variant="circular"
+                src={teacher.image}
+                sx={{ height: 200, width: 200 }}
+                alt={`${teacher.id}--${teacher.name}`}
+              />
+            </Grid>
+            {/**grid item 2 */}
+            <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
+              <Typography variant="h5" component="h2">
+                {teacher.name}
+              </Typography>
+              <Typography variant="subtitle2" component="h3">
+                {teacher.location}
+              </Typography>
+              <Typography variant="subtitle2" component="h3">
+                {teacher.nationality}
+              </Typography>
+              <Typography variant="subtitle2" component="h3">
+                {teacher.education}
+              </Typography>
+
+              <Typography variant="subtitle2" component="h3">
+                Teaching for: {teacher.workExperience}-
+                {teacher.workExperience > 1 ? "years" : "year"}
+              </Typography>
+              <Typography variant="subtitle2" component="h3">
+                {teacher.skill.map((skills, i) => (
+                  <Chip key={i} label={skills} />
+                ))}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined">Contact user</Button>
+            </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={6}>
-            <CollapsibleTable teacherResume={teacher.resume} />
+          <Grid item>
+            <Card sx={{ padding: 2 }}>
+              <Typography variant="subtitle2" component="h3">
+                {teacher.interests.map((interest, i) => (
+                  <Chip key={i} label={interest} />
+                ))}
+              </Typography>
+              <Typography variant="h6" component="h4">
+                A little about {teacher.name}:
+              </Typography>
+              <Typography variant="subtitle1" paragraph>
+                {teacher.about}
+              </Typography>
+            </Card>
           </Grid>
+        </Grid>
+        <Grid item xs={12} sm={6} md={6}>
+          <CollapsibleTable teacherResume={teacher.resume} />
         </Grid>
       </Grid>
     </Box>
@@ -84,26 +104,3 @@ const TeacherDetailsItem = ({ teacher }) => {
 };
 
 export default TeacherDetailsItem;
-
-// {teacher.resume.map(({resumeId, company, schoolName, role, location, jobTitle, from, to}) => (
-//   <>
-//   <TableContainer component={Paper} key={resumeId}>
-//     <Table sx={{ minWidth: 650 }} aria-label="resume">
-//       <TableHead>
-//         <TableRow>
-//           <TableCell>job Title</TableCell>
-//           <TableCell>Company</TableCell>
-//           <TableCell>School Name</TableCell>
-//           <TableCell>Role</TableCell>
-//           <TableCell>Location</TableCell>
-//           <TableCell>From</TableCell>
-//           <TableCell>job Title</TableCell>
-//         </TableRow>
-//       </TableHead>
-//       <TableBody>
-
-//       </TableBody>
-//     </Table>
-//   </TableContainer>
-//   </>
-// ))}

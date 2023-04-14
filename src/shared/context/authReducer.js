@@ -17,6 +17,7 @@ export const initialState = {
 export const authReducer = (state, action) => {
   switch (action.type) {
     case LOGIN:
+      console.log("LOGIN ACTIONS:", action.credits);
       return {
         ...state,
         isLoggedIn: true,

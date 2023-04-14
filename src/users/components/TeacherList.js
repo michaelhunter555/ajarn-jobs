@@ -41,7 +41,7 @@ const TeacherList = ({ teachers }) => {
     <Grid container spacing={2} wrap="wrap">
       {teachers.map((teacher, i) => (
         <Grid item key={teacher.id} xs={12} sm={6} md={3}>
-          {authCtx.isLoggedIn && (
+          {authCtx.isLoggedIn && authCtx.credits > 0 && (
             <Link to={`/teachers/${teacher.id}`}>
               <TeacherItem
                 id={teacher.id}
@@ -54,6 +54,19 @@ const TeacherList = ({ teachers }) => {
                 about={teacher.about}
               />
             </Link>
+          )}
+
+          {authCtx.isLoggedIn && authCtx.credits === 0 && (
+            <TeacherItem
+              id={teacher.id}
+              name={teacher.name}
+              currentLocation={teacher.location}
+              nationality={teacher.nationality}
+              workExperience={teacher.workExperience}
+              image={teacher.image}
+              degree={teacher.highestCertification}
+              about={teacher.about}
+            />
           )}
 
           {!authCtx.isLoggedIn && (

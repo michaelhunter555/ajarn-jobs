@@ -4,7 +4,10 @@ import React, {
   useState,
 } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 
 import { Grid } from '@mui/material';
 
@@ -26,6 +29,8 @@ import UpdateResumeItem from '../components/Profile/UpdateResumeItem';
 import Sidebar from '../components/Sidebar';
 
 const TeacherDashboard = () => {
+  const userId = useParams().uid;
+  const userDashboard = DUMMY_USERS_LIST.find((user) => user.id === userId);
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");

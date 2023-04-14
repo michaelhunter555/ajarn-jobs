@@ -82,7 +82,9 @@ const Auth = () => {
   const authSubmitHandler = (event) => {
     event.preventDefault();
     //api call
-    auth.login();
+    const userId = "u1";
+    const credits = 5;
+    auth.login(userId, credits);
     navigate("/");
   };
 
