@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
 import {
   FaClipboardList,
@@ -6,66 +6,64 @@ import {
   FaGraduationCap,
   FaMapMarkerAlt,
   FaMoneyBill,
-} from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-import BusinessIcon from '@mui/icons-material/Business';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import BusinessIcon from "@mui/icons-material/Business";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
-  Alert,
+  Avatar,
   Box,
   Button,
-  CardMedia,
+  Card,
   Divider,
   Grid,
-  List,
   ListItem,
-  Paper,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
 
-import { AuthContext } from '../../shared/context/auth-context';
+import { AuthContext } from "../../shared/context/auth-context";
+import JobDataTable from "./JobDataTable";
 
-const StyledGridContainer = styled(Grid)(({ theme, alert, jobData }) => ({
-  display: "flex",
-  flexDirection: alert ? "" : jobData ? "column" : "row",
-  alignItems: "center",
-  justifyContent: alert ? "flex-end" : jobData ? "" : "flex-start",
-  margin: alert ? "1rem 0 0 0" : "1rem 0 0.5rem 3rem",
-  gap: alert ? "1rem" : "",
-  fontSize: jobData ? 17 : "",
-  padding: jobData ? 2 : "",
-}));
+// const StyledGridContainer = styled(Grid)(({ theme, alert, jobData }) => ({
+//   display: "flex",
+//   flexDirection: alert ? "" : jobData ? "column" : "row",
+//   alignItems: "center",
+//   justifyContent: alert ? "flex-end" : jobData ? "" : "flex-start",
+//   margin: alert ? "1rem 0 0 0" : "1rem 0 0.5rem 3rem",
+//   gap: alert ? "1rem" : "",
+//   fontSize: jobData ? 17 : "",
+//   padding: jobData ? 2 : "",
+// }));
 
-//job title || school
-const StyledJobTitle = styled("div")({
-  fontSize: "2rem",
-  fontWeight: "bold",
-  textAlign: "center",
-});
+// //job title || school
+// const StyledJobTitle = styled("div")({
+//   fontSize: "2rem",
+//   fontWeight: "bold",
+//   textAlign: "center",
+// });
 
-//image styles of school
-const StyledCardMedia = styled(CardMedia)({
-  border: "1px solid #e5e5e5",
-  margin: "0 0 0.5rem 0",
-  borderRadius: "10px",
-  width: "50%",
-});
+// //image styles of school
+// const StyledCardMedia = styled(CardMedia)({
+//   border: "1px solid #e5e5e5",
+//   margin: "0 0 0.5rem 0",
+//   borderRadius: "10px",
+//   width: "50%",
+// });
 
-const Item = styled(Paper)(({ theme, button }) => ({
-  backgroundColor:
-    theme.palette.mode === "dark" ? "#1A2027" : button ? "transparent" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-}));
+// const Item = styled(Paper)(({ theme, button }) => ({
+//   backgroundColor:
+//     theme.palette.mode === "dark" ? "#1A2027" : button ? "transparent" : "#fff",
+//   ...theme.typography.body2,
+//   padding: theme.spacing(1),
+//   textAlign: "center",
+//   color: theme.palette.text.secondary,
+//   display: "flex",
+//   flexDirection: "column",
+//   alignItems: "center",
+// }));
 
 const JobDetails = (props) => {
   const authCtx = useContext(AuthContext);
@@ -98,6 +96,35 @@ const JobDetails = (props) => {
       data: job.workPermit ? "✅" : "⛔",
     },
     { text: "Hours", icon: <FaClock />, data: job.hours },
+  ];
+
+  const jobInformation = [
+    { variant: "h5", component: "h2", text: job.title },
+    { variant: "subtitle2", component: "h3", text: job.creator.company },
+    {
+      variant: "subtitle2",
+      component: "h3",
+      icon: <LocationOnIcon size="inherit" />,
+      text: job.creator.headquarters,
+    },
+    {
+      variant: "subtitle2",
+      component: "h3",
+      icon: <BusinessIcon size="inherit" />,
+      text: job.creator.companySize,
+    },
+    {
+      variant: "subtitle2",
+      component: "h3",
+      icon: <VerifiedUserIcon size="inherit" />,
+      text: job.creator.established,
+    },
+    {
+      variant: "subtitle2",
+      component: "h3",
+      icon: <EventAvailableIcon size="inherit" />,
+      text: "company Website: www.blah.com",
+    },
   ];
 
   let button;
@@ -140,117 +167,103 @@ const JobDetails = (props) => {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2} sx={{ width: "calc(90% + 16)" }}>
-          <Grid item xs={6} md={4}>
-            <Item>
-              <StyledJobTitle>{job.creator.company}</StyledJobTitle>
-              <Typography color="text.secondary" variant="subtitle1">
-                {job.title}
-              </Typography>
-              <StyledCardMedia
-                component="img"
-                image={job.creator.logoUrl}
-                alt={job.creator.company}
-              />
-              {button}
-              <Divider flexItem />
-              <StyledGridContainer container>
-                <LocationOnIcon />
-                <Typography>{job.creator.headquarters}</Typography>
-              </StyledGridContainer>
-              <StyledGridContainer container>
-                <BusinessIcon />
-                <Typography>{job.creator.companySize} employees</Typography>
-              </StyledGridContainer>
-              <StyledGridContainer container>
-                <EventAvailableIcon />
-                <Typography>Established: {job.creator.established} </Typography>
-              </StyledGridContainer>
-              <StyledGridContainer container>
-                <List
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    margin: 0,
-                  }}
-                  color="text.secondary"
-                >
-                  <b>Works with schools in:</b>{" "}
-                  {job.creator.presence.map((item, i) => (
-                    <ListItem key={i}>{item}</ListItem>
-                  ))}{" "}
-                </List>
-              </StyledGridContainer>
-            </Item>
-          </Grid>
-          <Grid item xs={6} md={8}>
-            <StyledGridContainer
-              container
-              direction="row"
-              wrap="nowrap"
-              spacing={1}
-              alert
-            >
-              <Alert
-                icon={<VerifiedUserIcon fontSize="inherit" />}
-                severity="success"
-              >
-                This listing was vetted and approved by AjarnJobs.com staff.
-              </Alert>
-              {outlinedButton}
-              <Button>Need Help?</Button>
-            </StyledGridContainer>
-            <Item
-              sx={{
-                border: "1px solid #e5e5e5",
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "row",
-                marginTop: 5,
-              }}
-            >
-              {jobSpecifications.map(({ text, icon, data }, i) => (
-                <StyledGridContainer key={i} item xs={6} jobData>
-                  {icon} {text}
-                  <Grid
-                    sx={{
-                      borderTop: "1px solid black",
-                      margin: "0.3rem 0 0 0",
-                    }}
-                  >
-                    {data}
-                  </Grid>
-                </StyledGridContainer>
-              ))}
-            </Item>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "80%",
+          margin: "0 auto",
+        }}
+      >
+        <Grid
+          spacing={2}
+          container
+          direction="row"
+          sx={{ justifyContent: "flex-start" }}
+        >
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={6}
+            container
+            direction="column"
+            justifyContent="flex-start"
+            spacing={2}
+          >
             <Grid
               item
-              sx={{ margin: "1rem auto", height: 300, overflowY: "auto" }}
+              container
+              direction="row"
+              spacing={1}
+              sx={{ marginTop: 4 }}
             >
-              <Paper>
+              {/**grid item 1 */}
+              <Grid item>
+                <Avatar
+                  variant="circular"
+                  src={job.creator.logoUrl}
+                  sx={{ height: 150, width: 150, border: "1px solid #e5e5e5" }}
+                  alt={`${job.id}--${job.creator.company}`}
+                />
+              </Grid>
+              {/**grid item 2 */}
+              <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
+                {jobInformation.map(({ variant, component, icon, text }) => (
+                  <Typography
+                    color="text.secondary"
+                    variant={variant}
+                    component={component}
+                  >
+                    {icon && <>{icon} </>}
+                    {text}
+                  </Typography>
+                ))}
+                <Divider flexItem sx={{ margin: "0.5rem 0" }} />
+              </Grid>
+              <Grid item>
+                <Button variant="outlined" sx={{ borderRadius: "17px" }}>
+                  Apply Now
+                </Button>
+              </Grid>
+            </Grid>
+
+            <Grid item>
+              <Card sx={{ padding: 2 }}>
+                <Typography variant="h6" component="h4">
+                  A little about {job.creator.company}:
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  {job.creator.about}
+                </Typography>
+                <Divider />
                 <Typography
-                  color="text.secondary"
-                  variant="h3"
-                  sx={{ margin: "5px 0 0 0" }}
+                  variant="subtitle2"
+                  component="div"
+                  sx={{ display: "flex", flexDirection: "row" }}
                 >
-                  About {job.creator.company}
-                  <img src={job.creator.logoUrl} alt={job.creator.company} />
+                  <Typography
+                    color="text.secondary"
+                    variant="subtitle2"
+                    component="ul"
+                  >
+                    presence:
+                  </Typography>
+                  {job.creator.presence.map((item, i) => (
+                    <ListItem key={i}>{item}</ListItem>
+                  ))}
                 </Typography>
-                <Typography sx={{ margin: 1 }} paragraph color="text.secondary">
-                  {job.about}
-                  {job.description}
-                </Typography>
-              </Paper>
+              </Card>
             </Grid>
           </Grid>
+          <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
+            <JobDataTable jobSpecifications={jobSpecifications} />
+            {button} {outlinedButton}
+            <Divider sx={{ margin: "2rem auto" }} />
+            {job.description}
+          </Grid>
         </Grid>
-        {authCtx.isLoggedIn && (
-          <Button component={Link} to={`/jobs/${job.id}/update`}>
-            {" "}
-            update Job{" "}
-          </Button>
-        )}
       </Box>
     </>
   );

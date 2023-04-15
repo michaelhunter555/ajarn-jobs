@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import LanguageIcon from '@mui/icons-material/Language';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import SchoolIcon from '@mui/icons-material/School';
-import WorkIcon from '@mui/icons-material/Work';
+import LanguageIcon from "@mui/icons-material/Language";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SchoolIcon from "@mui/icons-material/School";
+import WorkIcon from "@mui/icons-material/Work";
 import {
   Avatar,
   Box,
@@ -13,9 +13,9 @@ import {
   Divider,
   Grid,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import { CollapsibleTable } from '../../Dashboard/components/Profile/Resume';
+import { CollapsibleTable } from "../../Dashboard/components/Profile/Resume";
 
 const TeacherDetailsItem = ({ teacher }) => {
   return (
@@ -103,7 +103,7 @@ const TeacherDetailsItem = ({ teacher }) => {
                   variant="subtitle2"
                   component="h3"
                 >
-                  Interests:
+                  Skills:
                 </Typography>
                 {teacher.skill.map((skills, i) => (
                   <Chip key={i} label={skills} />

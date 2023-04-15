@@ -19,6 +19,8 @@ export const dummy_jobs = [
     },
     creator: {
       company: "Sine Education",
+      about:
+        "For years we have recognized the critical importance of delivering quality education to Thai children. The mission of providing good teaching is essential in ensuring that the younger generation receives the knowledge and skills necessary to succeed in life. It is through good teaching that we can unlock the potential of our children and equip them with the tools needed to tackle challenges and thrive in the modern world. A good teacher can inspire, motivate and ignite a passion for learning that can last a lifetime. By investing in good teaching, we are investing in the future of our children and the prosperity of our society.",
       logoUrl: Logo,
       companySize: "10-50",
       headquarters: "Bangkok, TH",
