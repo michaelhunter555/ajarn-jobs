@@ -13,9 +13,6 @@ import { styled } from '@mui/material/styles';
 import ProfileTabs from './ProfileTabs';
 import { CollapsibleTable } from './Resume';
 
-const profilepic =
-  "https://images.unsplash.com/photo-1573166364524-d9dbfd8bbf83?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80";
-
 const StyledProfileContainer = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
