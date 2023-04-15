@@ -1,18 +1,18 @@
-import React from 'react';
+import React from "react";
 
-import { MdOutlineFiberNew } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { MdOutlineFiberNew } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
-import { getTimeDifference } from '../../shared/util/getTimeDifference';
-import RecentJobItems from './RecentJobItems';
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
+import RecentJobItems from "./RecentJobItems";
 
 const RecentJobs = (props) => {
   if (props.homeJobs?.length === 0) {
     return (
       <div>
-        <p>...no jobs bro</p>
+        <p>...no jobs</p>
       </div>
     );
   }

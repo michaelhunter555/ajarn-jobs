@@ -1,71 +1,18 @@
-import {
-  useContext,
-  useState,
-} from 'react';
+import { useContext, useState } from "react";
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
-import EastIcon from '@mui/icons-material/East';
-import {
-  Button,
-  Divider,
-  Stack,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import EastIcon from "@mui/icons-material/East";
+import { Button, Divider, Stack } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import Logo from '../../logo.svg';
-//import Button from "../../shared/components/FormElements/Button";
-import Card from '../../shared/components/UIElements/Card';
-import Footer from '../../shared/components/UIElements/Footer';
-//import JobLists from "../components/JobLists";
-import JobAdsList from '../../shared/components/UIElements/JobAdsList';
-import { AuthContext } from '../../shared/context/auth-context';
-import FeaturedJobsLists from '../components/FeaturedJobsLists';
-import JobFilters from '../components/JobFilters';
-
-const dummy_jobs = [
-  {
-    id: 1,
-    title: "English Teacher",
-    location: "Bangkok",
-    salary: "50k THB/month",
-    requirements: "BA Degree,120-hr TEFL",
-    description: "Teach English to primary and secondary students in Bangkok.",
-    datePosted: "2023-02-28",
-    hours: "Full-time",
-    jobType: {
-      basic: false,
-      flare: false,
-      featured: true,
-    },
-    creator: {
-      company: "Sine Education",
-      logoUrl: Logo,
-      companySize: "10-50",
-    },
-  },
-  {
-    id: 2,
-    title: "Mathematics Teacher",
-    location: "Chiang Mai",
-    salary: "25,000 - 40,000 THB/month",
-    requirements:
-      "Bachelor's degree in Mathematics, teaching experience preferred",
-    description: "Teach Mathematics to secondary students in Chiang Mai.",
-    datePosted: "2023-02-27",
-    hours: "Full-time",
-    jobType: {
-      basic: false,
-      flare: false,
-      featured: false,
-    },
-    creator: {
-      company: "BFits",
-      logoUrl: Logo,
-      companySize: "10-20",
-    },
-  },
-];
+import Card from "../../shared/components/UIElements/Card";
+import Footer from "../../shared/components/UIElements/Footer";
+import JobAdsList from "../../shared/components/UIElements/JobAdsList";
+import { AuthContext } from "../../shared/context/auth-context";
+import { dummy_jobs } from "../../shared/util/DummyJobs";
+import FeaturedJobsLists from "../components/FeaturedJobsLists";
+import JobFilters from "../components/JobFilters";
 
 const StyledUserJobsDiv = styled("div")({
   maxWidth: "85%",

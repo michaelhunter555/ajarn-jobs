@@ -1,53 +1,17 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
-import Button from '../../shared/components/FormElements/Button';
-import Input from '../../shared/components/FormElements/Input';
-import { useForm } from '../../shared/hooks/form-hook';
+import Button from "../../shared/components/FormElements/Button";
+import Input from "../../shared/components/FormElements/Input";
+import { useForm } from "../../shared/hooks/form-hook";
+import { dummy_jobs } from "../../shared/util/DummyJobs";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
-} from '../../shared/util/validators';
+} from "../../shared/util/validators";
 
 //import JobUpdateForm from "../components/JobUpdateForm";
-
-const dummy_jobs = [
-  {
-    id: "1",
-    title: "English Teacher",
-    location: "Bangkok",
-    salary: "30,000 - 50,000 THB/month",
-    requirements: "Bachelor's degree, TEFL certification",
-    description: "Teach English to primary and secondary students in Bangkok.",
-    datePosted: "2023-02-28",
-    hours: "Full-time",
-    creator: {
-      company: "Sine Education",
-      logoUrl: "#",
-      companySize: "10-50",
-    },
-  },
-  {
-    id: "2",
-    title: "Mathematics Teacher",
-    location: "Chiang Mai",
-    salary: "25,000 - 40,000 THB/month",
-    requirements:
-      "Bachelor's degree in Mathematics, teaching experience preferred",
-    description: "Teach Mathematics to secondary students in Chiang Mai.",
-    datePosted: "2023-02-27",
-    hours: "Full-time",
-    creator: {
-      company: "BFits",
-      logoUrl: "#",
-      companySize: "10-20",
-    },
-  },
-];
 
 const updateJobStyles = {
   "job-form": {

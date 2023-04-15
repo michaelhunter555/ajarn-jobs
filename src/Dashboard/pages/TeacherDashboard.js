@@ -1,39 +1,31 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import {
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 
-import { Grid } from '@mui/material';
+import { Grid } from "@mui/material";
 
-import JobAdsList from '../../shared/components/UIElements/JobAdsList';
-import UserProfileJobAd
-  from '../../shared/components/UIElements/UserProfileJobAd';
-import { AuthContext } from '../../shared/context/auth-context';
-import { dummy_jobs } from '../../shared/util/DummyJobs';
-import { DUMMY_USERS_LIST } from '../../shared/util/DummyUsers';
-import TeacherItem from '../../users/components/TeacherItem';
-import Applications from '../components/Profile/Applications';
-import FeaturedCard from '../components/Profile/FeaturedCard';
-import ProfileInformation from '../components/Profile/ProfileInformation';
-import TeacherSettings from '../components/Profile/TeacherSettings';
-import UpdateResumeItem from '../components/Profile/UpdateResumeItem';
-import Sidebar from '../components/Sidebar';
+import JobAdsList from "../../shared/components/UIElements/JobAdsList";
+import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
+import { AuthContext } from "../../shared/context/auth-context";
+import { dummy_jobs } from "../../shared/util/DummyJobs";
+import { DUMMY_USERS_LIST } from "../../shared/util/DummyUsers";
+import TeacherItem from "../../users/components/TeacherItem";
+import Applications from "../components/Profile/Applications";
+import FeaturedCard from "../components/Profile/FeaturedCard";
+import ProfileInformation from "../components/Profile/ProfileInformation";
+import TeacherSettings from "../components/Profile/TeacherSettings";
+import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
+import Sidebar from "../components/Sidebar";
 
 const TeacherDashboard = () => {
   const userId = useParams().id;
-  const user = DUMMY_USERS_LIST.find((user) => user.id === userId);
-  console.log(user);
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [isTeacher, setIsTeacher] = useState(true);
   const [selectedCard, setSelectedCard] = useState(null);
+
+  const user = DUMMY_USERS_LIST.find((user) => user.id === userId);
 
   useEffect(() => {
     const randomUser =

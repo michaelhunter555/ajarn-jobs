@@ -1,23 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import Contribute from '../../assets/contribute.png';
-import ThaiLifeTwo from '../../assets/geoff-greenwood-rH1aA4TqGms-unsplash.jpg';
-import Interviews from '../../assets/interviews.png';
-import Jobs from '../../assets/mario-heller-hXLkFpvKRys-unsplash.jpg';
-import SchoolImage
-  from '../../assets/sangga-rima-roman-selia-bgQgAKagQB4-unsplash.jpg';
-import SkillsTests from '../../assets/skillsTest.png';
+import Contribute from "../../assets/contribute.png";
+import ThaiLifeTwo from "../../assets/geoff-greenwood-rH1aA4TqGms-unsplash.jpg";
+import Interviews from "../../assets/interviews.png";
+import Jobs from "../../assets/mario-heller-hXLkFpvKRys-unsplash.jpg";
+import SchoolImage from "../../assets/sangga-rima-roman-selia-bgQgAKagQB4-unsplash.jpg";
+import SkillsTests from "../../assets/skillsTest.png";
 
 const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -58,6 +51,7 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
 }));
 
 const SiteFeatures = () => {
+  //arrange items in array of objects
   const items = [
     { label: "Jobs", img: Jobs, link: `/jobs` },
     { label: "Schools", img: SchoolImage, link: `/school` },
@@ -69,6 +63,7 @@ const SiteFeatures = () => {
 
   return (
     <StyledBoxWrapper>
+      {/*map over items with destructured values */}
       {items.map(({ label, img, link }, i) => {
         return (
           <Link key={i} to={link}>

@@ -1,7 +1,9 @@
 import React from 'react';
 
 import {
+  Button,
   Card,
+  Grid,
   TextField,
 } from '@mui/material';
 
@@ -59,40 +61,39 @@ const UpdateResumeItem = ({ resumeItem, onUpdate }) => {
   };
 
   return (
-    <Card>
+    <Card sx={{ padding: "2rem 2rem" }}>
       <form onSubmit={handleSubmit}>
-        <TextField
-          name="company"
-          label="Company"
-          defaultValue={resumeItem.company}
-          onChange={(event) =>
-            inputHandler(
-              "company",
-              event.target.value,
-              event.target.value !== ""
-            )
-          }
-        />
-        <TextField
-          name="schoolName"
-          label="School Name"
-          defaultValue={resumeItem.schoolName}
-          onChange={(event) =>
-            inputHandler(
-              "schoolName",
-              event.target.value,
-              event.target.value !== ""
-            )
-          }
-        />
-        <TextField
-          name="role"
-          label="Role"
-          defaultValue={resumeItem.role}
-          onChange={(event) =>
-            inputHandler("role", event.target.value, event.target.value !== "")
-          }
-        />
+        <Grid container direction="row" sx={{ margin: "0 0 1rem 0" }}>
+          <Grid item xs={12} sm={6} md={5}>
+            <TextField
+              name="schoolName"
+              label="School Name"
+              defaultValue={resumeItem.schoolName}
+              onChange={(event) =>
+                inputHandler(
+                  "schoolName",
+                  event.target.value,
+                  event.target.value !== ""
+                )
+              }
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={7}>
+            <TextField
+              name="company"
+              label="Company"
+              defaultValue={resumeItem.company}
+              onChange={(event) =>
+                inputHandler(
+                  "company",
+                  event.target.value,
+                  event.target.value !== ""
+                )
+              }
+            />
+          </Grid>
+        </Grid>
+
         <TextField
           name="location"
           label="Location"
@@ -133,7 +134,16 @@ const UpdateResumeItem = ({ resumeItem, onUpdate }) => {
             inputHandler("to", event.target.value, event.target.value !== "")
           }
         />
-        <button type="submit">Save</button>
+        <TextField
+          multiline
+          name="role"
+          label="Role"
+          defaultValue={resumeItem.role}
+          onChange={(event) =>
+            inputHandler("role", event.target.value, event.target.value !== "")
+          }
+        />
+        <Button type="submit">Save</Button>
       </form>
     </Card>
   );

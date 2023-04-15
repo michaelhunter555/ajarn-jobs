@@ -15,7 +15,7 @@ const FeaturedJobsLists = (props) => {
     <>
       <h2>Featured jobs:</h2>
       {props?.sponsors
-        .filter((listing) => listing.jobType?.featured)
+        .filter((listing) => listing?.jobType?.featured)
         .map((school) => (
           <FeaturedJobs
             key={school?.id}

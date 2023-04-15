@@ -1,8 +1,8 @@
-import 'animate.css';
+import "animate.css";
 
-import React from 'react';
+import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import {
   Box,
@@ -14,8 +14,8 @@ import {
   Grid,
   Paper,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledPaper = styled(Paper)({
   position: "relative",
@@ -129,6 +129,7 @@ const MainFeaturedPost = (props) => {
 
   return (
     <>
+      {/*featured post */}
       <StyledPaper sx={{ backgroundImage: `url(${post[0].image})` }}>
         <StyledBoxOverlay />
         <Grid container>
@@ -160,6 +161,7 @@ const MainFeaturedPost = (props) => {
 
         <Box sx={{ padding: "0 0 1rem 0", margin: "0 0 0 0.5rem" }}>
           <Grid container spacing={2}>
+            {/*next posts after 1st or featured post */}
             {post.slice(1).map((posts, i) => (
               <Grid item key={i} xs={12} sm={6} md={4}>
                 <Link key={i} to="/">

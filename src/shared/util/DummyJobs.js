@@ -1,4 +1,4 @@
-import Logo from '../../logo.svg';
+import Logo from "../../logo.svg";
 
 export const dummy_jobs = [
   {
@@ -11,6 +11,7 @@ export const dummy_jobs = [
     description: "Teach English to primary and secondary students in Bangkok.",
     datePosted: "2023-02-28",
     hours: "Full-time",
+    workPermit: true,
     jobType: {
       basic: false,
       flare: false,
@@ -20,6 +21,16 @@ export const dummy_jobs = [
       company: "Sine Education",
       logoUrl: Logo,
       companySize: "10-50",
+      headquarters: "Bangkok, TH",
+      established: "2006",
+      presence: [
+        "Bangkok",
+        "chiang mai",
+        "nontaburi",
+        "sisaket",
+        "Burriram",
+        "Nakhon Nayok",
+      ],
     },
   },
   {
@@ -33,6 +44,7 @@ export const dummy_jobs = [
     description: "Teach Mathematics to secondary students in Chiang Mai.",
     datePosted: "2023-02-27",
     hours: "Full-time",
+    workPermit: true,
     jobType: {
       basic: false,
       flare: false,
@@ -42,6 +54,9 @@ export const dummy_jobs = [
       company: "BFits",
       logoUrl: Logo,
       companySize: "10-20",
+      headquarters: "Chaing Mai, TH",
+      established: "2006",
+      presence: ["Bangkok", "chiang mai"],
     },
   },
   {
@@ -54,6 +69,7 @@ export const dummy_jobs = [
     description: "Teach Philosphy to university students in bangkok",
     datePosted: "2023-02-27",
     hours: "Full-time",
+    workPermit: false,
     jobType: {
       basic: false,
       flare: false,
@@ -63,6 +79,16 @@ export const dummy_jobs = [
       company: "St. Johns Intl'",
       logoUrl: Logo,
       companySize: "10-20",
+      headquarters: "Bangkok, TH",
+      established: "2006",
+      presence: [
+        "Bangkok",
+        "chiang mai",
+        "nontaburi",
+        "sisaket",
+        "Burriram",
+        "Nakhon Nayok",
+      ],
     },
   },
 ];

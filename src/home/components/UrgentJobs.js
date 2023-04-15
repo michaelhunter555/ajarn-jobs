@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
-import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import {
   Card,
   CardContent,
@@ -11,8 +11,8 @@ import {
   List,
   ListItem,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledJobText = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
@@ -24,6 +24,7 @@ const UrgentJobs = (props) => {
   const date = new Date();
   const today = date.toLocaleDateString();
 
+  //for now max of 2 jobs
   const urgentJobLimit = job.slice(0, 2);
 
   return (
