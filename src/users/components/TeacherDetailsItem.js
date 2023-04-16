@@ -8,7 +8,6 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
   Chip,
   Divider,
   Grid,
@@ -62,9 +61,12 @@ const TeacherDetailsItem = ({ teacher }) => {
               />
             </Grid>
             {/**grid item 2 */}
-            <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
-              <Typography variant="h5" component="h2">
+            <Grid item alignItems="center" sx={{ margin: "0 0 0 0.5rem" }}>
+              <Typography color="text.secondary" variant="h5" component="h2">
                 {teacher.name}
+              </Typography>
+              <Typography variant="subtitle2" paragraph>
+                <Chip label={teacher.profession} size="small" />
               </Typography>
               <Typography
                 variant="subtitle2"
@@ -78,7 +80,8 @@ const TeacherDetailsItem = ({ teacher }) => {
                 variant="subtitle2"
                 component="h3"
               >
-                <LanguageIcon size="inherit" /> {teacher.nationality}
+                <LanguageIcon size="inherit" />
+                {teacher.nationality}
               </Typography>
               <Typography
                 color="text.secondary"
@@ -119,19 +122,24 @@ const TeacherDetailsItem = ({ teacher }) => {
           </Grid>
 
           <Grid item>
-            <Card sx={{ padding: 2 }}>
-              <Typography variant="subtitle2" component="h3">
-                {teacher.interests.map((interest, i) => (
-                  <Chip key={i} label={interest} variant="outlined" />
-                ))}
-              </Typography>
+            <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
               <Typography variant="h6" component="h4">
                 A little about {teacher.name}:
               </Typography>
               <Typography variant="subtitle1" paragraph>
                 {teacher.about}
               </Typography>
-            </Card>
+              <Divider
+                flexItem
+                variant="left"
+                sx={{ margin: "0 0 0.5rem 0" }}
+              />
+              <Typography variant="subtitle2" component="h3">
+                {teacher.interests.map((interest, i) => (
+                  <Chip key={i} label={interest} variant="outlined" />
+                ))}
+              </Typography>
+            </Paper>
           </Grid>
         </Grid>
         <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
@@ -149,7 +157,7 @@ const TeacherDetailsItem = ({ teacher }) => {
               }}
             >
               <Typography variant="h5" component="h4">
-                {teacher.name}
+                {teacher.name} - CoverLetter
               </Typography>
               <Typography
                 variant="subtitle2"
@@ -161,7 +169,10 @@ const TeacherDetailsItem = ({ teacher }) => {
             </Box>
 
             <Divider />
-            {teacher.about}
+            <Typography color="text.secondary" variant="subtitle2" paragraph>
+              {teacher.coverLetter}
+              {teacher.about}
+            </Typography>
           </Paper>
           <CollapsibleTable teacherResume={teacher.resume} />
         </Grid>

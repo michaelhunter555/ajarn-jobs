@@ -1,19 +1,14 @@
-import React from 'react';
+import React from "react";
 
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme, featured }) => ({
   backgroundColor: featured ? "#fffef9" : "#fafafa",
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
   display: "flex",
   minWidth: "auto",
+
   [theme.breakpoints.down("md")]: {
     width: "100%",
   },

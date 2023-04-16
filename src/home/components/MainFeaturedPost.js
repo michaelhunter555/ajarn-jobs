@@ -34,7 +34,7 @@ const StyledBoxOverlay = styled(Box)({
   bottom: 0,
   right: 0,
   left: 0,
-  borderRadius: "15px",
+  borderRadius: "5px",
   backgroundColor: "rgba(0,0,0,.5)",
 });
 
@@ -45,34 +45,21 @@ const StyledBoxContent = styled(Box)({
   pr: { md: 0 },
 });
 
-// const StyledCard = styled(Card)(({ theme }) => ({
-//   display: "flex",
-//   flexDirection: "row",
-//   minWidth: "auto",
-//   [theme.breakpoints.down("md")]: {
-//     width: "100%",
-//   },
-//   [theme.breakpoints.down("sm")]: {
-//     width: "100%",
-//   },
-// }));
-
 const StyledGlassCard = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   justifyContent: "flex-start",
   position: "relative",
   border: "1px solid rgba(216, 216, 216, 0.5)",
-  backgroundColor: "#4b6cb7",
-  color: "white",
+  color: "black",
   fontSize: "16px",
   fontWeight: "bold",
   padding: "0 20px 0 0",
   borderRadius: "6px",
   overflow: "hidden",
-  boxShadow: "0px 0px 20px rgba(255, 255, 255, 0.5)",
+
   background:
-    "linear-gradient(135deg, hsla(0, 0%, 100%, 0.15), hsla(0, 0%, 100%, 0.1125) 9.37%, hsla(0, 0%, 100%, 0.0375) 54.69%, hsla(0, 0%, 100%, 0.0394911) 66.15%, hsla(0, 0%, 100%, 0.15))",
+    "linear-gradient(135deg, hsla(360, 100%, 100%, 1), hsla(360, 100%, 100%, 1) 9.37%, hsla(360, 100%, 100%, 1) 54.69%, hsla(360, 100%, 100%, 1) 66.15%, hsla(360, 1000%, 100%, 1))",
   "&::after": {
     content: '""',
     position: "absolute",
@@ -132,7 +119,7 @@ const MainFeaturedPost = (props) => {
     <>
       {/*featured post */}
       <StyledPaper
-        sx={{ backgroundImage: `url(${post[0].image})`, borderRadius: "15px" }}
+        sx={{ backgroundImage: `url(${post[0].image})`, borderRadius: "5px" }}
       >
         <StyledBoxOverlay />
         <Grid container>
@@ -174,18 +161,17 @@ const MainFeaturedPost = (props) => {
                       flexDirection: "row",
                       flexWrap: "wrap",
                       justifyContent: "flex-start",
-
                       position: "relative",
                     }}
                   >
-                    <StyledGlassCard raised={true}>
+                    <StyledGlassCard elevation={3}>
                       <CardMedia
                         component="img"
                         image={posts.image}
                         alt={`${posts.author}-${posts.title}`}
                         sx={{
                           width: 70,
-                          borderRight: "1px solid #958f8f",
+                          borderRight: "1px solid #bbbbbb",
                         }}
                       />
                       <StyledBox>
@@ -194,8 +180,9 @@ const MainFeaturedPost = (props) => {
                             <Typography
                               component="h2"
                               variant="h6"
+                              color="text.primary"
                               sx={{
-                                fontSize: 11,
+                                fontSize: 12,
                                 wordWrap: "break-word",
                                 maxWidth: "100%",
                               }}
@@ -208,9 +195,9 @@ const MainFeaturedPost = (props) => {
                           <Box>
                             <Typography
                               variant="subtitle1"
-                              color="text.secondary"
+                              color="text.primary"
                               component="h3"
-                              sx={{ fontSize: 9, color: "white" }}
+                              sx={{ fontSize: 10 }}
                             >
                               By {posts.author}
                             </Typography>

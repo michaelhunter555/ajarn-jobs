@@ -29,7 +29,7 @@ const UrgentJobs = (props) => {
   const urgentJobLimit = job.slice(0, 2);
 
   return (
-    <Card sx={{ borderRadius: "15px" }}>
+    <Card>
       <CardContent>
         <Typography variant="h5" component="div">
           <Chip

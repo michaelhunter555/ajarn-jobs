@@ -14,7 +14,6 @@ import { styled } from "@mui/material/styles";
 
 const StyledTeflCard = styled(Card)({
   minWidth: "auto",
-  borderRadius: "15px",
 });
 
 const StyledChip = styled(Chip)({
