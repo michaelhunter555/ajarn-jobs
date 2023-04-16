@@ -4,43 +4,36 @@ import {
   LOGOUT,
   UPDATE_USER,
   USE_CREDITS,
-} from './authActions';
+} from "./authActions";
 
 export const initialState = {
   isLoggedIn: false,
-  userId: null,
-  credits: 0,
-  userHasCredits: false,
   user: null,
 };
 
 export const authReducer = (state, action) => {
   switch (action.type) {
     case LOGIN:
-      console.log("LOGIN ACTIONS:", action.credits);
+      console.log("LOGIN ACTIONS:", action.user);
       return {
         ...state,
         isLoggedIn: true,
-        userId: action.userId,
-        credits: action.credits,
-        userHasCredits: action.credits > 0,
+        user: action.user,
       };
     case LOGOUT:
       return initialState;
     case ADD_CREDITS:
-      const newCredits = state.credits + action.amount;
+      const newCredits = state.user.credits + action.amount;
       return {
-        ...state,
+        ...state.user,
         credits: newCredits,
-        userHasCredits: newCredits > 0,
       };
 
     case USE_CREDITS:
-      const remaingCredits = state.credits - action.amount;
+      const remaingCredits = state.user.credits - action.amount;
       return {
-        ...state,
+        ...state.user,
         credits: remaingCredits,
-        userHasCredits: remaingCredits > 0,
       };
     case UPDATE_USER:
       return {

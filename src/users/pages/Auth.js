@@ -1,24 +1,18 @@
-import React, {
-  useContext,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-import {
-  Box,
-  Card,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Card } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import Button from '../../shared/components/FormElements/Button';
-import Input from '../../shared/components/FormElements/Input';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useForm } from '../../shared/hooks/form-hook';
+import Button from "../../shared/components/FormElements/Button";
+import Input from "../../shared/components/FormElements/Input";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useForm } from "../../shared/hooks/form-hook";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
-} from '../../shared/util/validators';
+} from "../../shared/util/validators";
 
 const StyledFormCard = styled(Card)({
   listStyle: "none",
@@ -82,11 +76,15 @@ const Auth = () => {
   const authSubmitHandler = (event) => {
     event.preventDefault();
     //api call
-    const userId = "u2";
-    const credits = 5;
-    auth.login(userId, credits);
+    const userId = "u3";
+    auth.login(userId);
+
     navigate("/");
   };
+  console.log("logged in user", auth.user);
+  useEffect(() => {
+    console.log("Auth is set:", auth.user);
+  }, [auth.user]);
 
   return (
     <StyledFormCard>

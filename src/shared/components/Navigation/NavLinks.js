@@ -1,13 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
-import {
-  NavLink,
-  useNavigate,
-} from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
-import { AuthContext } from '../../context/auth-context';
+import { AuthContext } from "../../context/auth-context";
 
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
@@ -37,7 +34,7 @@ const NavLinks = (props) => {
 
       {auth.isLoggedIn && (
         <li>
-          <NavLink to={`/users/${auth.userId}`}>Dashboard</NavLink>
+          <NavLink to={`/users/${auth.user.id}`}>Dashboard</NavLink>
         </li>
       )}
 

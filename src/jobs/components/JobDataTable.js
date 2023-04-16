@@ -33,8 +33,11 @@ const JobDataTable = (props) => {
                 alignItems: "center",
               }}
             >
-              <Chip label="Job Specifications" size="small" />
-              <ArrowCircleDownIcon sx={{ width: "15px" }} />
+              <Chip
+                icon={<ArrowCircleDownIcon sx={{ width: "15px" }} />}
+                label="Job Specifications"
+                size="small"
+              />
             </TableCell>
             <TableCell
               sx={{

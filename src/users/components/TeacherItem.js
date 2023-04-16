@@ -78,7 +78,7 @@ const TeacherItem = (props) => {
   let viewProfileButton;
   let contactTeacherButton;
 
-  if (!authCtx.isLoggedIn || authCtx.credits === 0) {
+  if (!authCtx.isLoggedIn || authCtx.user.credits === 0) {
     viewProfileButton = (
       <Button sx={{ margin: "0 auto" }} onClick={handleModalOpen}>
         View Profile

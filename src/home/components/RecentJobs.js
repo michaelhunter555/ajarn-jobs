@@ -27,7 +27,7 @@ const RecentJobs = (props) => {
         <MdOutlineFiberNew style={{ color: "green" }} />
       </StyledTitle>
       {props.homeJobs &&
-        props.homeJobs?.map((job) => (
+        props?.homeJobs?.map((job) => (
           <Link
             style={{ color: "rgb(92, 92, 92)" }}
             key={job.id}

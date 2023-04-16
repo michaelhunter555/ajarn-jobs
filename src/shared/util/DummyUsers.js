@@ -1,8 +1,7 @@
-import John from '../../assets/cdc-GDokEYnOfnE-unsplash.jpg';
-import Janitha
-  from '../../assets/christina-wocintechchat-com-7JGjoSVfIDM-unsplash.jpg';
-import Bob from '../../assets/sebastien-bonneval-UIpFY1Umamw-unsplash.jpg';
-import MichaelHunter from '../../assets/thisIsMe.jpg';
+import John from "../../assets/cdc-GDokEYnOfnE-unsplash.jpg";
+import Janitha from "../../assets/christina-wocintechchat-com-7JGjoSVfIDM-unsplash.jpg";
+import Bob from "../../assets/sebastien-bonneval-UIpFY1Umamw-unsplash.jpg";
+import MichaelHunter from "../../assets/thisIsMe.jpg";
 
 export const SINGLE_DUMMY_USERS = [
   {
@@ -10,6 +9,7 @@ export const SINGLE_DUMMY_USERS = [
     name: "John Doe",
     nationality: "American",
     location: "Bangkok",
+    credits: 0,
     education: "Bachelor of Education, Chulalongkorn University",
     workExperience: "5 years teaching experience",
     interests: ["Teaching", "Traveling", "Photography"],
@@ -55,6 +55,7 @@ export const DUMMY_USERS_LIST = [
     id: "u1",
     name: "John Doe",
     image: John,
+    credits: 0,
     location: "Phuket",
     nationality: "American",
     education: "Bachelor of Education, Chulalongkorn University",
@@ -92,6 +93,7 @@ export const DUMMY_USERS_LIST = [
     id: "u2",
     name: "Michael Hunter",
     image: MichaelHunter,
+    credits: 0,
     location: "Bangkok",
     nationality: "Jamaican",
     education: "Bachelor of Arts, Temple University",
@@ -117,6 +119,7 @@ export const DUMMY_USERS_LIST = [
     id: "u3",
     name: "Bob McFarland",
     image: Bob,
+    credits: 0,
     location: "Bangkok",
     nationality: "Swiss",
     education: "Bachelor of journalism, Harvard",
@@ -153,6 +156,7 @@ export const DUMMY_USERS_LIST = [
     id: "u4",
     name: "Janitha Willdubs",
     image: Janitha,
+    credits: 0,
     location: "Chiang Mai",
     nationality: "English",
     education: "Bachelor of Education, Khao Saun University",

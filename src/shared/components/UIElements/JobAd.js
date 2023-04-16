@@ -39,10 +39,7 @@ const JobAd = (props) => {
 
   return (
     <Link to={`/jobs/${job.id}`} style={{ textDecoration: "none" }}>
-      <Card
-        raised={true}
-        sx={{ border: "1px solid #a1bcff", borderRadius: "15px" }}
-      >
+      <Card sx={{ borderRadius: "15px" }}>
         <CardActionArea>
           <CardContent>
             <Grid container direction="row">

@@ -1,16 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import {
-  Button,
-  Card,
-  CardActions,
-  Grid,
-} from '@mui/material';
+import { Button, Card, CardActions, Grid } from "@mui/material";
 
-import { AuthContext } from '../../shared/context/auth-context';
-import TeacherItem from './TeacherItem';
+import { AuthContext } from "../../shared/context/auth-context";
+import TeacherItem from "./TeacherItem";
 
 const TeacherList = ({ teachers }) => {
   const authCtx = useContext(AuthContext);
@@ -41,7 +36,7 @@ const TeacherList = ({ teachers }) => {
     <Grid container spacing={2} wrap="wrap">
       {teachers.map((teacher, i) => (
         <Grid item key={teacher.id} xs={12} sm={6} md={3}>
-          {authCtx.isLoggedIn && authCtx.credits > 0 && (
+          {authCtx.isLoggedIn && authCtx.user.credits > 0 && (
             <Link to={`/teachers/${teacher.id}`}>
               <TeacherItem
                 id={teacher.id}
@@ -56,7 +51,7 @@ const TeacherList = ({ teachers }) => {
             </Link>
           )}
 
-          {authCtx.isLoggedIn && authCtx.credits === 0 && (
+          {authCtx.isLoggedIn && authCtx.user.credits === 0 && (
             <TeacherItem
               id={teacher.id}
               name={teacher.name}

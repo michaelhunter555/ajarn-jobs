@@ -65,7 +65,7 @@ const JobDetails = (props) => {
     {
       variant: "subtitle2",
       component: "h3",
-      text: <Chip size="small" label={job.creator.company}></Chip>,
+      text: <Chip size="small" label={job.creator.company} />,
     },
     {
       variant: "subtitle2",
@@ -163,8 +163,9 @@ const JobDetails = (props) => {
               </Grid>
               {/**grid item 2 */}
               <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
-                {jobInformation.map(({ variant, component, icon, text }) => (
+                {jobInformation.map(({ variant, component, icon, text }, i) => (
                   <Typography
+                    key={i}
                     color="text.secondary"
                     variant={variant}
                     component={component}
@@ -183,6 +184,7 @@ const JobDetails = (props) => {
                 <Typography variant="h6" component="h4">
                   A little about {job.creator.company}:
                 </Typography>
+                <Divider variant="middle" sx={{ margin: "0 0 0.5rem 0" }} />
                 <Typography variant="subtitle1" paragraph>
                   {job.creator.about}
                 </Typography>
@@ -228,7 +230,7 @@ const JobDetails = (props) => {
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
-                  component="text"
+                  paragraph
                 >
                   date posted: {job.datePosted}
                 </Typography>

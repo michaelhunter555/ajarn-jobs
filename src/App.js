@@ -1,42 +1,33 @@
-import React, {
-  useCallback,
-  useReducer,
-} from 'react';
+import React, { useCallback, useReducer } from "react";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import TeacherDashboard from './Dashboard/pages/TeacherDashboard';
-import Home from './home/pages/Home';
-import JobDetailsPage from './jobs/pages/JobDetailsPage';
-import NewJob from './jobs/pages/NewJob';
-import UpdateJob from './jobs/pages/UpdateJob';
-import UserJobs from './jobs/pages/UserJobs';
-import MainNavigation from './shared/components/Navigation/MainNavigation';
-import { AuthContext } from './shared/context/auth-context';
+import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
+import Home from "./home/pages/Home";
+import JobDetailsPage from "./jobs/pages/JobDetailsPage";
+import NewJob from "./jobs/pages/NewJob";
+import UpdateJob from "./jobs/pages/UpdateJob";
+import UserJobs from "./jobs/pages/UserJobs";
+import MainNavigation from "./shared/components/Navigation/MainNavigation";
+import { AuthContext } from "./shared/context/auth-context";
 import {
   ADD_CREDITS,
   LOGIN,
   LOGOUT,
   UPDATE_USER,
   USE_CREDITS,
-} from './shared/context/authActions';
-import {
-  authReducer,
-  initialState,
-} from './shared/context/authReducer';
-import Login from './users/pages/Auth';
-import TeacherDetails from './users/pages/TeacherDetails';
-import Teachers from './users/pages/Teachers';
+} from "./shared/context/authActions";
+import { authReducer, initialState } from "./shared/context/authReducer";
+import { DUMMY_USERS_LIST } from "./shared/util/DummyUsers";
+import Login from "./users/pages/Auth";
+import TeacherDetails from "./users/pages/TeacherDetails";
+import Teachers from "./users/pages/Teachers";
 
 function App() {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const login = useCallback((userId, credits) => {
-    dispatch({ type: LOGIN, userId, credits });
+  const login = useCallback((userId) => {
+    dispatch({ type: LOGIN, user: DUMMY_USERS_LIST[2] });
   }, []);
 
   const logout = useCallback(() => {
@@ -84,14 +75,12 @@ function App() {
   }
   //remember to update users to dynamic id
   console.log(state);
-  console.log("App state credits:", state.credits);
+  console.log("App state credits:", state.user);
   return (
     <AuthContext.Provider
       value={{
         isLoggedIn: state.isLoggedIn,
-        userId: state.userId,
-        credits: state.credits,
-        userHasCredits: state.userHasCredits,
+        user: state.user,
         login: login,
         logout: logout,
         addCredits: addCredits,
