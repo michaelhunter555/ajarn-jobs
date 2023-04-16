@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
 import {
   FaClipboardList,
@@ -6,13 +6,13 @@ import {
   FaGraduationCap,
   FaMapMarkerAlt,
   FaMoneyBill,
-} from 'react-icons/fa';
-import { Link as RouterLink } from 'react-router-dom';
+} from "react-icons/fa";
+import { Link as RouterLink } from "react-router-dom";
 
-import BusinessIcon from '@mui/icons-material/Business';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import BusinessIcon from "@mui/icons-material/Business";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
   Avatar,
   Box,
@@ -23,10 +23,10 @@ import {
   Link,
   Paper,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import { AuthContext } from '../../shared/context/auth-context';
-import JobDataTable from './JobDataTable';
+import { AuthContext } from "../../shared/context/auth-context";
+import JobDataTable from "./JobDataTable";
 
 const JobDetails = (props) => {
   const authCtx = useContext(AuthContext);
@@ -179,7 +179,7 @@ const JobDetails = (props) => {
             </Grid>
 
             <Grid item sx={{ MaxWidth: "100%" }}>
-              <Paper sx={{ padding: 2, borderRadius: '15px' }} elevation={0}>
+              <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
                 <Typography variant="h6" component="h4">
                   A little about {job.creator.company}:
                 </Typography>

@@ -73,7 +73,7 @@ const TeacherDetailsItem = ({ teacher }) => {
                 color="text.secondary"
                 component="h3"
               >
-                <LocationOnIcon size="inherit" /> {teacher.location}
+                <LocationOnIcon size="inherit" /> lives in {teacher.location}
               </Typography>
               <Typography
                 color="text.secondary"
@@ -81,7 +81,7 @@ const TeacherDetailsItem = ({ teacher }) => {
                 component="h3"
               >
                 <LanguageIcon size="inherit" />
-                {teacher.nationality}
+                nationality: {teacher.nationality}
               </Typography>
               <Typography
                 color="text.secondary"

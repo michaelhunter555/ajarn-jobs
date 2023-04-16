@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {
   Box,
   Collapse,
@@ -14,12 +14,16 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
 import {
   DUMMY_USERS_LIST,
   SINGLE_DUMMY_USERS,
-} from '../../../shared/util/DummyUsers';
+} from "../../../shared/util/DummyUsers";
+
+/**
+ * Collapsible table used in ./ProfileInformation and users/TeacherDetailsItem
+ */
 
 //create data
 const createData = (
