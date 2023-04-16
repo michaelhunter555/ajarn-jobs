@@ -16,14 +16,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledJobAdCard = styled(
-  Card,
-  "div"
-)({
-  backgroundColor: "#fffef9",
-  border: "1px solid #faea92",
-});
-
 const StyledMediaCard = styled(CardMedia)({
   width: "75%",
   border: "1px solid #e5e5e5",
@@ -47,7 +39,10 @@ const JobAd = (props) => {
 
   return (
     <Link to={`/jobs/${job.id}`} style={{ textDecoration: "none" }}>
-      <StyledJobAdCard>
+      <Card
+        raised={true}
+        sx={{ border: "1px solid #a1bcff", borderRadius: "15px" }}
+      >
         <CardActionArea>
           <CardContent>
             <Grid container direction="row">
@@ -98,7 +93,7 @@ const JobAd = (props) => {
             </Grid>
           </CardContent>
         </CardActionArea>
-      </StyledJobAdCard>
+      </Card>
     </Link>
   );
 };

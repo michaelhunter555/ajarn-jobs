@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import PaymentsIcon from '@mui/icons-material/Payments';
-import PlaceIcon from '@mui/icons-material/Place';
-import PunchClockIcon from '@mui/icons-material/PunchClock';
+import PaymentsIcon from "@mui/icons-material/Payments";
+import PlaceIcon from "@mui/icons-material/Place";
+import PunchClockIcon from "@mui/icons-material/PunchClock";
 import {
   Box,
   Button,
@@ -16,11 +16,11 @@ import {
   Grid,
   List,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledJobAdCard = styled(Card)(({ theme, featured }) => ({
-  backgroundColor: featured === true ? "#fffef9" : "#fafafa",
+  backgroundColor: featured === true ? "#fffef9" : "",
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
 }));
 

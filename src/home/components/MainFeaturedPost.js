@@ -34,6 +34,7 @@ const StyledBoxOverlay = styled(Box)({
   bottom: 0,
   right: 0,
   left: 0,
+  borderRadius: "15px",
   backgroundColor: "rgba(0,0,0,.5)",
 });
 
@@ -130,7 +131,9 @@ const MainFeaturedPost = (props) => {
   return (
     <>
       {/*featured post */}
-      <StyledPaper sx={{ backgroundImage: `url(${post[0].image})` }}>
+      <StyledPaper
+        sx={{ backgroundImage: `url(${post[0].image})`, borderRadius: "15px" }}
+      >
         <StyledBoxOverlay />
         <Grid container>
           <Grid item md={6}>

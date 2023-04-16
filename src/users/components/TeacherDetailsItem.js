@@ -12,6 +12,7 @@ import {
   Chip,
   Divider,
   Grid,
+  Paper,
   Typography,
 } from "@mui/material";
 
@@ -56,7 +57,7 @@ const TeacherDetailsItem = ({ teacher }) => {
               <Avatar
                 variant="circular"
                 src={teacher.image}
-                sx={{ height: 200, width: 200 }}
+                sx={{ height: 175, width: 175 }}
                 alt={`${teacher.id}--${teacher.name}`}
               />
             </Grid>
@@ -112,7 +113,7 @@ const TeacherDetailsItem = ({ teacher }) => {
             </Grid>
             <Grid item>
               <Button variant="outlined" sx={{ borderRadius: "17px" }}>
-                Contact user
+                Message
               </Button>
             </Grid>
           </Grid>
@@ -121,7 +122,7 @@ const TeacherDetailsItem = ({ teacher }) => {
             <Card sx={{ padding: 2 }}>
               <Typography variant="subtitle2" component="h3">
                 {teacher.interests.map((interest, i) => (
-                  <Chip key={i} label={interest} />
+                  <Chip key={i} label={interest} variant="outlined" />
                 ))}
               </Typography>
               <Typography variant="h6" component="h4">
@@ -134,6 +135,34 @@ const TeacherDetailsItem = ({ teacher }) => {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
+          {/*cover letter */}
+          <Paper
+            elevation={0}
+            sx={{ padding: "2rem", borderRadius: "17px", margin: "1rem auto" }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              <Typography variant="h5" component="h4">
+                {teacher.name}
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                component="text"
+              >
+                user@email.com | job title: | phone number
+              </Typography>
+            </Box>
+
+            <Divider />
+            {teacher.about}
+          </Paper>
           <CollapsibleTable teacherResume={teacher.resume} />
         </Grid>
       </Grid>

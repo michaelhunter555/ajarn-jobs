@@ -7,7 +7,7 @@ import {
   FaMapMarkerAlt,
   FaMoneyBill,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import BusinessIcon from "@mui/icons-material/Business";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
@@ -18,58 +18,20 @@ import {
   Box,
   Button,
   Card,
+  Chip,
   Divider,
   Grid,
-  ListItem,
+  Link,
+  Paper,
   Typography,
 } from "@mui/material";
 
 import { AuthContext } from "../../shared/context/auth-context";
 import JobDataTable from "./JobDataTable";
 
-// const StyledGridContainer = styled(Grid)(({ theme, alert, jobData }) => ({
-//   display: "flex",
-//   flexDirection: alert ? "" : jobData ? "column" : "row",
-//   alignItems: "center",
-//   justifyContent: alert ? "flex-end" : jobData ? "" : "flex-start",
-//   margin: alert ? "1rem 0 0 0" : "1rem 0 0.5rem 3rem",
-//   gap: alert ? "1rem" : "",
-//   fontSize: jobData ? 17 : "",
-//   padding: jobData ? 2 : "",
-// }));
-
-// //job title || school
-// const StyledJobTitle = styled("div")({
-//   fontSize: "2rem",
-//   fontWeight: "bold",
-//   textAlign: "center",
-// });
-
-// //image styles of school
-// const StyledCardMedia = styled(CardMedia)({
-//   border: "1px solid #e5e5e5",
-//   margin: "0 0 0.5rem 0",
-//   borderRadius: "10px",
-//   width: "50%",
-// });
-
-// const Item = styled(Paper)(({ theme, button }) => ({
-//   backgroundColor:
-//     theme.palette.mode === "dark" ? "#1A2027" : button ? "transparent" : "#fff",
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: "center",
-//   color: theme.palette.text.secondary,
-//   display: "flex",
-//   flexDirection: "column",
-//   alignItems: "center",
-// }));
-
 const JobDetails = (props) => {
   const authCtx = useContext(AuthContext);
   const { job } = props;
-
-  // work permit?
 
   //add function for sending job application to employer. maybe email.js?
   // const sendApplicationHandler = (event, userId) => {
@@ -100,66 +62,57 @@ const JobDetails = (props) => {
 
   const jobInformation = [
     { variant: "h5", component: "h2", text: job.title },
-    { variant: "subtitle2", component: "h3", text: job.creator.company },
+    {
+      variant: "subtitle2",
+      component: "h3",
+      text: <Chip size="small" label={job.creator.company}></Chip>,
+    },
     {
       variant: "subtitle2",
       component: "h3",
       icon: <LocationOnIcon size="inherit" />,
-      text: job.creator.headquarters,
+      text: "location " + job.creator.headquarters,
     },
     {
       variant: "subtitle2",
       component: "h3",
       icon: <BusinessIcon size="inherit" />,
-      text: job.creator.companySize,
+      text: job.creator.companySize + " employees",
     },
     {
       variant: "subtitle2",
       component: "h3",
       icon: <VerifiedUserIcon size="inherit" />,
-      text: job.creator.established,
+      text: "established in " + job.creator.established,
     },
     {
       variant: "subtitle2",
       component: "h3",
       icon: <EventAvailableIcon size="inherit" />,
-      text: "company Website: www.blah.com",
+      text: <Link href={job.creator.url}>{job.creator.url}</Link>,
     },
   ];
 
-  let button;
   let outlinedButton;
 
   if (authCtx.isLoggedIn) {
-    button = (
-      <Button
-        sx={{ marginBottom: 1.5 }}
-        onClick={() => console.log("modal")}
-        variant="contained"
-      >
-        Apply Now
-      </Button>
-    );
-
     outlinedButton = (
-      <Button onClick={() => console.log("POST request")} variant="outlined">
+      <Button
+        sx={{ borderRadius: "17px" }}
+        onClick={() => console.log("POST request")}
+        variant="outlined"
+      >
         Apply Now
       </Button>
     );
   } else {
-    button = (
-      <Button
-        sx={{ marginBottom: 1.5 }}
-        component={Link}
-        to="/auth"
-        variant="contained"
-      >
-        login/join
-      </Button>
-    );
-
     outlinedButton = (
-      <Button component={Link} to="/auth" variant="outlined">
+      <Button
+        sx={{ borderRadius: "17px" }}
+        component={RouterLink}
+        to="/auth"
+        variant="outlined"
+      >
         login/join
       </Button>
     );
@@ -204,7 +157,7 @@ const JobDetails = (props) => {
                 <Avatar
                   variant="circular"
                   src={job.creator.logoUrl}
-                  sx={{ height: 150, width: 150, border: "1px solid #e5e5e5" }}
+                  sx={{ height: 175, width: 175, border: "1px solid #e5e5e5" }}
                   alt={`${job.id}--${job.creator.company}`}
                 />
               </Grid>
@@ -222,14 +175,10 @@ const JobDetails = (props) => {
                 ))}
                 <Divider flexItem sx={{ margin: "0.5rem 0" }} />
               </Grid>
-              <Grid item>
-                <Button variant="outlined" sx={{ borderRadius: "17px" }}>
-                  Apply Now
-                </Button>
-              </Grid>
+              <Grid item>{outlinedButton}</Grid>
             </Grid>
 
-            <Grid item>
+            <Grid item sx={{ MaxWidth: "100%" }}>
               <Card sx={{ padding: 2 }}>
                 <Typography variant="h6" component="h4">
                   A little about {job.creator.company}:
@@ -238,30 +187,56 @@ const JobDetails = (props) => {
                   {job.creator.about}
                 </Typography>
                 <Divider />
-                <Typography
-                  variant="subtitle2"
-                  component="div"
-                  sx={{ display: "flex", flexDirection: "row" }}
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                    flexWrap: "wrap",
+                  }}
                 >
-                  <Typography
-                    color="text.secondary"
-                    variant="subtitle2"
-                    component="ul"
-                  >
-                    presence:
-                  </Typography>
                   {job.creator.presence.map((item, i) => (
-                    <ListItem key={i}>{item}</ListItem>
+                    <Chip
+                      key={i}
+                      clickable
+                      label={item}
+                      variant="outlined"
+                      sx={{ margin: "1rem 8px 8px 0" }}
+                    />
                   ))}
-                </Typography>
+                </Box>
               </Card>
             </Grid>
           </Grid>
           <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
             <JobDataTable jobSpecifications={jobSpecifications} />
-            {button} {outlinedButton}
-            <Divider sx={{ margin: "2rem auto" }} />
-            {job.description}
+            <Divider sx={{ margin: "1rem auto" }} />
+
+            <Paper elevation={0} sx={{ padding: "2rem", borderRadius: "17px" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "5px",
+                }}
+              >
+                <Typography variant="h5" component="h4">
+                  {job.title}
+                </Typography>
+                <Typography
+                  variant="subtitle2"
+                  color="text.secondary"
+                  component="text"
+                >
+                  date posted: {job.datePosted}
+                </Typography>
+              </Box>
+
+              <Divider />
+              {job.description}
+            </Paper>
           </Grid>
         </Grid>
       </Box>

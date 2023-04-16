@@ -16,6 +16,7 @@ import { styled } from "@mui/material/styles";
 
 const StyledJobText = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
+
   ...theme.typography.button,
 }));
 
@@ -28,7 +29,7 @@ const UrgentJobs = (props) => {
   const urgentJobLimit = job.slice(0, 2);
 
   return (
-    <Card>
+    <Card sx={{ borderRadius: "15px" }}>
       <CardContent>
         <Typography variant="h5" component="div">
           <Chip

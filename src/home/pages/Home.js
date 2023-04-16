@@ -56,6 +56,7 @@ const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
   backgroundColor: "rgb(255, 255, 255)",
   gridColumn: "2/3",
   height: "auto",
+  borderRadius: "15px",
   [theme.breakpoints.down("md")]: {
     gridColumn: 1,
     gridRow: 2,
@@ -70,6 +71,7 @@ const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
   textAlign: "center",
   boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
   overflow: "auto",
+  borderRadius: "15px",
   [theme.breakpoints.down("md")]: {
     gridColumn: 1,
     gridRow: 3,
@@ -84,6 +86,7 @@ const StyledHomeFeaturedSponsors = styled("div")(({ theme }) => ({
   textAlign: "center",
   boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
   overflow: "auto",
+  borderRadius: "15px",
   [theme.breakpoints.down("md")]: {
     gridcolumn: 1,
     gridRow: 4,
