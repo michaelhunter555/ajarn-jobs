@@ -110,7 +110,7 @@ const TeacherDetailsItem = ({ teacher }) => {
                   Skills:
                 </Typography>
                 {teacher.skill.map((skills, i) => (
-                  <Chip key={i} label={skills} />
+                  <Chip clickable key={i} label={skills} />
                 ))}
               </Typography>
             </Grid>
@@ -136,7 +136,7 @@ const TeacherDetailsItem = ({ teacher }) => {
               />
               <Typography variant="subtitle2" component="h3">
                 {teacher.interests.map((interest, i) => (
-                  <Chip key={i} label={interest} variant="outlined" />
+                  <Chip clickable key={i} label={interest} variant="outlined" />
                 ))}
               </Typography>
             </Paper>

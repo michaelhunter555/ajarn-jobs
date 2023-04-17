@@ -59,7 +59,7 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
   overflow: "hidden",
 
   background:
-    "linear-gradient(135deg, hsla(360, 100%, 100%, 1), hsla(360, 100%, 100%, 1) 9.37%, hsla(360, 100%, 100%, 1) 54.69%, hsla(360, 100%, 100%, 1) 66.15%, hsla(360, 1000%, 100%, 1))",
+    "linear-gradient(135deg, hsla(360, 100%, 100%, 0.7), hsla(360, 100%, 100%, 0.7) 9.37%, hsla(360, 100%, 100%, 0.7) 54.69%, hsla(360, 100%, 100%, 0.7) 66.15%, hsla(360, 1000%, 100%, 0.7))",
   "&::after": {
     content: '""',
     position: "absolute",
