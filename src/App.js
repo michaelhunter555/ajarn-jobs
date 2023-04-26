@@ -18,7 +18,6 @@ import {
   USE_CREDITS,
 } from "./shared/context/authActions";
 import { authReducer, initialState } from "./shared/context/authReducer";
-import { DUMMY_USERS_LIST } from "./shared/util/DummyUsers";
 import Login from "./users/pages/Auth";
 import TeacherDetails from "./users/pages/TeacherDetails";
 import Teachers from "./users/pages/Teachers";
@@ -27,7 +26,7 @@ function App() {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const login = useCallback((userId) => {
-    dispatch({ type: LOGIN, user: DUMMY_USERS_LIST[2] });
+    dispatch({ type: LOGIN, user: userId });
   }, []);
 
   const logout = useCallback(() => {

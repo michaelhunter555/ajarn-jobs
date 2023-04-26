@@ -7,54 +7,6 @@ import { styled } from "@mui/material/styles";
 
 import Backdrop from "./Backdrop";
 
-const ModalOverlay = (props) => {
-  const content = (
-    <ModalStyles className={`modal ${props.className}`} style={props.style}>
-      <ModalHeaderStyles className={`modal__header ${props.headerClass}`}>
-        <h2>{props.header}</h2>
-      </ModalHeaderStyles>
-      <form
-        onSubmit={
-          props.onSubmit ? props.onSubmit : (event) => event.preventDefault()
-        }
-      >
-        <ModalContentStyles className={`modal__content ${props.contentClass}`}>
-          {props.children}
-        </ModalContentStyles>
-        <ModalFooterStyles className={`modal__footer ${props.footerClass}`}>
-          {props.footer}
-        </ModalFooterStyles>
-      </form>
-    </ModalStyles>
-  );
-  return ReactDOM.createPortal(content, document.getElementById("modal-hook"));
-};
-
-const Modal = (props) => {
-  return (
-    <React.Fragment>
-      {props.show && <Backdrop onClick={props.onCancel} />}
-      <CSSTransition
-        in={props.show}
-        mountOnEnter
-        unmountOnExit
-        timeout={200}
-        classNames={{
-          enter: "modal-enter",
-          enterActive: "modal-enter-active",
-          exit: "modal-exit",
-          exitActive: "modal-exit-active",
-        }}
-        style={transitionStyles}
-      >
-        <ModalOverlay {...props} />
-      </CSSTransition>
-    </React.Fragment>
-  );
-};
-
-export default Modal;
-
 const transitionStyles = {
   enter: {
     transform: "translateY(-10rem)",
@@ -110,3 +62,51 @@ const ModalContentStyles = styled("div")(({ theme }) => ({
 const ModalFooterStyles = styled("footer")(({ theme }) => ({
   padding: "1rem 0.5rem",
 }));
+
+const ModalOverlay = (props) => {
+  const content = (
+    <ModalStyles className={`modal ${props.className}`} style={props.style}>
+      <ModalHeaderStyles className={`modal__header ${props.headerClass}`}>
+        <h2>{props.header}</h2>
+      </ModalHeaderStyles>
+      <form
+        onSubmit={
+          props.onSubmit ? props.onSubmit : (event) => event.preventDefault()
+        }
+      >
+        <ModalContentStyles className={`modal__content ${props.contentClass}`}>
+          {props.children}
+        </ModalContentStyles>
+        <ModalFooterStyles className={`modal__footer ${props.footerClass}`}>
+          {props.footer}
+        </ModalFooterStyles>
+      </form>
+    </ModalStyles>
+  );
+  return ReactDOM.createPortal(content, document.getElementById("modal-hook"));
+};
+
+const Modal = (props) => {
+  return (
+    <React.Fragment>
+      {props.show && <Backdrop onClick={props.onCancel} />}
+      <CSSTransition
+        in={props.show}
+        mountOnEnter
+        unmountOnExit
+        timeout={200}
+        classNames={{
+          enter: "modal-enter",
+          enterActive: "modal-enter-active",
+          exit: "modal-exit",
+          exitActive: "modal-exit-active",
+        }}
+        style={transitionStyles}
+      >
+        <ModalOverlay {...props} />
+      </CSSTransition>
+    </React.Fragment>
+  );
+};
+
+export default Modal;
