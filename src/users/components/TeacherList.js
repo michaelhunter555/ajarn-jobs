@@ -18,7 +18,7 @@ const TeacherList = ({ teachers }) => {
 
   // }
 
-  if (teachers.length === 0) {
+  if (teachers?.length === 0) {
     return (
       <Card>
         No teachers match your current search criteria. Please check back in the
@@ -34,7 +34,7 @@ const TeacherList = ({ teachers }) => {
 
   return (
     <Grid container spacing={2} wrap="wrap">
-      {teachers.map((teacher, i) => (
+      {teachers?.map((teacher, i) => (
         <Grid item key={teacher.id} xs={12} sm={6} md={3}>
           {authCtx.isLoggedIn && authCtx.user.credits > 0 && (
             <Link to={`/teachers/${teacher.id}`}>
