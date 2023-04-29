@@ -1,7 +1,4 @@
-import React, {
-  useContext,
-  useState,
-} from 'react';
+import React, { useContext, useState } from "react";
 
 import {
   Button,
@@ -17,14 +14,11 @@ import {
   Switch,
   TextField,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import { AuthContext } from '../../../shared/context/auth-context';
-import { useForm } from '../../../shared/hooks/form-hook';
-import {
-  nationalities,
-  thaiCities,
-} from '../../../shared/util/ThaiData';
+import { AuthContext } from "../../../shared/context/auth-context";
+import { useForm } from "../../../shared/hooks/form-hook";
+import { nationalities, thaiCities } from "../../../shared/util/ThaiData";
 
 const TeacherSettings = (props) => {
   const { updateUser } = useContext(AuthContext);
@@ -144,7 +138,7 @@ const TeacherSettings = (props) => {
               <InputLabel id="location-select">Location</InputLabel>
               <Select
                 labelId="update-location"
-                id="locataion"
+                id="location"
                 value={formState.inputs.location.value}
                 label="Location"
                 onChange={(event) =>

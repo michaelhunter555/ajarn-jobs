@@ -11,6 +11,7 @@ import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
@@ -39,10 +40,7 @@ const Auth = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  //const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -79,58 +77,44 @@ const Auth = () => {
   //submit login || signup
   const authSubmitHandler = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
     //api call
     if (isLoginMode) {
       try {
-        const response = await fetch("http://localhost:5000/api/user/login", {
-          method: "POST",
-          body: JSON.stringify({
+        //custom http hook accepts 4 arguments (see http-hook.js)
+        //for login, we expect an email and password according to user as sign-up
+        const response = await sendRequest(
+          "http://localhost:5000/api/user/login",
+          "POST",
+          JSON.stringify({
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
           }),
-          headers: { "Content-type": "application/json" },
-        });
-
-        const data = await response.json();
-
-        if (!data.ok) {
-          throw new Error(data.message);
-        }
-        console.log(data);
-        setIsLoading(false);
-        auth.login();
+          { "Content-type": "application/json" }
+        );
+        console.log(response);
+        auth.login(response.user.id);
         // navigate("/");
       } catch (err) {
-        setIsLoading(false);
-        setIsError(err.message || "Something went wrong. Please try again");
-        console.log(err);
+        //error handling done in custom hook
       }
     } else {
       try {
-        const response = await fetch("http://localhost:5000/api/user/sign-up", {
-          method: "POST",
-          body: JSON.stringify({
+        //POST - sign up expects a name, email and password
+        const response = await sendRequest(
+          "http://localhost:5000/api/user/sign-up",
+          "POST",
+          JSON.stringify({
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
           }),
-          headers: { "Content-type": "application/json" },
-        });
+          { "Content-type": "application/json" }
+        );
 
-        const data = await response.json();
-
-        if (!data.ok) {
-          throw new Error(data.message);
-        }
-        console.log(data);
-        setIsLoading(false);
-        auth.login();
+        auth.login(response.user.id);
         // navigate("/");
       } catch (err) {
-        setIsLoading(false);
-        setIsError(err.message || "Something went wrong. Please try again");
-        console.log(err);
+        //error handling done in custom hook
       }
     }
   };
@@ -140,13 +124,9 @@ const Auth = () => {
     console.log("Auth is set:", auth.user);
   }, [auth.user]);
 
-  const errorHandler = (err) => {
-    setIsError(null);
-  };
-
   return (
     <>
-      <ErrorModal onClear={errorHandler} error={isError} />
+      <ErrorModal onClear={clearError} error={error} />
       <StyledFormCard>
         {isLoading && <LoadingSpinner asOverlay />}
         <form onSubmit={authSubmitHandler}>

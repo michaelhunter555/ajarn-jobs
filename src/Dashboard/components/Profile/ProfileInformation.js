@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import {
-  Avatar,
-  Box,
-  Chip,
-  Divider,
-  Paper,
-  Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Avatar, Box, Chip, Divider, Paper, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import ProfileTabs from './ProfileTabs';
-import { CollapsibleTable } from './Resume';
+import ProfileTabs from "./ProfileTabs";
+import { CollapsibleTable } from "./Resume";
 
 const StyledProfileContainer = styled(Paper)(({ theme }) => ({
   display: "flex",
