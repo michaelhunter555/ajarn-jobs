@@ -55,25 +55,25 @@ const TeacherDetailsItem = ({ teacher }) => {
             <Grid item>
               <Avatar
                 variant="circular"
-                src={teacher.image}
+                src={teacher?.image}
                 sx={{ height: 175, width: 175 }}
-                alt={`${teacher.id}--${teacher.name}`}
+                alt={`${teacher?.id}--${teacher?.name}`}
               />
             </Grid>
             {/**grid item 2 */}
             <Grid item alignItems="center" sx={{ margin: "0 0 0 0.5rem" }}>
               <Typography color="text.secondary" variant="h5" component="h2">
-                {teacher.name}
+                {teacher?.name}
               </Typography>
               <Typography variant="subtitle2" paragraph>
-                <Chip label={teacher.profession} size="small" />
+                <Chip label={teacher?.profession} size="small" />
               </Typography>
               <Typography
                 variant="subtitle2"
                 color="text.secondary"
                 component="h3"
               >
-                <LocationOnIcon size="inherit" /> lives in {teacher.location}
+                <LocationOnIcon size="inherit" /> lives in {teacher?.location}
               </Typography>
               <Typography
                 color="text.secondary"
@@ -81,14 +81,14 @@ const TeacherDetailsItem = ({ teacher }) => {
                 component="h3"
               >
                 <LanguageIcon size="inherit" />
-                nationality: {teacher.nationality}
+                nationality: {teacher?.nationality}
               </Typography>
               <Typography
                 color="text.secondary"
                 variant="subtitle2"
                 component="h3"
               >
-                <SchoolIcon size="inherit" /> {teacher.education}
+                <SchoolIcon size="inherit" /> {teacher?.education}
               </Typography>
 
               <Typography
@@ -97,8 +97,8 @@ const TeacherDetailsItem = ({ teacher }) => {
                 component="h3"
               >
                 <WorkIcon size="inherit" /> Teaching for{" "}
-                {teacher.workExperience}-
-                {teacher.workExperience > 1 ? "years" : "year"}
+                {teacher?.workExperience}-
+                {teacher?.workExperience > 1 ? "years" : "year"}
               </Typography>
               <Divider flexItem sx={{ margin: "0.5rem 0" }} />
               <Typography variant="subtitle2" component="h3">
@@ -109,7 +109,7 @@ const TeacherDetailsItem = ({ teacher }) => {
                 >
                   Skills:
                 </Typography>
-                {teacher.skill.map((skills, i) => (
+                {teacher?.skill.map((skills, i) => (
                   <Chip clickable key={i} label={skills} />
                 ))}
               </Typography>
@@ -124,10 +124,10 @@ const TeacherDetailsItem = ({ teacher }) => {
           <Grid item>
             <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
               <Typography variant="h6" component="h4">
-                A little about {teacher.name}:
+                A little about {teacher?.name}:
               </Typography>
               <Typography variant="subtitle1" paragraph>
-                {teacher.about}
+                {teacher?.about}
               </Typography>
               <Divider
                 flexItem
@@ -135,7 +135,7 @@ const TeacherDetailsItem = ({ teacher }) => {
                 sx={{ margin: "0 0 0.5rem 0" }}
               />
               <Typography variant="subtitle2" component="h3">
-                {teacher.interests.map((interest, i) => (
+                {teacher?.interests.map((interest, i) => (
                   <Chip clickable key={i} label={interest} variant="outlined" />
                 ))}
               </Typography>
@@ -157,7 +157,7 @@ const TeacherDetailsItem = ({ teacher }) => {
               }}
             >
               <Typography variant="h5" component="h4">
-                {teacher.name} - CoverLetter
+                {teacher?.name} - CoverLetter
               </Typography>
               <Typography
                 variant="subtitle2"
@@ -170,11 +170,11 @@ const TeacherDetailsItem = ({ teacher }) => {
 
             <Divider />
             <Typography color="text.secondary" variant="subtitle2" paragraph>
-              {teacher.coverLetter}
-              {teacher.about}
+              {teacher?.coverLetter}
+              {teacher?.about}
             </Typography>
           </Paper>
-          <CollapsibleTable teacherResume={teacher.resume} />
+          <CollapsibleTable teacherResume={teacher?.resume} />
         </Grid>
       </Grid>
     </Box>

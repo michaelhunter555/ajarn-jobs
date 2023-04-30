@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ListIcon from '@mui/icons-material/List';
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ListIcon from "@mui/icons-material/List";
 import {
   Divider,
   List,
@@ -9,8 +9,8 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const HorizontalSideBar = styled(Paper)(({ theme }) => ({
   display: "flex",
@@ -50,6 +50,11 @@ const menuItems = [
     text: "Settings",
     icon: <DashboardIcon />,
     componentName: "settings",
+  },
+  {
+    text: "Creator Profile",
+    icon: <DashboardIcon />,
+    componentName: "creator",
   },
   {
     text: "Log out",

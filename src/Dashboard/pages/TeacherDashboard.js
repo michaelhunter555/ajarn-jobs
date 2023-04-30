@@ -14,6 +14,7 @@ import { dummy_jobs } from "../../shared/util/DummyJobs";
 import { DUMMY_USERS_LIST } from "../../shared/util/DummyUsers";
 import TeacherItem from "../../users/components/TeacherItem";
 import Applications from "../components/Profile/Applications";
+import Creator from "../components/Profile/Creator";
 import FeaturedCard from "../components/Profile/FeaturedCard";
 import ProfileInformation from "../components/Profile/ProfileInformation";
 import TeacherSettings from "../components/Profile/TeacherSettings";
@@ -26,75 +27,195 @@ const TeacherDashboard = () => {
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [isTeacher, setIsTeacher] = useState(true);
+  const [isHidden, setIsHidden] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+  //get random user card if user is employer
   useEffect(() => {
     const randomUser =
       DUMMY_USERS_LIST[Math.floor(Math.random() * DUMMY_USERS_LIST.length)];
     setSelectedCard(randomUser);
   }, []);
 
+  //GET user profile information
   useEffect(() => {
     const getUserInformation = async () => {
       try {
+        //send call to server expected dynamic id (useParams)
         const response = await sendRequest(
           `http://localhost:5000/api/user/${userId}`
         );
+        //set currentUser to user key based on /get-user-by-id.js (see backend)
         setCurrentUser(response.user);
+        const userType = response.user.userType;
+        setIsTeacher(userType === "teacher");
         console.log(response);
       } catch (err) {}
     };
+    //call function
     getUserInformation();
+    //sendRequest and userId exist outside of our useEffect, and there are dependencies
   }, [sendRequest, userId]);
 
+  //PATCH General Profile Info Upate
+  const handleProfileUpdate = async (update) => {
+    try {
+      const responseData = await sendRequest(
+        `http://localhost:5000/api/user/update-profile/${userId}`,
+        "PATCH",
+        JSON.stringify({
+          name: update.name ? update.name : "",
+          nationality: update.nationality ? update.nationality : "",
+          location: update.location ? update.location : "",
+          email: update.email ? update.email : "",
+          skills: update.skills ? update.skills : "",
+          interest: update.interest ? update.interest : "",
+          about: update.about ? update.about : "",
+        }),
+        { "Content-Type": "application/json" }
+      );
+      console.log("ServerResponse:", responseData);
+
+      authCtx.updateUser(responseData.user);
+    } catch (e) {}
+  };
+
+  // PATCH Update Resume
   const handleResumeUpdate = async (updatedResumeItem) => {
     try {
       await sendRequest(
+        //We expect dynamic userId (useParams)
         `http://localhost:5000/api/user/update-profile/${userId}`,
         "PATCH",
+        //property to be updated "resume" on user object
         JSON.stringify({ resume: updatedResumeItem }),
         { "Content-type": "application/json" }
       );
-
+      //reflect changes on client side
       setCurrentUser((prev) => {
         const updatedResume = prev.resume.map((resumeItem) => {
-          return resumeItem.id === updatedResumeItem.id
+          return resumeItem._id === updatedResumeItem._id
             ? updatedResumeItem
             : resumeItem;
         });
+        //return copy of prev state and the new resume added
         return { ...prev, resume: updatedResume };
       });
     } catch (err) {}
     console.log("updated resume", updatedResumeItem);
   };
 
+  //PATCH Delete Resume
   const handleResumeDelete = async (resumeItem) => {
     try {
       await sendRequest(
+        //We expect a dynamic Id to update the profile and Patch to update the user object
         `http://localhost:5000/api/user/update-profile/${userId}`,
         "PATCH",
+        //we send deleteResume key in the req.body (req.body.deleteResume)
+        //see => /backend/controllers/users/update-user-profile.js
         JSON.stringify({ deleteResume: resumeItem }),
         { "Content-Type": "application/json" }
       );
-
+      //update the currentUser client side
       setCurrentUser((prev) => {
         const updatedResume = prev.resume.filter(
           (r) => r._id !== resumeItem._id
         );
+        //return the latest copy of the user resumes with the deleted removed.
         return { ...prev, resume: updatedResume };
       });
     } catch (err) {}
   };
 
+  //PATCH update creator information
+  const handleCreatorUpdate = async (creatorItem) => {
+    try {
+      await sendRequest(
+        `http://localhost:5000/api/user/update-profile/${userId}`,
+        "PATCH",
+        JSON.stringify(creatorItem),
+        { "Content-Type": "application/json" }
+      );
+
+      setCurrentUser((prev) => {
+        return { ...prev, creator: creatorItem };
+      });
+    } catch (err) {}
+  };
+
+  //PATCH remove Creator Data
+  const handleCreatorDelete = async (creatorItem) => {
+    try {
+      await sendRequest(
+        `http://localhost:5000/api/user/${userId}`,
+        "PATCH",
+        JSON.stringify({ deleteCreator: creatorItem._id }),
+        { "Content-Type": "application/json" }
+      );
+      setCurrentUser((prev) => {
+        return { ...prev, creator: null };
+      });
+    } catch (e) {}
+  };
+
+  //this will be an API call
+  const handleRoleChange = async () => {
+    try {
+      await sendRequest(
+        `http://localhost:5000/api/user/update-profile/${userId}`,
+        "PATCH",
+        JSON.stringify({ userType: isTeacher ? "employer" : "teacher" }),
+        { "Content-Type": "application/json" }
+      );
+    } catch (e) {}
+    setIsTeacher((prev) => !prev);
+  };
+
+  const handleUserVisibility = async () => {
+    try {
+      await sendRequest(
+        `http://localhost:5000/api/user/update-profile/${userId}`,
+        "PATCH",
+        JSON.stringify({ isHidden: isHidden ? true : false }),
+        { "Content-Type": "application/json" }
+      );
+
+      setIsHidden((prev) => !prev);
+    } catch (e) {}
+  };
+
+  //Add resume items
   const addNewResumeItem = () => {
     setCurrentUser({
+      //copy of current user object
       ...currentUser,
+      //we return resume key with array containing a copy of the user's current resume
       resume: [
         ...currentUser.resume,
         { id: "new-" + new Date().getTime(), isNew: true },
       ],
+    });
+  };
+
+  //Add creator profile
+  const addCreatorItem = () => {
+    setCurrentUser((prev) => {
+      //check if creator profile already exists if it does, return the existing profile
+      if (prev.creator) {
+        return prev;
+      }
+
+      //if it doesn't add a new one for them.
+      return {
+        ...prev,
+        creator: {
+          id: "creator-profile-" + new Date().getTime(),
+          isNew: true,
+        },
+      };
     });
   };
 
@@ -109,14 +230,12 @@ const TeacherDashboard = () => {
     about,
   } = selectedCard || {};
 
+  //sidebar component rendering
   const handleMenuItemClick = (componentName) => {
     setCurrentComponent(componentName);
   };
 
-  const handleRoleChange = () => {
-    setIsTeacher((prev) => !prev);
-  };
-
+  //Sidebar component rendering
   const renderComponent = () => {
     switch (currentComponent) {
       case "profile":
@@ -130,7 +249,7 @@ const TeacherDashboard = () => {
           <>
             {currentUser?.resume?.map((resumeItem) => (
               <UpdateResumeItem
-                key={resumeItem?.id}
+                key={resumeItem?._id}
                 resumeItem={resumeItem}
                 onUpdate={handleResumeUpdate}
                 onDelete={() => handleResumeDelete(resumeItem)}
@@ -139,12 +258,29 @@ const TeacherDashboard = () => {
             <Button onClick={addNewResumeItem}>Add New Resume</Button>
           </>
         );
+      case "creator":
+        return (
+          <>
+            {currentUser?.creator ? (
+              <Creator
+                creatorItem={currentUser.creator}
+                onUpdate={handleCreatorUpdate}
+                onDelete={() => handleCreatorDelete(currentUser.creator)}
+              />
+            ) : (
+              <Button onClick={addCreatorItem}>Creator Account</Button>
+            )}
+          </>
+        );
       case "settings":
         return (
           <TeacherSettings
             isSchool={isTeacher}
             user={currentUser}
             onClickToggle={handleRoleChange}
+            onProfileUpdate={handleProfileUpdate}
+            onToggleVisibility={handleUserVisibility}
+            isHidden={isHidden}
           />
         );
       case "logout":

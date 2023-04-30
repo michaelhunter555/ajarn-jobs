@@ -25,8 +25,8 @@ import Teachers from "./users/pages/Teachers";
 function App() {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const login = useCallback((userId) => {
-    dispatch({ type: LOGIN, user: userId });
+  const login = useCallback((userobj) => {
+    dispatch({ type: LOGIN, user: userobj });
   }, []);
 
   const logout = useCallback(() => {
@@ -74,7 +74,7 @@ function App() {
   }
   //remember to update users to dynamic id
   console.log(state);
-  console.log("App state credits:", state.user);
+  console.log("App state:", state.user);
   return (
     <AuthContext.Provider
       value={{

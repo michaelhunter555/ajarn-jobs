@@ -36,6 +36,7 @@ export const authReducer = (state, action) => {
         credits: remaingCredits,
       };
     case UPDATE_USER:
+      console.log("UPDATE ACTION", action.user);
       return {
         ...state,
         user: action.user,

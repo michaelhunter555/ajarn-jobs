@@ -16,8 +16,6 @@ import { useForm } from "../../../shared/hooks/form-hook";
 import { thaiCities } from "../../../shared/util/ThaiData";
 
 const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
-  const { isNew = false } = resumeItem;
-
   const [formState, inputHandler] = useForm(
     {
       company: {
@@ -51,6 +49,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
     },
     true
   );
+  const { isNew = false } = resumeItem;
 
   const handleSubmit = (event) => {
     event.preventDefault();
