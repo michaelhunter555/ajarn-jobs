@@ -24,12 +24,11 @@ import Sidebar from "../components/Sidebar";
 const TeacherDashboard = () => {
   const userId = useParams().id;
   const authCtx = useContext(AuthContext);
+  const { updateUser } = authCtx;
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [isTeacher, setIsTeacher] = useState(true);
-  const [isHidden, setIsHidden] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   //get random user card if user is employer
@@ -48,7 +47,7 @@ const TeacherDashboard = () => {
           `http://localhost:5000/api/user/${userId}`
         );
         //set currentUser to user key based on /get-user-by-id.js (see backend)
-        setCurrentUser(response.user);
+        updateUser(response.user);
         const userType = response.user.userType;
         setIsTeacher(userType === "teacher");
         console.log(response);
@@ -57,7 +56,7 @@ const TeacherDashboard = () => {
     //call function
     getUserInformation();
     //sendRequest and userId exist outside of our useEffect, and there are dependencies
-  }, [sendRequest, userId]);
+  }, [sendRequest, userId, updateUser]);
 
   //PATCH General Profile Info Upate
   const handleProfileUpdate = async (update) => {
@@ -94,7 +93,7 @@ const TeacherDashboard = () => {
         { "Content-type": "application/json" }
       );
       //reflect changes on client side
-      setCurrentUser((prev) => {
+      authCtx.updateUser((prev) => {
         const updatedResume = prev.resume.map((resumeItem) => {
           return resumeItem._id === updatedResumeItem._id
             ? updatedResumeItem
@@ -120,7 +119,7 @@ const TeacherDashboard = () => {
         { "Content-Type": "application/json" }
       );
       //update the currentUser client side
-      setCurrentUser((prev) => {
+      authCtx.updateUser((prev) => {
         const updatedResume = prev.resume.filter(
           (r) => r._id !== resumeItem._id
         );
@@ -140,7 +139,7 @@ const TeacherDashboard = () => {
         { "Content-Type": "application/json" }
       );
 
-      setCurrentUser((prev) => {
+      authCtx.updateUser((prev) => {
         return { ...prev, creator: creatorItem };
       });
     } catch (err) {}
@@ -155,7 +154,7 @@ const TeacherDashboard = () => {
         JSON.stringify({ deleteCreator: creatorItem._id }),
         { "Content-Type": "application/json" }
       );
-      setCurrentUser((prev) => {
+      authCtx.updateUser((prev) => {
         return { ...prev, creator: null };
       });
     } catch (e) {}
@@ -164,37 +163,38 @@ const TeacherDashboard = () => {
   //this will be an API call
   const handleRoleChange = async () => {
     try {
-      await sendRequest(
+      const response = await sendRequest(
         `http://localhost:5000/api/user/update-profile/${userId}`,
         "PATCH",
         JSON.stringify({ userType: isTeacher ? "employer" : "teacher" }),
         { "Content-Type": "application/json" }
       );
+      authCtx.updateUser(response.user);
     } catch (e) {}
-    setIsTeacher((prev) => !prev);
   };
 
   const handleUserVisibility = async () => {
+    const isHidden = authCtx.user.isHidden;
     try {
-      await sendRequest(
+      const response = await sendRequest(
         `http://localhost:5000/api/user/update-profile/${userId}`,
         "PATCH",
-        JSON.stringify({ isHidden: isHidden ? true : false }),
+        JSON.stringify({ isHidden: !isHidden }),
         { "Content-Type": "application/json" }
       );
 
-      setIsHidden((prev) => !prev);
+      authCtx.updateUser(response.user);
     } catch (e) {}
   };
 
   //Add resume items
   const addNewResumeItem = () => {
-    setCurrentUser({
+    authCtx.updateUser({
       //copy of current user object
-      ...currentUser,
+      ...authCtx.user,
       //we return resume key with array containing a copy of the user's current resume
       resume: [
-        ...currentUser.resume,
+        ...authCtx.user.resume,
         { id: "new-" + new Date().getTime(), isNew: true },
       ],
     });
@@ -202,21 +202,14 @@ const TeacherDashboard = () => {
 
   //Add creator profile
   const addCreatorItem = () => {
-    setCurrentUser((prev) => {
-      //check if creator profile already exists if it does, return the existing profile
-      if (prev.creator) {
-        return prev;
-      }
-
-      //if it doesn't add a new one for them.
-      return {
-        ...prev,
-        creator: {
-          id: "creator-profile-" + new Date().getTime(),
-          isNew: true,
-        },
-      };
-    });
+    const creatorItem = {
+      ...authCtx.user,
+      creator: {
+        id: "creator-" + new Date().getTime(),
+        isNew: true,
+      },
+    };
+    authCtx.updateUser(creatorItem);
   };
 
   const {
@@ -239,7 +232,7 @@ const TeacherDashboard = () => {
   const renderComponent = () => {
     switch (currentComponent) {
       case "profile":
-        return currentUser && <ProfileInformation user={currentUser} />;
+        return authCtx.user && <ProfileInformation user={authCtx.user} />;
       case "job-listings":
         return <JobAdsList job={dummy_jobs} />;
       case "applications":
@@ -247,7 +240,7 @@ const TeacherDashboard = () => {
       case "resume":
         return (
           <>
-            {currentUser?.resume?.map((resumeItem) => (
+            {authCtx.user?.resume?.map((resumeItem) => (
               <UpdateResumeItem
                 key={resumeItem?._id}
                 resumeItem={resumeItem}
@@ -261,11 +254,11 @@ const TeacherDashboard = () => {
       case "creator":
         return (
           <>
-            {currentUser?.creator ? (
+            {authCtx.user?.creator ? (
               <Creator
-                creatorItem={currentUser.creator}
+                creatorItem={authCtx.user?.creator}
                 onUpdate={handleCreatorUpdate}
-                onDelete={() => handleCreatorDelete(currentUser.creator)}
+                onDelete={() => handleCreatorDelete(authCtx.user?.creator)}
               />
             ) : (
               <Button onClick={addCreatorItem}>Creator Account</Button>
@@ -273,10 +266,12 @@ const TeacherDashboard = () => {
           </>
         );
       case "settings":
+        const isTeacher = authCtx.user.userType === "teacher";
+        const isHidden = authCtx.user.isHidden;
         return (
           <TeacherSettings
             isSchool={isTeacher}
-            user={currentUser}
+            user={authCtx.user}
             onClickToggle={handleRoleChange}
             onProfileUpdate={handleProfileUpdate}
             onToggleVisibility={handleUserVisibility}
@@ -288,7 +283,7 @@ const TeacherDashboard = () => {
         navigate("/");
         break;
       default:
-        return <ProfileInformation user={currentUser} />;
+        return <ProfileInformation user={authCtx.user} />;
     }
   };
 
