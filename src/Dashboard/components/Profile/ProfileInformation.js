@@ -67,7 +67,7 @@ const ProfileInformation = ({ user }) => {
               justifyContent: "center",
             }}
           >
-            {skill.map((item, i) => (
+            {skill?.map((item, i) => (
               <Chip
                 key={i}
                 label={item}
@@ -92,7 +92,7 @@ const ProfileInformation = ({ user }) => {
         <Typography variant="subtitle2">{education}</Typography>
         <Typography variant="body1">{WorkExperience}</Typography>
         <Box sx={{ display: "flex", flexDirection: "row" }}>
-          {interests.map((interest, i) => {
+          {interests?.map((interest, i) => {
             return <Chip key={i} label={interest} sx={{ margin: 0.5 }} />;
           })}
         </Box>

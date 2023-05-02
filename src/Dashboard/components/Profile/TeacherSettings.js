@@ -145,8 +145,8 @@ const TeacherSettings = (props) => {
           <Grid item xs={12} sm={6} md={5}>
             <FormControl fullWidth>
               <InputLabel htmlFor="my-input">Email address</InputLabel>
-              <Input id="my-input" aria-describedby="my-helper-text" />
-              <FormHelperText id="my-helper-text">
+              <Input id="my-input" aria-describedby="e-mail-address" />
+              <FormHelperText id="e-mail-address">
                 We'll never share your email.
               </FormHelperText>
             </FormControl>
@@ -200,7 +200,7 @@ const TeacherSettings = (props) => {
             <TextField
               multiline
               fullWidth
-              helperText="separate each skill by a comma."
+              helperText="separate each interest by a comma."
               label="Interest"
               variant="outlined"
               id="interest"

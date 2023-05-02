@@ -49,7 +49,6 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
     },
     true
   );
-  const { isNew = false } = resumeItem;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -74,7 +73,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
           fullWidth
           name="jobTitle"
           label="Job Title"
-          value={isNew ? "" : resumeItem.jobTitle}
+          value={formState.inputs.jobTitle.value}
           onChange={(event) =>
             inputHandler(
               "jobTitle",
@@ -94,7 +93,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
               fullWidth
               name="schoolName"
               label="School Name"
-              value={isNew ? "" : resumeItem.schoolName}
+              value={formState.inputs.schoolName.value}
               onChange={(event) =>
                 inputHandler(
                   "schoolName",
@@ -113,7 +112,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
             <TextField
               name="company"
               label="Company"
-              value={isNew ? "" : resumeItem.company}
+              value={formState.inputs.company.value}
               onChange={(event) =>
                 inputHandler(
                   "company",
@@ -129,7 +128,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
           <Select
             labelId="location"
             id="location"
-            value={isNew ? "" : resumeItem.location}
+            value={formState.inputs.location.value}
             label="Location"
             onChange={(event) =>
               inputHandler(
@@ -151,7 +150,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
           sx={{ margin: "0 0.5rem 0 0" }}
           name="from"
           label="From"
-          value={isNew ? "" : resumeItem.from}
+          value={formState.inputs.from.value}
           onChange={(event) =>
             inputHandler("from", event.target.value, event.target.value !== "")
           }
@@ -159,7 +158,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
         <TextField
           name="to"
           label="To"
-          value={isNew ? "" : resumeItem.to}
+          value={formState.inputs.to.value}
           onChange={(event) =>
             inputHandler("to", event.target.value, event.target.value !== "")
           }
@@ -172,7 +171,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
           helperText="describe your role at this job"
           name="role"
           label="Role"
-          value={isNew ? "" : resumeItem.role}
+          value={formState.inputs.role.value}
           onChange={(event) =>
             inputHandler("role", event.target.value, event.target.value !== "")
           }

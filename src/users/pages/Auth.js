@@ -92,8 +92,8 @@ const Auth = () => {
           { "Content-type": "application/json" }
         );
         console.log(response);
-        auth.login(response.user);
-        navigate("/");
+        auth.login(response?.user);
+        navigate(`/`);
       } catch (err) {
         //error handling done in custom hook
       }
@@ -111,8 +111,8 @@ const Auth = () => {
           { "Content-type": "application/json" }
         );
 
-        auth.login(response.user.id);
-        // navigate("/");
+        auth.login(response?.user);
+        navigate("/");
       } catch (err) {
         //error handling done in custom hook
       }

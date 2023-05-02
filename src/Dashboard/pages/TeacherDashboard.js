@@ -9,7 +9,10 @@ import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
 import { AuthContext } from "../../shared/context/auth-context";
-import { useHttpClient } from "../../shared/hooks/http-hook";
+import { useCreator } from "../../shared/hooks/creator-hook";
+import { useResume } from "../../shared/hooks/resume-hook";
+import { useSettingsToggle } from "../../shared/hooks/toggle-hook";
+import { useUser } from "../../shared/hooks/user-hook";
 import { dummy_jobs } from "../../shared/util/DummyJobs";
 import { DUMMY_USERS_LIST } from "../../shared/util/DummyUsers";
 import TeacherItem from "../../users/components/TeacherItem";
@@ -24,12 +27,40 @@ import Sidebar from "../components/Sidebar";
 const TeacherDashboard = () => {
   const userId = useParams().id;
   const authCtx = useContext(AuthContext);
-  const { updateUser } = authCtx;
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
-  const [isTeacher, setIsTeacher] = useState(true);
   const [selectedCard, setSelectedCard] = useState(null);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const {
+    //get and update user profile
+    getUserInformation,
+    updateUserProfile,
+    isLoading: userProfileLoading,
+    error: getUserProfileError,
+    clearError: clearUserProfileError,
+  } = useUser();
+  const {
+    //update and delete user resume
+    updateUserResume,
+    deleteUserResume,
+    isLoading: userResumeUpdating,
+    error: userResumeError,
+    clearError: clearResumeError,
+  } = useResume();
+  const {
+    //create and delete creator account
+    updateCreator,
+    deleteCreator,
+    isLoading: updatingCreator,
+    error: creatorUpdatingError,
+    clearError: clearCreatorError,
+  } = useCreator();
+  const {
+    updateRoleChange,
+    updateUserVisibility,
+    isLoading: settingToggleIsLoading,
+    error: settingToggleError,
+    clearError: clearSettingToggleError,
+  } = useSettingsToggle();
 
   //get random user card if user is employer
   useEffect(() => {
@@ -40,151 +71,44 @@ const TeacherDashboard = () => {
 
   //GET user profile information
   useEffect(() => {
-    const getUserInformation = async () => {
-      try {
-        //send call to server expected dynamic id (useParams)
-        const response = await sendRequest(
-          `http://localhost:5000/api/user/${userId}`
-        );
-        //set currentUser to user key based on /get-user-by-id.js (see backend)
-        updateUser(response.user);
-        const userType = response.user.userType;
-        setIsTeacher(userType === "teacher");
-        console.log(response);
-      } catch (err) {}
-    };
-    //call function
-    getUserInformation();
-    //sendRequest and userId exist outside of our useEffect, and there are dependencies
-  }, [sendRequest, userId, updateUser]);
+    if (userId) {
+      getUserInformation(userId);
+    }
+  }, [userId, getUserInformation]);
 
   //PATCH General Profile Info Upate
   const handleProfileUpdate = async (update) => {
-    try {
-      const responseData = await sendRequest(
-        `http://localhost:5000/api/user/update-profile/${userId}`,
-        "PATCH",
-        JSON.stringify({
-          name: update.name ? update.name : "",
-          nationality: update.nationality ? update.nationality : "",
-          location: update.location ? update.location : "",
-          email: update.email ? update.email : "",
-          skills: update.skills ? update.skills : "",
-          interest: update.interest ? update.interest : "",
-          about: update.about ? update.about : "",
-        }),
-        { "Content-Type": "application/json" }
-      );
-      console.log("ServerResponse:", responseData);
-
-      authCtx.updateUser(responseData.user);
-    } catch (e) {}
+    updateUserProfile(userId, update);
   };
 
   // PATCH Update Resume
   const handleResumeUpdate = async (updatedResumeItem) => {
-    try {
-      await sendRequest(
-        //We expect dynamic userId (useParams)
-        `http://localhost:5000/api/user/update-profile/${userId}`,
-        "PATCH",
-        //property to be updated "resume" on user object
-        JSON.stringify({ resume: updatedResumeItem }),
-        { "Content-type": "application/json" }
-      );
-      //reflect changes on client side
-      authCtx.updateUser((prev) => {
-        const updatedResume = prev.resume.map((resumeItem) => {
-          return resumeItem._id === updatedResumeItem._id
-            ? updatedResumeItem
-            : resumeItem;
-        });
-        //return copy of prev state and the new resume added
-        return { ...prev, resume: updatedResume };
-      });
-    } catch (err) {}
-    console.log("updated resume", updatedResumeItem);
+    updateUserResume(userId, updatedResumeItem);
   };
 
   //PATCH Delete Resume
   const handleResumeDelete = async (resumeItem) => {
-    try {
-      await sendRequest(
-        //We expect a dynamic Id to update the profile and Patch to update the user object
-        `http://localhost:5000/api/user/update-profile/${userId}`,
-        "PATCH",
-        //we send deleteResume key in the req.body (req.body.deleteResume)
-        //see => /backend/controllers/users/update-user-profile.js
-        JSON.stringify({ deleteResume: resumeItem }),
-        { "Content-Type": "application/json" }
-      );
-      //update the currentUser client side
-      authCtx.updateUser((prev) => {
-        const updatedResume = prev.resume.filter(
-          (r) => r._id !== resumeItem._id
-        );
-        //return the latest copy of the user resumes with the deleted removed.
-        return { ...prev, resume: updatedResume };
-      });
-    } catch (err) {}
+    deleteUserResume(userId, resumeItem);
   };
 
   //PATCH update creator information
   const handleCreatorUpdate = async (creatorItem) => {
-    try {
-      await sendRequest(
-        `http://localhost:5000/api/user/update-profile/${userId}`,
-        "PATCH",
-        JSON.stringify(creatorItem),
-        { "Content-Type": "application/json" }
-      );
-
-      authCtx.updateUser((prev) => {
-        return { ...prev, creator: creatorItem };
-      });
-    } catch (err) {}
+    updateCreator(userId, creatorItem);
   };
 
   //PATCH remove Creator Data
   const handleCreatorDelete = async (creatorItem) => {
-    try {
-      await sendRequest(
-        `http://localhost:5000/api/user/${userId}`,
-        "PATCH",
-        JSON.stringify({ deleteCreator: creatorItem._id }),
-        { "Content-Type": "application/json" }
-      );
-      authCtx.updateUser((prev) => {
-        return { ...prev, creator: null };
-      });
-    } catch (e) {}
+    deleteCreator(userId, creatorItem);
   };
 
-  //this will be an API call
+  //PATCH toggle between teacher or employer
   const handleRoleChange = async () => {
-    try {
-      const response = await sendRequest(
-        `http://localhost:5000/api/user/update-profile/${userId}`,
-        "PATCH",
-        JSON.stringify({ userType: isTeacher ? "employer" : "teacher" }),
-        { "Content-Type": "application/json" }
-      );
-      authCtx.updateUser(response.user);
-    } catch (e) {}
+    updateRoleChange(userId);
   };
 
+  //PATCH isHidden property for search results.
   const handleUserVisibility = async () => {
-    const isHidden = authCtx.user.isHidden;
-    try {
-      const response = await sendRequest(
-        `http://localhost:5000/api/user/update-profile/${userId}`,
-        "PATCH",
-        JSON.stringify({ isHidden: !isHidden }),
-        { "Content-Type": "application/json" }
-      );
-
-      authCtx.updateUser(response.user);
-    } catch (e) {}
+    updateUserVisibility(userId);
   };
 
   //Add resume items
@@ -266,8 +190,8 @@ const TeacherDashboard = () => {
           </>
         );
       case "settings":
-        const isTeacher = authCtx.user.userType === "teacher";
-        const isHidden = authCtx.user.isHidden;
+        const isTeacher = authCtx.user?.userType === "teacher";
+        const isHidden = authCtx.user?.isHidden;
         return (
           <TeacherSettings
             isSchool={isTeacher}
@@ -287,10 +211,27 @@ const TeacherDashboard = () => {
     }
   };
 
+  const isLoading =
+    userProfileLoading ||
+    userResumeUpdating ||
+    updatingCreator ||
+    settingToggleIsLoading;
+  const error =
+    getUserProfileError ||
+    userResumeError ||
+    creatorUpdatingError ||
+    settingToggleError;
+  const combinedClearError = () => {
+    clearUserProfileError();
+    clearResumeError();
+    clearCreatorError();
+    clearSettingToggleError();
+  };
+
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
-      <ErrorModal error={error} onClear={clearError} />
+      <ErrorModal error={error} onClear={combinedClearError} />
       <Grid container spacing={1} sx={{ maxWidth: "90%", margin: "0 auto" }}>
         <Grid item xs={12} md={2}>
           <Sidebar onMenuItemClick={handleMenuItemClick} />
@@ -338,7 +279,7 @@ const TeacherDashboard = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
-          {isTeacher ? (
+          {authCtx.user.userType === "teacher" ? (
             <FeaturedCard />
           ) : (
             <TeacherItem

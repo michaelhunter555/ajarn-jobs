@@ -1,7 +1,11 @@
 import React from "react";
 
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import ArticleIcon from "@mui/icons-material/Article";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ListIcon from "@mui/icons-material/List";
+import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import SettingsIcon from "@mui/icons-material/Settings";
+import WorkIcon from "@mui/icons-material/Work";
 import {
   Divider,
   List,
@@ -33,27 +37,27 @@ const menuItems = [
   },
   {
     text: "Job Listings",
-    icon: <ListIcon />,
+    icon: <WorkIcon />,
     componentName: "job-listings",
   },
   {
     text: "Applications",
-    icon: <DashboardIcon />,
+    icon: <HistoryEduIcon />,
     componentName: "applications",
   },
   {
     text: "My Resume",
-    icon: <DashboardIcon />,
+    icon: <ArticleIcon />,
     componentName: "resume",
   },
   {
     text: "Settings",
-    icon: <DashboardIcon />,
+    icon: <SettingsIcon />,
     componentName: "settings",
   },
   {
     text: "Creator Profile",
-    icon: <DashboardIcon />,
+    icon: <AddBusinessIcon />,
     componentName: "creator",
   },
   {

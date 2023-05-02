@@ -177,7 +177,7 @@ const TeacherItem = (props) => {
                 variant="subtitle2"
                 color="text.secondary"
               >
-                {props.about.length > 50
+                {props.about?.length > 50
                   ? props.about.substring(0, 50) + "..."
                   : props.about}
               </Typography>

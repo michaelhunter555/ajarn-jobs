@@ -103,7 +103,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
           fullWidth
           name="company"
           label="Company Name"
-          defaultValue={isNew ? "" : creatorItem.company}
+          defaultValue={formState.inputs.company.value}
           onChange={(event) =>
             inputHandler(
               "company",
@@ -123,7 +123,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
               fullWidth
               name="logoUrl"
               label="Company Logo"
-              defaultValue={isNew ? "" : creatorItem.logoUrl}
+              defaultValue={formState.inputs.logoUrl.value}
               onChange={(event) =>
                 inputHandler(
                   "logoUrl",
@@ -143,7 +143,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
               name="companySize"
               id="companySize"
               label="Company Size"
-              defaultValue={isNew ? "" : creatorItem.companySize}
+              defaultValue={formState.inputs.companySize.value}
               onChange={(event) =>
                 inputHandler(
                   "companySize",
@@ -159,7 +159,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
           <Select
             labelId="headquarters"
             id="headquarters"
-            defaultValue={isNew ? "" : creatorItem.headquarters}
+            defaultValue={formState.inputs.headquarters.value}
             label="headquarters"
             onChange={(event) =>
               inputHandler(
@@ -180,8 +180,9 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
         <TextField
           sx={{ margin: "0 0.5rem 0 0" }}
           name="established"
+          helperText="year of launch (i.e. 2004)"
           label="established"
-          defaultValue={isNew ? "" : creatorItem.established}
+          defaultValue={formState.inputs.established.value}
           onChange={(event) =>
             inputHandler(
               "established",
@@ -193,7 +194,8 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
         <TextField
           name="presence"
           label="Presence"
-          defaultValue={isNew ? "" : creatorItem.presence}
+          helperText="separate each location by comma"
+          defaultValue={formState.inputs.presence.value}
           onChange={(event) =>
             inputHandler(
               "presence",
