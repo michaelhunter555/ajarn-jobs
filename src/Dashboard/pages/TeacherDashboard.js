@@ -55,6 +55,7 @@ const TeacherDashboard = () => {
     clearError: clearCreatorError,
   } = useCreator();
   const {
+    //update user role and search result visibility
     updateRoleChange,
     updateUserVisibility,
     isLoading: settingToggleIsLoading,
