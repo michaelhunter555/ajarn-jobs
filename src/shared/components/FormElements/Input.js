@@ -1,6 +1,13 @@
 import React, { useEffect, useReducer } from "react";
 
-import { MenuItem, Select, TextField } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { validate } from "../../util/validators";
@@ -101,26 +108,41 @@ const Input = (props) => {
     ) : props.element === "textarea" ? (
       <TextField
         id={props.id}
+        multiline
         rows={props.rows || 3}
         onChange={changeHandler}
         onBlur={touchHandler}
         value={inputState.value}
       />
+    ) : props.element === "select" ? (
+      <Select
+        id={props.id}
+        onChange={changeHandler}
+        onBlur={touchHandler}
+        value={inputState.value}
+      >
+        {props.options &&
+          props.options.map((item, i) => (
+            <MenuItem key={i} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+      </Select>
     ) : (
-      props.element === "select" && (
-        <Select
-          id={props.id}
-          onChange={changeHandler}
-          onBlur={touchHandler}
-          value={inputState.value}
-        >
+      props.element === "checkbox" && (
+        <FormGroup row>
           {props.options &&
             props.options.map((item, i) => (
-              <MenuItem key={i} value={item}>
-                {item}
-              </MenuItem>
+              <FormControlLabel
+                key={i}
+                id={props.id}
+                value={item}
+                control={<Checkbox />}
+                label={item}
+                labelPlacement="top"
+              />
             ))}
-        </Select>
+        </FormGroup>
       )
     );
 

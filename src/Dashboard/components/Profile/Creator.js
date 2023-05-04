@@ -20,6 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import NewJob from "../../../jobs/pages/NewJob";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
 import { thaiCities } from "../../../shared/util/ThaiData";
@@ -125,11 +126,11 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
       case "applicants":
         return <>You have no applicant's yet!</>;
       case "jobs":
-        return "you have no jobs yet!";
+        return "No jobs yet!";
       case "credits":
         return <PurchaseCredits />;
       case "createJob":
-        return "job Form Here";
+        return <NewJob />;
       default:
         return "nothing here yet";
     }
@@ -345,7 +346,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
           </Grid>
           <Divider sx={{ width: "100%", marginBottom: "1rem" }} flexItem />
           <CreatorTabs onTabChange={handleMenuItemClick} />
-          <Box sx={{ height: 400 }}>{renderComponent()}</Box>
+          <Box sx={{ height: "auto" }}>{renderComponent()}</Box>
         </Card>
       )}
     </>

@@ -1,32 +1,30 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
-import { styled } from '@mui/material/styles';
+import { Grid } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 //import { useNavigate } from 'react-router-dom';
-import Button from '../../shared/components/FormElements/Button';
-import Input from '../../shared/components/FormElements/Input';
-import { useForm } from '../../shared/hooks/form-hook';
+import Button from "../../shared/components/FormElements/Button";
+import Input from "../../shared/components/FormElements/Input";
+import { useForm } from "../../shared/hooks/form-hook";
 //import { AuthContext } from '../../shared/context/auth-context';
 import {
+  coreJobRequirements,
   fullTimeSalaries,
   partTimeSalaries,
   thaiCities,
-} from '../../shared/util/ThaiData';
+} from "../../shared/util/ThaiData";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
-} from '../../shared/util/validators';
+} from "../../shared/util/validators";
 
 const StyledForm = styled("form")({
   listStyle: "none",
-  margin: "6rem auto",
-  padding: "1rem",
+  margin: "1rem auto",
+  padding: "0.5rem",
   width: "90%",
   maxWidth: "40rem",
-  boxShadow: " 0 2px 8px rgba(0, 0, 0, 0.26)",
   borderRadius: "6px",
   background: "white",
 });
@@ -90,71 +88,89 @@ const NewJob = () => {
 
   return (
     <StyledForm onSubmit={jobSubmitHandler}>
-      <Input
-        id="title"
-        element="input"
-        type="text"
-        label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="please enter a valid title"
-        onInput={inputHandler}
-      />
-      <input
-        id="hours-fullTime"
-        type="radio"
-        name="jobType"
-        value="Full-time"
-        checked={isFullTime}
-        onChange={jobIsFullTimeHandler}
-      />{" "}
-      Full-Time
-      <input
-        id="hours-partTime"
-        type="radio"
-        name="jobType"
-        value="Part-time"
-        checked={!isFullTime}
-        onChange={jobIsPartTimeHandler}
-      />{" "}
-      Part-Time
-      <Input
-        id="salary"
-        element="select"
-        type="number"
-        label="Salary"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="please select a valid salary"
-        onInput={inputHandler}
-        options={isFullTime ? fullTimeSalaries : partTimeSalaries}
-      />
-      <Input
-        id="location"
-        element="select"
-        label="Location"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="please enter a valid location"
-        onInput={inputHandler}
-        options={thaiCities}
-        selectType="location"
-      />
-      <Input
-        id="requirements"
-        element="input"
-        type="text"
-        label="Requirements"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="please enter a valid requirements"
-        onInput={inputHandler}
-      />
-      <Input
-        id="description"
-        element="textarea"
-        label="Description"
-        validators={[VALIDATOR_MINLENGTH(7)]}
-        errorText="please enter a valid description of min 7 characters"
-        onInput={inputHandler}
-        type="text"
-      />
+      <Grid container direction="row">
+        <Grid item xs={12}>
+          <input
+            id="hours-fullTime"
+            type="radio"
+            name="jobType"
+            value="Full-time"
+            checked={isFullTime}
+            onChange={jobIsFullTimeHandler}
+          />{" "}
+          Full-Time
+          <input
+            id="hours-partTime"
+            type="radio"
+            name="jobType"
+            value="Part-time"
+            checked={!isFullTime}
+            onChange={jobIsPartTimeHandler}
+          />{" "}
+          Part-Time
+        </Grid>
+        <Grid item xs={12}>
+          <Input
+            id="title"
+            element="input"
+            type="text"
+            label="Title"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="please enter a valid title"
+            onInput={inputHandler}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={5}>
+          <Input
+            id="salary"
+            element="select"
+            type="number"
+            label="Salary"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="please select a valid salary"
+            onInput={inputHandler}
+            options={isFullTime ? fullTimeSalaries : partTimeSalaries}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={7}>
+          <Input
+            id="location"
+            element="select"
+            label="Location"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="please enter a valid location"
+            onInput={inputHandler}
+            options={thaiCities}
+            selectType="location"
+          />
+        </Grid>
+        <Grid item>
+          <Input
+            id="requirements"
+            element="checkbox"
+            type="checkbox"
+            label="Requirements"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="please enter a valid requirements"
+            onInput={inputHandler}
+            options={coreJobRequirements}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Input
+            sx={{ width: "100%" }}
+            id="description"
+            rows={4}
+            element="textarea"
+            label="Description"
+            validators={[VALIDATOR_MINLENGTH(7)]}
+            errorText="please enter a valid description of min 7 characters"
+            onInput={inputHandler}
+            type="text"
+          />
+        </Grid>
+      </Grid>
       <Button type="submit" disabled={!formState.isValid}>
         Add Job
       </Button>
