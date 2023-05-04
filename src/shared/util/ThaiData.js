@@ -71,6 +71,7 @@ export const coreJobRequirements = [
   "CELTA",
   "DELTA",
   "MBA",
+  "TEFL",
 ];
 
 export const nationalities = [
@@ -276,7 +277,8 @@ export const nationalities = [
   "Venezuelan",
   "Vietnamese",
   "Vincentian",
-  "Wallisian, Futunan",
+  "Wallisian",
+  "Futunan",
   "Yemeni",
   "Zambian",
   "Zimbabwean",

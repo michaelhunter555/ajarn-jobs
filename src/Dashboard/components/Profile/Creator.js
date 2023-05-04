@@ -1,9 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import BusinessIcon from "@mui/icons-material/Business";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import BusinessIcon from '@mui/icons-material/Business';
+import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import {
   Box,
   Button,
@@ -14,18 +19,22 @@ import {
   InputLabel,
   Link,
   MenuItem,
+  Paper,
   Select,
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import NewJob from "../../../jobs/pages/NewJob";
-import { AuthContext } from "../../../shared/context/auth-context";
-import { useForm } from "../../../shared/hooks/form-hook";
-import { thaiCities } from "../../../shared/util/ThaiData";
-import CreatorTabs from "./CreatorTabs";
-import PurchaseCredits from "./PurchaseCredits";
+import NewJob from '../../../jobs/pages/NewJob';
+import { AuthContext } from '../../../shared/context/auth-context';
+import { useForm } from '../../../shared/hooks/form-hook';
+import { thaiCities } from '../../../shared/util/ThaiData';
+import CreatorTabs from './CreatorTabs';
+import PurchaseCredits from './PurchaseCredits';
+
+const date = new Date();
+const today = date.toISOString().split("T")[0];
 
 const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const auth = useContext(AuthContext);
@@ -55,6 +64,10 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
       },
       presence: {
         value: creatorItem.presence || "",
+        isValid: true,
+      },
+      about: {
+        value: creatorItem.about || "",
         isValid: true,
       },
     },
@@ -90,6 +103,10 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
             value: creatorItem.presence || "",
             isValid: true,
           },
+          about: {
+            value: creatorItem.about || "",
+            isValid: true,
+          },
         },
         true
       );
@@ -112,6 +129,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
       headquarters: formState.inputs.headquarters.value,
       established: formState.inputs.established.value,
       presence: formState.inputs.presence.value,
+      about: formState.inputs.about.value,
     };
     onUpdate(creatorItem);
     setIsEditing(false);
@@ -247,6 +265,23 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                 )
               }
             />
+            <Grid item xs={12} sx={{ margin: "0 0 0.5rem 0" }}>
+              <TextField
+                multiline
+                rows={4}
+                fullWidth
+                name="about"
+                label={`About ${auth.user?.creator?.company}`}
+                defaultValue={formState.inputs.about.value}
+                onChange={(event) =>
+                  inputHandler(
+                    "about",
+                    event.target.value,
+                    event.target.value !== ""
+                  )
+                }
+              />
+            </Grid>
             <Stack direction="row" spacing={2}>
               <Button variant="contained" type="submit">
                 Save
@@ -341,7 +376,48 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
               }}
             >
               <Divider orientation="vertical" flexItem />
-              <h1>Applicants row</h1>
+              <Stack sx={{ margin: "0 auto" }}>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Your account as of {today}{" "}
+                </Typography>
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={4}
+                >
+                  <Paper elevation={0}>
+                    <Typography variant="body1" color="text.secondary">
+                      Applicants
+                    </Typography>
+                    <Typography variant="h4" color="text.secondary">
+                      {(auth.user?.jobs?.applicants?.length || 0) < 1 && 0}
+                    </Typography>
+                  </Paper>
+                  <Paper elevation={0}>
+                    <Typography variant="body1" color="text.secondary">
+                      Listings
+                    </Typography>
+                    <Typography variant="h4" color="text.secondary">
+                      {(auth.user?.jobs?.length || 0) < 1 && 0}
+                    </Typography>
+                  </Paper>
+                  <Paper elevation={0}>
+                    <Typography variant="body1" color="text.secondary">
+                      Find Teachers
+                    </Typography>
+
+                    <Button
+                      sx={{ fontSize: 9 }}
+                      startIcon={<ElectricBoltIcon />}
+                      color="success"
+                      variant="outlined"
+                    >
+                      24hr Buffet!
+                    </Button>
+                  </Paper>
+                </Stack>
+              </Stack>
             </Grid>
           </Grid>
           <Divider sx={{ width: "100%", marginBottom: "1rem" }} flexItem />

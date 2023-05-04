@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Grid } from "@mui/material";
+import { FormLabel, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 //import { useNavigate } from 'react-router-dom';
@@ -90,6 +90,7 @@ const NewJob = () => {
     <StyledForm onSubmit={jobSubmitHandler}>
       <Grid container direction="row">
         <Grid item xs={12}>
+          <FormLabel>Hours</FormLabel>
           <input
             id="hours-fullTime"
             type="radio"
@@ -152,7 +153,7 @@ const NewJob = () => {
             type="checkbox"
             label="Requirements"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="please enter a valid requirements"
+            errorText="please enter a valid requirement"
             onInput={inputHandler}
             options={coreJobRequirements}
           />

@@ -6,25 +6,6 @@ export const useHttpClient = () => {
   //loading state
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchWithTimeout = async (url, options, timeout = 10000) => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    const fetchPromise = fetch(url, { ...options, signal });
-
-    const timeoutPromise = new Promise((_, reject) => {
-      const timer = setTimeout(() => {
-        clearTimeout(timer);
-        controller.abort();
-        reject(new Error("Request Timeout"));
-      }, timeout);
-    });
-    try {
-      const response = await Promise.race([fetchPromise, timeoutPromise]);
-      return response;
-    } catch (err) {
-      throw err;
-    }
-  };
   //store data across re-render cycles
   const activeHttpRequest = useRef([]);
 
@@ -39,7 +20,7 @@ export const useHttpClient = () => {
       activeHttpRequest.current.push(httpAbortController);
 
       //fetch and parameters depending on GET,POST,PATCH, DELETE
-      const response = await fetchWithTimeout(url, {
+      const response = await fetch(url, {
         method,
         body,
         headers,

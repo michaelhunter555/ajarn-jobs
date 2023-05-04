@@ -46,6 +46,7 @@ const LoginFormControl = styled("div")(({ theme }) => ({
 const inputReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE":
+      console.log("state change:", action.val);
       return {
         ...state,
         value: action.val,
@@ -80,6 +81,19 @@ const Input = (props) => {
   }, [id, value, isValid, onInput]);
 
   const changeHandler = (event) => {
+    if (props.element === "checkbox") {
+      let newValues = [...inputState.value];
+      if (event.target.checked) {
+        newValues.push(event.target.value);
+      } else {
+        newValues = newValues.filter((val) => val !== event.target.value);
+      }
+      dispatch({
+        type: "CHANGE",
+        val: newValues.join(", "),
+        validators: props.validators,
+      });
+    }
     dispatch({
       type: "CHANGE",
       val: event.target.value,
@@ -130,7 +144,7 @@ const Input = (props) => {
       </Select>
     ) : (
       props.element === "checkbox" && (
-        <FormGroup row>
+        <FormGroup row onChange={changeHandler} onBlur={touchHandler}>
           {props.options &&
             props.options.map((item, i) => (
               <FormControlLabel
