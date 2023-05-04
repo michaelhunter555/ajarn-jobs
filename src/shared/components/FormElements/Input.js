@@ -1,13 +1,15 @@
 import React, { useEffect, useReducer } from "react";
 
+import { MenuItem, Select, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { validate } from "../../util/validators";
 
-const FormControl = styled("div")(({ theme }) => ({
-  margin: "1rem 0",
+const LoginFormControl = styled("div")(({ theme }) => ({
+  margin: "1rem 0.5rem",
   "& label, & input, & textarea": {
-    display: "block",
+    display: "flex",
+    maxWidth: "100%",
   },
   "& label": {
     fontWeight: "bold",
@@ -16,13 +18,13 @@ const FormControl = styled("div")(({ theme }) => ({
   "& input, & textarea": {
     width: "100%",
     font: "inherit",
-    border: "1px solid #ccc",
-    background: "#f8f8f8",
-    padding: "0.15rem 0.25rem",
+
+    background: "#fff",
+    margin: "0 auto",
   },
   "& input:focus, & textarea:focus": {
     outline: "none",
-    background: "#ebebeb",
+    background: "#f9f9f9",
     borderColor: "#510077",
   },
   "&.form-control--invalid label, &.form-control--invalid p": {
@@ -86,16 +88,18 @@ const Input = (props) => {
 
   const element =
     props.element === "input" ? (
-      <input
+      <TextField
         id={props.id}
         type={props.type}
+        helperText={props.helperText}
+        label={props.fieldLabel}
         placeholder={props.placeholder}
         onChange={changeHandler}
         onBlur={touchHandler}
         value={inputState.value}
       />
     ) : props.element === "textarea" ? (
-      <textarea
+      <TextField
         id={props.id}
         rows={props.rows || 3}
         onChange={changeHandler}
@@ -104,7 +108,7 @@ const Input = (props) => {
       />
     ) : (
       props.element === "select" && (
-        <select
+        <Select
           id={props.id}
           onChange={changeHandler}
           onBlur={touchHandler}
@@ -112,16 +116,21 @@ const Input = (props) => {
         >
           {props.options &&
             props.options.map((item, i) => (
-              <option key={i} value={item}>
+              <MenuItem key={i} value={item}>
                 {item}
-              </option>
+              </MenuItem>
             ))}
-        </select>
+        </Select>
       )
     );
 
   return (
-    <FormControl
+    <LoginFormControl
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
       className={`form-control ${
         !inputState.isValid && inputState.isTouched && "form-control--invalid"
       }`}
@@ -129,7 +138,7 @@ const Input = (props) => {
       <label htmlFor={props.id}>{props.label}</label>
       {element}
       {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
-    </FormControl>
+    </LoginFormControl>
   );
 };
 

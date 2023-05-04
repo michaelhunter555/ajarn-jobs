@@ -2,14 +2,14 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
+import { Button as AuthButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledButton = styled("button")(({ theme }) => ({
+const StyledButton = styled(AuthButton)(({ theme }) => ({
   font: "inherit",
   padding: "0.5rem 1.5rem",
-  border: "1px solid #a7a7a7",
   borderRadius: "4px",
-  backgroundColor: "#36c7cc",
+  backgroundColor: theme.palette.primary.main,
   color: "white",
   cursor: "pointer",
   marginRight: "0rem",
@@ -19,7 +19,7 @@ const StyledButton = styled("button")(({ theme }) => ({
     outline: "none",
   },
   "&:hover, &:active": {
-    background: "#167f92",
+    background: theme.palette.primary.dark,
     borderColor: "#43aaff",
   },
   "&.button--inverse": {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 
 import {
   Button,
@@ -12,10 +12,12 @@ import {
   TextField,
 } from "@mui/material";
 
+import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
 import { thaiCities } from "../../../shared/util/ThaiData";
 
-const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
+const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete, onCancel }) => {
+  const auth = useContext(AuthContext);
   const [formState, inputHandler] = useForm(
     {
       company: {
@@ -49,6 +51,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
     },
     true
   );
+  const [cancelForm, setCancelForm] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -64,6 +67,15 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
     };
     onUpdate(updatedResumeItem);
   };
+
+  const resumeEditHandler = (cancel) => {
+    setCancelForm((prev) => !prev);
+    if (cancel) {
+      onCancel(resumeItem);
+    }
+  };
+
+  const hasResumeToDelete = auth.user?.resume.length > 1;
 
   return (
     <Card sx={{ padding: "1rem 1rem" }}>
@@ -180,13 +192,19 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete }) => {
           <Button variant="contained" type="submit">
             Save
           </Button>
-          <Button
-            onClick={() => onDelete(resumeItem)}
-            variant="outlined"
-            color="warning"
-          >
-            Delete
+          <Button variant="outlined" onClick={() => resumeEditHandler(true)}>
+            Cancel
           </Button>
+
+          {hasResumeToDelete && (
+            <Button
+              onClick={() => onDelete(resumeItem)}
+              variant="outlined"
+              color="warning"
+            >
+              Delete
+            </Button>
+          )}
         </Stack>
       </form>
     </Card>

@@ -59,11 +59,6 @@ const Teachers = () => {
 
   return (
     <>
-      {isLoading && (
-        <Box>
-          <LoadingSpinner asOverlay />
-        </Box>
-      )}
       <ErrorModal onClear={clearError} error={error} />
       <ThemeProvider theme={customThemeForTeachers}>
         <Grid container spacing={3} sx={{ width: "90%" }}>
@@ -72,7 +67,12 @@ const Teachers = () => {
           </Grid>
           <Grid item xs={12} xl={9} sx={{ margin: "1rem auto" }}>
             <Grid container spacing={2}>
-              <TeacherList teachers={filteredTeachers} />
+              {isLoading && (
+                <Box>
+                  <LoadingSpinner asOverlay />
+                </Box>
+              )}
+              {!isLoading && <TeacherList teachers={filteredTeachers} />}
             </Grid>
           </Grid>
         </Grid>

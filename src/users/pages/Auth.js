@@ -2,7 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import { Box, Card } from "@mui/material";
+import {
+  Box,
+  Card,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import Button from "../../shared/components/FormElements/Button";
@@ -67,6 +75,7 @@ const Auth = () => {
         {
           ...formState.inputs,
           name: { value: "", isValid: false },
+          userType: { value: "teacher", isValid: true },
         },
         false
       );
@@ -107,6 +116,7 @@ const Auth = () => {
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
+            userType: formState.inputs.userType.value,
           }),
           { "Content-type": "application/json" }
         );
@@ -119,10 +129,14 @@ const Auth = () => {
     }
   };
 
-  console.log("logged in user", auth.user);
+  const userTypeHandler = (event) => {
+    inputHandler("userType", event.target.value, true);
+  };
+
   useEffect(() => {
     console.log("Auth is set:", auth.user);
-  }, [auth.user]);
+    console.log("Form State:", formState);
+  }, [auth.user, formState]);
 
   return (
     <>
@@ -145,6 +159,8 @@ const Auth = () => {
             element="input"
             type="email"
             id="email"
+            helperText="Your email address"
+            fieldLabel="e-mail"
             label="Your e-mail"
             validators={[VALIDATOR_EMAIL()]}
             errorText="please enter a name"
@@ -155,11 +171,36 @@ const Auth = () => {
             element="input"
             type="password"
             id="password"
+            helperText="Enter Password"
+            fieldLabel="Password"
             label="Password"
             validators={[VALIDATOR_REQUIRE()]}
             errorText="please enter your password"
             onInput={inputHandler}
           />
+          {!isLoginMode && (
+            <FormControl component="fieldset">
+              <FormLabel component="legend">User Type</FormLabel>
+              <RadioGroup
+                row
+                value={formState.inputs.userType.value}
+                onChange={userTypeHandler}
+              >
+                <FormControlLabel
+                  id="teacher"
+                  value="teacher"
+                  control={<Radio />}
+                  label="teacher"
+                />
+                <FormControlLabel
+                  id="employer"
+                  value="employer"
+                  control={<Radio />}
+                  label="employer"
+                />
+              </RadioGroup>
+            </FormControl>
+          )}
           <StyledBoxForButtons>
             <Button type="submit" disabled={!formState.isValid}>
               {isLoginMode ? "Login" : "Sign-up"}

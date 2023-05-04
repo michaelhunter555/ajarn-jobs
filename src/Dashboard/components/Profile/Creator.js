@@ -1,6 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 
+import BusinessIcon from "@mui/icons-material/Business";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
+  Box,
   Button,
   Card,
   Divider,
@@ -18,10 +23,13 @@ import {
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
 import { thaiCities } from "../../../shared/util/ThaiData";
+import CreatorTabs from "./CreatorTabs";
+import PurchaseCredits from "./PurchaseCredits";
 
 const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const auth = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(true);
+  const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
   const [formState, inputHandler, setFormData] = useForm(
     {
       company: {
@@ -106,6 +114,25 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
     };
     onUpdate(creatorItem);
     setIsEditing(false);
+  };
+
+  const handleMenuItemClick = (componentName) => {
+    setCreatorProfileTab(componentName);
+  };
+
+  const renderComponent = () => {
+    switch (creatorProfileTab) {
+      case "applicants":
+        return <>You have no applicant's yet!</>;
+      case "jobs":
+        return "you have no jobs yet!";
+      case "credits":
+        return <PurchaseCredits />;
+      case "createJob":
+        return "job Form Here";
+      default:
+        return "nothing here yet";
+    }
   };
 
   return (
@@ -249,15 +276,56 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
               xs={12}
               sm={6}
               md={5}
-              sx={{ display: "flex", flexDirection: "column" }}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "1rem",
+                alignItems: "start",
+                justifyContent: "flext-start",
+              }}
             >
-              <Typography component="h1" variant="h5" color="text.secondary">
-                {auth.user?.creator?.company}
-              </Typography>
-              <Grid>{auth.user?.creator?.companySize}</Grid>
-              {auth.user?.creator?.headquarters}
-              {auth.user?.creator?.established}
-              {auth.user?.creator?.presensence}
+              <Stack direction="row" spacing={2}>
+                <Typography component="h1" variant="h5" color="text.secondary">
+                  {auth.user?.creator?.company}
+                </Typography>
+                <Button
+                  sx={{ fontSize: 10 }}
+                  onClick={() => setIsEditing(!isEditing)}
+                >
+                  Edit Info
+                </Button>
+              </Stack>
+
+              <Grid>
+                <Typography variant="subtitle2" color="text.secondary">
+                  <BusinessIcon /> Company Size:{" "}
+                  {auth.user?.creator?.companySize}
+                </Typography>
+              </Grid>
+              <Grid>
+                <Typography variant="subtitle2" color="text.secondary">
+                  <LocationOnIcon /> Location:{" "}
+                  {auth.user?.creator?.headquarters}
+                </Typography>
+              </Grid>
+              <Grid>
+                <Typography variant="subtitle2" color="text.secondary">
+                  <VerifiedUserIcon /> Established:{" "}
+                  {auth.user?.creator?.established}
+                </Typography>
+              </Grid>
+              <Stack direction="row" alignItems="start" spacing={2}>
+                <Grid>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    <MonetizationOnIcon /> Credit Balance: {auth.user?.credits}
+                  </Typography>
+                </Grid>
+                <Grid>
+                  <Link component="button" variant="subtitle2">
+                    add credits?
+                  </Link>
+                </Grid>
+              </Stack>
             </Grid>
 
             <Grid
@@ -269,19 +337,15 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                 display: "flex",
                 flexDirection: "row",
                 gap: "5px",
-                alignItems: "center",
               }}
             >
-              <Typography component="h1" variant="h5" color="text.secondary">
-                Credit Balance: {auth.user?.credits}
-              </Typography>
               <Divider orientation="vertical" flexItem />
-              <Link component="button" variant="subtitle2">
-                add credits?
-              </Link>
+              <h1>Applicants row</h1>
             </Grid>
           </Grid>
-          <Button onClick={() => setIsEditing(!isEditing)}>Edit Info</Button>
+          <Divider sx={{ width: "100%", marginBottom: "1rem" }} flexItem />
+          <CreatorTabs onTabChange={handleMenuItemClick} />
+          <Box sx={{ height: 400 }}>{renderComponent()}</Box>
         </Card>
       )}
     </>

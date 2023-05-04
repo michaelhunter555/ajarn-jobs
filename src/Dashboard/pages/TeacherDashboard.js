@@ -78,37 +78,37 @@ const TeacherDashboard = () => {
   }, [userId, getUserInformation]);
 
   //PATCH General Profile Info Upate
-  const handleProfileUpdate = async (update) => {
+  const handleProfileUpdate = (update) => {
     updateUserProfile(userId, update);
   };
 
   // PATCH Update Resume
-  const handleResumeUpdate = async (updatedResumeItem) => {
+  const handleResumeUpdate = (updatedResumeItem) => {
     updateUserResume(userId, updatedResumeItem);
   };
 
   //PATCH Delete Resume
-  const handleResumeDelete = async (resumeItem) => {
+  const handleResumeDelete = (resumeItem) => {
     deleteUserResume(userId, resumeItem);
   };
 
   //PATCH update creator information
-  const handleCreatorUpdate = async (creatorItem) => {
+  const handleCreatorUpdate = (creatorItem) => {
     updateCreator(userId, creatorItem);
   };
 
   //PATCH remove Creator Data
-  const handleCreatorDelete = async (creatorItem) => {
+  const handleCreatorDelete = (creatorItem) => {
     deleteCreator(userId, creatorItem);
   };
 
   //PATCH toggle between teacher or employer
-  const handleRoleChange = async () => {
+  const handleRoleChange = () => {
     updateRoleChange(userId);
   };
 
   //PATCH isHidden property for search results.
-  const handleUserVisibility = async () => {
+  const handleUserVisibility = () => {
     updateUserVisibility(userId);
   };
 
@@ -122,6 +122,17 @@ const TeacherDashboard = () => {
         ...authCtx.user.resume,
         { id: "new-" + new Date().getTime(), isNew: true },
       ],
+    });
+  };
+
+  const clearResumeItem = (cancelResumeItem) => {
+    authCtx.updateUser({
+      //copy of current user object
+      ...authCtx.user,
+      //we return resume key with array containing a copy of the user's current resume
+      resume: authCtx.user.resume.filter(
+        (resItem) => resItem._id !== cancelResumeItem._id
+      ),
     });
   };
 
@@ -171,6 +182,9 @@ const TeacherDashboard = () => {
                 resumeItem={resumeItem}
                 onUpdate={handleResumeUpdate}
                 onDelete={() => handleResumeDelete(resumeItem)}
+                onCancel={(canceledResumeItem) =>
+                  clearResumeItem(canceledResumeItem)
+                }
               />
             ))}
             <Button onClick={addNewResumeItem}>Add New Resume</Button>
@@ -231,7 +245,6 @@ const TeacherDashboard = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
       <ErrorModal error={error} onClear={combinedClearError} />
       <Grid container spacing={1} sx={{ maxWidth: "90%", margin: "0 auto" }}>
         <Grid item xs={12} md={2}>
@@ -276,7 +289,8 @@ const TeacherDashboard = () => {
               flexDirection: "column",
             }}
           >
-            {renderComponent()}
+            {isLoading && <LoadingSpinner asOverlay />}
+            {!isLoading && renderComponent()}
           </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
