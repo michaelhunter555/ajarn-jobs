@@ -8,6 +8,7 @@ export const useUser = () => {
   const { updateUser } = auth;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+  //GET logged in user information
   const getUserInformation = useCallback(
     async (userId) => {
       try {
@@ -20,6 +21,7 @@ export const useUser = () => {
     [updateUser, sendRequest]
   );
 
+  //PATCH update userprofile
   const updateUserProfile = useCallback(
     async (userId, update) => {
       try {
@@ -35,9 +37,30 @@ export const useUser = () => {
     [sendRequest, updateUser]
   );
 
+  //PATCH
+  const addCredits = useCallback(
+    async (userId, credits) => {
+      try {
+        const response = await sendRequest(
+          `http://localhost:5000/api/user/${userId}/add-credits`,
+          "PATCH",
+          JSON.stringify({ credits: credits }),
+          { "Content-Type": "application/json" }
+        );
+        const updatedUser = {
+          ...auth.user,
+          credits: response.credits,
+        };
+        updateUser(updatedUser);
+      } catch (err) {}
+    },
+    [sendRequest, updateUser, auth.user]
+  );
+
   return {
     getUserInformation,
     updateUserProfile,
+    addCredits,
     isLoading,
     error,
     clearError,

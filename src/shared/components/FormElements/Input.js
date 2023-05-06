@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 
 import {
   Checkbox,
@@ -69,6 +69,7 @@ const Input = (props) => {
     isTouched: false,
     isValid: props.initialValid || false,
   });
+  const [checkedCount, setCheckedCount] = useState(0);
 
   const { value, isValid } = inputState;
   const { id, onInput } = props;
@@ -85,8 +86,10 @@ const Input = (props) => {
       let newValues = [...inputState.value];
       if (event.target.checked) {
         newValues.push(event.target.value);
+        setCheckedCount((prev) => prev + 1);
       } else {
         newValues = newValues.filter((val) => val !== event.target.value);
+        setCheckedCount((prev) => prev - 1);
       }
       dispatch({
         type: "CHANGE",
@@ -151,7 +154,14 @@ const Input = (props) => {
                 key={i}
                 id={props.id}
                 value={item}
-                control={<Checkbox />}
+                control={
+                  <Checkbox
+                    disabled={
+                      checkedCount === props.max &&
+                      !inputState.value.split(", ").includes(item)
+                    }
+                  />
+                }
                 label={item}
                 labelPlacement="top"
               />

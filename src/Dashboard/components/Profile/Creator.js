@@ -1,14 +1,10 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import BusinessIcon from '@mui/icons-material/Business';
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import BusinessIcon from "@mui/icons-material/Business";
+import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
   Box,
   Button,
@@ -24,21 +20,25 @@ import {
   Stack,
   TextField,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import NewJob from '../../../jobs/pages/NewJob';
-import { AuthContext } from '../../../shared/context/auth-context';
-import { useForm } from '../../../shared/hooks/form-hook';
-import { thaiCities } from '../../../shared/util/ThaiData';
-import CreatorTabs from './CreatorTabs';
-import PurchaseCredits from './PurchaseCredits';
+import NewJob from "../../../jobs/pages/NewJob";
+import { AuthContext } from "../../../shared/context/auth-context";
+import { useForm } from "../../../shared/hooks/form-hook";
+import { thaiCities } from "../../../shared/util/ThaiData";
+import CreatorJobsTable from "./CreatorJobsTable";
+import CreatorTabs from "./CreatorTabs";
+import PurchaseCredits from "./PurchaseCredits";
 
 const date = new Date();
 const today = date.toISOString().split("T")[0];
 
 const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const auth = useContext(AuthContext);
+  //editing toggle for creator info
   const [isEditing, setIsEditing] = useState(true);
+  //loading state - checks if creator info is present or not.
+  const [isLoading, setIsLoading] = useState(auth.user?.creator !== null);
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -73,10 +73,20 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
     },
     true
   );
-  const { isNew = false } = creatorItem;
 
+  //destructured boolean value to check if a form is new or not
+  const { isNew = false } = creatorItem;
+  //on load, check if user has a creator profile
+  // if they do no need to show form
   useEffect(() => {
-    if (!isNew) {
+    if (auth.user?.creator !== null) {
+      setIsEditing(false);
+      setIsLoading(false);
+    }
+  }, [auth.user?.creator]);
+  //if is new or creator property is null, render new form.
+  useEffect(() => {
+    if (!isNew || auth.user?.creator === null) {
       setFormData(
         {
           company: {
@@ -111,17 +121,13 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
         true
       );
     }
-  }, [creatorItem, setFormData, isNew]);
+  }, [creatorItem, setFormData, isNew, auth.user?.creator]);
 
-  useEffect(() => {
-    if (auth.user?.creator !== null) {
-      setIsEditing(false);
-    }
-  }, [auth.user?.creator]);
-
+  //data we would like to pass to our creator property
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    //creator data fields
     const creatorItem = {
       company: formState.inputs.company.value,
       logoUrl: formState.inputs.logoUrl.value,
@@ -131,24 +137,31 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
       presence: formState.inputs.presence.value,
       about: formState.inputs.about.value,
     };
+    //props function for handling creator update
     onUpdate(creatorItem);
     setIsEditing(false);
   };
 
+  //Component tabs navigation for creator profile
   const handleMenuItemClick = (componentName) => {
     setCreatorProfileTab(componentName);
   };
 
+  //components rendered from tab navigation
   const renderComponent = () => {
     switch (creatorProfileTab) {
       case "applicants":
         return <>You have no applicant's yet!</>;
       case "jobs":
-        return "No jobs yet!";
+        return <CreatorJobsTable />;
       case "credits":
         return <PurchaseCredits />;
       case "createJob":
-        return <NewJob />;
+        return (
+          <>
+            <NewJob />
+          </>
+        );
       default:
         return "nothing here yet";
     }
@@ -156,7 +169,10 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
 
   return (
     <>
-      {isEditing && (
+      {/*isLoading checks if user.creator is not null and renders form depending on this. */}
+      {isLoading ? (
+        <div> loading...</div>
+      ) : isEditing ? (
         <Card sx={{ padding: "1rem 1rem" }}>
           <form onSubmit={handleSubmit}>
             <TextField
@@ -302,128 +318,142 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
             </Stack>
           </form>
         </Card>
-      )}
+      ) : (
+        !isEditing && (
+          <Card>
+            <Grid container direction="row" justifyContent="flex-start">
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={5}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "1rem",
+                  alignItems: "start",
+                  justifyContent: "flext-start",
+                }}
+              >
+                <Stack direction="row" spacing={2}>
+                  <Typography
+                    component="h1"
+                    variant="h5"
+                    color="text.secondary"
+                  >
+                    {auth.user?.creator?.company}
+                  </Typography>
+                  <Button
+                    sx={{ fontSize: 10 }}
+                    onClick={() => setIsEditing(!isEditing)}
+                  >
+                    Edit Info
+                  </Button>
+                </Stack>
 
-      {!isEditing && (
-        <Card>
-          <Grid container direction="row" justifyContent="flex-start">
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={5}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                padding: "1rem",
-                alignItems: "start",
-                justifyContent: "flext-start",
-              }}
-            >
-              <Stack direction="row" spacing={2}>
-                <Typography component="h1" variant="h5" color="text.secondary">
-                  {auth.user?.creator?.company}
-                </Typography>
-                <Button
-                  sx={{ fontSize: 10 }}
-                  onClick={() => setIsEditing(!isEditing)}
-                >
-                  Edit Info
-                </Button>
-              </Stack>
-
-              <Grid>
-                <Typography variant="subtitle2" color="text.secondary">
-                  <BusinessIcon /> Company Size:{" "}
-                  {auth.user?.creator?.companySize}
-                </Typography>
-              </Grid>
-              <Grid>
-                <Typography variant="subtitle2" color="text.secondary">
-                  <LocationOnIcon /> Location:{" "}
-                  {auth.user?.creator?.headquarters}
-                </Typography>
-              </Grid>
-              <Grid>
-                <Typography variant="subtitle2" color="text.secondary">
-                  <VerifiedUserIcon /> Established:{" "}
-                  {auth.user?.creator?.established}
-                </Typography>
-              </Grid>
-              <Stack direction="row" alignItems="start" spacing={2}>
                 <Grid>
                   <Typography variant="subtitle2" color="text.secondary">
-                    <MonetizationOnIcon /> Credit Balance: {auth.user?.credits}
+                    <BusinessIcon /> Company Size:{" "}
+                    {auth.user?.creator?.companySize}
                   </Typography>
                 </Grid>
                 <Grid>
-                  <Link component="button" variant="subtitle2">
-                    add credits?
-                  </Link>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    <LocationOnIcon /> Location:{" "}
+                    {auth.user?.creator?.headquarters}
+                  </Typography>
                 </Grid>
-              </Stack>
-            </Grid>
+                <Grid>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    <VerifiedUserIcon /> Established:{" "}
+                    {auth.user?.creator?.established}
+                  </Typography>
+                </Grid>
+              </Grid>
 
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={7}
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "5px",
-              }}
-            >
-              <Divider orientation="vertical" flexItem />
-              <Stack sx={{ margin: "0 auto" }}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Your account as of {today}{" "}
-                </Typography>
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={4}
-                >
-                  <Paper elevation={0}>
-                    <Typography variant="body1" color="text.secondary">
-                      Applicants
-                    </Typography>
-                    <Typography variant="h4" color="text.secondary">
-                      {(auth.user?.jobs?.applicants?.length || 0) < 1 && 0}
-                    </Typography>
-                  </Paper>
-                  <Paper elevation={0}>
-                    <Typography variant="body1" color="text.secondary">
-                      Listings
-                    </Typography>
-                    <Typography variant="h4" color="text.secondary">
-                      {(auth.user?.jobs?.length || 0) < 1 && 0}
-                    </Typography>
-                  </Paper>
-                  <Paper elevation={0}>
-                    <Typography variant="body1" color="text.secondary">
-                      Find Teachers
-                    </Typography>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={7}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "5px",
+                }}
+              >
+                <Divider orientation="vertical" flexItem />
+                <Stack>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Your account as of {today}{" "}
+                  </Typography>
 
-                    <Button
-                      sx={{ fontSize: 9 }}
-                      startIcon={<ElectricBoltIcon />}
-                      color="success"
-                      variant="outlined"
-                    >
-                      24hr Buffet!
-                    </Button>
-                  </Paper>
+                  <Stack
+                    direction="row"
+                    sx={{ margin: "0.5rem 0 0 1.5rem" }}
+                    spacing={4}
+                  >
+                    <Paper elevation={0}>
+                      <Typography variant="body1" color="text.secondary">
+                        Applicants
+                      </Typography>
+                      <Typography variant="h4" color="text.secondary">
+                        {(auth.user?.jobs?.applicants?.length || 0) < 1 && 0}
+                      </Typography>
+                    </Paper>
+                    <Paper elevation={0}>
+                      <Typography variant="body1" color="text.secondary">
+                        Listings
+                      </Typography>
+                      <Typography variant="h4" color="text.secondary">
+                        {(auth.user?.jobs?.length || 0) < 1 && 0}
+                      </Typography>
+                    </Paper>
+                    <Paper elevation={0}>
+                      <Typography variant="body1" color="text.secondary">
+                        Find Teachers
+                      </Typography>
+
+                      <Button
+                        sx={{ fontSize: 9 }}
+                        startIcon={<ElectricBoltIcon />}
+                        color="success"
+                        variant="outlined"
+                      >
+                        24hr Buffet!
+                      </Button>
+                    </Paper>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="end"
+                    spacing={1}
+                    sx={{ marginTop: "2rem" }}
+                  >
+                    <Grid>
+                      <MonetizationOnIcon color="success" fontSize="small" />
+                    </Grid>
+                    <Grid>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Credit Balance:
+                        {auth.user?.credits}
+                      </Typography>
+                    </Grid>
+                    <Grid>
+                      <Link component="button" variant="subtitle2">
+                        add credits?
+                      </Link>
+                    </Grid>
+                  </Stack>
                 </Stack>
-              </Stack>
+              </Grid>
             </Grid>
-          </Grid>
-          <Divider sx={{ width: "100%", marginBottom: "1rem" }} flexItem />
-          <CreatorTabs onTabChange={handleMenuItemClick} />
-          <Box sx={{ height: "auto" }}>{renderComponent()}</Box>
-        </Card>
+            <Divider sx={{ width: "100%", marginBottom: "1rem" }} flexItem />
+            <CreatorTabs onTabChange={handleMenuItemClick} />
+            <Box sx={{ height: "auto" }}>{renderComponent()}</Box>
+          </Card>
+        )
       )}
     </>
   );
