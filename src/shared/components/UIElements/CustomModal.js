@@ -1,13 +1,10 @@
-import React from 'react';
+import React, { useContext } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import {
-  Box,
-  Button,
-  Modal,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Modal, Typography } from "@mui/material";
+
+import { AuthContext } from "../../context/auth-context";
 
 const style = {
   position: "absolute",
@@ -22,6 +19,8 @@ const style = {
 };
 
 const CustomModal = (props) => {
+  const auth = useContext(AuthContext);
+  const { isLoggedIn, credits } = auth;
   const handleClose = () => {
     props.handleClose();
   };
@@ -36,15 +35,22 @@ const CustomModal = (props) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Please Sign-up and purchase Credits
+            {props.success || props.error}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            You must sign-up and purchase credits to view teacher information.
+            {props.noCredits || props.signIn}
           </Typography>
-          <Button component={Link} to={`/auth`}>
-            {" "}
-            login{" "}
-          </Button>
+          {!isLoggedIn && (
+            <Button component={Link} to={`/auth`}>
+              {" "}
+              login{" "}
+            </Button>
+          )}
+          {isLoggedIn && credits === 0 && (
+            <Button component={Link} to={`/users/${auth.user._id}`}>
+              Get Credits
+            </Button>
+          )}
         </Box>
       </Modal>
     </div>

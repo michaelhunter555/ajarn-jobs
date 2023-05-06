@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -15,6 +15,8 @@ import {
   Paper,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { AuthContext } from "../../shared/context/auth-context";
 
 const HorizontalSideBar = styled(Paper)(({ theme }) => ({
   display: "flex",
@@ -68,15 +70,29 @@ const menuItems = [
 ];
 
 const Sidebar = ({ onMenuItemClick }) => {
+  const { user } = useContext(AuthContext);
+  const userType = user.userType;
+
   const handleSidebarClick = (componentName) => {
     onMenuItemClick(componentName);
     console.log(componentName);
   };
 
+  const filteredSidebar = menuItems.filter((val) => {
+    if (val.componentName === "creator" && userType === "teacher") {
+      return false;
+    }
+
+    if (val.componentName === "applications" && userType === "employer") {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <HorizontalSideBar elevated="true">
       <List>
-        {menuItems.map((item, i) => (
+        {filteredSidebar.map((item, i) => (
           <React.Fragment key={i}>
             <ListItemButton
               onClick={() => handleSidebarClick(item.componentName)}
@@ -84,7 +100,7 @@ const Sidebar = ({ onMenuItemClick }) => {
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
-            {i - menuItems.length - 1 && <Divider light />}
+            {i - filteredSidebar.length - 1 && <Divider light />}
           </React.Fragment>
         ))}
       </List>

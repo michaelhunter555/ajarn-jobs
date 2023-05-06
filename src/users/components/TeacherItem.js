@@ -64,7 +64,7 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
 }));
 
 const TeacherItem = (props) => {
-  const authCtx = useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
 
   const handleModalOpen = () => {
@@ -78,7 +78,7 @@ const TeacherItem = (props) => {
   let viewProfileButton;
   let contactTeacherButton;
 
-  if (!authCtx.isLoggedIn || authCtx.user.credits === 0) {
+  if (!auth.isLoggedIn || auth.user.credits === 0) {
     viewProfileButton = (
       <Button sx={{ margin: "0 auto" }} onClick={handleModalOpen}>
         View Profile
@@ -110,10 +110,27 @@ const TeacherItem = (props) => {
     );
   }
 
+  const errorHeader = !auth.isLoggedIn
+    ? "Please Login"
+    : auth.isLoggedIn && auth.user.credits === 0
+    ? "Please Purchase Credits"
+    : "Please Login and/or purchase credits.";
+
+  const errorReason = !auth.isLoggedIn
+    ? "Please login & have credits on balance"
+    : auth.isLoggedIn && auth.user.credits === 0
+    ? "Please purchase credits to view teacher profiles"
+    : "Please login and purchase credits to view teachers.";
+
   return (
     <>
       {openModal && (
-        <CustomModal open={openModal} handleClose={handleCloseModal} />
+        <CustomModal
+          noCredits={errorReason}
+          error={errorHeader}
+          open={openModal}
+          handleClose={handleCloseModal}
+        />
       )}
       <Grid container direction="row" item>
         <StyledGlassCard>

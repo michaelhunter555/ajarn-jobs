@@ -351,24 +351,43 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                   </Button>
                 </Stack>
 
-                <Grid>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    <BusinessIcon /> Company Size:{" "}
-                    {auth.user?.creator?.companySize}
-                  </Typography>
-                </Grid>
-                <Grid>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    <LocationOnIcon /> Location:{" "}
-                    {auth.user?.creator?.headquarters}
-                  </Typography>
-                </Grid>
-                <Grid>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    <VerifiedUserIcon /> Established:{" "}
-                    {auth.user?.creator?.established}
-                  </Typography>
-                </Grid>
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={1}
+                >
+                  <Grid>
+                    <BusinessIcon color="info" />
+                  </Grid>
+                  <Grid>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Company Size: {auth.user?.creator?.companySize}
+                    </Typography>
+                  </Grid>
+                </Stack>
+
+                <Stack direction="row" spacing={1}>
+                  <Grid>
+                    <LocationOnIcon color="info" />
+                  </Grid>
+                  <Grid>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Location: {auth.user?.creator?.headquarters}
+                    </Typography>
+                  </Grid>
+                </Stack>
+
+                <Stack direction="row" spacing={1}>
+                  <Grid>
+                    <VerifiedUserIcon color="info" />
+                  </Grid>
+                  <Grid>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Established: {auth.user?.creator?.established}
+                    </Typography>
+                  </Grid>
+                </Stack>
               </Grid>
 
               <Grid
@@ -436,12 +455,20 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                     </Grid>
                     <Grid>
                       <Typography variant="subtitle2" color="text.secondary">
-                        Credit Balance:
+                        Credits:
+                      </Typography>
+                    </Grid>
+                    <Grid>
+                      <Typography variant="h5" color="text.secondary">
                         {auth.user?.credits}
                       </Typography>
                     </Grid>
                     <Grid>
-                      <Link component="button" variant="subtitle2">
+                      <Link
+                        onClick={() => setCreatorProfileTab("credits")}
+                        component="button"
+                        variant="subtitle2"
+                      >
                         add credits?
                       </Link>
                     </Grid>
