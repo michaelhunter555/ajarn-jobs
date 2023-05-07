@@ -11,7 +11,7 @@ export const useSettingsToggle = () => {
   //PATCH toggle between teacher or employer
   const updateRoleChange = useCallback(
     async (userId) => {
-      const isTeacher = auth.user.userType === "teacher";
+      const isTeacher = auth.user?.userType === "teacher";
       try {
         const response = await sendRequest(
           `http://localhost:5000/api/user/update-profile/${userId}`,
@@ -23,13 +23,13 @@ export const useSettingsToggle = () => {
         updateUser(response.user);
       } catch (e) {}
     },
-    [sendRequest, updateUser, auth.user.userType]
+    [sendRequest, updateUser, auth.user?.userType]
   );
 
   //PATCH isHidden property for search results.
   const updateUserVisibility = useCallback(
     async (userId) => {
-      const isHidden = auth.user.isHidden;
+      const isHidden = auth.user?.isHidden;
       try {
         const response = await sendRequest(
           `http://localhost:5000/api/user/update-profile/${userId}`,
@@ -41,7 +41,7 @@ export const useSettingsToggle = () => {
         updateUser(response.user);
       } catch (e) {}
     },
-    [sendRequest, updateUser, auth.user.isHidden]
+    [sendRequest, updateUser, auth.user?.isHidden]
   );
 
   return {

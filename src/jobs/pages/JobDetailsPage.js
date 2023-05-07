@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 
-import { dummy_jobs } from "../../shared/util/DummyJobs";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { useJob } from "../../shared/hooks/jobs-hook";
+//import { dummy_jobs } from "../../shared/util/DummyJobs";
 import JobDetails from "../components/JobDetails";
 
 const JobDetailsPage = () => {
   const jobId = useParams().jid;
-  const job = dummy_jobs.find((j) => j.id === jobId);
-  return <JobDetails job={job} />;
+  const { jobs, getJobById, isLoading, error, clearError } = useJob();
+
+  useEffect(() => {
+    getJobById(jobId);
+  }, [getJobById, jobId]);
+
+  return (
+    <>
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && <LoadingSpinner asOverlay />}
+      <JobDetails job={jobs} />
+    </>
+  );
 };
 
 export default JobDetailsPage;

@@ -19,6 +19,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useHttpClient } from "../../hooks/http-hook";
+
 const StyledJobAdCard = styled(Card)(({ theme, featured }) => ({
   backgroundColor: featured === true ? "#fffef9" : "",
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
@@ -47,7 +49,18 @@ const StyledChip = styled(Chip)(({ theme, featured }) => ({
 }));
 
 const JobAdsList = (props) => {
+  const { isLoading } = useHttpClient();
   const { job } = props;
+
+  if (isLoading) {
+    return (
+      <Box>
+        <Card sx={{ padding: "0 2rem" }}>
+          <h2>FINDING AVAILABLE JOBS...</h2>
+        </Card>
+      </Box>
+    );
+  }
 
   if (job.length === 0) {
     return (
@@ -67,17 +80,20 @@ const JobAdsList = (props) => {
   return (
     <>
       {job.map((school, i) => (
-        <List key={school.id}>
-          <Link to={`/jobs/${school.id}`} style={{ textDecoration: "none" }}>
-            <StyledJobAdCard component="div" featured={school.jobType.featured}>
+        <List key={school?._id}>
+          <Link to={`/jobs/${school?._id}`} style={{ textDecoration: "none" }}>
+            <StyledJobAdCard
+              component="div"
+              featured={school?.jobType?.featured}
+            >
               <CardActionArea>
                 <CardContent>
                   <Grid container direction="row">
                     <Grid item xs={4} sm={4} lg={3} xl={2}>
                       <StyledMediaCard
                         component="img"
-                        image={school.creator.logoUrl}
-                        alt={school.id}
+                        image={school?.creator?.logoUrl}
+                        alt={`${school?._id} -- ${school.creator.company}`}
                       />
                     </Grid>
 
@@ -88,7 +104,7 @@ const JobAdsList = (props) => {
                         variant="h5"
                         component="div"
                       >
-                        {school.creator.company} -{" "}
+                        {school?.creator?.company} -{" "}
                         {school.title.length > 25
                           ? school.title.substring(0, 40) + "..."
                           : school.title}

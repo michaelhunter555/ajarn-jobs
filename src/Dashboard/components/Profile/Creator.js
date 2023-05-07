@@ -35,6 +35,7 @@ const today = date.toISOString().split("T")[0];
 
 const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const auth = useContext(AuthContext);
+  console.log(auth.user.jobs.length);
   //editing toggle for creator info
   const [isEditing, setIsEditing] = useState(true);
   //loading state - checks if creator info is present or not.
@@ -417,7 +418,9 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                         Applicants
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {(auth.user?.jobs?.applicants?.length || 0) < 1 && 0}
+                        {(auth.user?.jobs?.applicants?.length || 0) < 1
+                          ? 0
+                          : auth.user?.jobs?.applicants?.length}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>
@@ -425,7 +428,9 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                         Listings
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {(auth.user?.jobs?.length || 0) < 1 && 0}
+                        {(auth.user?.jobs?.length || 0) < 1
+                          ? 0
+                          : auth.user?.jobs?.length}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>

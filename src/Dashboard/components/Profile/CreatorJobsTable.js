@@ -1,6 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, {
+  useContext,
+  useEffect,
+} from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import {
   Table,
@@ -10,22 +13,19 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import { AuthContext } from "../../../shared/context/auth-context";
-import { useJob } from "../../../shared/hooks/jobs-hook";
-import { dummy_jobs } from "../../../shared/util/DummyJobs";
+import { AuthContext } from '../../../shared/context/auth-context';
+import { useJob } from '../../../shared/hooks/jobs-hook';
 
 const CreatorJobsTable = () => {
   const auth = useContext(AuthContext);
+  const { user } = auth;
   const { getJobsByUserId, jobs } = useJob();
-  const applications = (auth.user?.jobs?.applicants?.length || 0) < 1 && 0;
 
   useEffect(() => {
-    getJobsByUserId(auth.user?._id);
-  }, [getJobsByUserId, auth.user]);
-
-  console.log(jobs);
+    getJobsByUserId(user?._id);
+  }, [getJobsByUserId, user]);
 
   return (
     <TableContainer>
@@ -87,18 +87,18 @@ const CreatorJobsTable = () => {
           </TableCell>
         </TableHead>
         <TableBody>
-          {dummy_jobs.map((job, i) => (
-            <TableRow key={job.id}>
-              <TableCell>{job.datePosted}</TableCell>
+          {jobs?.map((job, i) => (
+            <TableRow key={job?._id}>
+              <TableCell>{job?.datePosted.split('T')[0]}</TableCell>
               <TableCell>
-                <Link to={`/jobs/${job.id}`} target={"_blank"}>
+                <Link to={`/jobs/${job?._id}`} target={"_blank"}>
                   View Job
                 </Link>
               </TableCell>
-              <TableCell>{job.location}</TableCell>
-              <TableCell>{job.salary}</TableCell>
-              <TableCell>{job.hours}</TableCell>
-              <TableCell>{applications}</TableCell>
+              <TableCell>{job?.location}</TableCell>
+              <TableCell>{job?.salary}</TableCell>
+              <TableCell>{job?.hours}</TableCell>
+              <TableCell>{job?.applicants?.length}</TableCell>
             </TableRow>
           ))}
         </TableBody>

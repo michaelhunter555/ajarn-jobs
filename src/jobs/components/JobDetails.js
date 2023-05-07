@@ -29,7 +29,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 import JobDataTable from "./JobDataTable";
 
 const JobDetails = (props) => {
-  const authCtx = useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const { job } = props;
 
   //add function for sending job application to employer. maybe email.js?
@@ -48,53 +48,57 @@ const JobDetails = (props) => {
   // };
 
   const jobSpecifications = [
-    { text: "Location", icon: <FaMapMarkerAlt />, data: job.location },
-    { text: "Requirements", icon: <FaGraduationCap />, data: job.requirements },
-    { text: "Salary", icon: <FaMoneyBill />, data: job.salary },
+    { text: "Location", icon: <FaMapMarkerAlt />, data: job?.location },
+    {
+      text: "Requirements",
+      icon: <FaGraduationCap />,
+      data: job?.requirements,
+    },
+    { text: "Salary", icon: <FaMoneyBill />, data: job?.salary },
     {
       text: "Work Permit",
       icon: <FaClipboardList />,
-      data: job.workPermit ? "✅" : "⛔",
+      data: job?.workPermit ? "✅" : "⛔",
     },
-    { text: "Hours", icon: <FaClock />, data: job.hours },
+    { text: "Hours", icon: <FaClock />, data: job?.hours },
   ];
 
   const jobInformation = [
-    { variant: "h5", component: "h2", text: job.title },
+    { variant: "h5", component: "h2", text: job?.title },
     {
       variant: "subtitle2",
       component: "h3",
-      text: <Chip size="small" label={job.creator.company} />,
+      text: <Chip size="small" label={job?.creator?.company} />,
     },
     {
       variant: "subtitle2",
       component: "h3",
       icon: <LocationOnIcon size="inherit" />,
-      text: "location " + job.creator.headquarters,
+      text: "location " + job?.creator?.headquarters,
     },
     {
       variant: "subtitle2",
       component: "h3",
       icon: <BusinessIcon size="inherit" />,
-      text: job.creator.companySize + " employees",
+      text: job?.creator?.companySize + " employees",
     },
     {
       variant: "subtitle2",
       component: "h3",
       icon: <VerifiedUserIcon size="inherit" />,
-      text: "established in " + job.creator.established,
+      text: "established in " + job?.creator?.established,
     },
     {
       variant: "subtitle2",
       component: "h3",
       icon: <EventAvailableIcon size="inherit" />,
-      text: <Link href={job.creator.url}>{job.creator.url}</Link>,
+      text: <Link href={job?.creator?.url}>{job?.creator?.url}</Link>,
     },
   ];
 
   let outlinedButton;
 
-  if (authCtx.isLoggedIn) {
+  if (auth.isLoggedIn) {
     outlinedButton = (
       <Button
         sx={{ borderRadius: "17px" }}
@@ -155,9 +159,9 @@ const JobDetails = (props) => {
               <Grid item>
                 <Avatar
                   variant="circular"
-                  src={job.creator.logoUrl}
+                  src={job?.creator?.logoUrl}
                   sx={{ height: 175, width: 175, border: "1px solid #e5e5e5" }}
-                  alt={`${job.id}--${job.creator.company}`}
+                  alt={`${job?.id}--${job?.creator?.company}`}
                 />
               </Grid>
               {/**grid item 2 */}
@@ -181,11 +185,11 @@ const JobDetails = (props) => {
             <Grid item sx={{ MaxWidth: "100%" }}>
               <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
                 <Typography variant="h6" component="h4">
-                  A little about {job.creator.company}:
+                  A little about {job?.creator?.company}:
                 </Typography>
                 <Divider variant="middle" sx={{ margin: "0 0 0.5rem 0" }} />
                 <Typography variant="subtitle1" paragraph>
-                  {job.creator.about}
+                  {job?.creator?.about}
                 </Typography>
                 <Divider />
 
@@ -197,7 +201,7 @@ const JobDetails = (props) => {
                     flexWrap: "wrap",
                   }}
                 >
-                  {job.creator.presence.map((item, i) => (
+                  {job?.creator?.presence.map((item, i) => (
                     <Chip
                       key={i}
                       clickable
@@ -224,19 +228,19 @@ const JobDetails = (props) => {
                 }}
               >
                 <Typography variant="h5" component="h4">
-                  {job.title}
+                  {job?.title}
                 </Typography>
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
                   paragraph
                 >
-                  date posted: {job.datePosted}
+                  date posted: {job?.datePosted}
                 </Typography>
               </Box>
 
               <Divider />
-              {job.description}
+              {job?.description}
             </Paper>
           </Grid>
         </Grid>

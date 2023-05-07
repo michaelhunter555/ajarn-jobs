@@ -30,9 +30,8 @@ const Teachers = () => {
   useEffect(() => {
     const getUsersRequest = async () => {
       try {
-        const response = await sendRequest("http://localhost:5000/api/user");
+        const response = await sendRequest(`${process.env.REACT_APP_USERS}`);
         setUsers(response.users);
-        console.log(response);
       } catch (err) {}
     };
     getUsersRequest();

@@ -48,6 +48,10 @@ const NewJob = () => {
         value: "",
         isValid: false,
       },
+      jobType: {
+        value: "basic",
+        isValid: true,
+      },
       location: {
         value: "",
         isValid: false,
@@ -67,6 +71,10 @@ const NewJob = () => {
       description: {
         value: "",
         isValid: false,
+      },
+      workPermit: {
+        value: workPermitOffered,
+        isValid: true,
       },
     },
     false
@@ -106,23 +114,26 @@ const NewJob = () => {
   const workPermitHandler = (event) => {
     const workPermitValue = event.target.value === "true";
     setWorkPermitOffered(workPermitValue);
-    inputHandler("workPermit", workPermitOffered, true);
+    inputHandler("workPermit", workPermitValue, true);
   };
 
   const jobSubmitHandler = (event) => {
     event.preventDefault();
+    console.log("formState:", formState);
+    console.log("formState.inputs:", formState.inputs);
     //new job data expected fields
     const newJob = {
       title: formState.inputs.title.value,
       jobType: formState.inputs.jobType.value,
-      salary: formState.inputs.salary.value,
       location: formState.inputs.location.value,
+      salary: formState.inputs.salary.value,
       requirements: formState.inputs.requirements.value,
-      description: formState.inputs.description.value,
       hours: formState.inputs.hours.value,
-      workpermit: formState.inputs.workpermit.value,
+      description: formState.inputs.description.value,
+      workPermit: formState.inputs.workPermit.value,
     };
     //pass userId & object as argument to POST request
+    console.log(newJob);
     addJobByUserId(auth.user?._id, newJob);
     setSuccess(true);
   };

@@ -71,7 +71,7 @@ const menuItems = [
 
 const Sidebar = ({ onMenuItemClick }) => {
   const { user } = useContext(AuthContext);
-  const userType = user.userType;
+  const userType = user?.userType;
 
   const handleSidebarClick = (componentName) => {
     onMenuItemClick(componentName);

@@ -13,7 +13,7 @@ export const useUser = () => {
     async (userId) => {
       try {
         const response = await sendRequest(
-          `http://localhost:5000/api/user/${userId}`
+          `${process.env.REACT_APP_USERS}/${userId}`
         );
         updateUser(response.user);
       } catch (err) {}
@@ -26,7 +26,7 @@ export const useUser = () => {
     async (userId, update) => {
       try {
         const response = await sendRequest(
-          `http://localhost:5000/api/user/update-profile/${userId}`,
+          `${process.env.REACT_APP_USERS}/${userId}`,
           "PATCH",
           JSON.stringify(update),
           { "Content-Type": "application/json" }
@@ -42,7 +42,7 @@ export const useUser = () => {
     async (userId, credits) => {
       try {
         const response = await sendRequest(
-          `http://localhost:5000/api/user/${userId}/add-credits`,
+          `${process.env.REACT_APP_USERS}/${userId}/add-credits`,
           "PATCH",
           JSON.stringify({ credits: credits }),
           { "Content-Type": "application/json" }

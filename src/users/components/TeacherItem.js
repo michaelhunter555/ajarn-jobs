@@ -1,12 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, {
+  useContext,
+  useState,
+} from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
-import EmailIcon from "@mui/icons-material/Email";
-import PlaceIcon from "@mui/icons-material/Place";
-import PublicIcon from "@mui/icons-material/Public";
-import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
+import EmailIcon from '@mui/icons-material/Email';
+import PlaceIcon from '@mui/icons-material/Place';
+import PublicIcon from '@mui/icons-material/Public';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import {
   Box,
   Button,
@@ -16,11 +19,11 @@ import {
   Divider,
   Grid,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import CustomModal from "../../shared/components/UIElements/CustomModal";
-import { AuthContext } from "../../shared/context/auth-context";
+import CustomModal from '../../shared/components/UIElements/CustomModal';
+import { AuthContext } from '../../shared/context/auth-context';
 
 const StyledGlassCard = styled(Card)(({ theme }) => ({
   margin: "0 auto",
@@ -78,7 +81,7 @@ const TeacherItem = (props) => {
   let viewProfileButton;
   let contactTeacherButton;
 
-  if (!auth.isLoggedIn || auth.user.credits === 0) {
+  if (!auth.isLoggedIn || auth?.user?.credits === 0) {
     viewProfileButton = (
       <Button sx={{ margin: "0 auto" }} onClick={handleModalOpen}>
         View Profile
@@ -112,13 +115,13 @@ const TeacherItem = (props) => {
 
   const errorHeader = !auth.isLoggedIn
     ? "Please Login"
-    : auth.isLoggedIn && auth.user.credits === 0
+    : auth.isLoggedIn && auth.user?.credits === 0
     ? "Please Purchase Credits"
     : "Please Login and/or purchase credits.";
 
   const errorReason = !auth.isLoggedIn
     ? "Please login & have credits on balance"
-    : auth.isLoggedIn && auth.user.credits === 0
+    : auth.isLoggedIn && auth.user?.credits === 0
     ? "Please purchase credits to view teacher profiles"
     : "Please login and purchase credits to view teachers.";
 

@@ -92,7 +92,7 @@ const Auth = () => {
         //custom http hook accepts 4 arguments (see http-hook.js)
         //for login, we expect an email and password according to user as sign-up
         const response = await sendRequest(
-          "http://localhost:5000/api/user/login",
+          `${process.env.REACT_APP_USERS}/login`,
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,

@@ -9,20 +9,6 @@ export const useJob = () => {
   const { updateUser } = auth;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  //GET all jobs by userId
-  const getJobsByUserId = useCallback(
-    async (userId) => {
-      try {
-        const response = await sendRequest(
-          `http://localhost:5000/api/jobs/${userId}`
-        );
-        updateUser(response.user);
-        setJobs(response.job);
-      } catch (err) {}
-    },
-    [sendRequest, updateUser]
-  );
-
   //POST Create job by userId
   const addJobByUserId = useCallback(
     async (userId, jobData) => {
@@ -30,7 +16,17 @@ export const useJob = () => {
         const response = await sendRequest(
           `http://localhost:5000/api/jobs/create-job/${userId}`,
           "POST",
-          JSON.stringify(jobData),
+          JSON.stringify({
+            ...jobData,
+            creatorData: {
+              company: auth.user.creator.company,
+              companySize: auth.user.creator.companySize,
+              headquarters: auth.user.creator.headquarters,
+              eastablished: auth.user.creator.established,
+              presence: auth.user.creator.presence,
+              about: auth.user.creator.about,
+            },
+          }),
           { "Content-Type": "application/json" }
         );
         const updatedUser = {
@@ -41,6 +37,33 @@ export const useJob = () => {
       } catch (err) {}
     },
     [sendRequest, updateUser, auth.user]
+  );
+
+  //GET all jobs by userId
+  const getJobsByUserId = useCallback(
+    async (userId) => {
+      try {
+        const response = await sendRequest(
+          `http://localhost:5000/api/jobs/user/${userId}`
+        );
+        console.log("JOB RESPONSE", response);
+        setJobs(response.jobs);
+      } catch (err) {}
+    },
+    [sendRequest]
+  );
+
+  //Get jobs by Id ${jid}
+  const getJobById = useCallback(
+    async (jobId) => {
+      try {
+        const response = await sendRequest(
+          `http://localhost:5000/api/jobs/${jobId}`
+        );
+        setJobs(response.job);
+      } catch (err) {}
+    },
+    [sendRequest]
   );
 
   //PATCH Job by userId
@@ -87,6 +110,7 @@ export const useJob = () => {
 
   return {
     jobs,
+    getJobById,
     addJobByUserId,
     getJobsByUserId,
     updateJobById,

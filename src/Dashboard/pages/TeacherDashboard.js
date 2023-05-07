@@ -1,32 +1,43 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 
-import { Button, Grid } from "@mui/material";
+import {
+  Button,
+  Grid,
+} from '@mui/material';
 
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import JobAdsList from "../../shared/components/UIElements/JobAdsList";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useCreator } from "../../shared/hooks/creator-hook";
-import { useResume } from "../../shared/hooks/resume-hook";
-import { useSettingsToggle } from "../../shared/hooks/toggle-hook";
-import { useUser } from "../../shared/hooks/user-hook";
-import { dummy_jobs } from "../../shared/util/DummyJobs";
-import { DUMMY_USERS_LIST } from "../../shared/util/DummyUsers";
-import TeacherItem from "../../users/components/TeacherItem";
-import Applications from "../components/Profile/Applications";
-import Creator from "../components/Profile/Creator";
-import FeaturedCard from "../components/Profile/FeaturedCard";
-import ProfileInformation from "../components/Profile/ProfileInformation";
-import TeacherSettings from "../components/Profile/TeacherSettings";
-import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
-import Sidebar from "../components/Sidebar";
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import JobAdsList from '../../shared/components/UIElements/JobAdsList';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import UserProfileJobAd
+  from '../../shared/components/UIElements/UserProfileJobAd';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useCreator } from '../../shared/hooks/creator-hook';
+import { useResume } from '../../shared/hooks/resume-hook';
+import { useSettingsToggle } from '../../shared/hooks/toggle-hook';
+import { useUser } from '../../shared/hooks/user-hook';
+import { dummy_jobs } from '../../shared/util/DummyJobs';
+import { DUMMY_USERS_LIST } from '../../shared/util/DummyUsers';
+import TeacherItem from '../../users/components/TeacherItem';
+import Applications from '../components/Profile/Applications';
+import Creator from '../components/Profile/Creator';
+import FeaturedCard from '../components/Profile/FeaturedCard';
+import ProfileInformation from '../components/Profile/ProfileInformation';
+import TeacherSettings from '../components/Profile/TeacherSettings';
+import UpdateResumeItem from '../components/Profile/UpdateResumeItem';
+import Sidebar from '../components/Sidebar';
 
 const TeacherDashboard = () => {
   const userId = useParams().id;
-  const authCtx = useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [selectedCard, setSelectedCard] = useState(null);
@@ -65,6 +76,7 @@ const TeacherDashboard = () => {
 
   //get random user card if user is employer
   useEffect(() => {
+    console.log('fetching random users')
     const randomUser =
       DUMMY_USERS_LIST[Math.floor(Math.random() * DUMMY_USERS_LIST.length)];
     setSelectedCard(randomUser);
@@ -72,6 +84,7 @@ const TeacherDashboard = () => {
 
   //GET user profile information
   useEffect(() => {
+    console.log('fetching your user info')
     if (userId) {
       getUserInformation(userId);
     }
@@ -114,23 +127,23 @@ const TeacherDashboard = () => {
 
   //Add resume items
   const addNewResumeItem = () => {
-    authCtx.updateUser({
+    auth.updateUser({
       //copy of current user object
-      ...authCtx.user,
+      ...auth.user,
       //we return resume key with array containing a copy of the user's current resume
       resume: [
-        ...authCtx.user.resume,
+        ...auth.user.resume,
         { id: "new-" + new Date().getTime(), isNew: true },
       ],
     });
   };
 
   const clearResumeItem = (cancelResumeItem) => {
-    authCtx.updateUser({
+    auth.updateUser({
       //copy of current user object
-      ...authCtx.user,
+      ...auth.user,
       //we return resume key with array containing a copy of the user's current resume
-      resume: authCtx.user.resume.filter(
+      resume: auth.user.resume.filter(
         (resItem) => resItem._id !== cancelResumeItem._id
       ),
     });
@@ -139,13 +152,13 @@ const TeacherDashboard = () => {
   //Add creator profile
   const addCreatorItem = () => {
     const creatorItem = {
-      ...authCtx.user,
+      ...auth.user,
       creator: {
         id: "creator-" + new Date().getTime(),
         isNew: true,
       },
     };
-    authCtx.updateUser(creatorItem);
+    auth.updateUser(creatorItem);
   };
 
   const {
@@ -168,7 +181,7 @@ const TeacherDashboard = () => {
   const renderComponent = () => {
     switch (currentComponent) {
       case "profile":
-        return authCtx.user && <ProfileInformation user={authCtx.user} />;
+        return auth.user && <ProfileInformation user={auth.user} />;
       case "job-listings":
         return <JobAdsList job={dummy_jobs} />;
       case "applications":
@@ -176,7 +189,7 @@ const TeacherDashboard = () => {
       case "resume":
         return (
           <>
-            {authCtx.user?.resume?.map((resumeItem) => (
+            {auth.user?.resume?.map((resumeItem) => (
               <UpdateResumeItem
                 key={resumeItem?._id}
                 resumeItem={resumeItem}
@@ -193,11 +206,11 @@ const TeacherDashboard = () => {
       case "creator":
         return (
           <>
-            {authCtx.user?.creator ? (
+            {auth.user?.creator ? (
               <Creator
-                creatorItem={authCtx.user?.creator}
+                creatorItem={auth.user?.creator}
                 onUpdate={handleCreatorUpdate}
-                onDelete={() => handleCreatorDelete(authCtx.user?.creator)}
+                onDelete={() => handleCreatorDelete(auth.user?.creator)}
               />
             ) : (
               <Button onClick={addCreatorItem}>Creator Account</Button>
@@ -205,12 +218,12 @@ const TeacherDashboard = () => {
           </>
         );
       case "settings":
-        const isTeacher = authCtx.user?.userType === "teacher";
-        const isHidden = authCtx.user?.isHidden;
+        const isTeacher = auth.user?.userType === "teacher";
+        const isHidden = auth.user?.isHidden;
         return (
           <TeacherSettings
             isSchool={isTeacher}
-            user={authCtx.user}
+            user={auth.user}
             onClickToggle={handleRoleChange}
             onProfileUpdate={handleProfileUpdate}
             onToggleVisibility={handleUserVisibility}
@@ -218,11 +231,11 @@ const TeacherDashboard = () => {
           />
         );
       case "logout":
-        authCtx.logout();
+        auth.logout();
         navigate("/");
         break;
       default:
-        return <ProfileInformation user={authCtx.user} />;
+        return <ProfileInformation user={auth.user} />;
     }
   };
 
@@ -294,7 +307,7 @@ const TeacherDashboard = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
-          {authCtx.user.userType === "teacher" ? (
+          {auth.user?.userType === "teacher" ? (
             <FeaturedCard />
           ) : (
             <TeacherItem

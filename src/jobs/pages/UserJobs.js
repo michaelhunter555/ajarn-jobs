@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -7,9 +7,12 @@ import { Button, Divider, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import Card from "../../shared/components/UIElements/Card";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import Footer from "../../shared/components/UIElements/Footer";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import { dummy_jobs } from "../../shared/util/DummyJobs";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
 import JobFilters from "../components/JobFilters";
@@ -43,14 +46,28 @@ const FeaturedJobListDiv = styled(Card)({
 const UserJobs = () => {
   const authCtx = useContext(AuthContext);
   const [filter, setFilter] = useState(dummy_jobs);
+  const [jobs, setJobs] = useState([]);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   //const userId = useParams().userId;
   //const loadedJobs = dummy_jobs.map((job) => (job.creator = userId));
+
+  //GET all jobs
+
+  useEffect(() => {
+    const getAllJobs = async () => {
+      try {
+        const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
+        setJobs(response.jobs);
+      } catch (err) {}
+    };
+    getAllJobs();
+  }, [sendRequest]);
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
 
-  const filteredJobs = dummy_jobs.filter((job) => {
+  const filteredJobs = jobs.filter((job) => {
     return (
       (!filter.location ||
         job.location.toLowerCase().includes(filter.location.toLowerCase())) &&
@@ -95,6 +112,7 @@ const UserJobs = () => {
 
   return (
     <>
+      <ErrorModal error={error} onClear={clearError} />
       <StyledUserJobsDiv>
         <StyledAdJobDiv>
           <Stack spacing={2} direction="row">
@@ -107,6 +125,7 @@ const UserJobs = () => {
           <JobFilters onFilterChange={handleFilterChange} />
         </UsersJobFilterDiv>
         <UserJobListDiv>
+          {isLoading && <LoadingSpinner asOverlay />}
           <JobAdsList job={filteredJobs} />
         </UserJobListDiv>
         <FeaturedJobListDiv>

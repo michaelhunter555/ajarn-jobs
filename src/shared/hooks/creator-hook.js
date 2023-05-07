@@ -7,6 +7,7 @@ export const useCreator = () => {
   const auth = useContext(AuthContext);
   const { updateUser, user } = auth;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   //PATCH update creator information
   const updateCreator = useCallback(
     async (userId, creatorItem) => {
