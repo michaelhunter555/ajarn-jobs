@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { useJob } from "../../shared/hooks/jobs-hook";
-//import { dummy_jobs } from "../../shared/util/DummyJobs";
 import JobDetails from "../components/JobDetails";
 
 const JobDetailsPage = () => {

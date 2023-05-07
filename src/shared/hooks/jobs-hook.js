@@ -14,7 +14,7 @@ export const useJob = () => {
     async (userId, jobData) => {
       try {
         const response = await sendRequest(
-          `http://localhost:5000/api/jobs/create-job/${userId}`,
+          `${process.env.REACT_APP_JOBS}/create-job/${userId}`,
           "POST",
           JSON.stringify({
             ...jobData,
@@ -44,7 +44,7 @@ export const useJob = () => {
     async (userId) => {
       try {
         const response = await sendRequest(
-          `http://localhost:5000/api/jobs/user/${userId}`
+          `${process.env.REACT_APP_JOBS}/user/${userId}`
         );
         console.log("JOB RESPONSE", response);
         setJobs(response.jobs);
@@ -58,7 +58,7 @@ export const useJob = () => {
     async (jobId) => {
       try {
         const response = await sendRequest(
-          `http://localhost:5000/api/jobs/${jobId}`
+          `${process.env.REACT_APP_JOBS}/${jobId}`
         );
         setJobs(response.job);
       } catch (err) {}
@@ -71,7 +71,7 @@ export const useJob = () => {
     async (jobId, updatedInfo) => {
       try {
         const response = await sendRequest(
-          `http://localhost:5000/api/jobs/${jobId}`,
+          `${process.env.REACT_APP_JOBS}/${jobId}`,
           "PATCH",
           JSON.stringify({ creatorId: updatedInfo }),
           { "Content-Type": "application/json" }
@@ -94,7 +94,7 @@ export const useJob = () => {
     async (jobId) => {
       try {
         const response = await sendRequest(
-          `http://localhost:5000/api/jobs/${jobId}`,
+          `${process.env.REACT_APP_JOBS}/${jobId}`,
           "DELETE"
         );
         const deletedJob = {

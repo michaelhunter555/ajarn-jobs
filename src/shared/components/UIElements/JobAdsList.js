@@ -6,8 +6,6 @@ import PaymentsIcon from "@mui/icons-material/Payments";
 import PlaceIcon from "@mui/icons-material/Place";
 import PunchClockIcon from "@mui/icons-material/PunchClock";
 import {
-  Box,
-  Button,
   Card,
   CardActionArea,
   CardContent,
@@ -15,14 +13,13 @@ import {
   Chip,
   Grid,
   List,
+  Stack,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useHttpClient } from "../../hooks/http-hook";
-
 const StyledJobAdCard = styled(Card)(({ theme, featured }) => ({
-  backgroundColor: featured === true ? "#fffef9" : "",
+  backgroundColor: featured ? "#fffef9" : "",
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
 }));
 
@@ -49,33 +46,7 @@ const StyledChip = styled(Chip)(({ theme, featured }) => ({
 }));
 
 const JobAdsList = (props) => {
-  const { isLoading } = useHttpClient();
   const { job } = props;
-
-  if (isLoading) {
-    return (
-      <Box>
-        <Card sx={{ padding: "0 2rem" }}>
-          <h2>FINDING AVAILABLE JOBS...</h2>
-        </Card>
-      </Box>
-    );
-  }
-
-  if (job.length === 0) {
-    return (
-      <Box>
-        <Card sx={{ padding: "0 2rem" }}>
-          <h2>
-            No jobs found. Please check back again in the future or create one.
-          </h2>
-          <Button component={Link} to="/job/new">
-            Create a job
-          </Button>
-        </Card>
-      </Box>
-    );
-  }
 
   return (
     <>
@@ -84,7 +55,7 @@ const JobAdsList = (props) => {
           <Link to={`/jobs/${school?._id}`} style={{ textDecoration: "none" }}>
             <StyledJobAdCard
               component="div"
-              featured={school?.jobType?.featured}
+              featured={school.jobType === "featured"}
             >
               <CardActionArea>
                 <CardContent>
@@ -92,42 +63,45 @@ const JobAdsList = (props) => {
                     <Grid item xs={4} sm={4} lg={3} xl={2}>
                       <StyledMediaCard
                         component="img"
-                        image={school?.creator?.logoUrl}
-                        alt={`${school?._id} -- ${school.creator.company}`}
+                        image={school?.image}
+                        alt={`${school?._id}--${school.creator.company}`}
                       />
                     </Grid>
 
                     <Grid item xs={8} sm={8} md={8} lg={9} xl={10}>
-                      <Typography
-                        gutterBottom
-                        color="primary"
-                        variant="h5"
-                        component="div"
-                      >
-                        {school?.creator?.company} -{" "}
-                        {school.title.length > 25
-                          ? school.title.substring(0, 40) + "..."
-                          : school.title}
-                      </Typography>
-
+                      <Stack spacing={0} alignItems="start">
+                        <Typography color="primary" variant="h5">
+                          {school?.creator?.company} -{" "}
+                          {school.title.length > 25
+                            ? school.title.substring(0, 40) + "..."
+                            : school.title}
+                        </Typography>
+                        <Typography
+                          gutterBottom
+                          variant="subtitle2"
+                          color="text.secondary"
+                        >
+                          Listed - {school?.datePosted.split("T")[0]}
+                        </Typography>
+                      </Stack>
                       <StyledChipDiv variant="body2" component="div">
                         <StyledChip
                           label={school.location}
                           size={"small"}
                           icon={<PlaceIcon />}
-                          featured={school.jobType.featured}
+                          featured={school.jobType === "featured"}
                         />
                         <StyledChip
                           label={school.salary}
                           size={"small"}
                           icon={<PaymentsIcon />}
-                          featured={school.jobType.featured}
+                          featured={school.jobType === "featured"}
                         />
                         <StyledChip
                           label={school.hours}
                           size={"small"}
                           icon={<PunchClockIcon />}
-                          featured={school.jobType.featured}
+                          featured={school.jobType === "featured"}
                         />
                       </StyledChipDiv>
                       <Typography variant="body2" color="text.secondary">

@@ -18,7 +18,7 @@ import {
 import { AuthContext } from "../../shared/context/auth-context";
 
 const JobDataTable = (props) => {
-  const authCtx = useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const { jobSpecifications } = props;
 
   return (
@@ -45,7 +45,7 @@ const JobDataTable = (props) => {
                 textAlign: "right",
               }}
             >
-              {authCtx.isLoggedIn && (
+              {auth.isLoggedIn && (
                 <Button
                   sx={{ margin: "0 auto" }}
                   onClick={() => console.log("modal")}
@@ -54,7 +54,7 @@ const JobDataTable = (props) => {
                   Apply Now
                 </Button>
               )}
-              {!authCtx.isLoggedIn && (
+              {!auth.isLoggedIn && (
                 <Button
                   sx={{ margin: "0 auto" }}
                   onClick={() => console.log("modal")}

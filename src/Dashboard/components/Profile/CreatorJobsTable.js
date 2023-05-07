@@ -1,11 +1,9 @@
-import React, {
-  useContext,
-  useEffect,
-} from 'react';
+import React, { useContext, useEffect } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -13,15 +11,15 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import { AuthContext } from '../../../shared/context/auth-context';
-import { useJob } from '../../../shared/hooks/jobs-hook';
+import { AuthContext } from "../../../shared/context/auth-context";
+import { useJob } from "../../../shared/hooks/jobs-hook";
 
 const CreatorJobsTable = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const { getJobsByUserId, jobs } = useJob();
+  const { getJobsByUserId, jobs, isLoading } = useJob();
 
   useEffect(() => {
     getJobsByUserId(user?._id);
@@ -37,7 +35,7 @@ const CreatorJobsTable = () => {
               variant="button"
               color="text.secondary"
             >
-              Date Posted
+              Posted
             </Typography>
           </TableCell>
           <TableCell>
@@ -87,20 +85,30 @@ const CreatorJobsTable = () => {
           </TableCell>
         </TableHead>
         <TableBody>
-          {jobs?.map((job, i) => (
-            <TableRow key={job?._id}>
-              <TableCell>{job?.datePosted.split('T')[0]}</TableCell>
-              <TableCell>
-                <Link to={`/jobs/${job?._id}`} target={"_blank"}>
-                  View Job
-                </Link>
-              </TableCell>
-              <TableCell>{job?.location}</TableCell>
-              <TableCell>{job?.salary}</TableCell>
-              <TableCell>{job?.hours}</TableCell>
-              <TableCell>{job?.applicants?.length}</TableCell>
-            </TableRow>
-          ))}
+          {isLoading ? (
+            <p>Loading... </p>
+          ) : (
+            jobs?.map((job, i) => (
+              <TableRow key={job?._id}>
+                <TableCell>{job?.datePosted.split("T")[0]}</TableCell>
+                <TableCell>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    to={`/jobs/${job?._id}`}
+                    component={RouterLink}
+                    target={"_blank"}
+                  >
+                    View Job
+                  </Button>
+                </TableCell>
+                <TableCell>{job?.location}</TableCell>
+                <TableCell>{job?.salary}</TableCell>
+                <TableCell>{job?.hours}</TableCell>
+                <TableCell>{job?.applicants?.length}</TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>

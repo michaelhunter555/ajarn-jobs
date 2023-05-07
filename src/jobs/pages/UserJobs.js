@@ -3,10 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import EastIcon from "@mui/icons-material/East";
-import { Button, Divider, Stack } from "@mui/material";
+import { Box, Button, Card, Divider, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import Card from "../../shared/components/UIElements/Card";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import Footer from "../../shared/components/UIElements/Footer";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
@@ -48,11 +47,8 @@ const UserJobs = () => {
   const [filter, setFilter] = useState(dummy_jobs);
   const [jobs, setJobs] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
-  //const userId = useParams().userId;
-  //const loadedJobs = dummy_jobs.map((job) => (job.creator = userId));
 
   //GET all jobs
-
   useEffect(() => {
     const getAllJobs = async () => {
       try {
@@ -110,6 +106,17 @@ const UserJobs = () => {
     );
   }
 
+  const loadingBox = (
+    <Box>
+      <Card sx={{ padding: "0 2rem" }}>
+        <h2>Retrieving All jobs...</h2>
+        <Button component={RouterLink} to="/job/new">
+          Create a job
+        </Button>
+      </Card>
+    </Box>
+  );
+
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
@@ -117,7 +124,7 @@ const UserJobs = () => {
         <StyledAdJobDiv>
           <Stack spacing={2} direction="row">
             {button}
-            {<Divider orientation="vertical" />}
+            <Divider orientation="vertical" />
             {actionItem}
           </Stack>
         </StyledAdJobDiv>
@@ -126,7 +133,8 @@ const UserJobs = () => {
         </UsersJobFilterDiv>
         <UserJobListDiv>
           {isLoading && <LoadingSpinner asOverlay />}
-          <JobAdsList job={filteredJobs} />
+          {isLoading && loadingBox}
+          {!isLoading && <JobAdsList job={filteredJobs} />}
         </UserJobListDiv>
         <FeaturedJobListDiv>
           <FeaturedJobsLists sponsors={dummy_jobs} />

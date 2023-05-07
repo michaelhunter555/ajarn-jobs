@@ -12,15 +12,17 @@ import {
 import {
   Button,
   Grid,
+  Skeleton,
+  Stack,
 } from '@mui/material';
 
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import JobAdsList from '../../shared/components/UIElements/JobAdsList';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import UserProfileJobAd
   from '../../shared/components/UIElements/UserProfileJobAd';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useCreator } from '../../shared/hooks/creator-hook';
+import { useJob } from '../../shared/hooks/jobs-hook';
 import { useResume } from '../../shared/hooks/resume-hook';
 import { useSettingsToggle } from '../../shared/hooks/toggle-hook';
 import { useUser } from '../../shared/hooks/user-hook';
@@ -73,22 +75,33 @@ const TeacherDashboard = () => {
     error: settingToggleError,
     clearError: clearSettingToggleError,
   } = useSettingsToggle();
-
-  //get random user card if user is employer
-  useEffect(() => {
-    console.log('fetching random users')
-    const randomUser =
-      DUMMY_USERS_LIST[Math.floor(Math.random() * DUMMY_USERS_LIST.length)];
-    setSelectedCard(randomUser);
-  }, []);
+  const {
+    // get list of user jobs
+    jobs,
+    getJobsByUserId,
+    isLoading: jobsIsLoading,
+    error: gettingJobsError,
+    clearError: clearGettingJobsError,
+  } = useJob();
 
   //GET user profile information
   useEffect(() => {
-    console.log('fetching your user info')
     if (userId) {
       getUserInformation(userId);
     }
   }, [userId, getUserInformation]);
+
+  useEffect(() => {
+    getJobsByUserId(userId);
+  }, [userId, getJobsByUserId]);
+  console.log("JOBS ARRAY", jobs);
+
+  //get random user card if user is employer
+  useEffect(() => {
+    const randomUser =
+      DUMMY_USERS_LIST[Math.floor(Math.random() * DUMMY_USERS_LIST.length)];
+    setSelectedCard(randomUser);
+  }, []);
 
   //PATCH General Profile Info Upate
   const handleProfileUpdate = (update) => {
@@ -161,6 +174,8 @@ const TeacherDashboard = () => {
     auth.updateUser(creatorItem);
   };
 
+  console.log("test for auth creator data:", auth.user?.jobs);
+
   const {
     id,
     name,
@@ -183,7 +198,8 @@ const TeacherDashboard = () => {
       case "profile":
         return auth.user && <ProfileInformation user={auth.user} />;
       case "job-listings":
-        return <JobAdsList job={dummy_jobs} />;
+        /*auth.user.jobs */
+        return <JobAdsList job={jobs} />;
       case "applications":
         return <Applications />;
       case "resume":
@@ -243,17 +259,20 @@ const TeacherDashboard = () => {
     userProfileLoading ||
     userResumeUpdating ||
     updatingCreator ||
-    settingToggleIsLoading;
+    settingToggleIsLoading ||
+    jobsIsLoading;
   const error =
     getUserProfileError ||
     userResumeError ||
     creatorUpdatingError ||
-    settingToggleError;
+    settingToggleError ||
+    gettingJobsError;
   const combinedClearError = () => {
     clearUserProfileError();
     clearResumeError();
     clearCreatorError();
     clearSettingToggleError();
+    clearGettingJobsError();
   };
 
   return (
@@ -302,7 +321,16 @@ const TeacherDashboard = () => {
               flexDirection: "column",
             }}
           >
-            {isLoading && <LoadingSpinner asOverlay />}
+            {isLoading && (
+              <Stack justifyContent="flex-End">
+                <Skeleton width={80} height={80} variant="circular" />
+                <Skeleton height={180} variant="rectangular" />
+                <Skeleton height={30} width="60%" />
+                <Skeleton height={30} />
+                <Skeleton height={30} />
+              </Stack>
+            )}
+
             {!isLoading && renderComponent()}
           </Grid>
         </Grid>
