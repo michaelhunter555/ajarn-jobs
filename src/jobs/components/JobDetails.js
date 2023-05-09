@@ -159,7 +159,7 @@ const JobDetails = (props) => {
               <Grid item>
                 <Avatar
                   variant="circular"
-                  src={job?.creator?.logoUrl}
+                  src={job?.image}
                   sx={{ height: 175, width: 175, border: "1px solid #e5e5e5" }}
                   alt={`${job?.id}--${job?.creator?.company}`}
                 />

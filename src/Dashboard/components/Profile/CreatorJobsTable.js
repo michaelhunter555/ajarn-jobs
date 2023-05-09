@@ -1,9 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, {
+  useContext,
+  useEffect,
+} from 'react';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
 import {
+  Box,
   Button,
+  ButtonGroup,
   Table,
   TableBody,
   TableCell,
@@ -11,10 +16,10 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import { AuthContext } from "../../../shared/context/auth-context";
-import { useJob } from "../../../shared/hooks/jobs-hook";
+import { AuthContext } from '../../../shared/context/auth-context';
+import { useJob } from '../../../shared/hooks/jobs-hook';
 
 const CreatorJobsTable = () => {
   const auth = useContext(AuthContext);
@@ -44,7 +49,7 @@ const CreatorJobsTable = () => {
               variant="button"
               color="text.secondary"
             >
-              View Job
+              View/Edit
             </Typography>
           </TableCell>
           <TableCell>
@@ -86,21 +91,28 @@ const CreatorJobsTable = () => {
         </TableHead>
         <TableBody>
           {isLoading ? (
-            <p>Loading... </p>
+            <Box sx={{ display: "flex", width: "100%" }}>Loading...</Box>
           ) : (
             jobs?.map((job, i) => (
               <TableRow key={job?._id}>
                 <TableCell>{job?.datePosted.split("T")[0]}</TableCell>
                 <TableCell>
-                  <Button
+                  <ButtonGroup
                     size="small"
                     variant="contained"
-                    to={`/jobs/${job?._id}`}
-                    component={RouterLink}
-                    target={"_blank"}
+                    disableElevation
                   >
-                    View Job
-                  </Button>
+                    <Button to={`/jobs/${job?._id}`} component={RouterLink}>
+                      View
+                    </Button>
+                    <Button
+                      sx={{ backgroundColor: "#2c6399" }}
+                      to={`/jobs/${job?._id}/update`}
+                      component={RouterLink}
+                    >
+                      Edit
+                    </Button>
+                  </ButtonGroup>
                 </TableCell>
                 <TableCell>{job?.location}</TableCell>
                 <TableCell>{job?.salary}</TableCell>

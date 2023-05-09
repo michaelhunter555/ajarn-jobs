@@ -1,20 +1,32 @@
-import { useContext, useEffect, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
-import EastIcon from "@mui/icons-material/East";
-import { Box, Button, Card, Divider, Stack } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import EastIcon from '@mui/icons-material/East';
+import {
+  Box,
+  Button,
+  Card,
+  Divider,
+  Stack,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import Footer from "../../shared/components/UIElements/Footer";
-import JobAdsList from "../../shared/components/UIElements/JobAdsList";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useHttpClient } from "../../shared/hooks/http-hook";
-import { dummy_jobs } from "../../shared/util/DummyJobs";
-import FeaturedJobsLists from "../components/FeaturedJobsLists";
-import JobFilters from "../components/JobFilters";
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import Footer from '../../shared/components/UIElements/Footer';
+import JobAdsList from '../../shared/components/UIElements/JobAdsList';
+import {
+  JobAdSkeleton,
+} from '../../shared/components/UIElements/LoadingSkeletons';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import { dummy_jobs } from '../../shared/util/DummyJobs';
+import FeaturedJobsLists from '../components/FeaturedJobsLists';
+import JobFilters from '../components/JobFilters';
 
 const StyledUserJobsDiv = styled("div")({
   maxWidth: "85%",
@@ -43,7 +55,7 @@ const FeaturedJobListDiv = styled(Card)({
 });
 
 const UserJobs = () => {
-  const authCtx = useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const [filter, setFilter] = useState(dummy_jobs);
   const [jobs, setJobs] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -77,7 +89,7 @@ const UserJobs = () => {
   let button;
   let actionItem;
 
-  if (authCtx.isLoggedIn) {
+  if (auth.isLoggedIn) {
     button = (
       <Button variant="contained" component={RouterLink} to="/job/new">
         Add a Job +
@@ -88,11 +100,11 @@ const UserJobs = () => {
         Learn More
       </Button>
     );
-  } else if (!authCtx.isLoggedIn) {
+  } else if (!auth.isLoggedIn) {
     button = (
       <Button
         variant="contained"
-        disabled={!authCtx.isLoggedIn}
+        disabled={!auth.isLoggedIn}
         component={RouterLink}
         to="/auth"
       >
@@ -108,8 +120,16 @@ const UserJobs = () => {
 
   const loadingBox = (
     <Box>
-      <Card sx={{ padding: "0 2rem" }}>
+      <Card sx={{ padding: "0 2rem", height: "90px" }}>
         <h2>Retrieving All jobs...</h2>
+      </Card>
+    </Box>
+  );
+
+  const noJobs = (
+    <Box>
+      <Card sx={{ padding: "0 2rem" }}>
+        <h2>Sorry no jobs were found for your search</h2>
         <Button component={RouterLink} to="/job/new">
           Create a job
         </Button>
@@ -132,8 +152,9 @@ const UserJobs = () => {
           <JobFilters onFilterChange={handleFilterChange} />
         </UsersJobFilterDiv>
         <UserJobListDiv>
-          {isLoading && <LoadingSpinner asOverlay />}
           {isLoading && loadingBox}
+          {!isLoading && filteredJobs?.length === 0 && noJobs}
+          {isLoading && <JobAdSkeleton variant="rectangular" num={10} />}
           {!isLoading && <JobAdsList job={filteredJobs} />}
         </UserJobListDiv>
         <FeaturedJobListDiv>

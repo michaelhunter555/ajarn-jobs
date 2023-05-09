@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React from 'react';
 
-import { Box, Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Tab,
+  Tabs,
+} from '@mui/material';
 
 const creatorMenuItems = [
   {
@@ -21,13 +25,14 @@ const creatorMenuItems = [
   },
 ];
 
-const CreatorTabs = ({ onTabChange }) => {
-  const [selectedTab, setSelectedTab] = useState(0);
+const CreatorTabs = ({ onTabChange, addCredits }) => {
+    const handleTabChange = (event, newValue) => {
+        onTabChange(creatorMenuItems[newValue].renderData);
+      };
+    
+      const selectedTab = creatorMenuItems.findIndex((item) => item.renderData === addCredits);
+    
 
-  const handleTabChange = (event, newValue) => {
-    setSelectedTab(newValue);
-    onTabChange(creatorMenuItems[newValue].renderData);
-  };
   return (
     <Box
       sx={{ width: "100%", bgcolor: "background.paper", margin: "1rem auto" }}

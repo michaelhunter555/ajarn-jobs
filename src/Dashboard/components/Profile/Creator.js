@@ -470,7 +470,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                     </Grid>
                     <Grid>
                       <Link
-                        onClick={() => setCreatorProfileTab("credits")}
+                        onClick={() => handleMenuItemClick("credits")}
                         component="button"
                         variant="subtitle2"
                       >
@@ -482,7 +482,11 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
               </Grid>
             </Grid>
             <Divider sx={{ width: "100%", marginBottom: "1rem" }} flexItem />
-            <CreatorTabs onTabChange={handleMenuItemClick} />
+            {/* set tab to get credits */}
+            <CreatorTabs
+              addCredits={creatorProfileTab}
+              onTabChange={handleMenuItemClick}
+            />
             <Box sx={{ height: "auto" }}>{renderComponent()}</Box>
           </Card>
         )

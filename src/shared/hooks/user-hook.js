@@ -1,7 +1,10 @@
-import { useCallback, useContext } from "react";
+import {
+  useCallback,
+  useContext,
+} from 'react';
 
-import { AuthContext } from "../context/auth-context";
-import { useHttpClient } from "./http-hook";
+import { AuthContext } from '../context/auth-context';
+import { useHttpClient } from './http-hook';
 
 export const useUser = () => {
   const auth = useContext(AuthContext);
@@ -37,7 +40,7 @@ export const useUser = () => {
     [sendRequest, updateUser]
   );
 
-  //PATCH
+  //PATCH Add credits
   const addCredits = useCallback(
     async (userId, credits) => {
       try {

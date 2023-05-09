@@ -81,7 +81,7 @@ const JobAdsList = (props) => {
                           variant="subtitle2"
                           color="text.secondary"
                         >
-                          Listed - {school?.datePosted.split("T")[0]}
+                          Listed • {school?.datePosted.split("T")[0]}
                         </Typography>
                       </Stack>
                       <StyledChipDiv variant="body2" component="div">

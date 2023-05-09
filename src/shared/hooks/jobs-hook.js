@@ -76,7 +76,7 @@ export const useJob = () => {
           JSON.stringify({ creatorId: updatedInfo }),
           { "Content-Type": "application/json" }
         );
-        const jobToUpdate = auth.user.map((job) =>
+        const jobToUpdate = auth.user.jobs.map((job) =>
           job._id === response.job._id ? response.job : job
         );
         const updatedJob = {

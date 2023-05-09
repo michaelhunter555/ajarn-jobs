@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
+import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
-import { dummy_jobs } from "../../shared/util/DummyJobs";
+import { useJob } from "../../shared/hooks/jobs-hook";
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
@@ -27,38 +28,47 @@ const updateJobStyles = {
 };
 
 const UpdateJob = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const auth = useContext(AuthContext);
+  const { user } = auth;
   const jobId = useParams().jid;
+  const { jobs, getJobsByUserId, updateJobById, isLoading, error, clearError } =
+    useJob();
 
-  const identifiedJob = dummy_jobs.find((j) => j.id === jobId);
+  useEffect(() => {
+    getJobsByUserId(user?._id);
+  }, [getJobsByUserId, user]);
+
+  const identifiedJob = jobs.find((j) => j._id === jobId);
 
   const [formState, inputHandler, setFormData] = useForm(
     {
       title: {
-        value: identifiedJob.title,
-        isValid: true,
+        value: "",
+        isValid: false,
       },
       location: {
-        value: identifiedJob.location,
-        isValid: true,
+        value: "",
+        isValid: false,
       },
       requirements: {
-        value: identifiedJob.requirements,
-        isValid: true,
+        value: "",
+        isValid: false,
       },
       description: {
-        value: identifiedJob.description,
-        isValid: true,
+        value: "",
+        isValid: false,
       },
       hours: {
-        value: identifiedJob.hours,
-        isValid: true,
+        value: "",
+        isValid: false,
+      },
+      workPermit: {
+        value: "",
+        isValid: false,
       },
     },
-    true
+    false
   );
-
-  console.log(identifiedJob);
 
   useEffect(() => {
     if (identifiedJob) {
@@ -68,9 +78,17 @@ const UpdateJob = () => {
             value: identifiedJob.title,
             isValid: true,
           },
+          jobType: {
+            value: identifiedJob.jobType,
+            isValid: true,
+          },
           location: {
             value: identifiedJob.location,
             isValid: true,
+          },
+          salary: {
+            value: identifiedJob.salary,
+            isVaid: true,
           },
           requirements: {
             value: identifiedJob.requirements,
@@ -92,12 +110,22 @@ const UpdateJob = () => {
         true
       );
     }
-    setIsLoading(false);
   }, [setFormData, identifiedJob]);
 
   const jobUpdateHandler = (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
+
+    const updatedJob = {
+      title: formState.inputs.title.value,
+      jobType: formState.inputs.jobType.value,
+      location: formState.inputs.location.value,
+      salary: formState.inputs.salary.value,
+      requirements: formState.inputs.requirements.value,
+      hours: formState.inputs.hours.value,
+      description: formState.inputs.description.value,
+      workPermit: formState.inputs.workPermit.value,
+    };
+    updateJobById(jobId, updatedJob);
   };
 
   if (isLoading) {
