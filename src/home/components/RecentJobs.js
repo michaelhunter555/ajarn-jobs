@@ -20,6 +20,8 @@ const RecentJobs = (props) => {
     color: "#002379",
   });
 
+  const recentJobsLimit = props.homeJobs.slice(0, 3);
+
   return (
     <>
       <StyledTitle>
@@ -27,20 +29,20 @@ const RecentJobs = (props) => {
         <MdOutlineFiberNew style={{ color: "green" }} />
       </StyledTitle>
       {props.homeJobs &&
-        props?.homeJobs?.map((job) => (
+        recentJobsLimit?.map((job) => (
           <Link
             style={{ color: "rgb(92, 92, 92)" }}
-            key={job.id}
-            to={`/jobs/${job.id}`}
+            key={job?._id}
+            to={`/jobs/${job?._id}`}
           >
             <RecentJobItems
-              location={job.location}
-              salary={job.salary}
-              datePosted={job.datePosted}
-              logo={job.creator.logoUrl}
-              title={job.title}
-              id={job.id}
-              creationDate={getTimeDifference(job.creationDate)}
+              location={job?.location}
+              salary={job?.salary}
+              datePosted={job?.datePosted}
+              logo={job?.image}
+              title={job?.title}
+              id={job?.id}
+              creationDate={getTimeDifference(job?.datePosted)}
             />
           </Link>
         ))}

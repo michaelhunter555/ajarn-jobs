@@ -1,26 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import { Skeleton } from '@mui/material';
-
-export const LoadingSkeletons = () => {
-  return <div>LoadingSkeletons</div>;
-};
-
-export const DashBoardSkeleton = () => {
-  return <div>YOLO</div>;
-};
+import { Skeleton } from "@mui/material";
 
 //job ad skeleton
 export const JobAdSkeleton = (props) => {
   let skeletons = [];
 
   for (let i = 0; i < props.num; i++) {
-    skeletons.push(
-      <Skeleton
-        sx={{ margin: "0.5rem 0 0.5rem 0", height: "136px", borderRadius: '6px' }}
-        variant={props.variant}
-      />
-    );
+    skeletons.push(<Skeleton sx={props.sx} variant={props.variant} />);
   }
 
   return (
@@ -32,6 +19,7 @@ export const JobAdSkeleton = (props) => {
   );
 };
 
-export const CreatorDataSkeleton = () => {
-  return <Skeleton />;
+//creator
+export const CreatorDataSkeleton = (props) => {
+  return <Skeleton sx={props.sx} variant={props.variant} />;
 };

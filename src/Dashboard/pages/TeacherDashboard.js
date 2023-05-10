@@ -1,41 +1,28 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import {
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 
-import {
-  Button,
-  Grid,
-  Skeleton,
-  Stack,
-} from '@mui/material';
+import { Button, Grid, Skeleton, Stack } from "@mui/material";
 
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import JobAdsList from '../../shared/components/UIElements/JobAdsList';
-import UserProfileJobAd
-  from '../../shared/components/UIElements/UserProfileJobAd';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useCreator } from '../../shared/hooks/creator-hook';
-import { useJob } from '../../shared/hooks/jobs-hook';
-import { useResume } from '../../shared/hooks/resume-hook';
-import { useSettingsToggle } from '../../shared/hooks/toggle-hook';
-import { useUser } from '../../shared/hooks/user-hook';
-import { dummy_jobs } from '../../shared/util/DummyJobs';
-import { DUMMY_USERS_LIST } from '../../shared/util/DummyUsers';
-import TeacherItem from '../../users/components/TeacherItem';
-import Applications from '../components/Profile/Applications';
-import Creator from '../components/Profile/Creator';
-import FeaturedCard from '../components/Profile/FeaturedCard';
-import ProfileInformation from '../components/Profile/ProfileInformation';
-import TeacherSettings from '../components/Profile/TeacherSettings';
-import UpdateResumeItem from '../components/Profile/UpdateResumeItem';
-import Sidebar from '../components/Sidebar';
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import JobAdsList from "../../shared/components/UIElements/JobAdsList";
+import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useCreator } from "../../shared/hooks/creator-hook";
+import { useJob } from "../../shared/hooks/jobs-hook";
+import { useResume } from "../../shared/hooks/resume-hook";
+import { useSettingsToggle } from "../../shared/hooks/toggle-hook";
+import { useUser } from "../../shared/hooks/user-hook";
+import { dummy_jobs } from "../../shared/util/DummyJobs";
+import { DUMMY_USERS_LIST } from "../../shared/util/DummyUsers";
+import TeacherItem from "../../users/components/TeacherItem";
+import Applications from "../components/Profile/Applications";
+import Creator from "../components/Profile/Creator";
+import FeaturedCard from "../components/Profile/FeaturedCard";
+import ProfileInformation from "../components/Profile/ProfileInformation";
+import TeacherSettings from "../components/Profile/TeacherSettings";
+import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
+import Sidebar from "../components/Sidebar";
 
 const TeacherDashboard = () => {
   const userId = useParams().id;
@@ -94,7 +81,6 @@ const TeacherDashboard = () => {
   useEffect(() => {
     getJobsByUserId(userId);
   }, [userId, getJobsByUserId]);
-  console.log("JOBS ARRAY", jobs);
 
   //get random user card if user is employer
   useEffect(() => {
@@ -173,8 +159,6 @@ const TeacherDashboard = () => {
     };
     auth.updateUser(creatorItem);
   };
-
-  console.log("test for auth creator data:", auth.user?.jobs);
 
   const {
     id,

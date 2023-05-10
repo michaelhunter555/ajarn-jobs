@@ -28,6 +28,7 @@ import { useForm } from "../../../shared/hooks/form-hook";
 import { thaiCities } from "../../../shared/util/ThaiData";
 import CreatorJobsTable from "./CreatorJobsTable";
 import CreatorTabs from "./CreatorTabs";
+import JobApplicantsTable from "./JobApplicantsTable";
 import PurchaseCredits from "./PurchaseCredits";
 
 const date = new Date();
@@ -35,11 +36,11 @@ const today = date.toISOString().split("T")[0];
 
 const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const auth = useContext(AuthContext);
-  console.log(auth.user.jobs.length);
   //editing toggle for creator info
   const [isEditing, setIsEditing] = useState(true);
-  //loading state - checks if creator info is present or not.
+  //loading state - checks if user has creator profile already or not.
   const [isLoading, setIsLoading] = useState(auth.user?.creator !== null);
+  //dynamic creator profile for rendering components based on click, set to 'applicants'
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -152,7 +153,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const renderComponent = () => {
     switch (creatorProfileTab) {
       case "applicants":
-        return <>You have no applicant's yet!</>;
+        return <JobApplicantsTable />;
       case "jobs":
         return <CreatorJobsTable />;
       case "credits":

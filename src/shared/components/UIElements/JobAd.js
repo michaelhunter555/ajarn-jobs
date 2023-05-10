@@ -38,7 +38,7 @@ const JobAd = (props) => {
   const { job } = props;
 
   return (
-    <Link to={`/jobs/${job.id}`} style={{ textDecoration: "none" }}>
+    <Link to={`/jobs/${job?._id}`} style={{ textDecoration: "none" }}>
       <Card>
         <CardActionArea>
           <CardContent>
@@ -46,8 +46,8 @@ const JobAd = (props) => {
               <Grid item xs={4} sm={4} lg={3} xl={2}>
                 <StyledMediaCard
                   component="img"
-                  src={job.creator.logoUrl}
-                  alt={job.id}
+                  src={job?.image}
+                  alt={job?._id}
                 />
               </Grid>
 
@@ -58,33 +58,33 @@ const JobAd = (props) => {
                   variant="h5"
                   component="div"
                 >
-                  {job.creator.company} -{" "}
-                  {job.title.length > 25
-                    ? job.title.substring(0, 40) + "..."
-                    : job.title}
+                  {job?.creator?.company} -{" "}
+                  {job?.title?.length > 25
+                    ? job?.title.substring(0, 40) + "..."
+                    : job?.title}
                 </Typography>
 
                 <StyledChipDiv variant="body2" component="div">
                   <Chip
-                    label={job.location}
+                    label={job?.location}
                     size={"small"}
                     icon={<PlaceIcon />}
                   />
                   <Chip
-                    label={job.salary}
+                    label={job?.salary}
                     size={"small"}
                     icon={<PaymentsIcon />}
                   />
                   <Chip
-                    label={job.hours}
+                    label={job?.hours}
                     size={"small"}
                     icon={<PunchClockIcon />}
                   />
                 </StyledChipDiv>
                 <Typography variant="body2" color="text.secondary">
-                  {job.description.length > 60
-                    ? job.description.substring(0, 60) + "..."
-                    : job.description}
+                  {job?.description?.length > 120
+                    ? job?.description.substring(0, 120) + "..."
+                    : job?.description}
                 </Typography>
               </Grid>
             </Grid>

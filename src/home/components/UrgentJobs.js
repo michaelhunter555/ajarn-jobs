@@ -41,8 +41,8 @@ const UrgentJobs = (props) => {
         </Typography>
         <List>
           {urgentJobLimit.map((jobs, i) => (
-            <Link key={jobs.id} component={RouterLink} to={`/jobs/${jobs.id}`}>
-              <ListItem key={jobs.id}>
+            <Link key={jobs.id} component={RouterLink} to={`/jobs/${jobs._id}`}>
+              <ListItem key={jobs._id}>
                 <StyledJobText color="text.secondary">
                   {i + 1}. {jobs.title}
                 </StyledJobText>

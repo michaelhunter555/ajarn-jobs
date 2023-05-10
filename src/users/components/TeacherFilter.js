@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 import {
   FormControl,
@@ -7,14 +7,14 @@ import {
   Paper,
   Select,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import {
   coreJobRequirements,
   nationalities,
   thaiCities,
-} from '../../shared/util/ThaiData';
+} from "../../shared/util/ThaiData";
 
 const StyledPaperContainer = styled(Paper)({
   border: "1px solid #ddd",
@@ -46,7 +46,7 @@ const TeacherFilter = ({ onDataChange }) => {
   return (
     <StyledPaperContainer>
       <Typography sx={{ fontSize: 30 }} component="h2">
-        Filter Jobs
+        Filter Teachers
       </Typography>
       <FormControl fullWidth={true}>
         <FormLabel component="legend">Select city</FormLabel>

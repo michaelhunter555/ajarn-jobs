@@ -1,6 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import FeaturedJobs from "./FeaturedJobs";
+import { Paper } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+import FeaturedJobs from './FeaturedJobs';
+
+const StyledFeaturedJobs = styled(Paper)({
+  border: "1px solid #ddd",
+  padding: "1.5rem",
+  borderRadius: "6px",
+  background: "#fff",
+})
 
 const FeaturedJobsLists = (props) => {
   if (props?.sponsors?.length < 0) {
@@ -12,20 +22,19 @@ const FeaturedJobsLists = (props) => {
   }
 
   return (
-    <>
+    <StyledFeaturedJobs>
       <h2>Featured jobs:</h2>
       {props?.sponsors
-        .filter((listing) => listing?.jobType?.featured)
+        .filter((listing) => listing?.jobType === "featured")
         .map((school) => (
           <FeaturedJobs
-            key={school?.id}
-            id={school?.id}
-            logo={school?.creator?.logoUrl}
-            company={school?.creator?.company}
-          />
+            key={school?._id}
+            id={school?._id}
+            logo={school?.image}
+            company={school?.creator?.company} /> 
         ))}
-    </>
-  );
+        </StyledFeaturedJobs>
+  )
 };
 
 export default FeaturedJobsLists;

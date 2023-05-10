@@ -59,7 +59,7 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
   overflow: "hidden",
 
   background:
-    "linear-gradient(135deg, hsla(360, 100%, 100%, 0.7), hsla(360, 100%, 100%, 0.7) 9.37%, hsla(360, 100%, 100%, 0.7) 54.69%, hsla(360, 100%, 100%, 0.7) 66.15%, hsla(360, 1000%, 100%, 0.7))",
+    "linear-gradient(135deg, hsla(360, 100%, 100%, 0.9), hsla(360, 100%, 100%, 0.9) 9.37%, hsla(360, 100%, 100%, 0.9) 54.69%, hsla(360, 100%, 100%, 0.9) 66.15%, hsla(360, 1000%, 100%, 0.9))",
   "&::after": {
     content: '""',
     position: "absolute",
@@ -149,11 +149,13 @@ const MainFeaturedPost = (props) => {
 
         <StyledDivider variant="middle">More Content</StyledDivider>
 
-        <Box sx={{ padding: "0 0 1rem 0", margin: "0 0 0 0.5rem" }}>
+        <Box
+          sx={{ padding: "0 0 1rem 0", margin: "0 0 0 0.5rem", width: "100%" }}
+        >
           <Grid container spacing={2}>
             {/*next posts after 1st or featured post */}
             {post.slice(1).map((posts, i) => (
-              <Grid item key={i} xs={12} sm={6} md={4}>
+              <Grid item key={i} xs={12} sm={6}>
                 <Link key={i} to="/">
                   <Box
                     sx={{
@@ -187,8 +189,8 @@ const MainFeaturedPost = (props) => {
                                 maxWidth: "100%",
                               }}
                             >
-                              {posts.title.length > 30
-                                ? posts.title.substring(0, 30) + "..."
+                              {posts.title.length > 50
+                                ? posts.title.substring(0, 50) + "..."
                                 : posts.title}
                             </Typography>
                           </Box>

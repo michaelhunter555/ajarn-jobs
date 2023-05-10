@@ -75,7 +75,6 @@ const Sidebar = ({ onMenuItemClick }) => {
 
   const handleSidebarClick = (componentName) => {
     onMenuItemClick(componentName);
-    console.log(componentName);
   };
 
   const filteredSidebar = menuItems.filter((val) => {

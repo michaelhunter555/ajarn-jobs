@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -7,6 +7,8 @@ import { styled } from "@mui/material/styles";
 
 import Footer from "../../shared/components/UIElements/Footer";
 import JobAd from "../../shared/components/UIElements/JobAd";
+import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import { dummy_jobs } from "../../shared/util/DummyJobs";
 import BlogContent from "../components/BlogContent";
 import BottomFeatured from "../components/BottomFeatured";
@@ -120,6 +122,24 @@ const StyledTeflWrapper = styled("div")(({ theme }) => ({
 }));
 
 const Home = () => {
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [homeJobs, setHomeJobs] = useState([]);
+
+  useEffect(() => {
+    const getFeaturedJobs = async () => {
+      const response = await sendRequest("http://localhost:5000/api/jobs");
+      console.log("FEATURED JOBS HOME.JS:", response.jobs);
+      setHomeJobs(response.jobs);
+    };
+    getFeaturedJobs();
+  }, [sendRequest]);
+  console.log(homeJobs);
+  const filterFeaturedJobs = homeJobs.filter(
+    (job) => job.jobType === "featured"
+  );
+  const randomFeaturedJob =
+    filterFeaturedJobs[Math.floor(Math.random() * filterFeaturedJobs.length)];
+
   return (
     <>
       {/* */}
@@ -129,18 +149,51 @@ const Home = () => {
           <Tefl />
         </StyledTeflWrapper>
         <StyledHomeFeaturedTop>
-          <JobAd job={dummy_jobs[0]} />
+          {isLoading && (
+            <JobAdSkeleton
+              sx={{
+                height: "126px",
+                borderRadius: "6px",
+              }}
+              num={1}
+              variant="rectangular"
+            />
+          )}
+          {!isLoading && randomFeaturedJob && (
+            <JobAd key={randomFeaturedJob?._id} job={randomFeaturedJob} />
+          )}
+
           {/* top-middle column */}
         </StyledHomeFeaturedTop>
 
         {/* top-right column*/}
         <StyledUrgentJobsWrapper>
-          <UrgentJobs job={dummy_jobs} />
+          {isLoading && (
+            <JobAdSkeleton
+              sx={{
+                height: "200px",
+                borderRadius: "6px",
+              }}
+              num={1}
+              variant="text"
+            />
+          )}
+          {!isLoading && <UrgentJobs job={homeJobs} />}
         </StyledUrgentJobsWrapper>
 
         {/*lower-left column */}
         <StyledHomeFeaturedJobs>
-          <RecentJobs homeJobs={dummy_jobs} />
+          {isLoading && (
+            <JobAdSkeleton
+              sx={{
+                height: "95px",
+              }}
+              num={4}
+              variant="rectangular"
+            />
+          )}
+          {!isLoading && <RecentJobs homeJobs={homeJobs} />}
+
           <Button component={RouterLink} to="/jobs">
             View All Jobs
           </Button>
@@ -152,7 +205,7 @@ const Home = () => {
         </StyledHomeFeaturedContent>
         {/* lower-right column*/}
         <StyledHomeFeaturedSponsors>
-          <SponsorsList sponsor={dummy_jobs} />
+          <SponsorsList sponsor={filterFeaturedJobs} />
           <Button component={RouterLink} to="/jobs">
             Become a Sponsor
           </Button>

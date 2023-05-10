@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import { Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import Sponsors from './Sponsors';
+import Sponsors from "./Sponsors";
 
 const StyledPaper = styled(Paper)({
   maxHeight: "100%",
@@ -28,9 +28,9 @@ const SponsorsList = (props) => {
       <StyledTitle>Sponsors</StyledTitle>
       <StyledPaper elevation={0}>
         {sponsor.map((supporter, i) => (
-          <StyledLink key={supporter.id} to={`/jobs/${supporter.id}`}>
+          <StyledLink key={supporter.id} to={`/jobs/${supporter._id}`}>
             <Sponsors
-              logo={supporter.creator.logoUrl}
+              logo={supporter.image}
               description={supporter.description.substring(0, 25) + "..."}
               company={supporter.creator.company}
               salary={supporter.salary}

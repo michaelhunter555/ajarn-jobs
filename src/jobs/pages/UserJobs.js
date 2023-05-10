@@ -1,32 +1,20 @@
-import {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { useContext, useEffect, useState } from "react";
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
-import EastIcon from '@mui/icons-material/East';
-import {
-  Box,
-  Button,
-  Card,
-  Divider,
-  Stack,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import EastIcon from "@mui/icons-material/East";
+import { Box, Button, Card, Divider, Stack } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import Footer from '../../shared/components/UIElements/Footer';
-import JobAdsList from '../../shared/components/UIElements/JobAdsList';
-import {
-  JobAdSkeleton,
-} from '../../shared/components/UIElements/LoadingSkeletons';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { dummy_jobs } from '../../shared/util/DummyJobs';
-import FeaturedJobsLists from '../components/FeaturedJobsLists';
-import JobFilters from '../components/JobFilters';
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Footer from "../../shared/components/UIElements/Footer";
+import JobAdsList from "../../shared/components/UIElements/JobAdsList";
+import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import { dummy_jobs } from "../../shared/util/DummyJobs";
+import FeaturedJobsLists from "../components/FeaturedJobsLists";
+import JobFilters from "../components/JobFilters";
 
 const StyledUserJobsDiv = styled("div")({
   maxWidth: "85%",
@@ -49,9 +37,8 @@ const UsersJobFilterDiv = styled("div")({
 const UserJobListDiv = styled("div")({
   gridColumn: "2 / 4",
 });
-const FeaturedJobListDiv = styled(Card)({
+const FeaturedJobListDiv = styled("div")({
   gridColumn: "4 / 5",
-  marginTop: "1rem",
 });
 
 const UserJobs = () => {
@@ -151,14 +138,25 @@ const UserJobs = () => {
         <UsersJobFilterDiv>
           <JobFilters onFilterChange={handleFilterChange} />
         </UsersJobFilterDiv>
+
         <UserJobListDiv>
           {isLoading && loadingBox}
           {!isLoading && filteredJobs?.length === 0 && noJobs}
-          {isLoading && <JobAdSkeleton variant="rectangular" num={10} />}
+          {isLoading && (
+            <JobAdSkeleton
+              sx={{
+                margin: "0.5rem 0 0.5rem 0",
+                height: "136px",
+                borderRadius: "6px",
+              }}
+              variant="rectangular"
+              num={10}
+            />
+          )}
           {!isLoading && <JobAdsList job={filteredJobs} />}
         </UserJobListDiv>
         <FeaturedJobListDiv>
-          <FeaturedJobsLists sponsors={dummy_jobs} />
+          <FeaturedJobsLists sponsors={jobs} />
         </FeaturedJobListDiv>
       </StyledUserJobsDiv>
       <Footer />
