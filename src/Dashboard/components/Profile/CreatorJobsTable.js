@@ -1,9 +1,6 @@
-import React, {
-  useContext,
-  useEffect,
-} from 'react';
+import React, { useContext, useEffect } from "react";
 
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 
 import {
   Box,
@@ -16,10 +13,49 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import { AuthContext } from '../../../shared/context/auth-context';
-import { useJob } from '../../../shared/hooks/jobs-hook';
+import { AuthContext } from "../../../shared/context/auth-context";
+import { useJob } from "../../../shared/hooks/jobs-hook";
+
+const tableRows = [
+  {
+    text: "Posted",
+    variant: "button",
+    color: "text.secondary",
+    style: { fontWeight: 700 },
+  },
+  {
+    text: "View/Edit",
+    variant: "button",
+    color: "text.secondary",
+    style: { fontWeight: 700 },
+  },
+  {
+    text: "Location",
+    variant: "button",
+    color: "text.secondary",
+    style: { fontWeight: 700 },
+  },
+  {
+    text: "Salary",
+    variant: "button",
+    color: "text.secondary",
+    style: { fontWeight: 700 },
+  },
+  {
+    text: "Hours",
+    variant: "button",
+    color: "text.secondary",
+    style: { fontWeight: 700 },
+  },
+  {
+    text: "Applicants",
+    variant: "button",
+    color: "text.secondary",
+    style: { fontWeight: 700 },
+  },
+];
 
 const CreatorJobsTable = () => {
   const auth = useContext(AuthContext);
@@ -34,64 +70,25 @@ const CreatorJobsTable = () => {
     <TableContainer>
       <Table>
         <TableHead>
-          <TableCell>
-            <Typography
-              sx={{ fontWeight: 700 }}
-              variant="button"
-              color="text.secondary"
-            >
-              Posted
-            </Typography>
-          </TableCell>
-          <TableCell>
-            <Typography
-              sx={{ fontWeight: 700 }}
-              variant="button"
-              color="text.secondary"
-            >
-              View/Edit
-            </Typography>
-          </TableCell>
-          <TableCell>
-            <Typography
-              sx={{ fontWeight: 700 }}
-              variant="button"
-              color="text.secondary"
-            >
-              Location
-            </Typography>
-          </TableCell>
-          <TableCell>
-            <Typography
-              sx={{ fontWeight: 700 }}
-              variant="button"
-              color="text.secondary"
-            >
-              salary
-            </Typography>
-          </TableCell>
-          <TableCell>
-            <Typography
-              sx={{ fontWeight: 700 }}
-              variant="button"
-              color="text.secondary"
-            >
-              Hours
-            </Typography>
-          </TableCell>
-          <TableCell>
-            <Typography
-              sx={{ fontWeight: 700 }}
-              variant="button"
-              color="text.secondary"
-            >
-              Applicants
-            </Typography>
-          </TableCell>
+          {tableRows.map((item, i) => (
+            <TableCell key={i}>
+              <Typography
+                sx={item.style}
+                color={item.color}
+                variant={item.variant}
+              >
+                {item.text}
+              </Typography>
+            </TableCell>
+          ))}
         </TableHead>
         <TableBody>
           {isLoading ? (
-            <Box sx={{ display: "flex", width: "100%" }}>Loading...</Box>
+            <TableRow>
+              <TableCell>
+                <Box sx={{ display: "flex", width: "100%" }}>Loading...</Box>
+              </TableCell>
+            </TableRow>
           ) : (
             jobs?.map((job, i) => (
               <TableRow key={job?._id}>

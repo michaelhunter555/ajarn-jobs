@@ -2,21 +2,13 @@ import React, { useContext } from "react";
 
 import { Link } from "react-router-dom";
 
-import { Button, Card, CardActions, Grid } from "@mui/material";
+import { Button, Card, CardActions, Grid, Skeleton } from "@mui/material";
 
 import { AuthContext } from "../../shared/context/auth-context";
 import TeacherItem from "./TeacherItem";
 
-const TeacherList = ({ teachers }) => {
-  const authCtx = useContext(AuthContext);
-  //userId = useParams().uid;
-  //const teacher = teachers.find(teacher => teacher.id === userId);
-  //const [teacher, setTeacher] =  useState(null)
-
-  // const teacherClickHandler = () => {
-  //   setTeacher(userId);
-
-  // }
+const TeacherList = ({ teachers, isLoading }) => {
+  const auth = useContext(AuthContext);
 
   if (teachers?.length === 0) {
     return (
@@ -34,6 +26,22 @@ const TeacherList = ({ teachers }) => {
 
   return (
     <Grid container spacing={2} wrap="wrap">
+      {isLoading &&
+        Array.from(new Array(12)).map((_, i) => (
+          <Grid key={i} xs={12} sm={6} md={3}>
+            <Skeleton
+              sx={{ margin: "1rem 0.5rem 1rem 1rem", borderRadius: "6px" }}
+              variant="rectangular"
+              height={335}
+              width={261}
+            />
+            <Skeleton sx={{ margin: "0rem auto" }} variant="text" width={260} />
+            <Skeleton sx={{ margin: "0rem auto" }} variant="text" width={260} />
+            <Skeleton sx={{ margin: "0rem auto" }} variant="text" width={260} />
+            <Skeleton sx={{ margin: "0rem auto" }} variant="text" width={260} />
+          </Grid>
+        ))}
+
       {teachers?.map((teacher, i) => (
         <Grid item key={teacher.id} xs={12} sm={6} md={3}>
           {(() => {
@@ -50,8 +58,8 @@ const TeacherList = ({ teachers }) => {
               />
             );
 
-            if (authCtx?.isLoggedIn) {
-              if (authCtx?.user?.credits > 0) {
+            if (auth?.isLoggedIn) {
+              if (auth?.user?.credits > 0) {
                 return (
                   <Link to={`/teachers/${teacher.id}`}>{teacherItem}</Link>
                 );

@@ -12,18 +12,17 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Paper,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { AuthContext } from "../../shared/context/auth-context";
 
-const HorizontalSideBar = styled(Paper)(({ theme }) => ({
+const HorizontalSideBar = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   height: "100%",
-  minHeight: "50vh",
-  maxHeight: "50vh",
+  maxHeight: 310,
+  borderRadius: 10,
   maxWidth: 250,
   background: "white",
   [theme.breakpoints.down("md")]: {

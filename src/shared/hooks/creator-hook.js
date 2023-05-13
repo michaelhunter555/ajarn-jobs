@@ -13,7 +13,7 @@ export const useCreator = () => {
     async (userId, creatorItem) => {
       try {
         await sendRequest(
-          `http://localhost:5000/api/user/update-profile/${userId}`,
+          `${process.env.REACT_APP_USERS}/${userId}`,
           "PATCH",
           JSON.stringify({ creator: creatorItem }),
           { "Content-Type": "application/json" }
@@ -34,7 +34,7 @@ export const useCreator = () => {
     async (userId, creatorItem) => {
       try {
         await sendRequest(
-          `http://localhost:5000/api/user/${userId}`,
+          `${process.env.REACT_APP_USERS}/${userId}`,
           "PATCH",
           JSON.stringify({ deleteCreator: creatorItem._id }),
           { "Content-Type": "application/json" }

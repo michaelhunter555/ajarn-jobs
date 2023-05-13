@@ -18,7 +18,7 @@ import JobFilters from "../components/JobFilters";
 
 const StyledUserJobsDiv = styled("div")({
   maxWidth: "85%",
-  margin: "0 auto",
+  margin: "5rem auto",
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "15px",
@@ -105,14 +105,6 @@ const UserJobs = () => {
     );
   }
 
-  const loadingBox = (
-    <Box>
-      <Card sx={{ padding: "0 2rem", height: "90px" }}>
-        <h2>Retrieving All jobs...</h2>
-      </Card>
-    </Box>
-  );
-
   const noJobs = (
     <Box>
       <Card sx={{ padding: "0 2rem" }}>
@@ -129,19 +121,31 @@ const UserJobs = () => {
       <ErrorModal error={error} onClear={clearError} />
       <StyledUserJobsDiv>
         <StyledAdJobDiv>
-          <Stack spacing={2} direction="row">
-            {button}
-            <Divider orientation="vertical" />
-            {actionItem}
-          </Stack>
+          {!isLoading && (
+            <Stack spacing={2} direction="row">
+              {button}
+              <Divider orientation="vertical" />
+              {actionItem}
+            </Stack>
+          )}
         </StyledAdJobDiv>
         <UsersJobFilterDiv>
-          <JobFilters onFilterChange={handleFilterChange} />
+          {isLoading && (
+            <JobAdSkeleton
+              sx={{
+                margin: "0 auto",
+                height: 348,
+                width: 360,
+                borderRadius: "6px",
+              }}
+              variant="rectangular"
+              num={1}
+            />
+          )}
+          {!isLoading && <JobFilters onFilterChange={handleFilterChange} />}
         </UsersJobFilterDiv>
 
         <UserJobListDiv>
-          {isLoading && loadingBox}
-          {!isLoading && filteredJobs?.length === 0 && noJobs}
           {isLoading && (
             <JobAdSkeleton
               sx={{
@@ -153,10 +157,22 @@ const UserJobs = () => {
               num={10}
             />
           )}
+          {!isLoading && filteredJobs?.length === 0 && noJobs}
           {!isLoading && <JobAdsList job={filteredJobs} />}
         </UserJobListDiv>
         <FeaturedJobListDiv>
-          <FeaturedJobsLists sponsors={jobs} />
+          {isLoading && (
+            <JobAdSkeleton
+              sx={{
+                margin: "0.5rem 0 0.5rem 0",
+                height: "70px",
+                borderRadius: "6px",
+              }}
+              variant="rectangular"
+              num={4}
+            />
+          )}
+          {!isLoading && <FeaturedJobsLists sponsors={jobs} />}
         </FeaturedJobListDiv>
       </StyledUserJobsDiv>
       <Footer />

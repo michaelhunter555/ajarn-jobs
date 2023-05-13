@@ -9,7 +9,6 @@ import Footer from "../../shared/components/UIElements/Footer";
 import JobAd from "../../shared/components/UIElements/JobAd";
 import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
 import { useHttpClient } from "../../shared/hooks/http-hook";
-import { dummy_jobs } from "../../shared/util/DummyJobs";
 import BlogContent from "../components/BlogContent";
 import BottomFeatured from "../components/BottomFeatured";
 import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
@@ -133,7 +132,7 @@ const Home = () => {
     };
     getFeaturedJobs();
   }, [sendRequest]);
-  console.log(homeJobs);
+
   const filterFeaturedJobs = homeJobs.filter(
     (job) => job.jobType === "featured"
   );
@@ -171,11 +170,11 @@ const Home = () => {
           {isLoading && (
             <JobAdSkeleton
               sx={{
-                height: "200px",
+                height: "150px",
                 borderRadius: "6px",
               }}
               num={1}
-              variant="text"
+              variant="rectangular"
             />
           )}
           {!isLoading && <UrgentJobs job={homeJobs} />}
@@ -205,7 +204,17 @@ const Home = () => {
         </StyledHomeFeaturedContent>
         {/* lower-right column*/}
         <StyledHomeFeaturedSponsors>
-          <SponsorsList sponsor={filterFeaturedJobs} />
+          {isLoading && (
+            <JobAdSkeleton
+              sx={{
+                height: "95px",
+                borderRadius: "6px",
+              }}
+              num={4}
+              variant="rectangular"
+            />
+          )}
+          {!isLoading && <SponsorsList sponsor={filterFeaturedJobs} />}
           <Button component={RouterLink} to="/jobs">
             Become a Sponsor
           </Button>
@@ -219,7 +228,7 @@ const Home = () => {
       </div>
       <div>
         <h2 style={{ textAlign: "center" }}>Jobs You may like:</h2>{" "}
-        <BottomFeaturedAdsList footerJobs={dummy_jobs} />
+        <BottomFeaturedAdsList isLoading={isLoading} footerJobs={homeJobs} />
       </div>
       <Footer />
     </>

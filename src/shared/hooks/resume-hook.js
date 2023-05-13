@@ -13,7 +13,7 @@ export const useResume = () => {
       try {
         await sendRequest(
           //We expect dynamic userId (useParams)
-          `http://localhost:5000/api/user/update-profile/${userId}`,
+          `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
           //property to be updated "resume" on user object
           JSON.stringify({ resume: update }),
@@ -36,7 +36,7 @@ export const useResume = () => {
       try {
         await sendRequest(
           //We expect a dynamic Id to update the profile and Patch to update the user object
-          `http://localhost:5000/api/user/update-profile/${userId}`,
+          `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
           //we send deleteResume key in the req.body (req.body.deleteResume)
           //see => /backend/controllers/users/update-user-profile.js

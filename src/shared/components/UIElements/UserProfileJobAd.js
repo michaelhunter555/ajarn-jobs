@@ -38,15 +38,15 @@ const UserProfileJobAd = (props) => {
         <CardActionArea>
           <CardContent>
             <Grid container direction="row">
-              <Grid item xs={4} sm={4} lg={3} xl={2}>
+              <Grid item xs={4} sm={4} lg={3} xl={4}>
                 <StyledMediaCard
                   component="img"
                   src={props.logo}
-                  alt={props.id}
+                  alt={`${props.id}`}
                 />
               </Grid>
 
-              <Grid item xs={8} sm={8} md={8} lg={9} xl={10}>
+              <Grid item xs={8} sm={8} md={8} lg={9} xl={8}>
                 <Typography
                   gutterBottom
                   color="primary"

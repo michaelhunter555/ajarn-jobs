@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Grid } from "@mui/material/";
+import { Grid } from "@mui/material/";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import TeacherFilter from "../components/TeacherFilter";
 //[filter, teachersList, pagination];
@@ -66,12 +65,7 @@ const Teachers = () => {
           </Grid>
           <Grid item xs={12} xl={9} sx={{ margin: "1rem auto" }}>
             <Grid container spacing={2}>
-              {isLoading && (
-                <Box>
-                  <LoadingSpinner asOverlay />
-                </Box>
-              )}
-              {!isLoading && <TeacherList teachers={filteredTeachers} />}
+              <TeacherList teachers={filteredTeachers} isLoading={isLoading} />
             </Grid>
           </Grid>
         </Grid>

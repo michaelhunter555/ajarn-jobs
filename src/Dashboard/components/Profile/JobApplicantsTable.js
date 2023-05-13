@@ -57,6 +57,8 @@ const JobApplicantsTable = () => {
     getJobsByUserId(user?._id);
   }, [getJobsByUserId, user]);
 
+  const hasApplicants = jobs?.some((job) => job?.applicants?.length > 0);
+
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
@@ -77,9 +79,17 @@ const JobApplicantsTable = () => {
           </TableHead>
           <TableBody>
             {isLoading ? (
-              <Box sx={{ display: "flex", width: "100%" }}>Loading...</Box>
-            ) : jobs?.applicants?.length === 0 ? (
-              <Typography>No applicants yet! Check back later.</Typography>
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <Box sx={{ display: "flex", width: "100%" }}>Loading...</Box>
+                </TableCell>
+              </TableRow>
+            ) : !isLoading && !hasApplicants ? (
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <Typography>No applicants yet! Check back later.</Typography>
+                </TableCell>
+              </TableRow>
             ) : (
               jobs?.applicants?.map((teacher, i) => (
                 <TableRow key={teacher?._id}>

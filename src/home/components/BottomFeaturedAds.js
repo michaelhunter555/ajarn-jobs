@@ -32,16 +32,16 @@ const StyledCardContent = styled(CardContent)({
 
 const BottomFeaturedAds = (props) => {
   return (
-    <StyledCard featured={props.featured}>
+    <StyledCard featured={props?.featured}>
       <StyledMediaImage
         component="img"
-        image={props.image}
-        alt={props.school}
+        image={props?.image}
+        alt={props?.school}
       />
       <StyledBox>
         <StyledCardContent>
           <Typography component="div" variant="h5">
-            {props.title.trim().length > 20
+            {props?.title.trim().length > 20
               ? props.title.substring(0, 20) + "..."
               : props.title}
           </Typography>
@@ -50,14 +50,14 @@ const BottomFeaturedAds = (props) => {
             color="text.secondary"
             component="div"
           >
-            {props.location}
+            {props?.location}
           </Typography>
           <Typography
             variant="subtitle1"
             color="text.secondary"
             component="div"
           >
-            {props.salary} - {props.hours}
+            {props?.salary} - {props?.hours}
           </Typography>
         </StyledCardContent>
       </StyledBox>

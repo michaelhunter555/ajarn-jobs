@@ -13,8 +13,6 @@ import { useJob } from "../../shared/hooks/jobs-hook";
 import { useResume } from "../../shared/hooks/resume-hook";
 import { useSettingsToggle } from "../../shared/hooks/toggle-hook";
 import { useUser } from "../../shared/hooks/user-hook";
-import { dummy_jobs } from "../../shared/util/DummyJobs";
-import { DUMMY_USERS_LIST } from "../../shared/util/DummyUsers";
 import TeacherItem from "../../users/components/TeacherItem";
 import Applications from "../components/Profile/Applications";
 import Creator from "../components/Profile/Creator";
@@ -32,6 +30,8 @@ const TeacherDashboard = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const {
     //get and update user profile
+    users,
+    getAllUsers,
     getUserInformation,
     updateUserProfile,
     isLoading: userProfileLoading,
@@ -78,16 +78,25 @@ const TeacherDashboard = () => {
     }
   }, [userId, getUserInformation]);
 
+  //GET users current jobs for creator dash and
   useEffect(() => {
     getJobsByUserId(userId);
   }, [userId, getJobsByUserId]);
 
-  //get random user card if user is employer
+  //GET all users
   useEffect(() => {
-    const randomUser =
-      DUMMY_USERS_LIST[Math.floor(Math.random() * DUMMY_USERS_LIST.length)];
-    setSelectedCard(randomUser);
-  }, []);
+    if (!users || users.length === 0) {
+      getAllUsers();
+    }
+  }, [getAllUsers, users]);
+
+  //get random user card
+  useEffect(() => {
+    if (users && users.length > 0 && !selectedCard) {
+      const randomUser = users[Math.floor(Math.random() * users.length)];
+      setSelectedCard(randomUser);
+    }
+  }, [selectedCard, users]);
 
   //PATCH General Profile Info Upate
   const handleProfileUpdate = (update) => {
@@ -264,7 +273,15 @@ const TeacherDashboard = () => {
       <ErrorModal error={error} onClear={combinedClearError} />
       <Grid container spacing={1} sx={{ maxWidth: "90%", margin: "0 auto" }}>
         <Grid item xs={12} md={2}>
-          <Sidebar onMenuItemClick={handleMenuItemClick} />
+          {isLoading && (
+            <Skeleton
+              sx={{ margin: "0 auto", borderRadius: "6px" }}
+              variant="rectangular"
+              height={310}
+              width={250}
+            />
+          )}
+          {!isLoading && <Sidebar onMenuItemClick={handleMenuItemClick} />}
         </Grid>
 
         <Grid item xs={12} md={6}>
@@ -278,21 +295,41 @@ const TeacherDashboard = () => {
             }}
           >
             <Grid item>
-              <UserProfileJobAd
-                id={dummy_jobs[0].id}
-                logo={dummy_jobs[0].creator.logoUrl}
-                title={dummy_jobs[0].title}
-                description={dummy_jobs[0].description}
-              />
+              {isLoading && (
+                <Skeleton
+                  sx={{ margin: "0 auto", borderRadius: "6px" }}
+                  variant="rectangular"
+                  height={114}
+                  width={374}
+                />
+              )}
+              {!isLoading && (
+                <UserProfileJobAd
+                  id={jobs[0]?._id}
+                  logo={jobs[0]?.image}
+                  title={jobs[0]?.title}
+                  description={jobs[0]?.description}
+                />
+              )}
             </Grid>
 
             <Grid item>
-              <UserProfileJobAd
-                id={dummy_jobs[0].id}
-                logo={dummy_jobs[0].creator.logoUrl}
-                title={dummy_jobs[0].title}
-                description={dummy_jobs[0].description}
-              />
+              {isLoading && (
+                <Skeleton
+                  sx={{ margin: "0 auto", borderRadius: "6px" }}
+                  variant="rectangular"
+                  height={114}
+                  width={374}
+                />
+              )}
+              {!isLoading && (
+                <UserProfileJobAd
+                  id={jobs[0]?._id}
+                  logo={jobs[0]?.image}
+                  title={jobs[0]?.title}
+                  description={jobs[0]?.description}
+                />
+              )}
             </Grid>
           </Grid>
 
@@ -307,19 +344,27 @@ const TeacherDashboard = () => {
           >
             {isLoading && (
               <Stack justifyContent="flex-End">
-                <Skeleton width={80} height={80} variant="circular" />
+                <Skeleton height={80} variant="rectangular" />
                 <Skeleton height={180} variant="rectangular" />
                 <Skeleton height={30} width="60%" />
                 <Skeleton height={30} />
                 <Skeleton height={30} />
               </Stack>
             )}
-
             {!isLoading && renderComponent()}
           </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
-          {auth.user?.userType === "teacher" ? (
+          {isLoading ? (
+            <>
+              <Skeleton
+                sx={{ margin: "1rem 0.5rem 1rem 1rem", borderRadius: "6px" }}
+                variant="rectangular"
+                height={372}
+                width={343}
+              />
+            </>
+          ) : auth.user?.userType === "teacher" ? (
             <FeaturedCard />
           ) : (
             <TeacherItem

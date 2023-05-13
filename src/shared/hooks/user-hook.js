@@ -1,15 +1,21 @@
-import {
-  useCallback,
-  useContext,
-} from 'react';
+import { useCallback, useContext, useState } from "react";
 
-import { AuthContext } from '../context/auth-context';
-import { useHttpClient } from './http-hook';
+import { AuthContext } from "../context/auth-context";
+import { useHttpClient } from "./http-hook";
 
 export const useUser = () => {
   const auth = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
   const { updateUser } = auth;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  //Get All users
+  const getAllUsers = useCallback(async () => {
+    try {
+      const response = await sendRequest(`${process.env.REACT_APP_USERS}`);
+      setUsers(response.users);
+    } catch (err) {}
+  }, [sendRequest]);
 
   //GET logged in user information
   const getUserInformation = useCallback(
@@ -61,6 +67,8 @@ export const useUser = () => {
   );
 
   return {
+    users,
+    getAllUsers,
     getUserInformation,
     updateUserProfile,
     addCredits,
