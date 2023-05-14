@@ -2,6 +2,7 @@ import React, { useCallback, useReducer } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+import BlogPage from "./blog/pages/BlogPage";
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
 import JobDetailsPage from "./jobs/pages/JobDetailsPage";
@@ -50,7 +51,7 @@ function App() {
     routes = (
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
-        {/*user:uid || */}
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/users/:id" element={<TeacherDashboard />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/job/new" element={<NewJob />} />
@@ -65,6 +66,7 @@ function App() {
     routes = (
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
         <Route path="/teachers" element={<Teachers />} />

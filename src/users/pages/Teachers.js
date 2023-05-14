@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Grid } from "@mui/material/";
+import { Grid, Skeleton } from "@mui/material/";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
@@ -61,7 +61,13 @@ const Teachers = () => {
       <ThemeProvider theme={customThemeForTeachers}>
         <Grid container spacing={3} sx={{ width: "90%" }}>
           <Grid item xs={12} xl={3}>
-            <TeacherFilter onDataChange={handleFilterChange} />
+            {isLoading && (
+              <Skeleton
+                sx={{ height: 356, width: 332 }}
+                variant="rectangular"
+              />
+            )}
+            {!isLoading && <TeacherFilter onDataChange={handleFilterChange} />}
           </Grid>
           <Grid item xs={12} xl={9} sx={{ margin: "1rem auto" }}>
             <Grid container spacing={2}>

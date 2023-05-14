@@ -360,7 +360,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                   spacing={1}
                 >
                   <Grid>
-                    <BusinessIcon color="info" />
+                    <BusinessIcon color="inherit" />
                   </Grid>
                   <Grid>
                     <Typography variant="subtitle2" color="text.secondary">

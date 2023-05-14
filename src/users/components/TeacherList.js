@@ -43,11 +43,11 @@ const TeacherList = ({ teachers, isLoading }) => {
         ))}
 
       {teachers?.map((teacher, i) => (
-        <Grid item key={teacher.id} xs={12} sm={6} md={3}>
+        <Grid item key={teacher._id} xs={12} sm={6} md={3}>
           {(() => {
             const teacherItem = (
               <TeacherItem
-                id={teacher.id}
+                id={teacher._id}
                 name={teacher.name}
                 currentLocation={teacher.location}
                 nationality={teacher.nationality}
@@ -61,7 +61,7 @@ const TeacherList = ({ teachers, isLoading }) => {
             if (auth?.isLoggedIn) {
               if (auth?.user?.credits > 0) {
                 return (
-                  <Link to={`/teachers/${teacher.id}`}>{teacherItem}</Link>
+                  <Link to={`/teachers/${teacher._id}`}>{teacherItem}</Link>
                 );
               } else {
                 return teacherItem;
