@@ -271,7 +271,14 @@ const TeacherDashboard = () => {
   return (
     <>
       <ErrorModal error={error} onClear={combinedClearError} />
-      <Grid container spacing={1} sx={{ maxWidth: "90%", margin: "0 auto" }}>
+      <Grid
+        container
+        spacing={1}
+        sx={{
+          maxWidth: "90%",
+          margin: "0 auto",
+        }}
+      >
         <Grid item xs={12} md={2}>
           {isLoading && (
             <Skeleton

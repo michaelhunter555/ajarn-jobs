@@ -35,7 +35,7 @@ export const useUser = () => {
     async (userId, update) => {
       try {
         const response = await sendRequest(
-          `${process.env.REACT_APP_USERS}/${userId}`,
+          `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
           JSON.stringify(update),
           { "Content-Type": "application/json" }
@@ -66,12 +66,27 @@ export const useUser = () => {
     [sendRequest, updateUser, auth.user]
   );
 
+  //POST user apply to jobs
+  const applyToJob = useCallback(
+    async (userId, jobId) => {
+      const response = await sendRequest(
+        `${process.env.REACT_APP_USERS}/${userId}/apply/${jobId}`,
+        "POST",
+        JSON.stringify({ coverLetter: auth.user.about }),
+        { "Content-Type": "application/json" }
+      );
+      updateUser(response.user);
+    },
+    [sendRequest, updateUser, auth.user.about]
+  );
+
   return {
     users,
     getAllUsers,
     getUserInformation,
     updateUserProfile,
     addCredits,
+    applyToJob,
     isLoading,
     error,
     clearError,

@@ -42,7 +42,7 @@ const StyledMediaCard = styled(CardMedia)({
 });
 
 const StyledChip = styled(Chip)(({ theme, featured }) => ({
-  backgroundColor: featured ? "#faea92" : "#e5e5e5",
+  backgroundColor: featured ? "#f7f1d0" : "#e5e5e5",
 }));
 
 const JobAdsList = (props) => {
@@ -74,7 +74,20 @@ const JobAdsList = (props) => {
                           {school?.creator?.company} -{" "}
                           {school.title.length > 25
                             ? school.title.substring(0, 40) + "..."
-                            : school.title}
+                            : school.title}{" "}
+                          {school.jobType === "featured" && (
+                            <Chip
+                              sx={{
+                                backgroundColor: "#faea92",
+                                borderRadius: "6px",
+                                fontSize: "11px",
+                                height: "1.2rem",
+                                color: "black",
+                                border: "1px solid #cdbd64",
+                              }}
+                              label="Featured"
+                            />
+                          )}
                         </Typography>
                         <Typography
                           gutterBottom

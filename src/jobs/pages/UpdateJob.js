@@ -31,8 +31,7 @@ const UpdateJob = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const jobId = useParams().jid;
-  const { jobs, getJobsByUserId, updateJobById, isLoading, error, clearError } =
-    useJob();
+  const { jobs, getJobsByUserId, updateJobById, isLoading } = useJob();
 
   useEffect(() => {
     getJobsByUserId(user?._id);

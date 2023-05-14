@@ -14,7 +14,7 @@ export const useSettingsToggle = () => {
       const isTeacher = auth.user?.userType === "teacher";
       try {
         const response = await sendRequest(
-          `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
+          `${process.env.REACT_APP_USERS}/update-role/${userId}`,
           "PATCH",
           JSON.stringify({ userType: isTeacher ? "employer" : "teacher" }),
           { "Content-Type": "application/json" }
@@ -32,7 +32,7 @@ export const useSettingsToggle = () => {
       const isHidden = auth.user?.isHidden;
       try {
         const response = await sendRequest(
-          `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
+          `${process.env.REACT_APP_USERS}/update-visibility/${userId}`,
           "PATCH",
           JSON.stringify({ isHidden: !isHidden }),
           { "Content-Type": "application/json" }

@@ -1,16 +1,15 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import { styled } from '@mui/material/styles';
+import { CardMedia } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import Backdrop from '../UIElements/Backdrop';
-import MainHeader from './MainHeader';
-import NavLinks from './NavLinks';
-import SideDrawer from './SideDrawer';
+import MainLogo from "../../../assets/Aharnaroi.svg";
+import Backdrop from "../UIElements/Backdrop";
+import MainHeader from "./MainHeader";
+import NavLinks from "./NavLinks";
+import SideDrawer from "./SideDrawer";
 
 const MainNavigation = (props) => {
   const [navIsScrolled, setNavIsScrolled] = useState(false);
@@ -55,7 +54,14 @@ const MainNavigation = (props) => {
           <span />
         </MainNavigationButtonStyles>
         <MainNavTitleStyle>
-          <MainNavigationTitleStyle to="/">Ajarn Jobs</MainNavigationTitleStyle>
+          <MainNavigationTitleStyle to="/">
+            <CardMedia
+              sx={{ width: "30%" }}
+              component="img"
+              image={MainLogo}
+              alt="Ajarn-jobs"
+            />
+          </MainNavigationTitleStyle>
         </MainNavTitleStyle>
         <MainNavigationHeader>
           <NavLinks />

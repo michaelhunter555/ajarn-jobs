@@ -1,15 +1,12 @@
-import React, {
-  useContext,
-  useState,
-} from 'react';
+import React, { useContext, useState } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
-import EmailIcon from '@mui/icons-material/Email';
-import PlaceIcon from '@mui/icons-material/Place';
-import PublicIcon from '@mui/icons-material/Public';
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
+import EmailIcon from "@mui/icons-material/Email";
+import PlaceIcon from "@mui/icons-material/Place";
+import PublicIcon from "@mui/icons-material/Public";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import {
   Box,
   Button,
@@ -19,11 +16,11 @@ import {
   Divider,
   Grid,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import CustomModal from '../../shared/components/UIElements/CustomModal';
-import { AuthContext } from '../../shared/context/auth-context';
+import CustomModal from "../../shared/components/UIElements/CustomModal";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const StyledGlassCard = styled(Card)(({ theme }) => ({
   margin: "0 auto",
@@ -31,33 +28,6 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
   position: "relative",
   overflow: "hidden",
   background: "white",
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    top: "0",
-    left: "-200%",
-    width: "200%",
-    height: "100%",
-    transform: "skewX(-20deg)",
-    backgroundImage:
-      "linear-gradient(90deg, transparent, rgba(98, 250, 255, 0.219), transparent)",
-    pointerEvents: "none",
-  },
-  "&:hover::after": {
-    animation: "shine 0.5s alternate",
-    animationTimingFunction: "cubic-bezier(0, 0.6, 0.5, 0.4)",
-  },
-  "@keyframes shine": {
-    "0%": {
-      left: "-200%",
-    },
-    "60%": {
-      left: "100%",
-    },
-    "100%": {
-      left: "100%",
-    },
-  },
   [theme.breakpoints.down("md")]: {
     margin: "0.5rem 0.5rem 0",
   },

@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { AuthContext } from "../../context/auth-context";
@@ -9,6 +10,7 @@ import { AuthContext } from "../../context/auth-context";
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
   //const userId = useParams().uid
 
   const logoutHandler = () => {
@@ -20,44 +22,105 @@ const NavLinks = (props) => {
     <StyledNavLinks>
       <li>
         <NavLink to="/" exact="true">
-          Home
+          <Typography
+            sx={{ fontWeight: location.pathname === "/" ? 700 : "inherit" }}
+            variant="button"
+            color="text.secondary"
+          >
+            Home
+          </Typography>
         </NavLink>
       </li>
 
       <li>
-        <NavLink to="/jobs">Jobs</NavLink>
+        <NavLink to="/jobs">
+          <Typography
+            sx={{ fontWeight: location.pathname === "/jobs" ? 700 : "inherit" }}
+            variant="button"
+            color="text.secondary"
+          >
+            Jobs
+          </Typography>
+        </NavLink>
       </li>
 
       <li>
-        <NavLink to="/teachers">Teachers</NavLink>
+        <NavLink to="/teachers">
+          <Typography
+            sx={{
+              fontWeight: location.pathname === "/teachers" ? 700 : "inherit",
+            }}
+            variant="button"
+            color="text.secondary"
+          >
+            Teachers
+          </Typography>
+        </NavLink>
       </li>
 
       <li>
-        <NavLink to="/blog">Blog</NavLink>
+        <NavLink to="/blog">
+          <Typography
+            sx={{ fontWeight: location.pathname === "/blog" ? 700 : "inherit" }}
+            variant="button"
+            color="text.secondary"
+          >
+            Blog
+          </Typography>
+        </NavLink>
       </li>
 
       {auth.isLoggedIn && (
         <li>
-          <NavLink to={`/users/${auth.user?._id}`}>Dashboard</NavLink>
-        </li>
-      )}
-
-      {auth.isLoggedIn && (
-        <li>
-          <NavLink to="/job/new">Add Job</NavLink>
+          <NavLink to={`/users/${auth.user?._id}`}>
+            <Typography
+              sx={{
+                fontWeight:
+                  location.pathname === `/users/${auth.user?._id}`
+                    ? 700
+                    : "inherit",
+              }}
+              variant="button"
+              color="text.secondary"
+            >
+              Dashboard
+            </Typography>
+          </NavLink>
         </li>
       )}
 
       {!auth.isLoggedIn && (
         <li>
-          <NavLink to="/auth">Login</NavLink>
+          <NavLink to="/auth">
+            <Typography
+              sx={{
+                fontWeight: location.pathname === "/auth" ? 700 : "inherit",
+              }}
+              variant="button"
+              color="text.secondary"
+            >
+              Login
+            </Typography>
+          </NavLink>
         </li>
       )}
 
       {auth.isLoggedIn && (
         <li>
-          <button onClick={logoutHandler}>Logout</button>
+          <Button onClick={logoutHandler}>
+            <Typography variant="button" color="text.secondary">
+              Logout
+            </Typography>
+          </Button>
         </li>
+      )}
+      {auth.isLoggedIn && (
+        <Box>
+          <Avatar
+            alt={`${auth.user?._id}--${auth.user?.name}`}
+            src={auth.user?.image}
+          />
+        </Box>
       )}
     </StyledNavLinks>
   );
@@ -95,13 +158,11 @@ const StyledNavLinks = styled("ul")`
   a:active,
   a:active {
     background: #f5f5f5;
-    border-color: #e4e4e4;
-    border-radius: 6px;
     color: #292929;
   }
+
   button {
     cursor: pointer;
-    border: 1px solid #292929;
     color: #000;
     background: white;
     padding: 0.5rem;
@@ -132,7 +193,6 @@ const StyledNavLinks = styled("ul")`
   }
 
   button {
-    border: 1px solid black;
     color: black;
     background: white;
   }

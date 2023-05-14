@@ -37,6 +37,7 @@ const NewJob = () => {
   const auth = useContext(AuthContext);
   const [isFullTime, setIsFullTime] = useState(true);
   const [jobIsBasic, setJobIsBasic] = useState(true);
+  const [jobCost, setJobCost] = useState(5);
   const [success, setSuccess] = useState(false);
   const [workPermitOffered, setWorkPermitOffered] = useState(true);
   const { addJobByUserId, isLoading, error, clearError } = useJob();
@@ -103,11 +104,15 @@ const NewJob = () => {
 
   const basicJobTypeHandler = () => {
     setJobIsBasic(true);
+    if (jobCost > 5) {
+      setJobCost(5);
+    }
     inputHandler("jobType", "basic", true);
   };
 
   const featuredJobTypeHandler = () => {
     setJobIsBasic(false);
+    setJobCost((prev) => prev + 2);
     inputHandler("jobType", "featured", true);
   };
 
@@ -117,10 +122,11 @@ const NewJob = () => {
     inputHandler("workPermit", workPermitValue, true);
   };
 
-  const jobSubmitHandler = (event) => {
+  const jobSubmitHandler = async (event) => {
     event.preventDefault();
     console.log("formState:", formState);
     console.log("formState.inputs:", formState.inputs);
+
     //new job data expected fields
     const newJob = {
       title: formState.inputs.title.value,
@@ -134,8 +140,17 @@ const NewJob = () => {
     };
     //pass userId & object as argument to POST request
     console.log(newJob);
-    addJobByUserId(auth.user?._id, newJob);
-    setSuccess(true);
+
+    if (newJob.jobType === "featured") {
+      setJobCost((prev) => prev + 2);
+    }
+
+    try {
+      await addJobByUserId(auth.user?._id, newJob, jobCost);
+      setSuccess(true);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const clearModalHandler = () => {
@@ -154,6 +169,7 @@ const NewJob = () => {
       <ErrorModal error={error} onClear={clearError} />
       <StyledForm onSubmit={jobSubmitHandler}>
         <Grid container direction="row">
+          Total: {jobCost}
           <Grid item xs={12}>
             <FormLabel>Hours:</FormLabel>
             <input
@@ -228,7 +244,6 @@ const NewJob = () => {
               onInput={inputHandler}
             />
           </Grid>
-
           <Grid item xs={12} sm={6} md={5}>
             <Input
               id="salary"

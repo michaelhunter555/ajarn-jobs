@@ -9,9 +9,16 @@ export const useJob = () => {
   const { updateUser } = auth;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+  const getAllJobs = useCallback(async () => {
+    try {
+      const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
+      setJobs(response.jobs);
+    } catch {}
+  }, [sendRequest]);
+
   //POST Create job by userId
   const addJobByUserId = useCallback(
-    async (userId, jobData) => {
+    async (userId, jobData, jobCost) => {
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_JOBS}/create-job/${userId}`,
@@ -26,12 +33,14 @@ export const useJob = () => {
               presence: auth.user.creator.presence,
               about: auth.user.creator.about,
             },
+            credits: jobCost,
           }),
           { "Content-Type": "application/json" }
         );
         const updatedUser = {
           ...auth.user,
           jobs: [...auth.user.jobs, response.job],
+          credits: auth.user.credits - jobCost,
         };
         updateUser(updatedUser);
       } catch (err) {}
@@ -109,6 +118,7 @@ export const useJob = () => {
 
   return {
     jobs,
+    getAllJobs,
     getJobById,
     addJobByUserId,
     getJobsByUserId,

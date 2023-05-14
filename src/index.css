@@ -1,5 +1,8 @@
 @import "animate.css";
 
+html {
+  overflow-y: scroll;
+}
 a {
   text-decoration: none;
 }

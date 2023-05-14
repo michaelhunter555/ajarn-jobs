@@ -121,7 +121,7 @@ const StyledTeflWrapper = styled("div")(({ theme }) => ({
 }));
 
 const Home = () => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, sendRequest } = useHttpClient();
   const [homeJobs, setHomeJobs] = useState([]);
 
   useEffect(() => {

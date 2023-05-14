@@ -1,9 +1,6 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import {
   Avatar,
@@ -14,12 +11,11 @@ import {
   Chip,
   Grid,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import KidsInClassImg
-  from '../../../assets/mario-heller-hXLkFpvKRys-unsplash.jpg';
-import { dummy_jobs } from '../../../shared/util/DummyJobs';
+import KidsInClassImg from "../../../assets/mario-heller-hXLkFpvKRys-unsplash.jpg";
+import { useJob } from "../../../shared/hooks/jobs-hook";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: "flex",
@@ -41,12 +37,26 @@ const StyledImageOverlay = styled(Box)(({ theme }) => ({
 
 const FeaturedCard = (props) => {
   const [randomJob, setRandomJob] = useState(null);
+  const { jobs, getAllJobs } = useJob();
 
+  //to avoid infinite loop, check if there aren't any jobs already.
   useEffect(() => {
-    const randomJobData =
-      dummy_jobs[Math.floor(Math.random() * dummy_jobs.length)];
-    setRandomJob(randomJobData);
-  }, []);
+    if (!jobs || jobs.length === 0) {
+      try {
+        getAllJobs();
+      } catch (err) {
+        console.log("ERROR WITH FEATUREDCARD.js:", err);
+      }
+    }
+  }, [jobs, getAllJobs]);
+
+  //once we have jobs, we can randomly select one for the user
+  useEffect(() => {
+    if (jobs && jobs.length > 0) {
+      const randomJobData = jobs[Math.floor(Math.random() * jobs.length)];
+      setRandomJob(randomJobData);
+    }
+  }, [jobs]);
 
   return (
     <StyledCard>
@@ -56,7 +66,7 @@ const FeaturedCard = (props) => {
             <CardMedia
               sx={{ height: 140 }}
               component="img"
-              alt={`${randomJob?.id}--${randomJob?.title}`}
+              alt={`${randomJob?._id}--${randomJob?.title}`}
               image={KidsInClassImg}
             />
 
@@ -74,7 +84,7 @@ const FeaturedCard = (props) => {
               border: "1px solid #e5e5e5",
               backgroundColor: "white",
             }}
-            src={randomJob?.creator?.logoUrl}
+            src={randomJob?.image}
             variant="circular"
           />
           <Grid item>
@@ -115,7 +125,7 @@ const FeaturedCard = (props) => {
         <Typography
           sx={{ margin: "1rem 0 0 0.5rem", fontWeight: "bold" }}
           variant="body1"
-          componet="h3"
+          component="h3"
         >
           Description:
         </Typography>
@@ -139,7 +149,7 @@ const FeaturedCard = (props) => {
           <Button
             variant="contained"
             component={Link}
-            to={`/jobs/${randomJob?.id}`}
+            to={`/jobs/${randomJob?._id}`}
           >
             Apply Now
           </Button>
