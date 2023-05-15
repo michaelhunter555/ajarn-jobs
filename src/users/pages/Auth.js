@@ -14,6 +14,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import Button from "../../shared/components/FormElements/Button";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 import Input from "../../shared/components/FormElements/Input";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
@@ -67,7 +68,7 @@ const Auth = () => {
   const signUpOrLoginHandler = () => {
     if (!isLoginMode) {
       setFormData(
-        { ...formState.inputs, name: undefined },
+        { ...formState.inputs, name: undefined, image: undefined },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
     } else {
@@ -76,6 +77,9 @@ const Auth = () => {
           ...formState.inputs,
           name: { value: "", isValid: false },
           userType: { value: "teacher", isValid: true },
+        },
+        {
+          image: { value: null, isValid: false },
         },
         false
       );
@@ -86,6 +90,7 @@ const Auth = () => {
   //submit login || signup
   const authSubmitHandler = async (event) => {
     event.preventDefault();
+    console.log(formState.inputs);
     //api call
     if (isLoginMode) {
       try {
@@ -108,17 +113,17 @@ const Auth = () => {
       }
     } else {
       try {
-        //POST - sign up expects a name, email and password
+        //POST - sign up expects a name, email, userType, image and password
+        const formData = new FormData();
+        formData.append("name", formState.inputs.name.value);
+        formData.append("email", formState.inputs.email.value);
+        formData.append("password", formState.inputs.password.value);
+        formData.append("userType", formState.inputs.userType.value);
+        formData.append("image", formState.inputs.image.value);
         const response = await sendRequest(
-          "http://localhost:5000/api/user/sign-up",
+          `${process.env.REACT_APP_USERS}/sign-up`,
           "POST",
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-            userType: formState.inputs.userType.value,
-          }),
-          { "Content-type": "application/json" }
+          formData
         );
 
         auth.login(response?.user);
@@ -155,6 +160,7 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
+          {!isLoginMode && <ImageUpload id="image" oninput={inputHandler} />}
           <Input
             element="input"
             type="email"
