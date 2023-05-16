@@ -149,41 +149,7 @@ const Auth = () => {
       <StyledFormCard>
         {isLoading && <LoadingSpinner asOverlay />}
         <form onSubmit={authSubmitHandler}>
-          {!isLoginMode && (
-            <Input
-              element="input"
-              type="text"
-              id="name"
-              label="Your name"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="please enter a name"
-              onInput={inputHandler}
-            />
-          )}
-          {!isLoginMode && <ImageUpload id="image" oninput={inputHandler} />}
-          <Input
-            element="input"
-            type="email"
-            id="email"
-            helperText="Your email address"
-            fieldLabel="e-mail"
-            label="Your e-mail"
-            validators={[VALIDATOR_EMAIL()]}
-            errorText="please enter a name"
-            onInput={inputHandler}
-          />
-
-          <Input
-            element="input"
-            type="password"
-            id="password"
-            helperText="Enter Password"
-            fieldLabel="Password"
-            label="Password"
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText="please enter your password"
-            onInput={inputHandler}
-          />
+          {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} />}
           {!isLoginMode && (
             <FormControl component="fieldset">
               <FormLabel component="legend">User Type</FormLabel>
@@ -207,6 +173,41 @@ const Auth = () => {
               </RadioGroup>
             </FormControl>
           )}
+          {!isLoginMode && (
+            <Input
+              element="input"
+              type="text"
+              id="name"
+              label="Your name"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="please enter a name"
+              onInput={inputHandler}
+            />
+          )}
+
+          <Input
+            element="input"
+            type="email"
+            id="email"
+            helperText="Your email address"
+            fieldLabel="e-mail"
+            label="Your e-mail"
+            validators={[VALIDATOR_EMAIL()]}
+            errorText="please enter a name"
+            onInput={inputHandler}
+          />
+
+          <Input
+            element="input"
+            type="password"
+            id="password"
+            helperText="Enter Password"
+            fieldLabel="Password"
+            label="Password"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="please enter your password"
+            onInput={inputHandler}
+          />
           <StyledBoxForButtons>
             <Button type="submit" disabled={!formState.isValid}>
               {isLoginMode ? "Login" : "Sign-up"}

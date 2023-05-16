@@ -28,7 +28,7 @@ const TeacherList = ({ teachers, isLoading }) => {
     <Grid container spacing={2} wrap="wrap">
       {isLoading &&
         Array.from(new Array(12)).map((_, i) => (
-          <Grid key={i} xs={12} sm={6} md={3}>
+          <Grid item key={i} xs={12} sm={6} md={3}>
             <Skeleton
               sx={{ margin: "1rem 0.5rem 1rem 1rem", borderRadius: "6px" }}
               variant="rectangular"
@@ -52,7 +52,7 @@ const TeacherList = ({ teachers, isLoading }) => {
                 currentLocation={teacher.location}
                 nationality={teacher.nationality}
                 workExperience={teacher.workExperience}
-                image={teacher.image}
+                image={`${process.env.REACT_APP_IMAGE}${teacher.image}`}
                 degree={teacher.highestCertification}
                 about={teacher.about}
               />

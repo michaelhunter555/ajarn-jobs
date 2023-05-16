@@ -1,6 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { Box, Button, CardMedia } from "@mui/material";
+import { Box, Button, styled } from "@mui/material";
+
+const StyledImageUpload = styled(Box)({
+  width: "13rem",
+  height: "13rem",
+  border: "1px solid #ccc",
+  borderRadius: "6px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  textAlign: "center",
+  marginBottom: "1rem",
+  flexDirection: "column",
+  position: "relative",
+  "& img": {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    position: "absolute",
+  },
+});
 
 const ImageUpload = (props) => {
   const [file, setFile] = useState();
@@ -21,6 +41,7 @@ const ImageUpload = (props) => {
   }, [file]);
 
   const userChoseImageHandler = (event) => {
+    console.log(event.target);
     let pickedFile;
     let fileIsValid = isValid;
     if (event.target.files && event.target.files.length === 1) {
@@ -47,15 +68,29 @@ const ImageUpload = (props) => {
         id={props.id}
         accept=".jpg,.png,.jpeg"
         onChange={userChoseImageHandler}
+        style={{ display: "none" }}
       />
-      <Box>
-        <Box sx={{ center: props.center }}>
-          {filePreviewUrl && (
-            <CardMedia src={filePreviewUrl} alt="image-preview" />
-          )}
-          {!filePreviewUrl && <p>Please add an image</p>}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <StyledImageUpload>
+            {filePreviewUrl && <img src={filePreviewUrl} alt="preview" />}
+            {!filePreviewUrl && <p>Please add an image</p>}
+          </StyledImageUpload>
         </Box>
-        <Button type="button" onClick={chooseImageHandler}>
+        <Button variant="outlined" type="button" onClick={chooseImageHandler}>
           Pick Image
         </Button>
       </Box>

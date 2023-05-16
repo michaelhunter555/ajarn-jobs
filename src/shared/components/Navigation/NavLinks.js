@@ -118,7 +118,7 @@ const NavLinks = (props) => {
         <Box>
           <Avatar
             alt={`${auth.user?._id}--${auth.user?.name}`}
-            src={auth.user?.image}
+            src={`${process.env.REACT_APP_IMAGE}${auth.user?.image}`}
           />
         </Box>
       )}

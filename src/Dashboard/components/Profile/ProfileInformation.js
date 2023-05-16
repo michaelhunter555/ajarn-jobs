@@ -86,7 +86,10 @@ const ProfileInformation = ({ user }) => {
   return (
     <StyledProfileContainer>
       <StyledBackgroundBox>
-        <StyledProfileAvatar src={image} alt={`${id}-${name}`} />
+        <StyledProfileAvatar
+          src={`${process.env.REACT_APP_IMAGE}${image}`}
+          alt={`${id}-${name}`}
+        />
         <Typography variant="h5">{name}</Typography>
         <Typography variant="subtitle1">{location}</Typography>
         <Typography variant="subtitle2">{education}</Typography>

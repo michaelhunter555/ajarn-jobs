@@ -76,7 +76,7 @@ const UserJobs = () => {
   let button;
   let actionItem;
 
-  if (auth.isLoggedIn) {
+  if (auth.isLoggedIn && auth.user.userType === "employer") {
     button = (
       <Button variant="contained" component={RouterLink} to="/job/new">
         Add a Job +

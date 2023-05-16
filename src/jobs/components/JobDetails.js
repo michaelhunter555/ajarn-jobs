@@ -26,26 +26,21 @@ import {
 } from "@mui/material";
 
 import { AuthContext } from "../../shared/context/auth-context";
+import { useJob } from "../../shared/hooks/jobs-hook";
 import JobDataTable from "./JobDataTable";
 
 const JobDetails = (props) => {
   const auth = useContext(AuthContext);
+  const { applyToJob } = useJob();
   const { job } = props;
 
-  //add function for sending job application to employer. maybe email.js?
-  // const sendApplicationHandler = (event, userId) => {
-  //   event.preventDefault();
-
-  // const sendRequest = async (jobId, userId) => {
-  //   const responseData = await sendRequest(
-  //     "http://localhost:8080/job",
-  //     "POST",
-  //     JSON.stringify({})
-  //     ,
-  //     {'Content-Type': 'application/json'}
-  //     );
-  // };
-  // };
+  const applyToJobHandler = async () => {
+    try {
+      await applyToJob(auth.user?._id, job?.id);
+    } catch (err) {
+      console.log(`There was an error trying to apply to this job: ${err}`);
+    }
+  };
 
   const jobSpecifications = [
     { text: "Location", icon: <FaMapMarkerAlt />, data: job?.location },
@@ -102,7 +97,7 @@ const JobDetails = (props) => {
     outlinedButton = (
       <Button
         sx={{ borderRadius: "17px" }}
-        onClick={() => console.log("POST request")}
+        onClick={applyToJobHandler}
         variant="outlined"
       >
         Apply Now

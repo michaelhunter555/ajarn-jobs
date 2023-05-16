@@ -69,15 +69,23 @@ export const useUser = () => {
   //POST user apply to jobs
   const applyToJob = useCallback(
     async (userId, jobId) => {
-      const response = await sendRequest(
-        `${process.env.REACT_APP_USERS}/${userId}/apply/${jobId}`,
-        "POST",
-        JSON.stringify({ coverLetter: auth.user.about }),
-        { "Content-Type": "application/json" }
-      );
-      updateUser(response.user);
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/${userId}/apply/${jobId}`,
+          "POST",
+          JSON.stringify({ coverLetter: auth.user?.about }),
+          { "Content-Type": "application/json" }
+        );
+        const updatedUser = {
+          ...auth.user,
+          applications: response.user.applications,
+        };
+        response.ok && updateUser(updatedUser);
+      } catch (err) {
+        console.log(err);
+      }
     },
-    [sendRequest, updateUser, auth.user.about]
+    [sendRequest, updateUser, auth.user]
   );
 
   return {

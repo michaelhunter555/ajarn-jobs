@@ -110,11 +110,10 @@ const TeacherItem = (props) => {
           <CardContent sx={{ lineHeight: 1 }}>
             <CardMedia
               component="img"
-              image={`${process.env.REACT_APP_IMAGE}/${props.image}`}
+              image={props.image}
               alt={`${props.id}--${props.name}`}
               sx={{
                 border: "1px solid #e5e5e5",
-
                 height: 170,
                 margin: "0 auto",
               }}

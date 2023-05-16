@@ -9,6 +9,7 @@ import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useCreator } from "../../shared/hooks/creator-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import { useJob } from "../../shared/hooks/jobs-hook";
 import { useResume } from "../../shared/hooks/resume-hook";
 import { useSettingsToggle } from "../../shared/hooks/toggle-hook";
@@ -28,6 +29,7 @@ const TeacherDashboard = () => {
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [selectedCard, setSelectedCard] = useState(null);
+  const [jobAd, setJobAd] = useState([]);
   const {
     //get and update user profile
     users,
@@ -70,6 +72,16 @@ const TeacherDashboard = () => {
     error: gettingJobsError,
     clearError: clearGettingJobsError,
   } = useJob();
+  const {
+    isLoading: jobAdIsLoading,
+    error: jobAdError,
+    sendRequest: sendJobAdRequest,
+    clearError: clearJobAdError,
+  } = useHttpClient();
+  // jobAdIsLoading
+  // jobAdError
+  // sendJobAdRequest
+  // clearJobAdError
 
   //GET user profile information
   useEffect(() => {
@@ -97,6 +109,14 @@ const TeacherDashboard = () => {
       setSelectedCard(randomUser);
     }
   }, [selectedCard, users]);
+
+  useEffect(() => {
+    const getJobAds = async () => {
+      const response = await sendJobAdRequest(`${process.env.REACT_APP_JOBS}`);
+      setJobAd(response.jobs);
+    };
+    getJobAds();
+  }, [sendJobAdRequest]);
 
   //PATCH General Profile Info Upate
   const handleProfileUpdate = (update) => {
@@ -253,19 +273,22 @@ const TeacherDashboard = () => {
     userResumeUpdating ||
     updatingCreator ||
     settingToggleIsLoading ||
-    jobsIsLoading;
+    jobsIsLoading ||
+    jobAdIsLoading;
   const error =
     getUserProfileError ||
     userResumeError ||
     creatorUpdatingError ||
     settingToggleError ||
-    gettingJobsError;
+    gettingJobsError ||
+    jobAdError;
   const combinedClearError = () => {
     clearUserProfileError();
     clearResumeError();
     clearCreatorError();
     clearSettingToggleError();
     clearGettingJobsError();
+    clearJobAdError();
   };
 
   return (
@@ -312,10 +335,10 @@ const TeacherDashboard = () => {
               )}
               {!isLoading && (
                 <UserProfileJobAd
-                  id={jobs[0]?._id}
-                  logo={jobs[0]?.image}
-                  title={jobs[0]?.title}
-                  description={jobs[0]?.description}
+                  id={jobAd[0]?._id}
+                  logo={jobAd[0]?.image}
+                  title={jobAd[0]?.title}
+                  description={jobAd[0]?.description}
                 />
               )}
             </Grid>
@@ -331,10 +354,10 @@ const TeacherDashboard = () => {
               )}
               {!isLoading && (
                 <UserProfileJobAd
-                  id={jobs[0]?._id}
-                  logo={jobs[0]?.image}
-                  title={jobs[0]?.title}
-                  description={jobs[0]?.description}
+                  id={jobAd[1]?._id}
+                  logo={jobAd[1]?.image}
+                  title={jobAd[1]?.title}
+                  description={jobAd[1]?.description}
                 />
               )}
             </Grid>
