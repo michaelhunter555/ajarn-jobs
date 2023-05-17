@@ -79,10 +79,14 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   //destructured boolean value to check if a form is new or not
   const { isNew = false } = creatorItem;
   //on load, check if user has a creator profile
-  // if they do no need to show form
+  //simple check is to see if the company name exists already or not
+  // if it does, no need to show form
   useEffect(() => {
-    if (auth.user?.creator !== null) {
+    if (auth.user?.creator?.company) {
       setIsEditing(false);
+      setIsLoading(false);
+    } else {
+      setIsEditing(true);
       setIsLoading(false);
     }
   }, [auth.user?.creator]);

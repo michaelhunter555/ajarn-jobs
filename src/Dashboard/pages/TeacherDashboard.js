@@ -78,10 +78,6 @@ const TeacherDashboard = () => {
     sendRequest: sendJobAdRequest,
     clearError: clearJobAdError,
   } = useHttpClient();
-  // jobAdIsLoading
-  // jobAdError
-  // sendJobAdRequest
-  // clearJobAdError
 
   //GET user profile information
   useEffect(() => {

@@ -34,14 +34,14 @@ export const useCreator = () => {
     async (userId, creatorItem) => {
       try {
         await sendRequest(
-          `${process.env.REACT_APP_USERS}/${userId}`,
+          `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
           JSON.stringify({ deleteCreator: creatorItem._id }),
           { "Content-Type": "application/json" }
         );
         const deletedCreator = {
           ...user,
-          creator: creatorItem._id,
+          creator: null,
         };
         updateUser(deletedCreator);
       } catch (e) {}

@@ -75,7 +75,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete, onCancel }) => {
     }
   };
 
-  const hasResumeToDelete = auth.user?.resume.length > 1;
+  const hasResumeToDelete = auth.user?.resume.length >= 1;
 
   return (
     <Card sx={{ padding: "1rem 1rem" }}>

@@ -20,10 +20,14 @@ export const useSettingsToggle = () => {
           { "Content-Type": "application/json" }
         );
         console.log("ROLECHANGE_RESPONSE:", response);
-        updateUser(response.user);
+        const updatedUser = {
+          ...auth.user,
+          userType: response.user?.userType,
+        };
+        updateUser(updatedUser);
       } catch (e) {}
     },
-    [sendRequest, updateUser, auth.user?.userType]
+    [sendRequest, updateUser, auth.user]
   );
 
   //PATCH isHidden property for search results.
@@ -37,11 +41,15 @@ export const useSettingsToggle = () => {
           JSON.stringify({ isHidden: !isHidden }),
           { "Content-Type": "application/json" }
         );
+        const updatedUser = {
+          ...auth.user,
+          isHidden: response.user.isHidden,
+        };
 
-        updateUser(response.user);
+        updateUser(updatedUser);
       } catch (e) {}
     },
-    [sendRequest, updateUser, auth.user?.isHidden]
+    [sendRequest, updateUser, auth.user]
   );
 
   return {
