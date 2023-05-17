@@ -25,21 +25,18 @@ import {
   Typography,
 } from "@mui/material";
 
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../shared/context/auth-context";
-import { useJob } from "../../shared/hooks/jobs-hook";
+import { useUser } from "../../shared/hooks/user-hook";
 import JobDataTable from "./JobDataTable";
 
 const JobDetails = (props) => {
   const auth = useContext(AuthContext);
-  const { applyToJob } = useJob();
+  const { applyToJob, error, clearError } = useUser();
   const { job } = props;
 
-  const applyToJobHandler = async () => {
-    try {
-      await applyToJob(auth.user?._id, job?.id);
-    } catch (err) {
-      console.log(`There was an error trying to apply to this job: ${err}`);
-    }
+  const applyToJobHandler = () => {
+    applyToJob(auth.user?._id, job?.id);
   };
 
   const jobSpecifications = [
@@ -118,6 +115,7 @@ const JobDetails = (props) => {
 
   return (
     <>
+      <ErrorModal error={error} onClear={clearError} />
       <Box
         sx={{
           display: "flex",

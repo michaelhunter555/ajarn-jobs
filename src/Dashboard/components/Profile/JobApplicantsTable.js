@@ -91,15 +91,15 @@ const JobApplicantsTable = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              jobs?.applicants?.map((teacher, i) => (
-                <TableRow key={teacher?._id}>
-                  <TableCell>{teacher?.name}</TableCell>
-                  <TableCell>{teacher?.location}</TableCell>
-                  <TableCell>{teacher?.salary}</TableCell>
-                  <TableCell>{teacher?.hours}</TableCell>
-                  <TableCell>{teacher?.applicants?.length}</TableCell>
-                </TableRow>
-              ))
+              jobs?.map((job) =>
+                job?.applicants?.map((teacher, i) => (
+                  <TableRow key={teacher?.userId?._id}>
+                    <TableCell>{teacher?.userId?.name}</TableCell>
+                    <TableCell>{teacher?.userId?.nationality}</TableCell>
+                    <TableCell>{teacher?.userId?.location}</TableCell>
+                  </TableRow>
+                ))
+              )
             )}
           </TableBody>
         </Table>
