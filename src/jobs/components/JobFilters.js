@@ -13,7 +13,11 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { fullTimeSalaries, thaiCities } from "../../shared/util/ThaiData";
+import {
+  fullTimeSalaries,
+  partTimeSalaries,
+  thaiCities,
+} from "../../shared/util/ThaiData";
 
 const StyledPaperContainer = styled(Paper)({
   border: "1px solid #ddd",
@@ -25,7 +29,7 @@ const StyledPaperContainer = styled(Paper)({
 const JobFilters = ({ onFilterChange }) => {
   const [salaryRange, setSalaryRange] = useState("");
   const [location, setLocation] = useState("");
-  const [checked, setChecked] = useState("Full-Time");
+  const [checked, setChecked] = useState("Full-time");
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
@@ -48,39 +52,6 @@ const JobFilters = ({ onFilterChange }) => {
         Filter Jobs
       </Typography>
       <FormControl fullWidth={true}>
-        <FormLabel component="legend">Select city</FormLabel>
-        <Select
-          labelId="location"
-          id="location"
-          value={location}
-          onChange={handleLocationChange}
-        >
-          <MenuItem value="">any</MenuItem>
-          {thaiCities.map((item, i) => (
-            <MenuItem key={i} value={item}>
-              {item}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth={true}>
-        <FormLabel component="legend">Full-Time Salary</FormLabel>
-        <Select
-          labelId="salary"
-          id="salary"
-          value={salaryRange}
-          onChange={handleSalaryRangeChange}
-        >
-          <MenuItem value="">any</MenuItem>
-          {fullTimeSalaries.map((item, i) => (
-            <MenuItem key={i} value={item}>
-              {item}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <FormControl fullWidth={true}>
         <FormLabel component="legend">hours</FormLabel>
         <RadioGroup
           aria-labelledby="demo-controlled-radio-buttons-group"
@@ -101,6 +72,47 @@ const JobFilters = ({ onFilterChange }) => {
             name="partTime"
           />
         </RadioGroup>
+      </FormControl>
+      <FormControl fullWidth={true}>
+        <FormLabel component="legend">Select city</FormLabel>
+        <Select
+          labelId="location"
+          id="location"
+          value={location}
+          onChange={handleLocationChange}
+        >
+          <MenuItem value="">any</MenuItem>
+          {thaiCities.map((item, i) => (
+            <MenuItem key={i} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth={true}>
+        <FormLabel component="legend">
+          {checked === "Full-time" ? "Full-Time Salary" : "Part-Time Salary"}
+        </FormLabel>
+        <Select
+          labelId="salary"
+          id="salary"
+          value={salaryRange}
+          onChange={handleSalaryRangeChange}
+        >
+          <MenuItem value="">any</MenuItem>
+          {checked === "Full-time" &&
+            fullTimeSalaries.map((item, i) => (
+              <MenuItem key={i} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          {checked === "Part-time" &&
+            partTimeSalaries.map((item, i) => (
+              <MenuItem key={i} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+        </Select>
       </FormControl>
     </StyledPaperContainer>
   );

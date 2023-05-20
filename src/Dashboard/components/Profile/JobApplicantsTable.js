@@ -1,7 +1,10 @@
 import React, { useContext, useEffect } from "react";
 
+import { Link } from "react-router-dom";
+
 import {
   Box,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -97,6 +100,16 @@ const JobApplicantsTable = () => {
                     <TableCell>{teacher?.userId?.name}</TableCell>
                     <TableCell>{teacher?.userId?.nationality}</TableCell>
                     <TableCell>{teacher?.userId?.location}</TableCell>
+                    <TableCell>{teacher?.userId?.email}</TableCell>
+                    <TableCell>
+                      <Button
+                        component={Link}
+                        to={`/teachers/${teacher.userId._id}`}
+                        variant="contained"
+                      >
+                        profile
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))
               )

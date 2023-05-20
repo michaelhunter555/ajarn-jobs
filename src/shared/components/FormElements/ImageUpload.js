@@ -29,10 +29,9 @@ const ImageUpload = (props) => {
   const [file, setFile] = useState();
   const [filePreviewUrl, setFilePreviewUrl] = useState();
   const [isValid, setIsValid] = useState(false);
+  const filePickerRef = useRef();
 
   const authHasImage = auth.user?.image !== "";
-
-  const filePickerRef = useRef();
 
   useEffect(() => {
     if (!file) {
@@ -92,7 +91,7 @@ const ImageUpload = (props) => {
         >
           <StyledImageUpload>
             {filePreviewUrl && <img src={filePreviewUrl} alt="preview" />}
-            {authHasImage && (
+            {auth.isLoggedIn && authHasImage && (
               <img
                 src={`${process.env.REACT_APP_IMAGE}${auth.user?.image}`}
                 alt="preview"

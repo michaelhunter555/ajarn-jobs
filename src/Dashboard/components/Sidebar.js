@@ -42,6 +42,11 @@ const menuItems = [
     componentName: "job-listings",
   },
   {
+    text: "Cover Letter",
+    icon: <WorkIcon />,
+    componentName: "cover-letter",
+  },
+  {
     text: "Applications",
     icon: <HistoryEduIcon />,
     componentName: "applications",
@@ -81,7 +86,15 @@ const Sidebar = ({ onMenuItemClick }) => {
       return false;
     }
 
+    if (val.componentName === "job-listings" && userType === "teacher") {
+      return false;
+    }
+
     if (val.componentName === "applications" && userType === "employer") {
+      return false;
+    }
+
+    if (val.componentName === "cover-letter" && userType === "employer") {
       return false;
     }
     return true;

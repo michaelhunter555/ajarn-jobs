@@ -73,7 +73,7 @@ export const useUser = () => {
         const response = await sendRequest(
           `${process.env.REACT_APP_USERS}/${userId}/apply/${jobId}`,
           "POST",
-          JSON.stringify({ coverLetter: auth.user?.about }),
+          JSON.stringify({ coverLetter: auth.user?.coverLetter }),
           { "Content-Type": "application/json" }
         );
         const updatedUser = {
