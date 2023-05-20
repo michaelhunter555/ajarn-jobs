@@ -80,6 +80,10 @@ const TeacherDashboard = () => {
     clearError: clearJobAdError,
   } = useHttpClient();
 
+  const authHasResume = !auth.user?.resume
+    ? "Add Work History Item"
+    : "Add More Work";
+
   //GET user profile information
   useEffect(() => {
     if (userId) {
@@ -152,15 +156,23 @@ const TeacherDashboard = () => {
 
   //Add resume items
   const addNewResumeItem = () => {
+    const resumeItem = {
+      id: "temp-" + new Date().getTime(),
+      isNew: true,
+      company: "",
+      schoolName: "",
+      role: "",
+      location: "",
+      jobTitle: "",
+      from: "",
+      to: "",
+    };
+
     auth.updateUser({
-      //copy of current user object
       ...auth.user,
-      //we return resume key with array containing a copy of the user's current resume
-      resume: [
-        ...auth.user.resume,
-        { id: "new-" + new Date().getTime(), isNew: true },
-      ],
+      resume: [...auth.user?.resume, resumeItem],
     });
+    console.log(auth.user);
   };
 
   const clearResumeItem = (cancelResumeItem) => {
@@ -226,7 +238,7 @@ const TeacherDashboard = () => {
                 }
               />
             ))}
-            <Button onClick={addNewResumeItem}>Add New Resume</Button>
+            <Button onClick={addNewResumeItem}>{authHasResume}</Button>
           </>
         );
       case "cover-letter":

@@ -18,12 +18,12 @@ import { useUser } from "../../../shared/hooks/user-hook";
 const CoverLetter = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const [isEditing, setIsEditing] = useState(true);
+  const [isEditing, setIsEditing] = useState(user?.coverLetter === "");
   const { updateUserProfile, isLoading } = useUser();
   const [formState, inputHandler] = useForm(
     {
       coverLetter: {
-        value: "",
+        value: user.coverLetter || "",
         isValid: true,
       },
     },
@@ -88,9 +88,7 @@ const CoverLetter = () => {
               </Grid>
             </Grid>
             <Stack direction="row">
-              <Button onClick={updateCoverLetterHandler}>
-                {auth.user?.coverLetter ? "Update" : "Save"}
-              </Button>
+              <Button onClick={updateCoverLetterHandler}>Save</Button>
               <Button onClick={() => setIsEditing(true)}>Edit</Button>
             </Stack>
           </Grid>
