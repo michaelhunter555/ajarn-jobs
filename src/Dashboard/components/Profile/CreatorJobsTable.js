@@ -66,9 +66,6 @@ const CreatorJobsTable = () => {
     getJobsByUserId(user?._id);
   }, [getJobsByUserId, user]);
 
-  let a = jobs?.map((job) => job.applicants.map((user) => user.userId.name));
-  console.log(a);
-
   return (
     <TableContainer>
       <Table>

@@ -1,27 +1,40 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 
-import { Button, Grid, Skeleton, Stack } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Skeleton,
+  Stack,
+} from '@mui/material';
 
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import JobAdsList from "../../shared/components/UIElements/JobAdsList";
-import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useCreator } from "../../shared/hooks/creator-hook";
-import { useHttpClient } from "../../shared/hooks/http-hook";
-import { useJob } from "../../shared/hooks/jobs-hook";
-import { useResume } from "../../shared/hooks/resume-hook";
-import { useSettingsToggle } from "../../shared/hooks/toggle-hook";
-import { useUser } from "../../shared/hooks/user-hook";
-import TeacherItem from "../../users/components/TeacherItem";
-import Applications from "../components/Profile/Applications";
-import Creator from "../components/Profile/Creator";
-import FeaturedCard from "../components/Profile/FeaturedCard";
-import ProfileInformation from "../components/Profile/ProfileInformation";
-import TeacherSettings from "../components/Profile/TeacherSettings";
-import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
-import Sidebar from "../components/Sidebar";
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import JobAdsList from '../../shared/components/UIElements/JobAdsList';
+import UserProfileJobAd
+  from '../../shared/components/UIElements/UserProfileJobAd';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useCreator } from '../../shared/hooks/creator-hook';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import { useJob } from '../../shared/hooks/jobs-hook';
+import { useResume } from '../../shared/hooks/resume-hook';
+import { useSettingsToggle } from '../../shared/hooks/toggle-hook';
+import { useUser } from '../../shared/hooks/user-hook';
+import TeacherItem from '../../users/components/TeacherItem';
+import Applications from '../components/Profile/Applications';
+import Creator from '../components/Profile/Creator';
+import FeaturedCard from '../components/Profile/FeaturedCard';
+import ProfileInformation from '../components/Profile/ProfileInformation';
+import TeacherSettings from '../components/Profile/TeacherSettings';
+import UpdateResumeItem from '../components/Profile/UpdateResumeItem';
+import Sidebar from '../components/Sidebar';
 
 const TeacherDashboard = () => {
   const userId = useParams().id;
@@ -399,7 +412,7 @@ const TeacherDashboard = () => {
               currentLocation={location}
               nationality={nationality}
               workExperience={workExperience}
-              image={image}
+              image={`${process.env.REACT_APP_IMAGE}${image}`}
               degree={highestCertification}
               about={about}
             />

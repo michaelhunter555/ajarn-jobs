@@ -55,9 +55,9 @@ const TeacherDetailsItem = ({ teacher }) => {
             <Grid item>
               <Avatar
                 variant="circular"
-                src={teacher?.image}
+                src={`${process.env.REACT_APP_IMAGE}${teacher?.image}`}
                 sx={{ height: 175, width: 175 }}
-                alt={`${teacher?.id}--${teacher?.name}`}
+                alt={`${teacher?._id}--${teacher?.name}`}
               />
             </Grid>
             {/**grid item 2 */}

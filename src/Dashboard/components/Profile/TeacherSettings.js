@@ -16,8 +16,14 @@ import {
   Typography,
 } from "@mui/material";
 
+import ImageUpload from "../../../shared/components/FormElements/ImageUpload";
 import { useForm } from "../../../shared/hooks/form-hook";
-import { nationalities, thaiCities } from "../../../shared/util/ThaiData";
+import {
+  coreJobRequirements,
+  nationalities,
+  thaiCities,
+  yearsOfExperience,
+} from "../../../shared/util/ThaiData";
 
 const TeacherSettings = (props) => {
   const [isSchool, setIsSchool] = useState(props.isSchool);
@@ -49,6 +55,22 @@ const TeacherSettings = (props) => {
         value: user.interests,
         isValid: true,
       },
+      education: {
+        value: user.education,
+        isValid: true,
+      },
+      highestCertification: {
+        value: user.highestCertification,
+        isValid: true,
+      },
+      workExperience: {
+        value: user.workExperience,
+        isvalid: true,
+      },
+      image: {
+        value: user.image,
+        isValid: true,
+      },
     },
     true
   );
@@ -63,6 +85,10 @@ const TeacherSettings = (props) => {
       about: formState.inputs.about.value,
       skill: formState.inputs.skill.value,
       interests: formState.inputs.interests.value,
+      education: formState.inputs.education.value,
+      highestCertification: formState.inputs.highestCertification.value,
+      workExperience: formState.inputs.workExperience.value,
+      image: formState.inputs.image.value,
     };
     props.onProfileUpdate(updatedUser);
     console.log("updateProfileHandler:", updatedUser);
@@ -101,6 +127,9 @@ const TeacherSettings = (props) => {
       <CardContent>
         <Grid container spacing={2} direction="row">
           <Grid item xs={12} sm={6} md={5}>
+            <ImageUpload id="image" onInput={inputHandler} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={5}>
             <TextField
               fullWidth
               label="Full name"
@@ -134,6 +163,60 @@ const TeacherSettings = (props) => {
                 }
               >
                 {nationalities.map((item, i) => (
+                  <MenuItem key={i} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={5}>
+            <FormControl fullWidth>
+              <InputLabel id="workExperience-select">
+                Work Experience
+              </InputLabel>
+              <Select
+                labelId="update-workExperience"
+                id="workExperience"
+                defaultValue={formState.inputs.workExperience.value}
+                label="Years of Experience"
+                onChange={(event) =>
+                  inputHandler(
+                    "workExperience",
+                    event.target.value,
+                    event.target.value !== ""
+                  )
+                }
+              >
+                {yearsOfExperience.map((item, i) => (
+                  <MenuItem key={i} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={7}>
+            <FormControl fullWidth>
+              <InputLabel id="highestCertification-select">
+                Highest Certification
+              </InputLabel>
+              <Select
+                labelId="update-highestCertification"
+                id="highestCertification"
+                defaultValue={formState.inputs.highestCertification.value}
+                label="Highest Certification"
+                onChange={(event) =>
+                  inputHandler(
+                    "highestCertification",
+                    event.target.value,
+                    event.target.value !== ""
+                  )
+                }
+              >
+                {coreJobRequirements.map((item, i) => (
                   <MenuItem key={i} value={item}>
                     {item}
                   </MenuItem>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 const MainHeaderStyles = styled("header")(({ theme, navIsScrolled }) => ({
   width: "100%",
@@ -16,7 +16,7 @@ const MainHeaderStyles = styled("header")(({ theme, navIsScrolled }) => ({
     ? "0 4px 30px rgba(0, 0, 0, 0.26)"
     : "0 2px 6px rgba(0, 0, 0, 0.26)",
   padding: "0 1rem",
-  zIndex: "5",
+  zIndex: 11,
   border: navIsScrolled
     ? "1px solid rgba(255, 255, 255, 0.3)"
     : "1px solid #e0e0e0",
