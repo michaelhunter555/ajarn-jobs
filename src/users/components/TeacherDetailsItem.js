@@ -66,7 +66,7 @@ const TeacherDetailsItem = ({ teacher }) => {
                 {teacher?.name}
               </Typography>
               <Typography variant="subtitle2" paragraph>
-                <Chip label={teacher?.profession} size="small" />
+                <Chip label={teacher?.userType} size="small" />
               </Typography>
               <Typography
                 variant="subtitle2"
@@ -81,14 +81,15 @@ const TeacherDetailsItem = ({ teacher }) => {
                 component="h3"
               >
                 <LanguageIcon size="inherit" />
-                nationality: {teacher?.nationality}
+                Nationality: {teacher?.nationality}
               </Typography>
               <Typography
                 color="text.secondary"
                 variant="subtitle2"
                 component="h3"
               >
-                <SchoolIcon size="inherit" /> {teacher?.education}
+                <SchoolIcon size="inherit" />
+                Education: {teacher?.highestCertification}
               </Typography>
 
               <Typography
@@ -164,14 +165,13 @@ const TeacherDetailsItem = ({ teacher }) => {
                 color="text.secondary"
                 component="text"
               >
-                user@email.com | job title: | phone number
+                {teacher.name} | {teacher.email}
               </Typography>
             </Box>
 
             <Divider />
             <Typography color="text.secondary" variant="subtitle2" paragraph>
               {teacher?.coverLetter}
-              {teacher?.about}
             </Typography>
           </Paper>
           <CollapsibleTable teacherResume={teacher?.resume} />

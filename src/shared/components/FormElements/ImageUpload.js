@@ -26,12 +26,13 @@ const StyledImageUpload = styled(Box)({
 
 const ImageUpload = (props) => {
   const auth = useContext(AuthContext);
+  const { user } = auth;
   const [file, setFile] = useState();
   const [filePreviewUrl, setFilePreviewUrl] = useState();
   const [isValid, setIsValid] = useState(false);
   const filePickerRef = useRef();
 
-  const authHasImage = auth.user?.image !== "";
+  const authHasImage = user?.image !== "" && user?.image.includes("uploads\\");
 
   useEffect(() => {
     if (!file) {

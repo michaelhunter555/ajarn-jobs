@@ -25,6 +25,7 @@ import {
 import NewJob from "../../../jobs/pages/NewJob";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
+import { useJob } from "../../../shared/hooks/jobs-hook";
 import { thaiCities } from "../../../shared/util/ThaiData";
 import CreatorJobsTable from "./CreatorJobsTable";
 import CreatorTabs from "./CreatorTabs";
@@ -38,6 +39,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const auth = useContext(AuthContext);
   //editing toggle for creator info
   const [isEditing, setIsEditing] = useState(true);
+
   //loading state - checks if user has creator profile already or not.
   const [isLoading, setIsLoading] = useState(auth.user?.creator !== null);
   //dynamic creator profile for rendering components based on click, set to 'applicants'
@@ -75,6 +77,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
     },
     true
   );
+  const { jobs, getJobsByUserId } = useJob();
 
   //destructured boolean value to check if a form is new or not
   const { isNew = false } = creatorItem;
@@ -90,6 +93,10 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
       setIsLoading(false);
     }
   }, [auth.user?.creator]);
+
+  useEffect(() => {
+    getJobsByUserId(auth.user?._id);
+  }, [getJobsByUserId, auth.user]);
   //if is new or creator property is null, render new form.
   useEffect(() => {
     if (!isNew || auth.user?.creator === null) {
@@ -423,9 +430,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                         Applicants
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {(auth.user?.jobs?.applicants?.length || 0) < 1
-                          ? 0
-                          : auth.user?.jobs?.applicants?.length}
+                        {jobs.map((job) => job.applicants.length)}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>

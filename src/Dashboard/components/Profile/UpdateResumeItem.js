@@ -121,23 +121,87 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete, onCancel }) => {
     }
   };
 
-  const hasResumeToDelete = !!auth.user?.resume?.find(
-    (res) => res._id === resumeItem._id
-  );
-
   return (
-    <Card sx={{ padding: "1rem 1rem" }}>
+    <Card sx={{ padding: "1rem 1rem", marginBottom: "0.5rem" }}>
       {!isEditing && (
         <>
-          <Grid key={resumeItem?._id}>
-            <Typography>{resumeItem?.company}</Typography>
-            <Typography>{resumeItem?.schoolName}</Typography>
-            <Typography>{resumeItem?.role}</Typography>
-            <Typography>{resumeItem?.location}</Typography>
-            <Typography>{resumeItem?.from}</Typography>
-            <Typography>{resumeItem?.to}</Typography>
+          <Typography
+            sx={{ fontSize: 9 }}
+            color="text.secondary"
+            variant="subtitle2"
+          >
+            id: {resumeItem?._id}
+          </Typography>
+          <Grid key={resumeItem?._id} container direction="row" spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="company"
+                size="small"
+                label="Company"
+                variant="filled"
+                value={resumeItem?.company}
+                disabled={true}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={3}>
+              <TextField
+                id="from"
+                size="small"
+                label="From"
+                variant="filled"
+                value={resumeItem?.from}
+                disabled={true}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <TextField
+                id="to"
+                size="small"
+                label="To"
+                variant="filled"
+                value={resumeItem?.to}
+                disabled={true}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="schoolName"
+                size="small"
+                label="School Name"
+                variant="filled"
+                value={resumeItem?.schoolName}
+                disabled={true}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={4}>
+              <TextField
+                id="location"
+                size="small"
+                label="Location"
+                variant="filled"
+                value={resumeItem?.location}
+                disabled={true}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                multiline
+                fullWidth
+                id="role"
+                size="small"
+                label="Role"
+                variant="filled"
+                value={resumeItem?.role}
+                disabled={true}
+              />
+            </Grid>
           </Grid>
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} sx={{ margin: "1rem 0 0 0.5rem" }}>
             <Button
               onClick={() => setIsEditing((prev) => !prev)}
               variant="contained"
@@ -149,7 +213,8 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete, onCancel }) => {
                 Clear Item
               </Button>
             )}
-            {hasResumeToDelete && (
+
+            {!resumeItem.isNew && (
               <Button
                 onClick={() => onDelete(resumeItem)}
                 variant="outlined"
@@ -299,16 +364,24 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete, onCancel }) => {
                 Cancel
               </Button>
             )}
-
-            {hasResumeToDelete && (
-              <Button
-                onClick={() => onDelete(resumeItem)}
-                variant="outlined"
-                color="warning"
-              >
-                Delete
-              </Button>
-            )}
+            <Stack
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                flexDirection: "row",
+                width: "100%",
+              }}
+            >
+              {!resumeItem.isNew && (
+                <Button
+                  onClick={() => onDelete(resumeItem)}
+                  variant="outlined"
+                  color="warning"
+                >
+                  Delete
+                </Button>
+              )}
+            </Stack>
           </Stack>
         </form>
       )}
