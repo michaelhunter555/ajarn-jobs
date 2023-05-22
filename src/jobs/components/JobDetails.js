@@ -228,7 +228,7 @@ const JobDetails = (props) => {
                   color="text.secondary"
                   paragraph
                 >
-                  date posted: {job?.datePosted}
+                  date posted: {job?.datePosted?.split("T")[0]}
                 </Typography>
               </Box>
 

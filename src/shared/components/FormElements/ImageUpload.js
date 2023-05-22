@@ -8,7 +8,7 @@ const StyledImageUpload = styled(Box)({
   width: "13rem",
   height: "13rem",
   border: "1px solid #ccc",
-  borderRadius: "6px",
+  borderRadius: "50%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -19,6 +19,7 @@ const StyledImageUpload = styled(Box)({
   "& img": {
     width: "100%",
     height: "100%",
+    borderRadius: "50%",
     objectFit: "cover",
     position: "absolute",
   },
@@ -66,7 +67,7 @@ const ImageUpload = (props) => {
   };
 
   return (
-    <Box>
+    <Box sx={props.sx}>
       <input
         ref={filePickerRef}
         type="file"
@@ -98,7 +99,7 @@ const ImageUpload = (props) => {
                 alt="preview"
               />
             )}
-            {!filePreviewUrl && <p>Please add an image</p>}
+            {!filePreviewUrl && <p>{props.text || "Please add an image"}</p>}
           </StyledImageUpload>
         </Box>
         <Button variant="outlined" type="button" onClick={chooseImageHandler}>

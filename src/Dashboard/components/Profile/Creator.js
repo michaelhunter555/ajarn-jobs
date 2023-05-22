@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 
 import NewJob from "../../../jobs/pages/NewJob";
+import ImageUpload from "../../../shared/components/FormElements/ImageUpload";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
 import { useJob } from "../../../shared/hooks/jobs-hook";
@@ -188,6 +189,14 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
       ) : isEditing ? (
         <Card sx={{ padding: "1rem 1rem" }}>
           <form onSubmit={handleSubmit}>
+            <ImageUpload
+              sx={{ marginBottom: "0.5rem" }}
+              id="image"
+              onInput={inputHandler}
+              text={`provide a ${
+                auth.user?.creator?.company || "company"
+              }  logo for future job posts`}
+            />
             <TextField
               sx={{ margin: "0 0 0.5rem 0" }}
               fullWidth

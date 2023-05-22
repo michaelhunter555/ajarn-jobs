@@ -81,6 +81,8 @@ const Sidebar = ({ onMenuItemClick }) => {
     onMenuItemClick(componentName);
   };
 
+  //filter out what each userType needs and doesn't need
+  //user can always switch userType, but if created creator account, must delete it first to go from employer to teacher.
   const filteredSidebar = menuItems.filter((val) => {
     if (val.componentName === "creator" && userType === "teacher") {
       return false;
@@ -95,6 +97,10 @@ const Sidebar = ({ onMenuItemClick }) => {
     }
 
     if (val.componentName === "cover-letter" && userType === "employer") {
+      return false;
+    }
+
+    if (val.componentName === "resume" && userType === "employer") {
       return false;
     }
     return true;

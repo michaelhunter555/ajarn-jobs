@@ -173,6 +173,7 @@ const Auth = () => {
               </RadioGroup>
             </FormControl>
           )}
+
           {!isLoginMode && (
             <Input
               element="input"
