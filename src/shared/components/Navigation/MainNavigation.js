@@ -56,7 +56,7 @@ const MainNavigation = (props) => {
         <MainNavTitleStyle>
           <MainNavigationTitleStyle to="/">
             <CardMedia
-              sx={{ width: "30%", margin: "0 5rem" }}
+              sx={{ height: 45, width: 200, margin: "0 5rem" }}
               component="img"
               image={MainLogo}
               alt="Ajarn-jobs"

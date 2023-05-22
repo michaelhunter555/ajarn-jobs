@@ -24,7 +24,7 @@ const MessageTeacher = (props) => {
         <TextField
           sx={{ margin: "1rem auto" }}
           fullWidth
-          defaultValue={props.userName || ""}
+          defaultValue={props.userEmail}
           helperText="email is already added for you."
           disabled={true}
         />

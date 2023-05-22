@@ -147,7 +147,7 @@ const JobDetails = (props) => {
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
-                  marginTop: 4,
+                  marginTop: 10,
                   height: 260,
                   width: 692,
                 }}
@@ -266,7 +266,7 @@ const JobDetails = (props) => {
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
-                  marginTop: 2,
+                  marginTop: 1,
                   height: 177,
                   width: 692,
                 }}

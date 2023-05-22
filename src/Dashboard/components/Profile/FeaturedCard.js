@@ -151,12 +151,12 @@ const FeaturedCard = (props) => {
             component={Link}
             to={`/jobs/${randomJob?._id}`}
           >
-            Apply Now
+            View Job
           </Button>
         </Grid>
         <Grid item>
           <Button variant="outlined" component={Link} to="/jobs">
-            visit jobs
+            jobs page
           </Button>
         </Grid>
       </Grid>

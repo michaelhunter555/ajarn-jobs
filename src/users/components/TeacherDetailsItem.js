@@ -161,7 +161,8 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   <StyledBoxModal>
                     <MessageTeacher
                       closeModal={closeModalHandler}
-                      userName={teacher?.email}
+                      userName={teacher?.name}
+                      userEmail={teacher?.email}
                     />
                   </StyledBoxModal>
                 </Modal>
