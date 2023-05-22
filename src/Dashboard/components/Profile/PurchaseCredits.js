@@ -48,7 +48,7 @@ const tiers = [
 
 const PurchaseCredits = () => {
   const auth = useContext(AuthContext);
-  const { addCredits, isLoading, error, clearError } = useUser();
+  const { addCredits, isPostLoading, error, clearError } = useUser();
 
   const purchaseCreditsHandler = (amount) => {
     addCredits(auth.user?._id, amount);
@@ -56,7 +56,7 @@ const PurchaseCredits = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isPostLoading && <LoadingSpinner asOverlay />}
       <ErrorModal error={error} onClear={clearError} />
       <Container sx={{ marginBottom: "1rem" }}>
         <Grid container spacing={4} alignItems="flex-end">

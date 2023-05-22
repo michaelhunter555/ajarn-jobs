@@ -49,7 +49,7 @@ const Auth = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isPostLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -147,7 +147,7 @@ const Auth = () => {
     <>
       <ErrorModal onClear={clearError} error={error} />
       <StyledFormCard>
-        {isLoading && <LoadingSpinner asOverlay />}
+        {isPostLoading && <LoadingSpinner asOverlay />}
         <form onSubmit={authSubmitHandler}>
           {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} />}
           {!isLoginMode && (

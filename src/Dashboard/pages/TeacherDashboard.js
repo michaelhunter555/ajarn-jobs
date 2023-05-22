@@ -286,6 +286,11 @@ const TeacherDashboard = () => {
     settingToggleIsLoading ||
     jobsIsLoading ||
     jobAdIsLoading;
+
+  //dashboard loading state
+  const homeDashLoadingState =
+    userProfileLoading || jobsIsLoading || jobAdIsLoading;
+
   const error =
     getUserProfileError ||
     userResumeError ||
@@ -314,7 +319,7 @@ const TeacherDashboard = () => {
         }}
       >
         <Grid item xs={12} md={2}>
-          {isLoading && (
+          {homeDashLoadingState && (
             <Skeleton
               sx={{ margin: "0 auto", borderRadius: "6px" }}
               variant="rectangular"
@@ -322,7 +327,9 @@ const TeacherDashboard = () => {
               width={250}
             />
           )}
-          {!isLoading && <Sidebar onMenuItemClick={handleMenuItemClick} />}
+          {!homeDashLoadingState && (
+            <Sidebar onMenuItemClick={handleMenuItemClick} />
+          )}
         </Grid>
 
         <Grid item xs={12} md={6}>
@@ -336,7 +343,7 @@ const TeacherDashboard = () => {
             }}
           >
             <Grid item>
-              {isLoading && (
+              {homeDashLoadingState && (
                 <Skeleton
                   sx={{ margin: "0 auto", borderRadius: "6px" }}
                   variant="rectangular"
@@ -344,7 +351,7 @@ const TeacherDashboard = () => {
                   width={374}
                 />
               )}
-              {!isLoading && (
+              {!homeDashLoadingState && (
                 <UserProfileJobAd
                   id={jobAd[0]?._id}
                   logo={jobAd[0]?.image}
@@ -355,7 +362,7 @@ const TeacherDashboard = () => {
             </Grid>
 
             <Grid item>
-              {isLoading && (
+              {homeDashLoadingState && (
                 <Skeleton
                   sx={{ margin: "0 auto", borderRadius: "6px" }}
                   variant="rectangular"
@@ -363,7 +370,7 @@ const TeacherDashboard = () => {
                   width={374}
                 />
               )}
-              {!isLoading && (
+              {!homeDashLoadingState && (
                 <UserProfileJobAd
                   id={jobAd[1]?._id}
                   logo={jobAd[1]?.image}
@@ -383,7 +390,7 @@ const TeacherDashboard = () => {
               flexDirection: "column",
             }}
           >
-            {isLoading && (
+            {homeDashLoadingState && (
               <Stack justifyContent="flex-End">
                 <Skeleton height={80} variant="rectangular" />
                 <Skeleton height={180} variant="rectangular" />
@@ -392,11 +399,11 @@ const TeacherDashboard = () => {
                 <Skeleton height={30} />
               </Stack>
             )}
-            {!isLoading && renderComponent()}
+            {!homeDashLoadingState && renderComponent()}
           </Grid>
         </Grid>
         <Grid item xs={12} md={3}>
-          {isLoading ? (
+          {homeDashLoadingState ? (
             <>
               <Skeleton
                 sx={{ margin: "1rem 0.5rem 1rem 1rem", borderRadius: "6px" }}

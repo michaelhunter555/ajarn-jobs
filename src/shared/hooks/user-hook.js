@@ -7,7 +7,8 @@ export const useUser = () => {
   const auth = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const { updateUser } = auth;
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, isPostLoading, error, sendRequest, clearError } =
+    useHttpClient();
 
   //Get All users
   const getAllUsers = useCallback(async () => {
@@ -96,6 +97,7 @@ export const useUser = () => {
     addCredits,
     applyToJob,
     isLoading,
+    isPostLoading,
     error,
     clearError,
   };

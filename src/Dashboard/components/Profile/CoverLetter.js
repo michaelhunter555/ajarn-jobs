@@ -19,7 +19,7 @@ const CoverLetter = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const [isEditing, setIsEditing] = useState(user?.coverLetter === "");
-  const { updateUserProfile, isLoading } = useUser();
+  const { updateUserProfile, isPostLoading } = useUser();
   const [formState, inputHandler] = useForm(
     {
       coverLetter: {
@@ -41,8 +41,8 @@ const CoverLetter = () => {
 
   return (
     <>
-      {isLoading && <Skeleton sx={{ width: 753, height: 382 }} />}
-      {!isLoading && !isEditing && (
+      {isPostLoading && <Skeleton sx={{ width: 753, height: 382 }} />}
+      {!isPostLoading && !isEditing && (
         <>
           <Grid
             component={Paper}
@@ -94,7 +94,7 @@ const CoverLetter = () => {
           </Grid>
         </>
       )}
-      {!isLoading && isEditing && (
+      {!isPostLoading && isEditing && (
         <Grid
           component={Paper}
           container

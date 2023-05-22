@@ -1,15 +1,11 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export const useHttpClient = () => {
+export const useHttpClient = (props) => {
   //error state
   const [error, setError] = useState();
   //loading state
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isPostLoading, setIsPostLoading] = useState(false);
 
   //store data across re-render cycles
   const activeHttpRequest = useRef([]);
@@ -18,9 +14,9 @@ export const useHttpClient = () => {
   const sendRequest = useCallback(
     //set methods with defaults
     async (url, method = "GET", body = null, headers = {}) => {
-      setIsLoading(true);
       //current property holds array that doesnt change across re-render
       //push the abort controller.
+      setIsPostLoading(true);
       const httpAbortController = new AbortController();
       activeHttpRequest.current.push(httpAbortController);
 
@@ -31,8 +27,8 @@ export const useHttpClient = () => {
         headers,
         signal: httpAbortController.signal,
       });
-      
-      console.log('RESPONSE', response)
+
+      console.log("RESPONSE", response);
 
       try {
         //await json data
@@ -47,10 +43,12 @@ export const useHttpClient = () => {
           throw new Error(data.message);
         }
         setIsLoading(false);
+        setIsPostLoading(false);
         return data;
       } catch (err) {
         setError(err.message);
         setIsLoading(false);
+        setIsPostLoading(false);
         throw err;
       }
     },
@@ -73,6 +71,7 @@ export const useHttpClient = () => {
 
   return {
     isLoading,
+    isPostLoading,
     error,
     sendRequest,
     clearError,

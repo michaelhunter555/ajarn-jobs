@@ -40,7 +40,7 @@ const NewJob = () => {
   const [jobCost, setJobCost] = useState(5);
   const [success, setSuccess] = useState(false);
   const [workPermitOffered, setWorkPermitOffered] = useState(true);
-  const { addJobByUserId, isLoading, error, clearError } = useJob();
+  const { addJobByUserId, isPostLoading, error, clearError } = useJob();
   //our onInput props(1,2,3) takes 3 arguments(Refer to Input.js). these values will be used to locate the id, value and validate.
   // important! Avoid infinite loop! useCallback() with dependencies!
   const [formState, inputHandler] = useForm(
@@ -159,7 +159,7 @@ const NewJob = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isPostLoading && <LoadingSpinner asOverlay />}
       <Modal
         header={"You a created a job!"}
         footer={`A job has been created for ${auth.user?.creator?.company}`}

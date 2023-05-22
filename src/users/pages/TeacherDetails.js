@@ -28,7 +28,7 @@ const TeacherDetails = () => {
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
-      <TeacherDetailsItem teacher={userData} />;
+      <TeacherDetailsItem isLoading={isLoading} teacher={userData} />;
     </>
   );
 };
