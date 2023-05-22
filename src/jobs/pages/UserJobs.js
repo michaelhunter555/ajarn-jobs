@@ -16,30 +16,72 @@ import { dummy_jobs } from "../../shared/util/DummyJobs";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
 import JobFilters from "../components/JobFilters";
 
-const StyledUserJobsDiv = styled("div")({
+const StyledUserJobsDiv = styled("div")(({ theme }) => ({
   maxWidth: "85%",
   margin: "5rem auto",
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "15px",
-});
+  [theme.breakpoints.down("md")]: {
+    gridTemplateColumns: "100%",
+    gridAutoColumns: "auto",
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridTemplateColumns: "100%",
+    gridAutoColumns: "auto",
+  },
+}));
 
-const StyledAdJobDiv = styled("div")({
+const StyledAdJobDiv = styled("div")(({ theme }) => ({
   display: "grid",
   gridColumn: "2 /4",
   textalign: "center",
   margin: "0 auto",
-});
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 1,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 1,
+  },
+}));
 
-const UsersJobFilterDiv = styled("div")({
+const UsersJobFilterDiv = styled("div")(({ theme }) => ({
   gridColumn: "1 / 2",
-});
-const UserJobListDiv = styled("div")({
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 2,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 2,
+  },
+}));
+
+const UserJobListDiv = styled("div")(({ theme }) => ({
   gridColumn: "2 / 4",
-});
-const FeaturedJobListDiv = styled("div")({
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 4,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 4,
+  },
+}));
+
+const FeaturedJobListDiv = styled("div")(({ theme }) => ({
   gridColumn: "4 / 5",
-});
+  [theme.breakpoints.down("md")]: {
+    gridColumn: 1,
+    gridRow: 3,
+  },
+  [theme.breakpoints.down("sm")]: {
+    gridColumn: 1,
+    gridRow: 3,
+  },
+}));
 
 const UserJobs = () => {
   const auth = useContext(AuthContext);
