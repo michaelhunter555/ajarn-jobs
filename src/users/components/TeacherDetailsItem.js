@@ -168,6 +168,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
               </Grid>
             </Grid>
           )}
+
           {isLoading && (
             <Skeleton
               variant="rectangular"

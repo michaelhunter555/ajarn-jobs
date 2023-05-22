@@ -19,7 +19,7 @@ const JobDetailsPage = () => {
     <>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
-      <JobDetails job={jobs} />
+      <JobDetails isLoading={isLoading} job={jobs} />
     </>
   );
 };

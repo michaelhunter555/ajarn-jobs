@@ -25,7 +25,6 @@ const NavLinks = (props) => {
           <Typography
             sx={{ fontWeight: location.pathname === "/" ? 700 : "inherit" }}
             variant="button"
-            color="text.secondary"
           >
             Home
           </Typography>
@@ -37,7 +36,6 @@ const NavLinks = (props) => {
           <Typography
             sx={{ fontWeight: location.pathname === "/jobs" ? 700 : "inherit" }}
             variant="button"
-            color="text.secondary"
           >
             Jobs
           </Typography>
@@ -51,7 +49,6 @@ const NavLinks = (props) => {
               fontWeight: location.pathname === "/teachers" ? 700 : "inherit",
             }}
             variant="button"
-            color="text.secondary"
           >
             Teachers
           </Typography>
@@ -63,7 +60,6 @@ const NavLinks = (props) => {
           <Typography
             sx={{ fontWeight: location.pathname === "/blog" ? 700 : "inherit" }}
             variant="button"
-            color="text.secondary"
           >
             Blog
           </Typography>
@@ -81,7 +77,6 @@ const NavLinks = (props) => {
                     : "inherit",
               }}
               variant="button"
-              color="text.secondary"
             >
               Dashboard
             </Typography>
@@ -97,7 +92,6 @@ const NavLinks = (props) => {
                 fontWeight: location.pathname === "/auth" ? 700 : "inherit",
               }}
               variant="button"
-              color="text.secondary"
             >
               Login
             </Typography>
@@ -108,9 +102,7 @@ const NavLinks = (props) => {
       {auth.isLoggedIn && (
         <li>
           <Button onClick={logoutHandler}>
-            <Typography variant="button" color="text.secondary">
-              Logout
-            </Typography>
+            <Typography variant="button">Logout</Typography>
           </Button>
         </li>
       )}

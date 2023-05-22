@@ -22,6 +22,7 @@ import {
   Grid,
   Link,
   Paper,
+  Skeleton,
   Typography,
 } from "@mui/material";
 
@@ -33,7 +34,7 @@ import JobDataTable from "./JobDataTable";
 const JobDetails = (props) => {
   const auth = useContext(AuthContext);
   const { applyToJob, error, clearError } = useUser();
-  const { job } = props;
+  const { job, isLoading } = props;
 
   const applyToJobHandler = () => {
     applyToJob(auth.user?._id, job?.id);
@@ -141,100 +142,165 @@ const JobDetails = (props) => {
             justifyContent="flex-start"
             spacing={2}
           >
-            <Grid
-              item
-              container
-              direction="row"
-              spacing={1}
-              sx={{ marginTop: 4 }}
-            >
-              {/**grid item 1 */}
-              <Grid item>
-                <Avatar
-                  variant="circular"
-                  src={job?.image}
-                  sx={{ height: 175, width: 175, border: "1px solid #e5e5e5" }}
-                  alt={`${job?.id}--${job?.creator?.company}`}
-                />
+            {isLoading && (
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  borderRadius: "15px",
+                  marginTop: 4,
+                  height: 260,
+                  width: 692,
+                }}
+              />
+            )}
+            {!isLoading && (
+              <Grid
+                item
+                container
+                direction="row"
+                spacing={1}
+                sx={{ marginTop: 4 }}
+              >
+                {/**grid item 1 */}
+                <Grid item>
+                  <Avatar
+                    variant="circular"
+                    src={job?.image}
+                    sx={{
+                      height: 175,
+                      width: 175,
+                      border: "1px solid #e5e5e5",
+                    }}
+                    alt={`${job?.id}--${job?.creator?.company}`}
+                  />
+                </Grid>
+                {/**grid item 2 */}
+
+                {!isLoading && (
+                  <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
+                    {jobInformation.map(
+                      ({ variant, component, icon, text }, i) => (
+                        <Typography
+                          key={i}
+                          color="text.secondary"
+                          variant={variant}
+                          component={component}
+                        >
+                          {icon && <>{icon}</>}
+                          {text}
+                        </Typography>
+                      )
+                    )}
+                    <Divider flexItem sx={{ margin: "0.5rem 0" }} />
+                  </Grid>
+                )}
+
+                {!isLoading && <Grid item>{outlinedButton}</Grid>}
               </Grid>
-              {/**grid item 2 */}
-              <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
-                {jobInformation.map(({ variant, component, icon, text }, i) => (
-                  <Typography
-                    key={i}
-                    color="text.secondary"
-                    variant={variant}
-                    component={component}
-                  >
-                    {icon && <>{icon} </>}
-                    {text}
-                  </Typography>
-                ))}
-                <Divider flexItem sx={{ margin: "0.5rem 0" }} />
-              </Grid>
-              <Grid item>{outlinedButton}</Grid>
-            </Grid>
+            )}
 
             <Grid item sx={{ MaxWidth: "100%" }}>
-              <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
-                <Typography variant="h6" component="h4">
-                  A little about {job?.creator?.company}:
-                </Typography>
-                <Divider variant="middle" sx={{ margin: "0 0 0.5rem 0" }} />
-                <Typography variant="subtitle1" paragraph>
-                  {job?.creator?.about}
-                </Typography>
-                <Divider />
+              {isLoading && (
+                <Skeleton
+                  variant="rectangular"
+                  sx={{
+                    borderRadius: "15px",
+                    marginTop: 2,
+                    height: 177,
+                    width: 692,
+                  }}
+                />
+              )}
+              {!isLoading && (
+                <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
+                  <Typography variant="h6" component="h4">
+                    A little about {job?.creator?.company}:
+                  </Typography>
+                  <Divider variant="middle" sx={{ margin: "0 0 0.5rem 0" }} />
+                  <Typography variant="subtitle1" paragraph>
+                    {job?.creator?.about}
+                  </Typography>
+                  <Divider />
 
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      width: "100%",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {job?.creator?.presence.map((item, i) => (
+                      <Chip
+                        key={i}
+                        clickable
+                        label={item}
+                        variant="outlined"
+                        sx={{ margin: "1rem 8px 8px 0" }}
+                      />
+                    ))}
+                  </Box>
+                </Paper>
+              )}
+            </Grid>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
+            {isLoading && (
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  borderRadius: "15px",
+                  marginTop: 4,
+                  height: 260,
+                  width: 692,
+                }}
+              />
+            )}
+            {!isLoading && (
+              <JobDataTable jobSpecifications={jobSpecifications} />
+            )}
+            <Divider sx={{ margin: "1rem auto" }} />
+            {isLoading && (
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  borderRadius: "15px",
+                  marginTop: 2,
+                  height: 177,
+                  width: 692,
+                }}
+              />
+            )}
+            {!isLoading && (
+              <Paper
+                elevation={0}
+                sx={{ padding: "2rem", borderRadius: "17px" }}
+              >
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
-                    width: "100%",
-                    flexWrap: "wrap",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "5px",
                   }}
                 >
-                  {job?.creator?.presence.map((item, i) => (
-                    <Chip
-                      key={i}
-                      clickable
-                      label={item}
-                      variant="outlined"
-                      sx={{ margin: "1rem 8px 8px 0" }}
-                    />
-                  ))}
+                  <Typography variant="h5" component="h4">
+                    {job?.title}
+                  </Typography>
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    paragraph
+                  >
+                    date posted: {job?.datePosted?.split("T")[0]}
+                  </Typography>
                 </Box>
+
+                <Divider />
+                {job?.description}
               </Paper>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
-            <JobDataTable jobSpecifications={jobSpecifications} />
-            <Divider sx={{ margin: "1rem auto" }} />
-
-            <Paper elevation={0} sx={{ padding: "2rem", borderRadius: "17px" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "5px",
-                }}
-              >
-                <Typography variant="h5" component="h4">
-                  {job?.title}
-                </Typography>
-                <Typography
-                  variant="subtitle2"
-                  color="text.secondary"
-                  paragraph
-                >
-                  date posted: {job?.datePosted?.split("T")[0]}
-                </Typography>
-              </Box>
-
-              <Divider />
-              {job?.description}
-            </Paper>
+            )}
           </Grid>
         </Grid>
       </Box>
