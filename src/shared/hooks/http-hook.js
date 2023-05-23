@@ -3,8 +3,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export const useHttpClient = (props) => {
   //error state
   const [error, setError] = useState();
-  //loading state
+  //loading states for GET
   const [isLoading, setIsLoading] = useState(true);
+  //loading state for POST
   const [isPostLoading, setIsPostLoading] = useState(false);
 
   //store data across re-render cycles
@@ -70,6 +71,16 @@ export const useHttpClient = (props) => {
   };
 
   return {
+    client: {
+      query: async (url) => {
+        try {
+          const response = await sendRequest(url);
+          return response;
+        } catch (err) {
+          console.log(err.message);
+        }
+      },
+    },
     isLoading,
     isPostLoading,
     error,

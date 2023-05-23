@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button, Grid, Skeleton, Stack } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
@@ -74,11 +75,17 @@ const TeacherDashboard = () => {
     clearError: clearGettingJobsError,
   } = useJob();
   const {
+    client,
     isLoading: jobAdIsLoading,
     error: jobAdError,
     sendRequest: sendJobAdRequest,
     clearError: clearJobAdError,
   } = useHttpClient();
+
+  const { data: jobsByUser } = useQuery(["jobsByUser", userId], async () => {
+    const response = client.query(`${process.env.REACT_APP_JOBS}/${userId}`);
+    return response.jobs;
+  });
 
   const authHasResume = !auth.user?.resume
     ? "Add Work History Item"

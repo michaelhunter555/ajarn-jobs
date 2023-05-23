@@ -7,7 +7,7 @@ export const useJob = () => {
   const auth = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);
   const { updateUser } = auth;
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError, client } = useHttpClient();
 
   const getAllJobs = useCallback(async () => {
     try {
@@ -117,6 +117,7 @@ export const useJob = () => {
   );
 
   return {
+    client,
     jobs,
     getAllJobs,
     getJobById,
