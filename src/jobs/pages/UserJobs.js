@@ -1,17 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
 import EastIcon from "@mui/icons-material/East";
 import { Box, Button, Card, Divider, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import Footer from "../../shared/components/UIElements/Footer";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
 import { AuthContext } from "../../shared/context/auth-context";
-import { useHttpClient } from "../../shared/hooks/http-hook";
+import { useJob } from "../../shared/hooks/jobs-hook";
 import { dummy_jobs } from "../../shared/util/DummyJobs";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
 import JobFilters from "../components/JobFilters";
@@ -86,25 +87,18 @@ const FeaturedJobListDiv = styled("div")(({ theme }) => ({
 const UserJobs = () => {
   const auth = useContext(AuthContext);
   const [filter, setFilter] = useState(dummy_jobs);
-  const [jobs, setJobs] = useState([]);
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { client, isLoading, error, clearError } = useJob();
 
-  //GET all jobs
-  useEffect(() => {
-    const getAllJobs = async () => {
-      try {
-        const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
-        setJobs(response.jobs);
-      } catch (err) {}
-    };
-    getAllJobs();
-  }, [sendRequest]);
+  const { data: jobs } = useQuery(["jobs"], async () => {
+    const response = await client.query(`${process.env.REACT_APP_JOBS}`);
+    return response.jobs;
+  });
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
 
-  const filteredJobs = jobs.filter((job) => {
+  const filteredJobs = jobs?.filter((job) => {
     return (
       (!filter.location ||
         job.location.toLowerCase().includes(filter.location.toLowerCase())) &&

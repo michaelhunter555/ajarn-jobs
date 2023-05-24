@@ -2,6 +2,8 @@ import React, { useCallback, useReducer } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import BlogPage from "./blog/pages/BlogPage";
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
@@ -22,6 +24,8 @@ import { authReducer, initialState } from "./shared/context/authReducer";
 import Login from "./users/pages/Auth";
 import TeacherDetails from "./users/pages/TeacherDetails";
 import Teachers from "./users/pages/Teachers";
+
+const queryClient = new QueryClient();
 
 function App() {
   const [state, dispatch] = useReducer(authReducer, initialState);
@@ -78,22 +82,24 @@ function App() {
   console.log(state);
   console.log("App state:", state.user);
   return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn: state.isLoggedIn,
-        user: state.user,
-        login: login,
-        logout: logout,
-        addCredits: addCredits,
-        useCredits: useCredits,
-        updateUser: updatedUser,
-      }}
-    >
-      <Router>
-        <MainNavigation />
-        <main>{routes}</main>
-      </Router>
-    </AuthContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContext.Provider
+        value={{
+          isLoggedIn: state.isLoggedIn,
+          user: state.user,
+          login: login,
+          logout: logout,
+          addCredits: addCredits,
+          useCredits: useCredits,
+          updateUser: updatedUser,
+        }}
+      >
+        <Router>
+          <MainNavigation />
+          <main>{routes}</main>
+        </Router>
+      </AuthContext.Provider>
+    </QueryClientProvider>
   );
 }
 

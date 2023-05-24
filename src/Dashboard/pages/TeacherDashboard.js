@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button, Grid, Skeleton, Stack } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
@@ -27,6 +27,7 @@ import Sidebar from "../components/Sidebar";
 
 const TeacherDashboard = () => {
   const userId = useParams().id;
+  const queryClient = useQueryClient();
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
@@ -36,11 +37,11 @@ const TeacherDashboard = () => {
     //get and update user profile
     users,
     getAllUsers,
-    getUserInformation,
     updateUserProfile,
     isLoading: userProfileLoading,
     error: getUserProfileError,
     clearError: clearUserProfileError,
+    client: usersClient,
   } = useUser();
   const {
     //update and delete user resume
@@ -75,28 +76,26 @@ const TeacherDashboard = () => {
     clearError: clearGettingJobsError,
   } = useJob();
   const {
-    client,
     isLoading: jobAdIsLoading,
     error: jobAdError,
     sendRequest: sendJobAdRequest,
     clearError: clearJobAdError,
   } = useHttpClient();
 
-  const { data: jobsByUser } = useQuery(["jobsByUser", userId], async () => {
-    const response = client.query(`${process.env.REACT_APP_JOBS}/${userId}`);
-    return response.jobs;
+  const { data: userInfo } = useQuery(["userInfo", userId], async () => {
+    if (userId) {
+      const response = await usersClient.query(
+        `${process.env.REACT_APP_USERS}/${userId}`
+      );
+      queryClient.setQueryData(["userInfo", userId], response.user);
+      auth.updateUser(response.user);
+      return response.users;
+    }
   });
 
   const authHasResume = !auth.user?.resume
     ? "Add Work History Item"
     : "Add More Work";
-
-  //GET user profile information
-  useEffect(() => {
-    if (userId) {
-      getUserInformation(userId);
-    }
-  }, [userId, getUserInformation]);
 
   //GET users current jobs for creator dash and
   useEffect(() => {
@@ -225,7 +224,7 @@ const TeacherDashboard = () => {
   const renderComponent = () => {
     switch (currentComponent) {
       case "profile":
-        return auth.user && <ProfileInformation user={auth.user} />;
+        return auth.user && <ProfileInformation user={userInfo} />;
       case "job-listings":
         /*auth.user.jobs */
         return <JobAdsList job={jobs} />;

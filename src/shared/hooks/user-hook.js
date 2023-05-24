@@ -7,7 +7,7 @@ export const useUser = () => {
   const auth = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const { updateUser } = auth;
-  const { isLoading, isPostLoading, error, sendRequest, clearError } =
+  const { isLoading, isPostLoading, error, sendRequest, clearError, client } =
     useHttpClient();
 
   //Get All users
@@ -100,5 +100,6 @@ export const useUser = () => {
     isPostLoading,
     error,
     clearError,
+    client,
   };
 };

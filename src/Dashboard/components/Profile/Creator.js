@@ -21,6 +21,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 import NewJob from "../../../jobs/pages/NewJob";
 import ImageUpload from "../../../shared/components/FormElements/ImageUpload";
@@ -38,12 +39,9 @@ const today = date.toISOString().split("T")[0];
 
 const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const auth = useContext(AuthContext);
-  //editing toggle for creator info
+  const { user } = auth;
   const [isEditing, setIsEditing] = useState(true);
-
-  //loading state - checks if user has creator profile already or not.
   const [isLoading, setIsLoading] = useState(auth.user?.creator !== null);
-  //dynamic creator profile for rendering components based on click, set to 'applicants'
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -78,7 +76,17 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
     },
     true
   );
-  const { jobs, getJobsByUserId } = useJob();
+  const { client } = useJob();
+
+  const { data: jobApplicants } = useQuery(
+    ["JobApplicants", user?._id],
+    async () => {
+      const response = await client.query(
+        `${process.env.REACT_APP_JOBS}/user/${user?._id}`
+      );
+      return response.jobs;
+    }
+  );
 
   //destructured boolean value to check if a form is new or not
   const { isNew = false } = creatorItem;
@@ -86,21 +94,18 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   //simple check is to see if the company name exists already or not
   // if it does, no need to show form
   useEffect(() => {
-    if (auth.user?.creator?.company) {
+    if (user?.creator?.company) {
       setIsEditing(false);
       setIsLoading(false);
     } else {
       setIsEditing(true);
       setIsLoading(false);
     }
-  }, [auth.user?.creator]);
+  }, [user?.creator]);
 
-  useEffect(() => {
-    getJobsByUserId(auth.user?._id);
-  }, [getJobsByUserId, auth.user]);
   //if is new or creator property is null, render new form.
   useEffect(() => {
-    if (!isNew || auth.user?.creator === null) {
+    if (!isNew || user?.creator === null) {
       setFormData(
         {
           company: {
@@ -135,7 +140,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
         true
       );
     }
-  }, [creatorItem, setFormData, isNew, auth.user?.creator]);
+  }, [creatorItem, setFormData, isNew, user?.creator]);
 
   //data we would like to pass to our creator property
   const handleSubmit = (event) => {
@@ -363,7 +368,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                     variant="h5"
                     color="text.secondary"
                   >
-                    {auth.user?.creator?.company}
+                    {user?.creator?.company}
                   </Typography>
                   <Button
                     sx={{ fontSize: 10 }}
@@ -384,7 +389,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                   </Grid>
                   <Grid>
                     <Typography variant="subtitle2" color="text.secondary">
-                      Company Size: {auth.user?.creator?.companySize}
+                      Company Size: {user?.creator?.companySize}
                     </Typography>
                   </Grid>
                 </Stack>
@@ -395,7 +400,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                   </Grid>
                   <Grid>
                     <Typography variant="subtitle2" color="text.secondary">
-                      Location: {auth.user?.creator?.headquarters}
+                      Location: {user?.creator?.headquarters}
                     </Typography>
                   </Grid>
                 </Stack>
@@ -406,7 +411,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                   </Grid>
                   <Grid>
                     <Typography variant="subtitle2" color="text.secondary">
-                      Established: {auth.user?.creator?.established}
+                      Established: {user?.creator?.established}
                     </Typography>
                   </Grid>
                 </Stack>
@@ -439,7 +444,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                         Applicants
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {jobs.map((job) => job.applicants.length)}
+                        {jobApplicants?.map((job) => job.applicants.length)}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>
@@ -447,9 +452,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                         Listings
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {(auth.user?.jobs?.length || 0) < 1
-                          ? 0
-                          : auth.user?.jobs?.length}
+                        {(user?.jobs?.length || 0) < 1 ? 0 : user?.jobs?.length}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>
@@ -484,7 +487,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                     </Grid>
                     <Grid>
                       <Typography variant="h5" color="text.secondary">
-                        {auth.user?.credits}
+                        {user?.credits}
                       </Typography>
                     </Grid>
                     <Grid>

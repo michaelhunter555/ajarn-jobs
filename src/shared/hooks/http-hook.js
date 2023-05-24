@@ -71,6 +71,7 @@ export const useHttpClient = (props) => {
   };
 
   return {
+    //use client.query(url) for API caching
     client: {
       query: async (url) => {
         try {

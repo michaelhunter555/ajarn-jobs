@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -14,6 +14,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useJob } from "../../../shared/hooks/jobs-hook";
@@ -60,11 +61,17 @@ const tableRows = [
 const CreatorJobsTable = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const { getJobsByUserId, jobs, isLoading } = useJob();
+  const { isLoading, client } = useJob();
 
-  useEffect(() => {
-    getJobsByUserId(user?._id);
-  }, [getJobsByUserId, user]);
+  const { data: creatorJobs } = useQuery(
+    ["creatorJobs", user?._id],
+    async () => {
+      const response = await client.query(
+        `${process.env.REACT_APP_JOBS}/user/${user?._id}`
+      );
+      return response.jobs;
+    }
+  );
 
   return (
     <TableContainer>
@@ -90,7 +97,7 @@ const CreatorJobsTable = () => {
               </TableCell>
             </TableRow>
           ) : (
-            jobs?.map((job, i) => (
+            creatorJobs?.map((job, i) => (
               <TableRow key={job?._id}>
                 <TableCell>{job?.datePosted.split("T")[0]}</TableCell>
                 <TableCell>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -13,6 +13,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../../shared/context/auth-context";
@@ -54,13 +55,16 @@ const tableRows = [
 const JobApplicantsTable = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const { jobs, getJobsByUserId, isLoading, error, clearError } = useJob();
+  const { isLoading, error, clearError, client } = useJob();
 
-  useEffect(() => {
-    getJobsByUserId(user?._id);
-  }, [getJobsByUserId, user]);
+  const { data: jobsByUser } = useQuery(["jobsByUser", user?._id], async () => {
+    const response = await client.query(
+      `${process.env.REACT_APP_JOBS}/user/${user?._id}`
+    );
+    return response.jobs;
+  });
 
-  const hasApplicants = jobs?.some((job) => job?.applicants?.length > 0);
+  const hasApplicants = jobsByUser?.some((job) => job?.applicants?.length > 0);
 
   return (
     <>
@@ -94,7 +98,7 @@ const JobApplicantsTable = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              jobs?.map((job) =>
+              jobsByUser?.map((job) =>
                 job?.applicants?.map((teacher, i) => (
                   <TableRow key={teacher?.userId?._id}>
                     <TableCell>{teacher?.userId?.name}</TableCell>
