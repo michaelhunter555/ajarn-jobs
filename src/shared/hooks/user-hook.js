@@ -1,7 +1,11 @@
-import { useCallback, useContext, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
-import { AuthContext } from "../context/auth-context";
-import { useHttpClient } from "./http-hook";
+import { AuthContext } from '../context/auth-context';
+import { useHttpClient } from './http-hook';
 
 export const useUser = () => {
   const auth = useContext(AuthContext);
