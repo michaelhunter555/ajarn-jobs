@@ -8,7 +8,6 @@ import { useHttpClient } from "./http-hook";
 //const { users } = useQueryFetch('key', userId);
 //const { jobs } = useQueryFetch('jobs', userId);
 //const { getUserInformation } = useQueryFetch('userInfo, userId, `user/${userId}`);
-
 export const useQueryFetch = (key, userId) => {
   const auth = useContext(AuthContext);
   const { updateUser } = auth;

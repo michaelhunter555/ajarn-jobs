@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import {
   FaClipboardList,
@@ -21,23 +21,45 @@ import {
   Divider,
   Grid,
   Link,
+  Modal,
   Paper,
   Skeleton,
+  Stack,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useUser } from "../../shared/hooks/user-hook";
 import JobDataTable from "./JobDataTable";
 
+const StyledBoxModal = styled(Paper)({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "auto",
+  height: "auto",
+  bgcolor: "background.paper",
+  border: "2px solid #fff",
+  borderRadius: "15px",
+  boxShadow: 24,
+  padding: 14,
+});
+
 const JobDetails = (props) => {
   const auth = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
   const { applyToJob, error, clearError } = useUser();
   const { job, isLoading } = props;
 
   const applyToJobHandler = () => {
     applyToJob(auth.user?._id, job?.id);
+  };
+
+  const applyJobModalHandler = () => {
+    setOpen((prev) => !prev);
   };
 
   const jobSpecifications = [
@@ -93,13 +115,52 @@ const JobDetails = (props) => {
 
   if (auth.isLoggedIn) {
     outlinedButton = (
-      <Button
-        sx={{ borderRadius: "17px" }}
-        onClick={applyToJobHandler}
-        variant="outlined"
-      >
-        Apply Now
-      </Button>
+      <>
+        <Button
+          sx={{ borderRadius: "17px" }}
+          onClick={applyJobModalHandler}
+          variant="outlined"
+        >
+          Apply Now
+        </Button>
+        <Modal open={open} onClose={!open}>
+          <StyledBoxModal>
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item xs={12} sm={9} md={6} sx={{ marginBottom: 5 }}>
+                <Typography>You're about to apply to this job.</Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sm={9}
+                md={6}
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Stack spacing={2} direction="row">
+                  <Button onClick={applyToJobHandler} variant="contained">
+                    Apply
+                  </Button>
+                  <Button
+                    onClick={() => setOpen(false)}
+                    color="error"
+                    variant="outlined"
+                  >
+                    close
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          </StyledBoxModal>
+        </Modal>
+      </>
     );
   } else {
     outlinedButton = (

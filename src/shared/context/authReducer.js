@@ -20,8 +20,10 @@ export const authReducer = (state, action) => {
         isLoggedIn: true,
         user: action.user,
       };
+
     case LOGOUT:
       return initialState;
+
     case ADD_CREDITS:
       const newCredits = state.user.credits + action.amount;
       return {
@@ -35,6 +37,7 @@ export const authReducer = (state, action) => {
         ...state.user,
         credits: remaingCredits,
       };
+
     case UPDATE_USER:
       console.log("UPDATE ACTION", action.user);
       return {

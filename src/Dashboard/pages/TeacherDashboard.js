@@ -82,6 +82,7 @@ const TeacherDashboard = () => {
     clearError: clearJobAdError,
   } = useHttpClient();
 
+  //initial test of api cache call
   const { data: userInfo } = useQuery(["userInfo", userId], async () => {
     if (userId) {
       const response = await usersClient.query(
@@ -93,6 +94,7 @@ const TeacherDashboard = () => {
     }
   });
 
+  //does the user have a resume?
   const authHasResume = !auth.user?.resume
     ? "Add Work History Item"
     : "Add More Work";
@@ -117,6 +119,7 @@ const TeacherDashboard = () => {
     }
   }, [selectedCard, users]);
 
+  //get job ads
   useEffect(() => {
     const getJobAds = async () => {
       const response = await sendJobAdRequest(`${process.env.REACT_APP_JOBS}`);
@@ -304,6 +307,7 @@ const TeacherDashboard = () => {
     settingToggleError ||
     gettingJobsError ||
     jobAdError;
+
   const combinedClearError = () => {
     clearUserProfileError();
     clearResumeError();
