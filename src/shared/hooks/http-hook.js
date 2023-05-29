@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 export const useHttpClient = (props) => {
+  const queryClient = useQueryClient();
   //error state
   const [error, setError] = useState();
   //loading states for GET
@@ -80,6 +83,9 @@ export const useHttpClient = (props) => {
         } catch (err) {
           console.log(err.message);
         }
+      },
+      initialData: (key) => {
+        return queryClient.getQueryData([key]);
       },
     },
     isLoading,

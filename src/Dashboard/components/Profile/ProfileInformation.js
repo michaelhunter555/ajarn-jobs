@@ -29,7 +29,7 @@ const StyledProfileAvatar = styled(Avatar)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-const ProfileInformation = ({ user }) => {
+const ProfileInformation = ({ user, isLoading }) => {
   const [teacherProfileTab, setTeacherProfileTab] = useState("bio");
   const {
     id,
@@ -84,27 +84,31 @@ const ProfileInformation = ({ user }) => {
   };
 
   return (
-    <StyledProfileContainer>
-      <StyledBackgroundBox>
-        <StyledProfileAvatar
-          src={`${process.env.REACT_APP_IMAGE}${image}`}
-          alt={`${id}-${name}`}
-        />
-        <Typography variant="h5">{name}</Typography>
-        <Typography variant="subtitle1">{location}</Typography>
-        <Typography variant="subtitle2">{education}</Typography>
-        <Typography variant="body1">{WorkExperience}</Typography>
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
-          {interests?.map((interest, i) => {
-            return <Chip key={i} label={interest} sx={{ margin: 0.5 }} />;
-          })}
-        </Box>
-      </StyledBackgroundBox>
+    <>
+      {!isLoading && (
+        <StyledProfileContainer>
+          <StyledBackgroundBox>
+            <StyledProfileAvatar
+              src={`${process.env.REACT_APP_IMAGE}${image}`}
+              alt={`${id}-${name}`}
+            />
+            <Typography variant="h5">{name}</Typography>
+            <Typography variant="subtitle1">{location}</Typography>
+            <Typography variant="subtitle2">{education}</Typography>
+            <Typography variant="body1">{WorkExperience}</Typography>
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              {interests?.map((interest, i) => {
+                return <Chip key={i} label={interest} sx={{ margin: 0.5 }} />;
+              })}
+            </Box>
+          </StyledBackgroundBox>
 
-      <Divider flexItem sx={{ marginTop: "1rem" }} />
-      <ProfileTabs onTabChange={handleMenuItemClick} />
-      {renderComponent()}
-    </StyledProfileContainer>
+          <Divider flexItem sx={{ marginTop: "1rem" }} />
+          <ProfileTabs onTabChange={handleMenuItemClick} />
+          {renderComponent()}
+        </StyledProfileContainer>
+      )}
+    </>
   );
 };
 

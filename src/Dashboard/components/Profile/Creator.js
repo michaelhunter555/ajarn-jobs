@@ -1,10 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import BusinessIcon from "@mui/icons-material/Business";
-import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import BusinessIcon from '@mui/icons-material/Business';
+import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import {
   Box,
   Button,
@@ -20,19 +24,19 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 
-import NewJob from "../../../jobs/pages/NewJob";
-import ImageUpload from "../../../shared/components/FormElements/ImageUpload";
-import { AuthContext } from "../../../shared/context/auth-context";
-import { useForm } from "../../../shared/hooks/form-hook";
-import { useJob } from "../../../shared/hooks/jobs-hook";
-import { thaiCities } from "../../../shared/util/ThaiData";
-import CreatorJobsTable from "./CreatorJobsTable";
-import CreatorTabs from "./CreatorTabs";
-import JobApplicantsTable from "./JobApplicantsTable";
-import PurchaseCredits from "./PurchaseCredits";
+import NewJob from '../../../jobs/pages/NewJob';
+import ImageUpload from '../../../shared/components/FormElements/ImageUpload';
+import { AuthContext } from '../../../shared/context/auth-context';
+import { useForm } from '../../../shared/hooks/form-hook';
+import { useJob } from '../../../shared/hooks/jobs-hook';
+import { thaiCities } from '../../../shared/util/ThaiData';
+import CreatorJobsTable from './CreatorJobsTable';
+import CreatorTabs from './CreatorTabs';
+import JobApplicantsTable from './JobApplicantsTable';
+import PurchaseCredits from './PurchaseCredits';
 
 const date = new Date();
 const today = date.toISOString().split("T")[0];
@@ -87,6 +91,8 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
       return response.jobs;
     }
   );
+
+  console.log("CREATOR ITEM:", user)
 
   //destructured boolean value to check if a form is new or not
   const { isNew = false } = creatorItem;

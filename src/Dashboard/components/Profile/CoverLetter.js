@@ -1,4 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, {
+  useContext,
+  useState,
+} from 'react';
 
 import {
   Button,
@@ -9,11 +12,11 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
-import { AuthContext } from "../../../shared/context/auth-context";
-import { useForm } from "../../../shared/hooks/form-hook";
-import { useUser } from "../../../shared/hooks/user-hook";
+import { AuthContext } from '../../../shared/context/auth-context';
+import { useForm } from '../../../shared/hooks/form-hook';
+import { useUser } from '../../../shared/hooks/user-hook';
 
 const CoverLetter = () => {
   const auth = useContext(AuthContext);
@@ -88,8 +91,7 @@ const CoverLetter = () => {
               </Grid>
             </Grid>
             <Stack direction="row">
-              <Button onClick={updateCoverLetterHandler}>Save</Button>
-              <Button onClick={() => setIsEditing(true)}>Edit</Button>
+              <Button onClick={() => setIsEditing(true)}>{auth.user?.coverLetter ? 'Edit' : 'Add cover letter'}</Button>
             </Stack>
           </Grid>
         </>

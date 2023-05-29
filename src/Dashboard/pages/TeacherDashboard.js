@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button, Grid, Skeleton, Stack } from "@mui/material";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
@@ -25,9 +24,19 @@ import TeacherSettings from "../components/Profile/TeacherSettings";
 import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
 import Sidebar from "../components/Sidebar";
 
+const TEACHER = "teacher";
+const EMPLOYER = "employer";
+const PROFILE = "profile";
+const JOB_LISTINGS = "job-listings";
+const APPLICATIONS = "applications";
+const RESUME = "resume";
+const COVER_LETTER = "cover-letter";
+const CREATOR = "creator";
+const SETTINGS = "settings";
+const LOGOUT = "logout";
+
 const TeacherDashboard = () => {
   const userId = useParams().id;
-  const queryClient = useQueryClient();
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState("profile");
@@ -37,11 +46,11 @@ const TeacherDashboard = () => {
     //get and update user profile
     users,
     getAllUsers,
+    getUserInformation,
     updateUserProfile,
     isLoading: userProfileLoading,
     error: getUserProfileError,
     clearError: clearUserProfileError,
-    client: usersClient,
   } = useUser();
   const {
     //update and delete user resume
@@ -83,21 +92,58 @@ const TeacherDashboard = () => {
   } = useHttpClient();
 
   //initial test of api cache call
-  const { data: userInfo } = useQuery(["userInfo", userId], async () => {
-    if (userId) {
-      const response = await usersClient.query(
-        `${process.env.REACT_APP_USERS}/${userId}`
-      );
-      queryClient.setQueryData(["userInfo", userId], response.user);
-      auth.updateUser(response.user);
-      return response.users;
-    }
-  });
+
+  // const getUserInfo = async (userId) => {
+  //   if (userId) {
+  //     const response = await fetch(`${process.env.REACT_APP_USERS}/${userId}`);
+  //     const data = await response.json();
+  //     console.log(data);
+  //     return data.user;
+  //   } else {
+  //     return null;
+  //   }
+  // };
+
+  // const { data: userInfo, isLoading: userInfoLoading } = useQuery(
+  //   ["userInfo", userId],
+  //   () => getUserInfo(userId),
+  //   {
+  //     initialData: async () => auth.user || null,
+  //   }
+  // );
+
+  // console.log("UserInfo Query Call:", userInfo);
+
+  // const { data: userInfo, isLoading: userInfoLoading } = useQuery(
+  //   ["userInfo", userId],
+  //   async () => {
+  //     if (userId) {
+  //       const response = await usersClient.query(
+  //         `${process.env.REACT_APP_USERS}/${userId}`
+  //       );
+  //       queryClient.setQueryData(["userInfo", userId], response?.user);
+  //       auth?.updateUser(response.user);
+  //       return response?.users;
+  //     } else {
+  //       return null;
+  //     }
+  //   },
+  //   {
+  //     initialData: async () => auth.user || null,
+  //   }
+  // );
 
   //does the user have a resume?
   const authHasResume = !auth.user?.resume
     ? "Add Work History Item"
     : "Add More Work";
+
+  //GET user by ID
+  useEffect(() => {
+    if (userId) {
+      getUserInformation(userId);
+    }
+  }, [userId, getUserInformation]);
 
   //GET users current jobs for creator dash and
   useEffect(() => {
@@ -223,17 +269,36 @@ const TeacherDashboard = () => {
     setCurrentComponent(componentName);
   };
 
+  //if auth is an employer and has a creator account, make the creator component default.
+  const authIsCreator =
+    auth.user?.userType === EMPLOYER && auth.user?.creator !== null;
+
   //Sidebar component rendering
   const renderComponent = () => {
     switch (currentComponent) {
-      case "profile":
-        return auth.user && <ProfileInformation user={userInfo} />;
-      case "job-listings":
+      case PROFILE:
+        return (
+          <>
+            {auth.user?.userType === TEACHER && (
+              <ProfileInformation user={auth.user} />
+            )}
+            {authIsCreator ? (
+              <Creator
+                creatorItem={auth.user?.creator}
+                onUpdate={handleCreatorUpdate}
+                onDelete={() => handleCreatorDelete(auth.user?.creator)}
+              />
+            ) : (
+              <Button onClick={addCreatorItem}>Creator Account</Button>
+            )}
+          </>
+        );
+      case JOB_LISTINGS:
         /*auth.user.jobs */
         return <JobAdsList job={jobs} />;
-      case "applications":
+      case APPLICATIONS:
         return <Applications />;
-      case "resume":
+      case RESUME:
         return (
           <>
             {auth.user?.resume?.map((resumeItem) => (
@@ -250,9 +315,9 @@ const TeacherDashboard = () => {
             <Button onClick={addNewResumeItem}>{authHasResume}</Button>
           </>
         );
-      case "cover-letter":
+      case COVER_LETTER:
         return <CoverLetter />;
-      case "creator":
+      case CREATOR:
         return (
           <>
             {auth.user?.creator ? (
@@ -266,7 +331,7 @@ const TeacherDashboard = () => {
             )}
           </>
         );
-      case "settings":
+      case SETTINGS:
         const isTeacher = auth.user?.userType === "teacher";
         const isHidden = auth.user?.isHidden;
         return (
@@ -279,7 +344,7 @@ const TeacherDashboard = () => {
             isHidden={isHidden}
           />
         );
-      case "logout":
+      case LOGOUT:
         auth.logout();
         navigate("/");
         break;

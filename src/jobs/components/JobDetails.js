@@ -1,4 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, {
+  useContext,
+  useState,
+} from 'react';
 
 import {
   FaClipboardList,
@@ -6,13 +9,13 @@ import {
   FaGraduationCap,
   FaMapMarkerAlt,
   FaMoneyBill,
-} from "react-icons/fa";
-import { Link as RouterLink } from "react-router-dom";
+} from 'react-icons/fa';
+import { Link as RouterLink } from 'react-router-dom';
 
-import BusinessIcon from "@mui/icons-material/Business";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import BusinessIcon from '@mui/icons-material/Business';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import {
   Avatar,
   Box,
@@ -26,13 +29,13 @@ import {
   Skeleton,
   Stack,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useUser } from "../../shared/hooks/user-hook";
-import JobDataTable from "./JobDataTable";
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useUser } from '../../shared/hooks/user-hook';
+import JobDataTable from './JobDataTable';
 
 const StyledBoxModal = styled(Paper)({
   position: "absolute",
@@ -56,6 +59,7 @@ const JobDetails = (props) => {
 
   const applyToJobHandler = () => {
     applyToJob(auth.user?._id, job?.id);
+    setOpen(false);
   };
 
   const applyJobModalHandler = () => {
@@ -111,6 +115,16 @@ const JobDetails = (props) => {
     },
   ];
 
+  let userCantApply = true;
+
+  if (
+    auth.user?.resume &&
+    auth.user?.coverLetter &&
+    auth.user?.userType !== "employer"
+  ) {
+    userCantApply = false;
+  }
+
   let outlinedButton;
 
   if (auth.isLoggedIn) {
@@ -123,7 +137,7 @@ const JobDetails = (props) => {
         >
           Apply Now
         </Button>
-        <Modal open={open} onClose={!open}>
+        <Modal open={open} onClose={applyJobModalHandler}>
           <StyledBoxModal>
             <Grid
               container
@@ -132,7 +146,36 @@ const JobDetails = (props) => {
               alignItems="center"
             >
               <Grid item xs={12} sm={9} md={6} sx={{ marginBottom: 5 }}>
-                <Typography>You're about to apply to this job.</Typography>
+                <Typography>
+                  You're about to apply to {job?.creator?.company}'s job for{" "}
+                  {job?.title}.
+                </Typography>
+
+                <Typography color="text.secondary" variant="subtitle2">
+                  You currently{" "}
+                  {auth.user?.resume ? "have a resume" : "don't have a resume "}{" "}
+                  on file. {auth.user?.resume ? "✅" : "Please add one.⛔"}
+                </Typography>
+                <Typography color="text.secondary" variant="subtitle2">
+                  You currently{" "}
+                  {auth.user?.coverLetter
+                    ? "have a cover letter"
+                    : "don't have a cover letter "}{" "}
+                  on file. {auth.user?.coverLetter ? "✅" : "Please add one.⛔"}
+                </Typography>
+
+                {auth.user?.userType === "employer" && (
+                  <Typography color="text.secondary" variant="subtitle2">
+                    You're registered as an {auth.user?.userType}.You can not
+                    apply to jobs. ⛔
+                  </Typography>
+                )}
+
+                {auth.user?.coverLetter && auth.user?.resume && (
+                  <Typography sx={{marginTop: '1rem'}} color="text.secondary" variant="subtitle2">
+                    You May Apply to this job!
+                  </Typography>
+                )}
               </Grid>
 
               <Grid
@@ -145,7 +188,11 @@ const JobDetails = (props) => {
                 justifyContent="space-between"
               >
                 <Stack spacing={2} direction="row">
-                  <Button onClick={applyToJobHandler} variant="contained">
+                  <Button
+                    onClick={applyToJobHandler}
+                    variant="contained"
+                    disabled={userCantApply}
+                  >
                     Apply
                   </Button>
                   <Button
