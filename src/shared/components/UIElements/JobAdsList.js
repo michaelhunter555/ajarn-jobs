@@ -55,7 +55,7 @@ const JobAdsList = (props) => {
           <Link to={`/jobs/${school?._id}`} style={{ textDecoration: "none" }}>
             <StyledJobAdCard
               component="div"
-              featured={school.jobType === "featured"}
+              featured={school?.jobType === "featured"}
             >
               <CardActionArea>
                 <CardContent>
@@ -64,18 +64,23 @@ const JobAdsList = (props) => {
                       <StyledMediaCard
                         component="img"
                         image={school?.image}
-                        alt={`${school?._id}--${school.creator.company}`}
+                        alt={`${school?._id}--${school?.creator?.company}`}
                       />
                     </Grid>
 
                     <Grid item xs={8} sm={8} md={8} lg={9} xl={10}>
                       <Stack spacing={0} alignItems="start">
-                        <Typography color="primary" variant="h5">
+                        <Typography
+                          color="primary"
+                          variant="body1"
+                          sx={{ fontSize: "17px", fontWeight: 500 }}
+                          component="div"
+                        >
                           {school?.creator?.company} -{" "}
-                          {school.title.length > 25
+                          {school?.title.length > 25
                             ? school.title.substring(0, 40) + "..."
                             : school.title}{" "}
-                          {school.jobType === "featured" && (
+                          {school?.jobType === "featured" && (
                             <Chip
                               sx={{
                                 backgroundColor: "#faea92",
@@ -93,34 +98,35 @@ const JobAdsList = (props) => {
                           gutterBottom
                           variant="subtitle2"
                           color="text.secondary"
+                          component="div"
                         >
                           Listed • {school?.datePosted.split("T")[0]}
                         </Typography>
                       </Stack>
                       <StyledChipDiv variant="body2" component="div">
                         <StyledChip
-                          label={school.location}
+                          label={school?.location}
                           size={"small"}
                           icon={<PlaceIcon />}
-                          featured={school.jobType === "featured"}
+                          featured={school?.jobType === "featured"}
                         />
                         <StyledChip
-                          label={school.salary}
+                          label={school?.salary}
                           size={"small"}
                           icon={<PaymentsIcon />}
-                          featured={school.jobType === "featured"}
+                          featured={school?.jobType === "featured"}
                         />
                         <StyledChip
-                          label={school.hours}
+                          label={school?.hours}
                           size={"small"}
                           icon={<PunchClockIcon />}
-                          featured={school.jobType === "featured"}
+                          featured={school?.jobType === "featured"}
                         />
                       </StyledChipDiv>
                       <Typography variant="body2" color="text.secondary">
-                        {school.description.length > 60
-                          ? school.description.substring(0, 60) + "..."
-                          : school.description}
+                        {school?.description.length > 60
+                          ? school?.description.substring(0, 60) + "..."
+                          : school?.description}
                       </Typography>
                     </Grid>
                   </Grid>

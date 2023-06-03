@@ -6,7 +6,8 @@ import { useHttpClient } from "./http-hook";
 export const useResume = () => {
   const auth = useContext(AuthContext);
   const { updateUser } = auth;
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, isPostLoading, error, sendRequest, clearError } =
+    useHttpClient();
 
   const updateUserResume = useCallback(
     async (userId, update) => {
@@ -21,8 +22,8 @@ export const useResume = () => {
         );
         const updatedResume = {
           ...auth.user,
-          resume: auth.user.resume.map((resumeItem) => {
-            return resumeItem._id === update._id ? update : resumeItem;
+          resume: auth.user?.resume?.map((resumeItem) => {
+            return resumeItem?._id === update._id ? update : resumeItem;
           }),
         };
         updateUser(updatedResume);
@@ -57,6 +58,7 @@ export const useResume = () => {
   return {
     updateUserResume,
     deleteUserResume,
+    isPostLoading,
     isLoading,
     error,
     clearError,

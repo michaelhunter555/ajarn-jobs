@@ -56,6 +56,7 @@ export const useJob = () => {
           `${process.env.REACT_APP_JOBS}/user/${userId}`
         );
         setJobs(response.jobs);
+        return response.jobs;
       } catch (err) {}
     },
     [sendRequest]

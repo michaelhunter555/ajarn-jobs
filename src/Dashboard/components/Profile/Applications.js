@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 
 import {
   Box,
@@ -11,32 +11,32 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
 import { AuthContext } from "../../../shared/context/auth-context";
-import { useHttpClient } from "../../../shared/hooks/http-hook";
 
 const Applications = () => {
   const auth = useContext(AuthContext);
-  const { sendRequest } = useHttpClient();
-  const [jobs, setJobs] = useState([]);
 
   //GET all jobs
-  useEffect(() => {
-    const getAppliedUserJobs = async () => {
-      try {
-        const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
-        setJobs(response.jobs);
-        console.log("JOBS in APPLICATIONS", response.jobs);
-      } catch (err) {
-        console.log("there was an error in the applications component", err);
-      }
-    };
-    getAppliedUserJobs();
-  }, [sendRequest]);
+
+  const getAppliedUserJobs = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_JOBS}`);
+      const data = await response.json();
+      return data.jobs;
+    } catch (err) {
+      console.log("there was an error in the applications component", err);
+    }
+  };
+
+  const { data: jobs } = useQuery(["userApplications"], () =>
+    getAppliedUserJobs()
+  );
 
   //from current set of jobs, return jobs where the userId matches
   const userApplied = jobs?.filter((job) =>
-    job?.applicants?.some((applicant) => applicant.userId === auth?.user?._id)
+    job?.applicants?.some((applicant) => applicant?.userId === auth?.user?._id)
   );
 
   return (

@@ -1,14 +1,10 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import BusinessIcon from '@mui/icons-material/Business';
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import BusinessIcon from "@mui/icons-material/Business";
+import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
   Box,
   Button,
@@ -24,19 +20,19 @@ import {
   Stack,
   TextField,
   Typography,
-} from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+} from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
-import NewJob from '../../../jobs/pages/NewJob';
-import ImageUpload from '../../../shared/components/FormElements/ImageUpload';
-import { AuthContext } from '../../../shared/context/auth-context';
-import { useForm } from '../../../shared/hooks/form-hook';
-import { useJob } from '../../../shared/hooks/jobs-hook';
-import { thaiCities } from '../../../shared/util/ThaiData';
-import CreatorJobsTable from './CreatorJobsTable';
-import CreatorTabs from './CreatorTabs';
-import JobApplicantsTable from './JobApplicantsTable';
-import PurchaseCredits from './PurchaseCredits';
+import NewJob from "../../../jobs/pages/NewJob";
+import ImageUpload from "../../../shared/components/FormElements/ImageUpload";
+import { AuthContext } from "../../../shared/context/auth-context";
+import { useCreator } from "../../../shared/hooks/creator-hook";
+import { useForm } from "../../../shared/hooks/form-hook";
+import { thaiCities } from "../../../shared/util/ThaiData";
+import CreatorJobsTable from "./CreatorJobsTable";
+import CreatorTabs from "./CreatorTabs";
+import JobApplicantsTable from "./JobApplicantsTable";
+import PurchaseCredits from "./PurchaseCredits";
 
 const date = new Date();
 const today = date.toISOString().split("T")[0];
@@ -44,8 +40,9 @@ const today = date.toISOString().split("T")[0];
 const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const [isEditing, setIsEditing] = useState(true);
-  const [isLoading, setIsLoading] = useState(auth.user?.creator !== null);
+  const [isEditing, setIsEditing] = useState(auth.user?.creator === null);
+  const [isLoading, setIsLoading] = useState(auth.user?.creator === null);
+
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -77,22 +74,35 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
         value: creatorItem.about || "",
         isValid: true,
       },
+      image: {
+        value: creatorItem.image || null,
+        isValid: true,
+      },
     },
     true
   );
-  const { client } = useJob();
+  //create and delete creator account
+  const { updateCreator, deleteCreator, sendRequest } = useCreator();
 
-  const { data: jobApplicants } = useQuery(
-    ["JobApplicants", user?._id],
-    async () => {
-      const response = await client.query(
+  const getJobApplicants = async () => {
+    try {
+      const response = await fetch(
         `${process.env.REACT_APP_JOBS}/user/${user?._id}`
       );
-      return response.jobs;
+      const data = await response.json();
+      return data.jobs;
+    } catch (err) {
+      console.log(
+        "There was an error trying to get applicants count - Msg:" + err
+      );
     }
+  };
+
+  const { data: jobApplicants } = useQuery(["JobApplicants", user?._id], () =>
+    getJobApplicants()
   );
 
-  console.log("CREATOR ITEM:", user)
+  console.log("CREATOR ITEM:", user);
 
   //destructured boolean value to check if a form is new or not
   const { isNew = false } = creatorItem;
@@ -100,14 +110,16 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   //simple check is to see if the company name exists already or not
   // if it does, no need to show form
   useEffect(() => {
-    if (user?.creator?.company) {
+    if (user?.creator && !isEditing) {
       setIsEditing(false);
       setIsLoading(false);
-    } else {
+      console.log("CREATOR.js: editing & loading set to false");
+    } else if (!user?.creator && isEditing) {
       setIsEditing(true);
       setIsLoading(false);
+      console.log("CREATOR.js: editing is true and loading is false");
     }
-  }, [user?.creator]);
+  }, [user?.creator, isEditing]);
 
   //if is new or creator property is null, render new form.
   useEffect(() => {
@@ -142,29 +154,50 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
             value: creatorItem.about || "",
             isValid: true,
           },
+          image: {
+            value: null,
+            isValid: false,
+          },
         },
         true
       );
     }
   }, [creatorItem, setFormData, isNew, user?.creator]);
 
+  //PATCH remove Creator Data
+  const handleCreatorDelete = (creatorItem) => {
+    deleteCreator(user?._id, creatorItem);
+  };
+
+  //PATCH update creator information
   //data we would like to pass to our creator property
-  const handleSubmit = (event) => {
+  const handleCreatorUpdate = async (event) => {
     event.preventDefault();
 
-    //creator data fields
-    const creatorItem = {
-      company: formState.inputs.company.value,
-      logoUrl: formState.inputs.logoUrl.value,
-      companySize: formState.inputs.companySize.value,
-      headquarters: formState.inputs.headquarters.value,
-      established: formState.inputs.established.value,
-      presence: formState.inputs.presence.value,
-      about: formState.inputs.about.value,
-    };
-    //props function for handling creator update
-    onUpdate(creatorItem);
-    setIsEditing(false);
+    try {
+      //creator data fields
+      const formData = new FormData();
+      formData.append("company", formState.inputs.company.value);
+      formData.append("image", formState.inputs.image.value);
+      formData.append("companySize", formState.inputs.companySize.value);
+      formData.append("headquarters", formState.inputs.headquarters.value);
+      formData.append("established", formState.inputs.established.value);
+      formData.append("presence", formState.inputs.presence.value);
+      formData.append("about", formState.inputs.about.value);
+      const response = await sendRequest(
+        `${process.env.REACT_APP_USERS}/update-profile/${user?._id}`,
+        "PATCH",
+        formData
+      );
+
+      const updatedCreator = {
+        ...user,
+        creator: response.user.creator,
+      };
+
+      updateCreator(user?._id, updatedCreator);
+      //setIsEditing(false);
+    } catch (err) {}
   };
 
   //Component tabs navigation for creator profile
@@ -199,7 +232,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
         <div> loading...</div>
       ) : isEditing ? (
         <Card sx={{ padding: "1rem 1rem" }}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleCreatorUpdate}>
             <ImageUpload
               sx={{ marginBottom: "0.5rem" }}
               id="image"
@@ -344,7 +377,11 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                   width: "100%",
                 }}
               >
-                <Button onClick={onDelete} variant="outlined" color="warning">
+                <Button
+                  onClick={() => handleCreatorDelete(user?.creator)}
+                  variant="outlined"
+                  color="warning"
+                >
                   Delete
                 </Button>
               </Stack>
@@ -450,7 +487,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                         Applicants
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {jobApplicants?.map((job) => job.applicants.length)}
+                        {jobApplicants?.map((job) => job?.applicants?.length)}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>

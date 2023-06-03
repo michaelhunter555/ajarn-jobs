@@ -55,14 +55,21 @@ const tableRows = [
 const JobApplicantsTable = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const { isLoading, error, clearError, client } = useJob();
+  const { clearError } = useJob();
 
-  const { data: jobsByUser } = useQuery(["jobsByUser", user?._id], async () => {
-    const response = await client.query(
+  const getjobsAppliedTo = async () => {
+    const response = await fetch(
       `${process.env.REACT_APP_JOBS}/user/${user?._id}`
     );
-    return response.jobs;
-  });
+    const data = await response.json();
+    return data.jobs;
+  };
+
+  const {
+    data: jobsByUser,
+    isLoading,
+    error,
+  } = useQuery(["jobsByUser", user?._id], () => getjobsAppliedTo());
 
   const hasApplicants = jobsByUser?.some((job) => job?.applicants?.length > 0);
 
@@ -108,7 +115,7 @@ const JobApplicantsTable = () => {
                     <TableCell>
                       <Button
                         component={Link}
-                        to={`/teachers/${teacher.userId._id}`}
+                        to={`/teachers/${teacher?.userId?._id}`}
                         variant="contained"
                       >
                         profile

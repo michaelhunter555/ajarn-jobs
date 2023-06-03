@@ -1,7 +1,4 @@
-import React, {
-  useContext,
-  useState,
-} from 'react';
+import React, { useContext, useState } from "react";
 
 import {
   FaClipboardList,
@@ -9,13 +6,12 @@ import {
   FaGraduationCap,
   FaMapMarkerAlt,
   FaMoneyBill,
-} from 'react-icons/fa';
-import { Link as RouterLink } from 'react-router-dom';
+} from "react-icons/fa";
+import { Link as RouterLink } from "react-router-dom";
 
-import BusinessIcon from '@mui/icons-material/Business';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import BusinessIcon from "@mui/icons-material/Business";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
   Avatar,
   Box,
@@ -23,19 +19,18 @@ import {
   Chip,
   Divider,
   Grid,
-  Link,
   Modal,
   Paper,
   Skeleton,
   Stack,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useUser } from '../../shared/hooks/user-hook';
-import JobDataTable from './JobDataTable';
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useUser } from "../../shared/hooks/user-hook";
+import JobDataTable from "./JobDataTable";
 
 const StyledBoxModal = styled(Paper)({
   position: "absolute",
@@ -107,12 +102,6 @@ const JobDetails = (props) => {
       icon: <VerifiedUserIcon size="inherit" />,
       text: "established in " + job?.creator?.established,
     },
-    {
-      variant: "subtitle2",
-      component: "h3",
-      icon: <EventAvailableIcon size="inherit" />,
-      text: <Link href={job?.creator?.url}>{job?.creator?.url}</Link>,
-    },
   ];
 
   let userCantApply = true;
@@ -172,8 +161,12 @@ const JobDetails = (props) => {
                 )}
 
                 {auth.user?.coverLetter && auth.user?.resume && (
-                  <Typography sx={{marginTop: '1rem'}} color="text.secondary" variant="subtitle2">
-                    You May Apply to this job!
+                  <Typography
+                    sx={{ marginTop: "1rem" }}
+                    color="text.secondary"
+                    variant="subtitle2"
+                  >
+                    You may apply to this job!
                   </Typography>
                 )}
               </Grid>
@@ -183,7 +176,7 @@ const JobDetails = (props) => {
                 xs={12}
                 sm={9}
                 md={6}
-                direction="row"
+                sx={{ display: "flex", flexDirection: "row" }}
                 alignItems="center"
                 justifyContent="space-between"
               >
@@ -262,13 +255,7 @@ const JobDetails = (props) => {
               />
             )}
             {!isLoading && (
-              <Grid
-                item
-                container
-                direction="row"
-                spacing={1}
-                sx={{ marginTop: 4 }}
-              >
+              <Grid container direction="row" spacing={1} sx={{ marginTop: 4 }}>
                 {/**grid item 1 */}
                 <Grid item>
                   <Avatar
@@ -306,19 +293,18 @@ const JobDetails = (props) => {
                 {!isLoading && <Grid item>{outlinedButton}</Grid>}
               </Grid>
             )}
-
-            <Grid item sx={{ MaxWidth: "100%" }}>
-              {isLoading && (
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    borderRadius: "15px",
-                    marginTop: 2,
-                    height: 177,
-                    width: 692,
-                  }}
-                />
-              )}
+            {isLoading && (
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  borderRadius: "15px",
+                  marginTop: 4,
+                  height: 177,
+                  width: 692,
+                }}
+              />
+            )}
+            <Grid item>
               {!isLoading && (
                 <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
                   <Typography variant="h6" component="h4">
@@ -338,7 +324,7 @@ const JobDetails = (props) => {
                       flexWrap: "wrap",
                     }}
                   >
-                    {job?.creator?.presence.map((item, i) => (
+                    {job?.creator?.presence?.map((item, i) => (
                       <Chip
                         key={i}
                         clickable
@@ -366,7 +352,10 @@ const JobDetails = (props) => {
               />
             )}
             {!isLoading && (
-              <JobDataTable jobSpecifications={jobSpecifications} />
+              <JobDataTable
+                modal={applyJobModalHandler}
+                jobSpecifications={jobSpecifications}
+              />
             )}
             <Divider sx={{ margin: "1rem auto" }} />
             {isLoading && (

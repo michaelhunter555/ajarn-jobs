@@ -23,12 +23,24 @@ const customThemeForTeachers = createTheme({
 
 const Teachers = () => {
   const [filter, setFilter] = useState({});
-  const { isLoading, error, client, clearError } = useHttpClient();
+  const { clearError } = useHttpClient();
 
-  const { data: teachers } = useQuery(["teachers"], async () => {
-    const response = await client.query(`${process.env.REACT_APP_USERS}`);
-    return response.users;
-  });
+  const getTeachers = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_USERS}`);
+      const data = await response.json();
+      console.log(data);
+      return data.users;
+    } catch (err) {
+      console.log("there was an error retrieving teachers  - Msg: " + err);
+    }
+  };
+
+  const {
+    data: teachers,
+    isLoading,
+    error,
+  } = useQuery(["teachers"], () => getTeachers());
 
   const handleFilterChange = (teacher) => {
     setFilter(teacher);

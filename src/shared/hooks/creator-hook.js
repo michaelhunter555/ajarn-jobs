@@ -52,6 +52,7 @@ export const useCreator = () => {
   return {
     updateCreator,
     deleteCreator,
+    sendRequest,
     isLoading,
     error,
     clearError,

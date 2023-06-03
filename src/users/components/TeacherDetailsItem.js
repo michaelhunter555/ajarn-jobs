@@ -14,6 +14,7 @@ import {
   Modal,
   Paper,
   Skeleton,
+  Stack,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -78,13 +79,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
             />
           )}
           {!isLoading && (
-            <Grid
-              item
-              container
-              direction="row"
-              spacing={1}
-              sx={{ marginTop: 4 }}
-            >
+            <Grid container direction="row" spacing={1} sx={{ marginTop: 4 }}>
               {/**grid item 1 */}
               <Grid item>
                 <Avatar
@@ -99,20 +94,20 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 <Typography color="text.secondary" variant="h5" component="h2">
                   {teacher?.name}
                 </Typography>
-                <Typography variant="subtitle2" paragraph>
+                <Typography variant="subtitle2" component="div">
                   <Chip label={teacher?.userType} size="small" />
                 </Typography>
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
-                  component="h3"
+                  component="div"
                 >
                   <LocationOnIcon size="inherit" /> lives in {teacher?.location}
                 </Typography>
                 <Typography
                   color="text.secondary"
                   variant="subtitle2"
-                  component="h3"
+                  component="div"
                 >
                   <LanguageIcon size="inherit" />
                   Nationality: {teacher?.nationality}
@@ -120,7 +115,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 <Typography
                   color="text.secondary"
                   variant="subtitle2"
-                  component="h3"
+                  component="div"
                 >
                   <SchoolIcon size="inherit" />
                   Education: {teacher?.highestCertification}
@@ -129,7 +124,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 <Typography
                   color="text.secondary"
                   variant="subtitle2"
-                  component="h3"
+                  component="div"
                 >
                   <WorkIcon size="inherit" /> Teaching for{" "}
                   {teacher?.workExperience}-
@@ -140,13 +135,15 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   <Typography
                     color="text.secondary"
                     variant="subtitle2"
-                    component="h3"
+                    component="div"
                   >
                     Skills:
                   </Typography>
-                  {teacher?.skill?.map((skills, i) => (
-                    <Chip clickable key={i} label={skills} />
-                  ))}
+                  <Stack spacing={1} direction="row">
+                    {teacher?.skill?.map((skills, i) => (
+                      <Chip clickable key={i} label={skills} />
+                    ))}
+                  </Stack>
                 </Typography>
               </Grid>
               <Grid item>
@@ -243,11 +240,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 <Typography variant="h5" component="h4">
                   {teacher?.name} - CoverLetter
                 </Typography>
-                <Typography
-                  variant="subtitle2"
-                  color="text.secondary"
-                  component="text"
-                >
+                <Typography variant="subtitle2" color="text.secondary">
                   {teacher?.name} | {teacher?.email}
                 </Typography>
               </Box>

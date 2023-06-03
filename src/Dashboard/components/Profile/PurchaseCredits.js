@@ -23,7 +23,7 @@ const tiers = [
     title: "starter",
     price: "฿750",
     credits: 5,
-    description: "Good for one job post up to 30 days",
+    description: "5 Good for one job post up to 30 days",
     buttonText: "Add Credits",
     buttonVariant: "outlined",
   },
@@ -91,7 +91,8 @@ const PurchaseCredits = () => {
                   >
                     <Typography
                       component="h2"
-                      variant="h3"
+                      variant="body1"
+                      sx={{ fontSize: 20 }}
                       color="text.primary"
                     >
                       {tier.price}

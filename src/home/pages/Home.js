@@ -9,6 +9,7 @@ import Footer from "../../shared/components/UIElements/Footer";
 import JobAd from "../../shared/components/UIElements/JobAd";
 import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
 import { useHttpClient } from "../../shared/hooks/http-hook";
+//import { useHttpClient } from "../../shared/hooks/http-hook";
 import BlogContent from "../components/BlogContent";
 import BottomFeatured from "../components/BottomFeatured";
 import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
@@ -133,11 +134,14 @@ const Home = () => {
     getFeaturedJobs();
   }, [sendRequest]);
 
-  const filterFeaturedJobs = homeJobs.filter(
-    (job) => job.jobType === "featured"
+  const filterFeaturedJobs = homeJobs?.filter(
+    (job) => job?.jobType === "featured"
   );
-  const randomFeaturedJob =
-    filterFeaturedJobs[Math.floor(Math.random() * filterFeaturedJobs.length)];
+
+  //console.log("JOBS DATA:", filterFeaturedJobs);
+  const randomFeaturedJob = filterFeaturedJobs
+    ? filterFeaturedJobs[Math.floor(Math.random() * filterFeaturedJobs?.length)]
+    : null;
 
   return (
     <>

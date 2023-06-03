@@ -66,7 +66,7 @@ const TeacherItem = (props) => {
     viewProfileButton = (
       <Button
         component={Link}
-        to={`/teachers/${props.id}`}
+        to={`/teachers/${props?.id}`}
         sx={{ margin: "0 auto" }}
       >
         View Profile
@@ -110,8 +110,8 @@ const TeacherItem = (props) => {
           <CardContent sx={{ lineHeight: 1 }}>
             <CardMedia
               component="img"
-              image={props.image}
-              alt={`${props.id}--${props.name}`}
+              image={props?.image}
+              alt={`${props?.id}--${props?.name}`}
               sx={{
                 border: "1px solid #e5e5e5",
                 height: 170,
@@ -119,7 +119,7 @@ const TeacherItem = (props) => {
               }}
             />
             <Typography component="h2" variant="h6">
-              {props.name}
+              {props?.name}
             </Typography>
             {/*2 x 2 */}
             <Grid container spacing={2} direction="row">
@@ -129,7 +129,7 @@ const TeacherItem = (props) => {
                   color="text.secondary"
                   variant="subtitle2"
                 >
-                  <PublicIcon fontSize="inherit" /> {props.nationality}
+                  <PublicIcon fontSize="inherit" /> {props?.nationality}
                 </Typography>
                 <Typography
                   component="h3"
@@ -137,8 +137,8 @@ const TeacherItem = (props) => {
                   variant="subtitle2"
                 >
                   <AssuredWorkloadIcon fontSize="inherit" />{" "}
-                  {props.workExperience}{" "}
-                  {props.workExperience > 1 ? "Years" : "Year"}
+                  {props?.workExperience}{" "}
+                  {props?.workExperience > 1 ? "Years" : "Year"}
                 </Typography>
               </Grid>
               {/*2 x 2 */}
@@ -148,14 +148,14 @@ const TeacherItem = (props) => {
                   color="text.secondary"
                   variant="subtitle2"
                 >
-                  <PlaceIcon fontSize="inherit" /> {props.currentLocation}
+                  <PlaceIcon fontSize="inherit" /> {props?.currentLocation}
                 </Typography>
                 <Typography
                   component="h3"
                   color="text.secondary"
                   variant="subtitle2"
                 >
-                  <WorkspacePremiumIcon fontSize="inherit" /> {props.degree}
+                  <WorkspacePremiumIcon fontSize="inherit" /> {props?.degree}
                 </Typography>
               </Grid>
             </Grid>
@@ -166,9 +166,9 @@ const TeacherItem = (props) => {
                 variant="subtitle2"
                 color="text.secondary"
               >
-                {props.about?.length > 50
-                  ? props.about.substring(0, 50) + "..."
-                  : props.about}
+                {props?.about?.length > 50
+                  ? props?.about.substring(0, 50) + "..."
+                  : props?.about}
               </Typography>
             </Box>
           </CardContent>

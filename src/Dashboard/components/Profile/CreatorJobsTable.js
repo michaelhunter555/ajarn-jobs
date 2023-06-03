@@ -17,7 +17,6 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 import { AuthContext } from "../../../shared/context/auth-context";
-import { useJob } from "../../../shared/hooks/jobs-hook";
 
 const tableRows = [
   {
@@ -61,16 +60,24 @@ const tableRows = [
 const CreatorJobsTable = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const { isLoading, client } = useJob();
 
-  const { data: creatorJobs } = useQuery(
-    ["creatorJobs", user?._id],
-    async () => {
-      const response = await client.query(
+  const getCreatorJobs = async () => {
+    try {
+      const response = await fetch(
         `${process.env.REACT_APP_JOBS}/user/${user?._id}`
       );
-      return response.jobs;
+      const data = await response.json();
+      return data.jobs;
+    } catch (err) {
+      console.log(
+        "There was an issue with the request for creatorJobsTable - Msg: " + err
+      );
     }
+  };
+
+  const { data: creatorJobs, isLoading } = useQuery(
+    ["creatorJobs", user?._id],
+    () => getCreatorJobs()
   );
 
   return (

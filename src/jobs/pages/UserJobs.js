@@ -8,7 +8,6 @@ import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import Footer from "../../shared/components/UIElements/Footer";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
 import { AuthContext } from "../../shared/context/auth-context";
@@ -87,12 +86,28 @@ const FeaturedJobListDiv = styled("div")(({ theme }) => ({
 const UserJobs = () => {
   const auth = useContext(AuthContext);
   const [filter, setFilter] = useState(dummy_jobs);
-  const { client, isLoading, error, clearError } = useJob();
+  const { clearError } = useJob();
 
-  const { data: jobs } = useQuery(["jobs"], async () => {
-    const response = await client.query(`${process.env.REACT_APP_JOBS}`);
-    return response.jobs;
-  });
+  const getAllJobs = async (jobs) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_JOBS}`);
+      const data = await response.json();
+      return data.jobs;
+    } catch (err) {
+      console.log("There was an error retrieving jobs data" + err);
+    }
+  };
+
+  const {
+    data: jobs,
+    isLoading,
+    error,
+  } = useQuery(["jobs"], () => getAllJobs());
+
+  // const { data: jobs } = useQuery(["jobs"], async () => {
+  //   const response = await client.query(`${process.env.REACT_APP_JOBS}`);
+  //   return response.jobs;
+  // });
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
@@ -211,7 +226,6 @@ const UserJobs = () => {
           {!isLoading && <FeaturedJobsLists sponsors={jobs} />}
         </FeaturedJobListDiv>
       </StyledUserJobsDiv>
-      <Footer />
     </>
   );
 };

@@ -26,6 +26,7 @@ export const useUser = () => {
           `${process.env.REACT_APP_USERS}/${userId}`
         );
         updateUser(response.user);
+        return response.user;
       } catch (err) {}
     },
     [updateUser, sendRequest]
