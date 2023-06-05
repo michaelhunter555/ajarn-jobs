@@ -6,22 +6,25 @@ import { useHttpClient } from "./http-hook";
 export const useCreator = () => {
   const auth = useContext(AuthContext);
   const { updateUser, user } = auth;
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, isPostLoading, error, sendRequest, clearError } =
+    useHttpClient();
 
   //PATCH update creator information
   const updateCreator = useCallback(
     async (userId, creatorItem) => {
       try {
-        await sendRequest(
-          `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/update-creator/${userId}`,
           "PATCH",
           JSON.stringify({ creator: creatorItem }),
           { "Content-Type": "application/json" }
         );
 
+        console.log("RESPONSE-CREATOR_HOOK:", response.user.creator);
+
         const updatedCreator = {
           ...user,
-          creator: creatorItem,
+          creator: response.user.creator,
         };
         updateUser(updatedCreator);
       } catch (err) {}
@@ -54,6 +57,7 @@ export const useCreator = () => {
     deleteCreator,
     sendRequest,
     isLoading,
+    isPostLoading,
     error,
     clearError,
   };

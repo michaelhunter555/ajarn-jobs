@@ -24,7 +24,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 import NewJob from "../../../jobs/pages/NewJob";
-import ImageUpload from "../../../shared/components/FormElements/ImageUpload";
+import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useCreator } from "../../../shared/hooks/creator-hook";
 import { useForm } from "../../../shared/hooks/form-hook";
@@ -37,11 +37,12 @@ import PurchaseCredits from "./PurchaseCredits";
 const date = new Date();
 const today = date.toISOString().split("T")[0];
 
-const Creator = ({ creatorItem, onUpdate, onDelete }) => {
+const Creator = ({ creatorItem }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const [isEditing, setIsEditing] = useState(auth.user?.creator === null);
-  const [isLoading, setIsLoading] = useState(auth.user?.creator === null);
+  const [isEditing, setIsEditing] = useState(
+    auth.user && auth.user.creator === null
+  );
 
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
   const [formState, inputHandler, setFormData] = useForm(
@@ -82,7 +83,8 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
     true
   );
   //create and delete creator account
-  const { updateCreator, deleteCreator, sendRequest } = useCreator();
+  const { deleteCreator, updateCreator, isPostLoading, error, clearError } =
+    useCreator();
 
   const getJobApplicants = async () => {
     try {
@@ -102,28 +104,15 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
     getJobApplicants()
   );
 
-  console.log("CREATOR ITEM:", user);
-
   //destructured boolean value to check if a form is new or not
   const { isNew = false } = creatorItem;
   //on load, check if user has a creator profile
   //simple check is to see if the company name exists already or not
   // if it does, no need to show form
-  useEffect(() => {
-    if (user?.creator && !isEditing) {
-      setIsEditing(false);
-      setIsLoading(false);
-      console.log("CREATOR.js: editing & loading set to false");
-    } else if (!user?.creator && isEditing) {
-      setIsEditing(true);
-      setIsLoading(false);
-      console.log("CREATOR.js: editing is true and loading is false");
-    }
-  }, [user?.creator, isEditing]);
 
   //if is new or creator property is null, render new form.
   useEffect(() => {
-    if (!isNew || user?.creator === null) {
+    if (!creatorItem.company) {
       setFormData(
         {
           company: {
@@ -155,14 +144,15 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
             isValid: true,
           },
           image: {
-            value: null,
-            isValid: false,
+            value: creatorItem.image || null,
+            isValid: true,
           },
         },
         true
       );
     }
-  }, [creatorItem, setFormData, isNew, user?.creator]);
+    console.log(creatorItem);
+  }, [creatorItem, setFormData]);
 
   //PATCH remove Creator Data
   const handleCreatorDelete = (creatorItem) => {
@@ -173,36 +163,31 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
   //data we would like to pass to our creator property
   const handleCreatorUpdate = async (event) => {
     event.preventDefault();
-
+    //creator data fields
+    const creatorItem = {
+      company: formState.inputs.company.value,
+      logoUrl: formState.inputs.logoUrl.value,
+      companySize: formState.inputs.companySize.value,
+      headquarters: formState.inputs.headquarters.value,
+      established: formState.inputs.established.value,
+      presence: formState.inputs.presence.value,
+      about: formState.inputs.about.value,
+    };
     try {
-      //creator data fields
-      const formData = new FormData();
-      formData.append("company", formState.inputs.company.value);
-      formData.append("image", formState.inputs.image.value);
-      formData.append("companySize", formState.inputs.companySize.value);
-      formData.append("headquarters", formState.inputs.headquarters.value);
-      formData.append("established", formState.inputs.established.value);
-      formData.append("presence", formState.inputs.presence.value);
-      formData.append("about", formState.inputs.about.value);
-      const response = await sendRequest(
-        `${process.env.REACT_APP_USERS}/update-profile/${user?._id}`,
-        "PATCH",
-        formData
-      );
-
-      const updatedCreator = {
-        ...user,
-        creator: response.user.creator,
-      };
-
-      updateCreator(user?._id, updatedCreator);
-      //setIsEditing(false);
-    } catch (err) {}
+      updateCreator(user?._id, creatorItem);
+    } catch (err) {
+      console.log(err);
+    }
+    //setIsEditing(false);
   };
 
   //Component tabs navigation for creator profile
   const handleMenuItemClick = (componentName) => {
     setCreatorProfileTab(componentName);
+  };
+
+  const handleEditing = () => {
+    setIsEditing((prev) => !prev);
   };
 
   //components rendered from tab navigation
@@ -227,20 +212,13 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
 
   return (
     <>
+      <ErrorModal error={error} onClear={clearError} />
       {/*isLoading checks if user.creator is not null and renders form depending on this. */}
-      {isLoading ? (
+      {isPostLoading ? (
         <div> loading...</div>
       ) : isEditing ? (
         <Card sx={{ padding: "1rem 1rem" }}>
           <form onSubmit={handleCreatorUpdate}>
-            <ImageUpload
-              sx={{ marginBottom: "0.5rem" }}
-              id="image"
-              onInput={inputHandler}
-              text={`provide a ${
-                auth.user?.creator?.company || "company"
-              }  logo for future job posts`}
-            />
             <TextField
               sx={{ margin: "0 0 0.5rem 0" }}
               fullWidth
@@ -353,7 +331,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                 rows={4}
                 fullWidth
                 name="about"
-                label={`About ${auth.user?.creator?.company}`}
+                label={`About`}
                 defaultValue={formState.inputs.about.value}
                 onChange={(event) =>
                   inputHandler(
@@ -368,7 +346,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
               <Button variant="contained" type="submit">
                 Save
               </Button>
-              <Button onClick={() => setIsEditing(!isEditing)}>Cancel</Button>
+              <Button onClick={handleEditing}>Cancel</Button>
               <Stack
                 sx={{
                   display: "flex",
@@ -389,7 +367,8 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
           </form>
         </Card>
       ) : (
-        !isEditing && (
+        !isEditing &&
+        user?.creator && (
           <Card>
             <Grid container direction="row" justifyContent="flex-start">
               <Grid
@@ -413,10 +392,7 @@ const Creator = ({ creatorItem, onUpdate, onDelete }) => {
                   >
                     {user?.creator?.company}
                   </Typography>
-                  <Button
-                    sx={{ fontSize: 10 }}
-                    onClick={() => setIsEditing(!isEditing)}
-                  >
+                  <Button sx={{ fontSize: 10 }} onClick={handleEditing}>
                     Edit Info
                   </Button>
                 </Stack>
