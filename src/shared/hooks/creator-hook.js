@@ -14,7 +14,7 @@ export const useCreator = () => {
     async (userId, creatorItem) => {
       try {
         const response = await sendRequest(
-          `${process.env.REACT_APP_USERS}/update-creator/${userId}`,
+          `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
           JSON.stringify({ creator: creatorItem }),
           { "Content-Type": "application/json" }

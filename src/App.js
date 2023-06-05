@@ -79,7 +79,6 @@ function App() {
     );
   }
   //remember to update users to dynamic id
-  console.log(state);
   console.log("App state:", state.user);
   return (
     <QueryClientProvider client={queryClient}>

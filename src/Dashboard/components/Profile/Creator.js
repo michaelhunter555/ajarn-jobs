@@ -178,7 +178,7 @@ const Creator = ({ creatorItem }) => {
     } catch (err) {
       console.log(err);
     }
-    //setIsEditing(false);
+    setIsEditing(false);
   };
 
   //Component tabs navigation for creator profile

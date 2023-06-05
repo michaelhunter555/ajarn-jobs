@@ -20,7 +20,9 @@ export const useHttpClient = (props) => {
     async (url, method = "GET", body = null, headers = {}) => {
       //current property holds array that doesnt change across re-render
       //push the abort controller.
-      setIsPostLoading(true);
+      setIsPostLoading(
+        method === "POST" || method === "PATCH" || method === "DELETE"
+      );
       const httpAbortController = new AbortController();
       activeHttpRequest.current.push(httpAbortController);
 

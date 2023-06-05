@@ -44,7 +44,8 @@ const ImageUpload = (props) => {
       setFilePreviewUrl(fileReader.result);
     };
     fileReader.readAsDataURL(file);
-  }, [file]);
+    console.log("file img picker re-rendered");
+  }, [file, filePreviewUrl]);
 
   const userChoseImageHandler = (event) => {
     console.log(event.target);
