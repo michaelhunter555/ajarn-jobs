@@ -104,12 +104,6 @@ const Creator = ({ creatorItem }) => {
     getJobApplicants()
   );
 
-  //destructured boolean value to check if a form is new or not
-  const { isNew = false } = creatorItem;
-  //on load, check if user has a creator profile
-  //simple check is to see if the company name exists already or not
-  // if it does, no need to show form
-
   //if is new or creator property is null, render new form.
   useEffect(() => {
     if (!creatorItem.company) {
@@ -463,7 +457,10 @@ const Creator = ({ creatorItem }) => {
                         Applicants
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {jobApplicants?.map((job) => job?.applicants?.length)}
+                        {jobApplicants?.reduce(
+                          (acc, job) => acc + job?.applicants.length,
+                          0
+                        )}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>

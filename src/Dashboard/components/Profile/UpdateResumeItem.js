@@ -132,75 +132,79 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete, onCancel }) => {
           >
             id: {resumeItem?._id}
           </Typography>
-          <Grid key={resumeItem?._id} container direction="row" spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="company"
-                size="small"
-                label="Company"
-                variant="filled"
-                value={resumeItem?.company}
-                disabled={true}
-                fullWidth
-              />
-            </Grid>
+          {auth.user?.resume
+            .filter((userResumeItem) => userResumeItem._id === resumeItem?._id)
+            .map((resumeItem) => (
+              <Grid key={resumeItem?._id} container direction="row" spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="company"
+                    size="small"
+                    label="Company"
+                    variant="filled"
+                    value={resumeItem?.company}
+                    disabled={true}
+                    fullWidth
+                  />
+                </Grid>
 
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                id="from"
-                size="small"
-                label="From"
-                variant="filled"
-                value={resumeItem?.from}
-                disabled={true}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <TextField
-                id="to"
-                size="small"
-                label="To"
-                variant="filled"
-                value={resumeItem?.to}
-                disabled={true}
-              />
-            </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <TextField
+                    id="from"
+                    size="small"
+                    label="From"
+                    variant="filled"
+                    value={resumeItem?.from}
+                    disabled={true}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <TextField
+                    id="to"
+                    size="small"
+                    label="To"
+                    variant="filled"
+                    value={resumeItem?.to}
+                    disabled={true}
+                  />
+                </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="schoolName"
-                size="small"
-                label="School Name"
-                variant="filled"
-                value={resumeItem?.schoolName}
-                disabled={true}
-                fullWidth
-              />
-            </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="schoolName"
+                    size="small"
+                    label="School Name"
+                    variant="filled"
+                    value={resumeItem?.schoolName}
+                    disabled={true}
+                    fullWidth
+                  />
+                </Grid>
 
-            <Grid item xs={12} sm={6} md={4}>
-              <TextField
-                id="location"
-                size="small"
-                label="Location"
-                variant="filled"
-                value={resumeItem?.location}
-                disabled={true}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                multiline
-                fullWidth
-                id="role"
-                size="small"
-                label="Role"
-                variant="filled"
-                value={resumeItem?.role}
-                disabled={true}
-              />
-            </Grid>
-          </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    id="location"
+                    size="small"
+                    label="Location"
+                    variant="filled"
+                    value={resumeItem?.location}
+                    disabled={true}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    multiline
+                    fullWidth
+                    id="role"
+                    size="small"
+                    label="Role"
+                    variant="filled"
+                    value={resumeItem?.role}
+                    disabled={true}
+                  />
+                </Grid>
+              </Grid>
+            ))}
           <Stack direction="row" spacing={2} sx={{ margin: "1rem 0 0 0.5rem" }}>
             <Button
               onClick={() => setIsEditing((prev) => !prev)}

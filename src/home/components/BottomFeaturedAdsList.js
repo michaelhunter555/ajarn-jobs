@@ -57,7 +57,7 @@ const BottomFeaturedAdsList = (props) => {
         <Link component={RouterLink} key={job._id} to={`/jobs/${job._id}`}>
           <ListItem>
             <BottomFeaturedAds
-              image={job?.image}
+              image={`${process.env.REACT_APP_IMAGE}${job?.image}`}
               id={job?._id}
               title={job?.title}
               salary={job?.salary}

@@ -40,6 +40,7 @@ const TeacherDashboard = () => {
   const userId = useParams().id;
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [selectedCard, setSelectedCard] = useState(null);
   const [jobAd, setJobAd] = useState([]);
@@ -385,7 +386,7 @@ const TeacherDashboard = () => {
               gap: "5px",
             }}
           >
-            <Grid item>
+            <Grid item xs={12} sm={6}>
               {homeDashLoadingState && (
                 <Skeleton
                   sx={{ margin: "0 auto", borderRadius: "6px" }}
@@ -397,14 +398,14 @@ const TeacherDashboard = () => {
               {!homeDashLoadingState && (
                 <UserProfileJobAd
                   id={jobAd[0]?._id}
-                  logo={jobAd[0]?.image}
+                  logo={`${process.env.REACT_APP_IMAGE}${jobAd[0]?.image}`}
                   title={jobAd[0]?.title}
                   description={jobAd[0]?.description}
                 />
               )}
             </Grid>
 
-            <Grid item>
+            <Grid item xs={12} sm={6}>
               {homeDashLoadingState && (
                 <Skeleton
                   sx={{ margin: "0 auto", borderRadius: "6px" }}
@@ -416,7 +417,7 @@ const TeacherDashboard = () => {
               {!homeDashLoadingState && (
                 <UserProfileJobAd
                   id={jobAd[1]?._id}
-                  logo={jobAd[1]?.image}
+                  logo={`${process.env.REACT_APP_IMAGE}${jobAd[0]?.image}`}
                   title={jobAd[1]?.title}
                   description={jobAd[1]?.description}
                 />

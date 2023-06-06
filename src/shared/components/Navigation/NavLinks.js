@@ -55,7 +55,7 @@ const NavLinks = (props) => {
         </NavLink>
       </li>
 
-      <li>
+      {/*<li>
         <NavLink to="/blog">
           <Typography
             sx={{ fontWeight: location.pathname === "/blog" ? 700 : "inherit" }}
@@ -64,7 +64,7 @@ const NavLinks = (props) => {
             Blog
           </Typography>
         </NavLink>
-      </li>
+          </li> */}
 
       {auth.isLoggedIn && (
         <li>

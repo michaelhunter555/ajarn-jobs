@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -138,10 +138,11 @@ const Auth = () => {
     inputHandler("userType", event.target.value, true);
   };
 
-  useEffect(() => {
-    console.log("Auth is set:", auth.user);
-    console.log("Form State:", formState);
-  }, [auth.user, formState]);
+  //UNCOMMENT FOR LOGGING FORM INPUTS
+  // useEffect(() => {
+  //   console.log("Auth is set:", auth.user);
+  //   console.log("Form State:", formState);
+  // }, [auth.user, formState]);
 
   return (
     <>

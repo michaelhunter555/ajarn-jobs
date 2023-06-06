@@ -63,7 +63,7 @@ const JobAdsList = (props) => {
                     <Grid item xs={4} sm={4} lg={3} xl={2}>
                       <StyledMediaCard
                         component="img"
-                        image={school?.image}
+                        image={`${process.env.REACT_APP_IMAGE}${school?.image}`}
                         alt={`${school?._id}--${school?.creator?.company}`}
                       />
                     </Grid>

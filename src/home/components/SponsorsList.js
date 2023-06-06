@@ -30,7 +30,7 @@ const SponsorsList = (props) => {
         {sponsor.map((supporter, i) => (
           <StyledLink key={supporter.id} to={`/jobs/${supporter._id}`}>
             <Sponsors
-              logo={supporter.image}
+              logo={`${process.env.REACT_APP_IMAGE}${supporter?.image}`}
               description={supporter.description.substring(0, 25) + "..."}
               company={supporter.creator.company}
               salary={supporter.salary}

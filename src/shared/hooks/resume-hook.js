@@ -12,20 +12,23 @@ export const useResume = () => {
   const updateUserResume = useCallback(
     async (userId, update) => {
       try {
-        await sendRequest(
-          //We expect dynamic userId (useParams)
+        const response = await sendRequest(
+          //We expect dynamic userId
           `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
           //property to be updated "resume" on user object
           JSON.stringify({ resume: update }),
           { "Content-type": "application/json" }
         );
+        //create object with copy of existing user data and updated response.
+        //if _id matches then we update, otherwise new resumeItem
         const updatedResume = {
           ...auth.user,
-          resume: auth.user?.resume?.map((resumeItem) => {
+          resume: response.user?.resume?.map((resumeItem) => {
             return resumeItem?._id === update._id ? update : resumeItem;
           }),
         };
+        //update authContext
         updateUser(updatedResume);
       } catch (err) {}
     },

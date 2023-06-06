@@ -39,7 +39,7 @@ const RecentJobs = (props) => {
               location={job?.location}
               salary={job?.salary}
               datePosted={job?.datePosted}
-              logo={job?.image}
+              logo={`${process.env.REACT_APP_IMAGE}${job?.image}`}
               title={job?.title}
               id={job?.id}
               creationDate={getTimeDifference(job?.datePosted)}

@@ -84,7 +84,7 @@ const FeaturedCard = (props) => {
               border: "1px solid #e5e5e5",
               backgroundColor: "white",
             }}
-            src={randomJob?.image}
+            src={`${process.env.REACT_APP_IMAGE}${randomJob?.image}`}
             variant="circular"
           />
           <Grid item>

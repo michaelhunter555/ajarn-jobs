@@ -49,11 +49,11 @@ const StyledBoxModal = styled(Paper)({
 const JobDetails = (props) => {
   const auth = useContext(AuthContext);
   const [open, setOpen] = useState(false);
-  const { applyToJob, error, clearError } = useUser();
+  const { applyToJob, error, clearError, isPostLoading } = useUser();
   const { job, isLoading } = props;
 
   const applyToJobHandler = () => {
-    applyToJob(auth.user?._id, job?.id);
+    applyToJob(auth.user?._id, job?._id);
     setOpen(false);
   };
 
@@ -243,6 +243,17 @@ const JobDetails = (props) => {
             justifyContent="flex-start"
             spacing={2}
           >
+            {isPostLoading && (
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  borderRadius: "15px",
+                  marginTop: 10,
+                  height: 260,
+                  width: 692,
+                }}
+              />
+            )}
             {isLoading && (
               <Skeleton
                 variant="rectangular"
@@ -254,13 +265,13 @@ const JobDetails = (props) => {
                 }}
               />
             )}
-            {!isLoading && (
+            {!isLoading && !isPostLoading && (
               <Grid container direction="row" spacing={1} sx={{ marginTop: 4 }}>
                 {/**grid item 1 */}
                 <Grid item>
                   <Avatar
                     variant="circular"
-                    src={job?.image}
+                    src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
                     sx={{
                       height: 175,
                       width: 175,
@@ -271,7 +282,7 @@ const JobDetails = (props) => {
                 </Grid>
                 {/**grid item 2 */}
 
-                {!isLoading && (
+                {!isLoading && !isPostLoading && (
                   <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
                     {jobInformation.map(
                       ({ variant, component, icon, text }, i) => (
@@ -290,8 +301,21 @@ const JobDetails = (props) => {
                   </Grid>
                 )}
 
-                {!isLoading && <Grid item>{outlinedButton}</Grid>}
+                {!isLoading && !isPostLoading && (
+                  <Grid item>{outlinedButton}</Grid>
+                )}
               </Grid>
+            )}
+            {isPostLoading && (
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  borderRadius: "15px",
+                  marginTop: 4,
+                  height: 177,
+                  width: 692,
+                }}
+              />
             )}
             {isLoading && (
               <Skeleton
@@ -305,7 +329,7 @@ const JobDetails = (props) => {
               />
             )}
             <Grid item>
-              {!isLoading && (
+              {!isLoading && !isPostLoading && (
                 <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
                   <Typography variant="h6" component="h4">
                     A little about {job?.creator?.company}:
@@ -351,7 +375,18 @@ const JobDetails = (props) => {
                 }}
               />
             )}
-            {!isLoading && (
+            {isPostLoading && (
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  borderRadius: "15px",
+                  marginTop: 4,
+                  height: 260,
+                  width: 692,
+                }}
+              />
+            )}
+            {!isLoading && !isPostLoading && (
               <JobDataTable
                 modal={applyJobModalHandler}
                 jobSpecifications={jobSpecifications}
@@ -369,7 +404,18 @@ const JobDetails = (props) => {
                 }}
               />
             )}
-            {!isLoading && (
+            {isPostLoading && (
+              <Skeleton
+                variant="rectangular"
+                sx={{
+                  borderRadius: "15px",
+                  marginTop: 1,
+                  height: 177,
+                  width: 692,
+                }}
+              />
+            )}
+            {!isLoading && !isPostLoading && (
               <Paper
                 elevation={0}
                 sx={{ padding: "2rem", borderRadius: "17px" }}

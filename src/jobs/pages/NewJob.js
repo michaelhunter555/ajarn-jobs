@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { FormLabel, Grid } from "@mui/material";
+import { FormLabel, Grid, Modal, Paper, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import Button from "../../shared/components/FormElements/Button";
@@ -8,7 +8,6 @@ import Input from "../../shared/components/FormElements/Input";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 //import { useNavigate } from 'react-router-dom';
-import Modal from "../../shared/components/UIElements/Modal";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useJob } from "../../shared/hooks/jobs-hook";
@@ -31,6 +30,19 @@ const StyledForm = styled("form")({
   maxWidth: "40rem",
   borderRadius: "6px",
   background: "white",
+});
+
+const BoxContent = styled(Paper)({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  padding: 20,
+  textAlign: "center",
 });
 
 const NewJob = () => {
@@ -147,7 +159,9 @@ const NewJob = () => {
 
     try {
       await addJobByUserId(auth.user?._id, newJob, jobCost);
-      setSuccess(true);
+      if (!error) {
+        setSuccess(true);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -161,144 +175,160 @@ const NewJob = () => {
     <>
       {isPostLoading && <LoadingSpinner asOverlay />}
       <Modal
-        header={"You a created a job!"}
-        footer={`A job has been created for ${auth.user?.creator?.company}`}
-        show={success}
-        onCancel={clearModalHandler}
-      />
+        open={success}
+        onClose={clearModalHandler}
+        aria-labelledby="job-succes-title"
+        aria-describedby="job-succes-description"
+      >
+        <BoxContent>
+          <Typography variant="subtitle1" id="job-success-title">
+            You have successfully created a job!
+          </Typography>
+          <Typography
+            color="text.secondary"
+            variant="subtitle2"
+            id="job-success-description"
+          >
+            Your job is live and users can apply. View your current list of jobs
+            in Job Listings.
+          </Typography>
+        </BoxContent>
+      </Modal>
       <ErrorModal error={error} onClear={clearError} />
-      <StyledForm onSubmit={jobSubmitHandler}>
-        <Grid container direction="row">
-          Total: {jobCost}
-          <Grid item xs={12}>
-            <FormLabel>Hours:</FormLabel>
-            <input
-              id="hours-fullTime"
-              type="radio"
-              name="hours"
-              value="Full-time"
-              checked={isFullTime}
-              onChange={jobIsFullTimeHandler}
-            />{" "}
-            Full-Time
-            <input
-              id="hours-partTime"
-              type="radio"
-              name="hours"
-              value="Part-time"
-              checked={!isFullTime}
-              onChange={jobIsPartTimeHandler}
-            />{" "}
-            Part-Time
+      {!isPostLoading && (
+        <StyledForm onSubmit={jobSubmitHandler}>
+          <Grid container direction="row">
+            Total: {jobCost}
+            <Grid item xs={12}>
+              <FormLabel>Hours:</FormLabel>
+              <input
+                id="hours-fullTime"
+                type="radio"
+                name="hours"
+                value="Full-time"
+                checked={isFullTime}
+                onChange={jobIsFullTimeHandler}
+              />{" "}
+              Full-Time
+              <input
+                id="hours-partTime"
+                type="radio"
+                name="hours"
+                value="Part-time"
+                checked={!isFullTime}
+                onChange={jobIsPartTimeHandler}
+              />{" "}
+              Part-Time
+            </Grid>
+            <Grid item xs={12} sx={{ margin: "0.5rem 0" }}>
+              <FormLabel>Job Type:</FormLabel>
+              <input
+                id="basic"
+                type="radio"
+                name="jobType"
+                value="basic"
+                checked={jobIsBasic}
+                onChange={basicJobTypeHandler}
+              />{" "}
+              Basic (default)
+              <input
+                id="featured"
+                type="radio"
+                name="jobType"
+                value="featured"
+                checked={!jobIsBasic}
+                onChange={featuredJobTypeHandler}
+              />{" "}
+              Featured (+2 credits)
+            </Grid>
+            <Grid item xs={12}>
+              <FormLabel>Work Permit</FormLabel>
+              <input
+                id="workPermit"
+                type="radio"
+                name="workPermit"
+                value={true}
+                checked={workPermitOffered}
+                onChange={workPermitHandler}
+              />{" "}
+              Yes
+              <input
+                id="workPermit"
+                type="radio"
+                name="workPermit"
+                value={false}
+                checked={!workPermitOffered}
+                onChange={workPermitHandler}
+              />{" "}
+              No
+            </Grid>
+            <Grid item xs={12}>
+              <Input
+                id="title"
+                element="input"
+                type="text"
+                label="Title"
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="please enter a valid title"
+                onInput={inputHandler}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={5}>
+              <Input
+                id="salary"
+                element="select"
+                type="number"
+                label="Salary"
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="please select a valid salary"
+                onInput={inputHandler}
+                options={isFullTime ? fullTimeSalaries : partTimeSalaries}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={7}>
+              <Input
+                id="location"
+                element="select"
+                label="Location"
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="please enter a valid location"
+                onInput={inputHandler}
+                options={thaiCities}
+                selectType="location"
+              />
+            </Grid>
+            <Grid item>
+              <Input
+                id="requirements"
+                element="checkbox"
+                max={2}
+                type="checkbox"
+                label="Requirements (select Max 2)"
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="please enter a valid requirement"
+                onInput={inputHandler}
+                options={coreJobRequirements}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Input
+                sx={{ width: "100%" }}
+                id="description"
+                rows={4}
+                element="textarea"
+                label="Description"
+                validators={[VALIDATOR_MINLENGTH(7)]}
+                errorText="please enter a valid description of min 7 characters"
+                onInput={inputHandler}
+                type="text"
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sx={{ margin: "0.5rem 0" }}>
-            <FormLabel>Job Type:</FormLabel>
-            <input
-              id="basic"
-              type="radio"
-              name="jobType"
-              value="basic"
-              checked={jobIsBasic}
-              onChange={basicJobTypeHandler}
-            />{" "}
-            Basic (default)
-            <input
-              id="featured"
-              type="radio"
-              name="jobType"
-              value="featured"
-              checked={!jobIsBasic}
-              onChange={featuredJobTypeHandler}
-            />{" "}
-            Featured (+2 credits)
-          </Grid>
-          <Grid item xs={12}>
-            <FormLabel>Work Permit</FormLabel>
-            <input
-              id="workPermit"
-              type="radio"
-              name="workPermit"
-              value={true}
-              checked={workPermitOffered}
-              onChange={workPermitHandler}
-            />{" "}
-            Yes
-            <input
-              id="workPermit"
-              type="radio"
-              name="workPermit"
-              value={false}
-              checked={!workPermitOffered}
-              onChange={workPermitHandler}
-            />{" "}
-            No
-          </Grid>
-          <Grid item xs={12}>
-            <Input
-              id="title"
-              element="input"
-              type="text"
-              label="Title"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="please enter a valid title"
-              onInput={inputHandler}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={5}>
-            <Input
-              id="salary"
-              element="select"
-              type="number"
-              label="Salary"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="please select a valid salary"
-              onInput={inputHandler}
-              options={isFullTime ? fullTimeSalaries : partTimeSalaries}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={7}>
-            <Input
-              id="location"
-              element="select"
-              label="Location"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="please enter a valid location"
-              onInput={inputHandler}
-              options={thaiCities}
-              selectType="location"
-            />
-          </Grid>
-          <Grid item>
-            <Input
-              id="requirements"
-              element="checkbox"
-              max={2}
-              type="checkbox"
-              label="Requirements (select Max 2)"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="please enter a valid requirement"
-              onInput={inputHandler}
-              options={coreJobRequirements}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Input
-              sx={{ width: "100%" }}
-              id="description"
-              rows={4}
-              element="textarea"
-              label="Description"
-              validators={[VALIDATOR_MINLENGTH(7)]}
-              errorText="please enter a valid description of min 7 characters"
-              onInput={inputHandler}
-              type="text"
-            />
-          </Grid>
-        </Grid>
-        <Button type="submit" disabled={!formState.isValid}>
-          Add Job
-        </Button>
-      </StyledForm>
+          <Button type="submit" disabled={!formState.isValid}>
+            Add Job
+          </Button>
+        </StyledForm>
+      )}
     </>
   );
 };

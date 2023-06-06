@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import {
   Card,
@@ -9,8 +9,8 @@ import {
   CardMedia,
   Grid,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const StyledJobAdCard = styled(
   Card,
@@ -57,7 +57,9 @@ const UserProfileJobAd = (props) => {
                 </Typography>
 
                 <Typography variant="body2" color="text.secondary">
-                  {props.description}
+                  {props.description.length > 60
+                    ? props.description.substring(0, 60) + "..."
+                    : props.description}
                 </Typography>
               </Grid>
             </Grid>

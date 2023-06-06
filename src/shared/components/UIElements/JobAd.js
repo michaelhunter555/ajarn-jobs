@@ -46,7 +46,7 @@ const JobAd = (props) => {
               <Grid item xs={4} sm={4} lg={3} xl={2}>
                 <StyledMediaCard
                   component="img"
-                  src={job?.image}
+                  src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
                   alt={job?._id}
                 />
               </Grid>
