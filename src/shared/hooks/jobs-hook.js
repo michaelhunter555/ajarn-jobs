@@ -6,8 +6,10 @@ import { useHttpClient } from "./http-hook";
 export const useJob = () => {
   const auth = useContext(AuthContext);
   const [jobs, setJobs] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { updateUser } = auth;
-  const { isLoading, error, sendRequest, clearError, client } = useHttpClient();
+  const { isLoading, isPostLoading, error, sendRequest, clearError, client } =
+    useHttpClient();
 
   const getAllJobs = useCallback(async () => {
     try {
@@ -101,6 +103,7 @@ export const useJob = () => {
   //DELETE job by userId
   const deleteJobById = useCallback(
     async (jobId) => {
+      setIsDeleting(true);
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_JOBS}/${jobId}`,
@@ -108,11 +111,15 @@ export const useJob = () => {
         );
         const deletedJob = {
           ...auth.user,
-          job: auth.user.jobs.filter((job) => job._id !== response.job._id),
+          jobs: response.user.jobs,
         };
 
         updateUser(deletedJob);
-      } catch (err) {}
+        setIsDeleting(false);
+      } catch (err) {
+        setIsDeleting(false);
+        console.log(err);
+      }
     },
     [sendRequest, updateUser, auth.user]
   );
@@ -127,6 +134,8 @@ export const useJob = () => {
     updateJobById,
     deleteJobById,
     isLoading,
+    isPostLoading,
+    isDeleting,
     error,
     clearError,
   };

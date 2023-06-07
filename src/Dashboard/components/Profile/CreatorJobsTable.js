@@ -17,6 +17,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 import { AuthContext } from "../../../shared/context/auth-context";
+import { useJob } from "../../../shared/hooks/jobs-hook";
 
 const tableRows = [
   {
@@ -60,7 +61,7 @@ const tableRows = [
 const CreatorJobsTable = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-
+  const { deleteJobById, isDeleting } = useJob();
   const getCreatorJobs = async () => {
     try {
       const response = await fetch(
@@ -75,10 +76,20 @@ const CreatorJobsTable = () => {
     }
   };
 
-  const { data: creatorJobs, isLoading } = useQuery(
-    ["creatorJobs", user?._id],
-    () => getCreatorJobs()
-  );
+  const {
+    data: creatorJobs,
+    isLoading,
+    refetch,
+  } = useQuery(["creatorJobs", user?._id], () => getCreatorJobs());
+
+  const deleteJobHandler = async (jobId) => {
+    try {
+      await deleteJobById(jobId);
+      refetch();
+    } catch (err) {
+      console.log("Error trying to delete a job");
+    }
+  };
 
   return (
     <TableContainer>
@@ -97,7 +108,7 @@ const CreatorJobsTable = () => {
           ))}
         </TableHead>
         <TableBody>
-          {isLoading ? (
+          {isLoading || isDeleting ? (
             <TableRow>
               <TableCell>
                 <Box sx={{ display: "flex", width: "100%" }}>Loading...</Box>
@@ -122,6 +133,13 @@ const CreatorJobsTable = () => {
                       component={RouterLink}
                     >
                       Edit
+                    </Button>
+                    <Button
+                      to={`/users/${user?._id}`}
+                      color="error"
+                      onClick={() => deleteJobHandler(job?._id)}
+                    >
+                      Delete
                     </Button>
                   </ButtonGroup>
                 </TableCell>

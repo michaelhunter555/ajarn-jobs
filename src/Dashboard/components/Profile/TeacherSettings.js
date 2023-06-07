@@ -77,21 +77,36 @@ const TeacherSettings = (props) => {
 
   const updateProfileHandler = (event) => {
     event.preventDefault();
-    const updatedUser = {
-      ...user,
-      name: formState.inputs.name.value,
-      nationality: formState.inputs.nationality.value,
-      location: formState.inputs.location.value,
-      about: formState.inputs.about.value,
-      skill: formState.inputs.skill.value,
-      interests: formState.inputs.interests.value,
-      education: formState.inputs.education.value,
-      highestCertification: formState.inputs.highestCertification.value,
-      workExperience: formState.inputs.workExperience.value,
-      image: formState.inputs.image.value,
-    };
-    props.onProfileUpdate(updatedUser);
-    console.log("updateProfileHandler:", updatedUser);
+    // const updatedUser = {
+    //   ...user,
+    //   name: formState.inputs.name.value,
+    //   nationality: formState.inputs.nationality.value,
+    //   location: formState.inputs.location.value,
+    //   about: formState.inputs.about.value,
+    //   skill: formState.inputs.skill.value,
+    //   interests: formState.inputs.interests.value,
+    //   education: formState.inputs.education.value,
+    //   highestCertification: formState.inputs.highestCertification.value,
+    //   workExperience: formState.inputs.workExperience.value,
+    //   image: formState.inputs.image.value,
+    // };
+
+    const formData = new FormData();
+    formData.append("name", formState.inputs.name.value);
+    formData.append("nationality", formState.inputs.nationality.value);
+    formData.append("location", formState.inputs.location.value);
+    formData.append("about", formState.inputs.about.value);
+    formData.append("skill", formState.inputs.skill.value);
+    formData.append("interests", formState.inputs.interests.value);
+    formData.append("education", formState.inputs.education.value);
+    formData.append(
+      "highestCertification",
+      formState.inputs.highestCertification.value
+    );
+    formData.append("workExperience", formState.inputs.workExperience.value);
+    formData.append("image", formState.inputs.image.value);
+
+    props.onProfileUpdate(formData);
   };
 
   const userArrayHandler = (field, value, validator) => {

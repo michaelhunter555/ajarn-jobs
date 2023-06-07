@@ -1,12 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { FormLabel, Grid, Modal, Paper, Typography } from "@mui/material";
+import {
+  FormLabel,
+  Grid,
+  Modal,
+  Paper,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 //import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
@@ -173,7 +179,9 @@ const NewJob = () => {
 
   return (
     <>
-      {isPostLoading && <LoadingSpinner asOverlay />}
+      {isPostLoading && (
+        <Skeleton sx={{ height: 500, width: 788 }} variant="rectangular" />
+      )}
       <Modal
         open={success}
         onClose={clearModalHandler}

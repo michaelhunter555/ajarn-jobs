@@ -39,8 +39,7 @@ export const useUser = () => {
         const response = await sendRequest(
           `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
-          JSON.stringify(update),
-          { "Content-Type": "application/json" }
+          update
         );
         updateUser(response.user);
       } catch (err) {}
