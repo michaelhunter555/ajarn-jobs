@@ -176,7 +176,6 @@ const TeacherDashboard = () => {
       ...auth.user,
       resume: [...auth.user?.resume, resumeItem],
     });
-    console.log(auth.user);
   };
 
   const clearResumeItem = (cancelResumeItem) => {

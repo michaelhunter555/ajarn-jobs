@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 
 import {
   Button,
@@ -13,13 +13,12 @@ import {
 
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
-import { useUser } from "../../../shared/hooks/user-hook";
 
 const CoverLetter = () => {
   const auth = useContext(AuthContext);
-  const { user } = auth;
+  const { user, updateUser } = auth;
   const [isEditing, setIsEditing] = useState(user?.coverLetter === "");
-  const { updateUserProfile, isPostLoading } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
   const [formState, inputHandler] = useForm(
     {
       coverLetter: {
@@ -30,19 +29,48 @@ const CoverLetter = () => {
     true
   );
 
-  const updateCoverLetterHandler = () => {
-    const updatedCoverLetter = {
-      ...user,
-      coverLetter: formState.inputs.coverLetter.value,
-    };
-    updateUserProfile(user?._id, updatedCoverLetter);
-    setIsEditing(false);
-  };
+  const updateCoverLetterHandler = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        `${process.env.REACT_APP_USERS}/update-profile/${user?._id}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            coverLetter: formState.inputs.coverLetter.value,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("There was an issue with the request");
+      }
+
+      const responseData = await response.json();
+
+      const updatedCoverLetter = {
+        ...user,
+        coverLetter: responseData.user.coverLetter,
+      };
+
+      updateUser(updatedCoverLetter);
+      setIsLoading(false);
+      setIsEditing(false);
+    } catch (err) {
+      console.log("an error has occured in coverLetter update:" + err);
+    }
+  }, [user, updateUser, formState.inputs.coverLetter.value]);
+
+  // const temps = !isPostLoading && !isEditing
+  // const skeleton = isPostLoading
 
   return (
     <>
-      {isPostLoading && <Skeleton sx={{ width: 753, height: 382 }} />}
-      {!isPostLoading && !isEditing && (
+      {isLoading && <Skeleton sx={{ width: 753, height: 382 }} />}
+      {!isLoading && !isEditing && (
         <>
           <Grid
             component={Paper}
@@ -95,7 +123,7 @@ const CoverLetter = () => {
           </Grid>
         </>
       )}
-      {!isPostLoading && isEditing && (
+      {!isLoading && isEditing && (
         <Grid
           component={Paper}
           container

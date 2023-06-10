@@ -8,6 +8,7 @@ import {
   ListItemButton,
   ListItemText,
   Stack,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -40,7 +41,13 @@ const FeaturedJobs = (props) => {
           />
         </ListItemAvatar>
         <Stack spacing={0}>
-          <ListItemText primary={props.company} />
+          <ListItemText primary={props.title} />
+          <Typography variant="subtitle2" color="text.secondary">
+            {props.hours}
+          </Typography>
+          <Typography variant="subtitle2" color="text.secondary">
+            {props.salary}
+          </Typography>
         </Stack>
       </StyledListItemButton>
       <Divider />

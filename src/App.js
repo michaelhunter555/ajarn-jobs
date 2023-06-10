@@ -30,8 +30,8 @@ const queryClient = new QueryClient();
 function App() {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const login = useCallback((userobj) => {
-    dispatch({ type: LOGIN, user: userobj });
+  const login = useCallback((userId, token) => {
+    dispatch({ type: LOGIN, user: userId, token: token });
   }, []);
 
   const logout = useCallback(() => {
@@ -51,7 +51,7 @@ function App() {
   }, []);
 
   let routes;
-  if (state.isLoggedIn) {
+  if (state.token) {
     routes = (
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
@@ -78,13 +78,15 @@ function App() {
       </Routes>
     );
   }
-  //remember to update users to dynamic id
-  console.log("App state:", state.user);
+
+  console.log("APP STATE:", state.user, "APP TOKEN:", state.token);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthContext.Provider
         value={{
-          isLoggedIn: state.isLoggedIn,
+          isLoggedIn: !!state.token,
+          token: state.token,
           user: state.user,
           login: login,
           logout: logout,

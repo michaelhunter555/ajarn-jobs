@@ -53,7 +53,9 @@ const UserProfileJobAd = (props) => {
                   variant="h5"
                   component="div"
                 >
-                  {props.title}
+                  {props.title.length > 15
+                    ? props.title.substring(0, 15) + '...'
+                    : props.title}
                 </Typography>
 
                 <Typography variant="body2" color="text.secondary">

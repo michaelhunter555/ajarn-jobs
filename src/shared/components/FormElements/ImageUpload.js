@@ -39,13 +39,13 @@ const ImageUpload = (props) => {
     if (!file) {
       return;
     }
+
     const fileReader = new FileReader();
     fileReader.onload = () => {
       setFilePreviewUrl(fileReader.result);
     };
     fileReader.readAsDataURL(file);
-    console.log("file img picker re-rendered");
-  }, [file, filePreviewUrl]);
+  }, [file, authHasImage, auth.user?.image]);
 
   const userChoseImageHandler = (event) => {
     console.log(event.target);
@@ -57,6 +57,7 @@ const ImageUpload = (props) => {
       setIsValid(true);
       fileIsValid = true;
     } else {
+      setFile(null);
       setIsValid(false);
       fileIsValid = false;
     }

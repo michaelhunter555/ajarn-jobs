@@ -34,8 +34,6 @@ export const useHttpClient = (props) => {
         signal: httpAbortController.signal,
       });
 
-      console.log("RESPONSE", response);
-
       try {
         //await json data
         const data = await response.json();

@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -27,12 +29,19 @@ const FeaturedJobsLists = (props) => {
       {props?.sponsors
         .filter((listing) => listing?.jobType === "featured")
         .map((school) => (
-          <FeaturedJobs
+          <Link
+            style={{ textDecoration: "none" }}
             key={school?._id}
-            id={school?._id}
-            logo={`${process.env.REACT_APP_IMAGE}${school?.image}`}
-            company={school?.creator?.company}
-          />
+            to={`/jobs/${school._id}`}
+          >
+            <FeaturedJobs
+              id={school?._id}
+              logo={`${process.env.REACT_APP_IMAGE}${school?.image}`}
+              title={school?.title}
+              salary={school?.salary}
+              hours={school?.hours}
+            />
+          </Link>
         ))}
     </StyledFeaturedJobs>
   );

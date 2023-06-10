@@ -41,6 +41,7 @@ export const useUser = () => {
           "PATCH",
           update
         );
+        console.log("UPDATE_USER-HOOK", response.user);
         updateUser(response.user);
       } catch (err) {}
     },

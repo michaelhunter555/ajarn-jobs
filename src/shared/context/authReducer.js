@@ -9,16 +9,19 @@ import {
 export const initialState = {
   isLoggedIn: false,
   user: null,
+  token: null,
 };
 
 export const authReducer = (state, action) => {
   switch (action.type) {
     case LOGIN:
       console.log("LOGIN ACTIONS:", action.user);
+
       return {
         ...state,
         isLoggedIn: true,
         user: action.user,
+        token: action.token,
       };
 
     case LOGOUT:

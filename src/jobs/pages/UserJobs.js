@@ -122,6 +122,8 @@ const UserJobs = () => {
     );
   });
 
+  console.log("AUTH_OBJ-JOBS:", auth.user);
+
   //if not filter.location or dummyjobs[lowercase][includes] + (filter[location][lowercase])
 
   let button;

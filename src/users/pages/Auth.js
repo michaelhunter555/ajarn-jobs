@@ -90,7 +90,6 @@ const Auth = () => {
   //submit login || signup
   const authSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
     //api call
     if (isLoginMode) {
       try {
@@ -105,9 +104,10 @@ const Auth = () => {
           }),
           { "Content-type": "application/json" }
         );
-        console.log(response);
-        auth.login(response?.user);
-        navigate(`/`);
+        const { userId, token, image } = response;
+
+        auth.login({ _id: userId, image: image }, token);
+        //navigate(`/`);
       } catch (err) {
         //error handling done in custom hook
       }
@@ -126,7 +126,9 @@ const Auth = () => {
           formData
         );
 
-        auth.login(response?.user);
+        const { userId, token, image } = response;
+
+        auth.login({ _id: userId, image: image }, token);
         navigate("/");
       } catch (err) {
         //error handling done in custom hook

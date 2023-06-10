@@ -37,7 +37,10 @@ export const useJob = () => {
             },
             credits: jobCost,
           }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
         const updatedUser = {
           ...auth.user,
@@ -47,7 +50,7 @@ export const useJob = () => {
         updateUser(updatedUser);
       } catch (err) {}
     },
-    [sendRequest, updateUser, auth.user]
+    [sendRequest, updateUser, auth.user, auth.token]
   );
 
   //GET all jobs by userId
@@ -85,7 +88,10 @@ export const useJob = () => {
           `${process.env.REACT_APP_JOBS}/${jobId}`,
           "PATCH",
           JSON.stringify({ creatorId: updatedInfo }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
         const jobToUpdate = auth.user.jobs.map((job) =>
           job._id === response.job._id ? response.job : job
@@ -97,7 +103,7 @@ export const useJob = () => {
         updateUser(updatedJob);
       } catch (err) {}
     },
-    [sendRequest, updateUser, auth.user]
+    [sendRequest, updateUser, auth.user, auth.token]
   );
 
   //DELETE job by userId
@@ -107,11 +113,15 @@ export const useJob = () => {
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_JOBS}/${jobId}`,
-          "DELETE"
+          "DELETE",
+          null,
+          {
+            Authorization: "Bearer " + auth.token,
+          }
         );
         const deletedJob = {
           ...auth.user,
-          jobs: response.user.jobs,
+          jobs: response.user.jobs.filter((job) => job._id !== jobId),
         };
 
         updateUser(deletedJob);
@@ -121,7 +131,7 @@ export const useJob = () => {
         console.log(err);
       }
     },
-    [sendRequest, updateUser, auth.user]
+    [sendRequest, updateUser, auth.user, auth.token]
   );
 
   return {

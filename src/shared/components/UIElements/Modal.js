@@ -7,26 +7,29 @@ import { styled } from "@mui/material/styles";
 
 import Backdrop from "./Backdrop";
 
-const transitionStyles = {
-  enter: {
-    transform: "translateY(-10rem)",
-    opacity: 0,
-  },
-  enterActive: {
-    transform: "translateY(0)",
-    opacity: 1,
-    transition: "all 200ms",
-  },
-  exit: {
-    transform: "translateY(0)",
-    opacity: 1,
-  },
-  exitActive: {
-    transform: "translateY(-10rem)",
-    opacity: 0,
-    transition: "all 200ms",
-  },
-};
+const StyledTransition = styled("div")`
+  .modal-enter {
+    transform: translateY(-10rem);
+    opacity: 0;
+  }
+
+  .modal-enter-active {
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 200ms;
+  }
+
+  .modal-exit {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .modal-exit-active {
+    transform: translateY(-10rem);
+    opacity: 0;
+    transition: all 200ms;
+  }
+`;
 
 const ModalStyles = styled("div")(({ theme }) => ({
   zIndex: 100,
@@ -90,21 +93,22 @@ const Modal = (props) => {
   return (
     <React.Fragment>
       {props.show && <Backdrop onClick={props.onCancel} />}
-      <CSSTransition
-        in={props.show}
-        mountOnEnter
-        unmountOnExit
-        timeout={200}
-        classNames={{
-          enter: "modal-enter",
-          enterActive: "modal-enter-active",
-          exit: "modal-exit",
-          exitActive: "modal-exit-active",
-        }}
-        style={transitionStyles}
-      >
-        <ModalOverlay {...props} />
-      </CSSTransition>
+      <StyledTransition>
+        <CSSTransition
+          in={props.show}
+          mountOnEnter
+          unmountOnExit
+          timeout={200}
+          classNames={{
+            enter: "modal-enter",
+            enterActive: "modal-enter-active",
+            exit: "modal-exit",
+            exitActive: "modal-exit-active",
+          }}
+        >
+          <ModalOverlay {...props} />
+        </CSSTransition>
+      </StyledTransition>
     </React.Fragment>
   );
 };

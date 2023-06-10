@@ -28,6 +28,7 @@ import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useCreator } from "../../../shared/hooks/creator-hook";
 import { useForm } from "../../../shared/hooks/form-hook";
+//import { useJob } from "../../../shared/hooks/jobs-hook";
 import { thaiCities } from "../../../shared/util/ThaiData";
 import CreatorJobsTable from "./CreatorJobsTable";
 import CreatorTabs from "./CreatorTabs";
@@ -43,7 +44,6 @@ const Creator = ({ creatorItem }) => {
   const [isEditing, setIsEditing] = useState(
     auth.user && auth.user.creator === null
   );
-
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -85,8 +85,9 @@ const Creator = ({ creatorItem }) => {
   //create and delete creator account
   const { deleteCreator, updateCreator, isPostLoading, error, clearError } =
     useCreator();
+  //const { jobs, getJobsByUserId } = useJob();
 
-  const getJobApplicants = async () => {
+  const getJobs = async () => {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_JOBS}/user/${user?._id}`
@@ -100,8 +101,8 @@ const Creator = ({ creatorItem }) => {
     }
   };
 
-  const { data: jobApplicants } = useQuery(["JobApplicants", user?._id], () =>
-    getJobApplicants()
+  const { data: jobs } = useQuery(["JobApplicants", user?._id], () =>
+    getJobs()
   );
 
   //if is new or creator property is null, render new form.
@@ -457,7 +458,7 @@ const Creator = ({ creatorItem }) => {
                         Applicants
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {jobApplicants?.reduce(
+                        {jobs?.reduce(
                           (acc, job) => acc + job?.applicants.length,
                           0
                         )}
@@ -467,8 +468,11 @@ const Creator = ({ creatorItem }) => {
                       <Typography variant="body1" color="text.secondary">
                         Listings
                       </Typography>
+
                       <Typography variant="h4" color="text.secondary">
-                        {(user?.jobs?.length || 0) < 1 ? 0 : user?.jobs?.length}
+                        {(auth.user.jobs?.length || 0) < 1
+                          ? 0
+                          : auth.user.jobs?.length}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>
