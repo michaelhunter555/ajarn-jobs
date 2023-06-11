@@ -44,10 +44,10 @@ const FeaturedJobs = (props) => {
           <ListItemText primary={props.title} />
           <Typography variant="subtitle2" color="text.secondary">
             {props.hours}
-          </Typography>
-          <Typography variant="subtitle2" color="text.secondary">
+            {"-"}
             {props.salary}
           </Typography>
+          <Typography variant="subtitle2" color="text.secondary"></Typography>
         </Stack>
       </StyledListItemButton>
       <Divider />

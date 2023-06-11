@@ -38,7 +38,7 @@ import PurchaseCredits from "./PurchaseCredits";
 const date = new Date();
 const today = date.toISOString().split("T")[0];
 
-const Creator = ({ creatorItem }) => {
+const Creator = ({ creatorItem, jobsCount }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const [isEditing, setIsEditing] = useState(

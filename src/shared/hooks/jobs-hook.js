@@ -121,8 +121,10 @@ export const useJob = () => {
         );
         const deletedJob = {
           ...auth.user,
-          jobs: response.user.jobs.filter((job) => job._id !== jobId),
+          jobs: response.jobs,
         };
+
+        console.log("Response of Deleted Job:", deletedJob);
 
         updateUser(deletedJob);
         setIsDeleting(false);

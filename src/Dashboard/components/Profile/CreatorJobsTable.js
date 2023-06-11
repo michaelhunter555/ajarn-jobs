@@ -58,7 +58,7 @@ const tableRows = [
   },
 ];
 
-const CreatorJobsTable = () => {
+const CreatorJobsTable = (props) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const { deleteJobById, isDeleting } = useJob();

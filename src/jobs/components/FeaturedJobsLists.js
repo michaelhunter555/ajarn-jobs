@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import FeaturedJobs from "./FeaturedJobs";
@@ -29,10 +29,12 @@ const FeaturedJobsLists = (props) => {
       {props?.sponsors
         .filter((listing) => listing?.jobType === "featured")
         .map((school) => (
-          <Link
-            style={{ textDecoration: "none" }}
+          <Typography
+            component={Link}
             key={school?._id}
             to={`/jobs/${school._id}`}
+            color="text.secondary"
+            variant="body2"
           >
             <FeaturedJobs
               id={school?._id}
@@ -41,7 +43,7 @@ const FeaturedJobsLists = (props) => {
               salary={school?.salary}
               hours={school?.hours}
             />
-          </Link>
+          </Typography>
         ))}
     </StyledFeaturedJobs>
   );
