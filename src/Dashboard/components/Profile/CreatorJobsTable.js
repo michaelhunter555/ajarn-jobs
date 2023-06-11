@@ -62,6 +62,7 @@ const CreatorJobsTable = (props) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const { deleteJobById, isDeleting } = useJob();
+
   const getCreatorJobs = async () => {
     try {
       const response = await fetch(

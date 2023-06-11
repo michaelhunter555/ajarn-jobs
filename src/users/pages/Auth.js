@@ -107,7 +107,7 @@ const Auth = () => {
         const { userId, token, image } = response;
 
         auth.login({ _id: userId, image: image }, token);
-        //navigate(`/`);
+        navigate(`/`);
       } catch (err) {
         //error handling done in custom hook
       }

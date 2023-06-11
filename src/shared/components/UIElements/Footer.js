@@ -14,7 +14,7 @@ const FooterStyles = styled(Box)(({ theme }) => ({
   width: "100%",
   borderRadius: "6px 6px 0px 0px",
   bottom: 0,
-  margin: "0 auto",
+  margin: "auto 0",
   padding: "2rem 2rem",
 }));
 

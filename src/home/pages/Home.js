@@ -1,23 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Button } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import Footer from "../../shared/components/UIElements/Footer";
-import JobAd from "../../shared/components/UIElements/JobAd";
-import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
-import { useHttpClient } from "../../shared/hooks/http-hook";
+import Footer from '../../shared/components/UIElements/Footer';
+import JobAd from '../../shared/components/UIElements/JobAd';
+import {
+  JobAdSkeleton,
+} from '../../shared/components/UIElements/LoadingSkeletons';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 //import { useHttpClient } from "../../shared/hooks/http-hook";
-import BlogContent from "../components/BlogContent";
-import BottomFeatured from "../components/BottomFeatured";
-import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
-import RecentJobs from "../components/RecentJobs";
-import SiteFeatures from "../components/SiteFeatures";
-import SponsorsList from "../components/SponsorsList";
-import Tefl from "../components/Tefl";
-import UrgentJobs from "../components/UrgentJobs";
+import BlogContent from '../components/BlogContent';
+import BottomFeatured from '../components/BottomFeatured';
+import BottomFeaturedAdsList from '../components/BottomFeaturedAdsList';
+import RecentJobs from '../components/RecentJobs';
+import SiteFeatures from '../components/SiteFeatures';
+import SponsorsList from '../components/SponsorsList';
+import Tefl from '../components/Tefl';
+import UrgentJobs from '../components/UrgentJobs';
 
 const StyledGridContainer = styled("div")(({ theme }) => ({
   display: "grid",
@@ -234,7 +239,10 @@ const Home = () => {
         <h2 style={{ textAlign: "center" }}>Jobs You may like:</h2>{" "}
         <BottomFeaturedAdsList isLoading={isLoading} footerJobs={homeJobs} />
       </div>
+      <div style={{ margin: '0 auto'}}>
+
       <Footer />
+      </div>
     </>
   );
 };

@@ -41,13 +41,15 @@ const FeaturedJobs = (props) => {
           />
         </ListItemAvatar>
         <Stack spacing={0}>
-          <ListItemText primary={props.title} />
-          <Typography variant="subtitle2" color="text.secondary">
-            {props.hours}
-            {"-"}
-            {props.salary}
-          </Typography>
-          <Typography variant="subtitle2" color="text.secondary"></Typography>
+          <ListItemText secondary={props.title} />
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle2" color="text.secondary">
+              {props.hours}
+            </Typography>
+            <Typography variant="subtitle2" color="text.secondary">
+              {props.salary}
+            </Typography>
+          </Stack>
         </Stack>
       </StyledListItemButton>
       <Divider />

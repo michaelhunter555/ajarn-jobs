@@ -110,8 +110,8 @@ const TeacherSettings = (props) => {
   };
 
   const userArrayHandler = (field, value, validator) => {
-    const items = value.split(", ").map((item) => item.trim());
-    inputHandler(field, items, validator);
+    // const items = value.split(",").map((item) => item.trim());
+    inputHandler(field, value, validator);
   };
 
   const handleRoleToggle = () => {
