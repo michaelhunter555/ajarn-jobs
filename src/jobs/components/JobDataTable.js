@@ -1,6 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import { Link } from "react-router-dom";
+
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import {
   Box,
   Button,
@@ -13,9 +15,9 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import { AuthContext } from '../../shared/context/auth-context';
+import { AuthContext } from "../../shared/context/auth-context";
 
 const JobDataTable = (props) => {
   const auth = useContext(AuthContext);
@@ -56,8 +58,9 @@ const JobDataTable = (props) => {
               )}
               {!auth.isLoggedIn && (
                 <Button
+                  component={Link}
                   sx={{ margin: "0 auto" }}
-                  onClick={() => console.log("modal")}
+                  to="/auth"
                   variant="contained"
                 >
                   Login/Sign-up

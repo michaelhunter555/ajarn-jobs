@@ -39,7 +39,7 @@ const tableRows = [
     style: { fontWeight: 700 },
   },
   {
-    text: "Work Exp.",
+    text: "E-mail",
     variant: "button",
     color: "text.secondary",
     style: { fontWeight: 700 },

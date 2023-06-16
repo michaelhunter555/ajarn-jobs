@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import {
   Card,
@@ -9,8 +9,8 @@ import {
   CardMedia,
   Grid,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledJobAdCard = styled(
   Card,
@@ -22,6 +22,7 @@ const StyledJobAdCard = styled(
 
 const StyledMediaCard = styled(CardMedia)({
   width: "75%",
+  height: 70,
   border: "1px solid #e5e5e5",
   transition: "all 0.3s ease-in-out",
   "&:hover": {
@@ -54,7 +55,7 @@ const UserProfileJobAd = (props) => {
                   component="div"
                 >
                   {props.title.length > 15
-                    ? props.title.substring(0, 15) + '...'
+                    ? props.title.substring(0, 15) + "..."
                     : props.title}
                 </Typography>
 

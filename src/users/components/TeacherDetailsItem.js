@@ -140,7 +140,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                     Skills:
                   </Typography>
                   <Stack spacing={1} direction="row">
-                    {teacher?.skill?.map((skills, i) => (
+                    {teacher?.skill?.split(",").map((skills, i) => (
                       <Chip clickable key={i} label={skills} />
                     ))}
                   </Stack>
@@ -193,7 +193,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   sx={{ margin: "0 0 0.5rem 0" }}
                 />
                 <Typography variant="subtitle2" component="h3">
-                  {teacher?.interests?.map((interest, i) => (
+                  {teacher?.interests?.split(",").map((interest, i) => (
                     <Chip
                       clickable
                       key={i}

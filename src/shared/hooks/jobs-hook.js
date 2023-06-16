@@ -108,7 +108,7 @@ export const useJob = () => {
 
   //DELETE job by userId
   const deleteJobById = useCallback(
-    async (jobId) => {
+    async (jobId, userId) => {
       setIsDeleting(true);
       try {
         const response = await sendRequest(

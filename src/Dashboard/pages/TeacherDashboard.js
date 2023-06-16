@@ -416,7 +416,7 @@ const TeacherDashboard = () => {
               {!homeDashLoadingState && (
                 <UserProfileJobAd
                   id={jobAd[1]?._id}
-                  logo={`${process.env.REACT_APP_IMAGE}${jobAd[0]?.image}`}
+                  logo={`${process.env.REACT_APP_IMAGE}${jobAd[1]?.image}`}
                   title={jobAd[1]?.title}
                   description={jobAd[1]?.description}
                 />

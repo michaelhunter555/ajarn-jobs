@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -27,16 +27,54 @@ import Teachers from "./users/pages/Teachers";
 
 const queryClient = new QueryClient();
 
+let logoutTimer;
+
 function App() {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
-  const login = useCallback((userId, token) => {
+  const login = useCallback((userId, token, expirationDate) => {
     dispatch({ type: LOGIN, user: userId, token: token });
+
+    const tokenExpires =
+      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+    setTokenExpirationDate(tokenExpires);
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        userId: userId,
+        token: token,
+        tokenExpires: tokenExpires.toISOString(),
+      })
+    );
   }, []);
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (
+      userData &&
+      userData.token &&
+      new Date(userData.tokenExpires) > new Date()
+    ) {
+      login(userData.userId, userData.token, new Date(userData.tokenExpires));
+    }
+  }, [login]);
 
   const logout = useCallback(() => {
     dispatch({ type: LOGOUT });
+    setTokenExpirationDate(null);
+    localStorage.removeItem("userData");
   }, []);
+
+  useEffect(() => {
+    if (state.token && tokenExpirationDate) {
+      const timeRemaining =
+        tokenExpirationDate.getTime() - new Date().getTime();
+      logoutTimer = setTimeout(logout, timeRemaining);
+    } else {
+      clearTimeout(logoutTimer);
+    }
+  }, [state.token, logout, tokenExpirationDate]);
 
   const addCredits = useCallback((amount) => {
     dispatch({ type: ADD_CREDITS, amount });

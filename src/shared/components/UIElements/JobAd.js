@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import PaymentsIcon from "@mui/icons-material/Payments";
-import PlaceIcon from "@mui/icons-material/Place";
-import PunchClockIcon from "@mui/icons-material/PunchClock";
+import PaymentsIcon from '@mui/icons-material/Payments';
+import PlaceIcon from '@mui/icons-material/Place';
+import PunchClockIcon from '@mui/icons-material/PunchClock';
 import {
   Card,
   CardActionArea,
@@ -13,11 +13,12 @@ import {
   Chip,
   Grid,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const StyledMediaCard = styled(CardMedia)({
   width: "75%",
+  height: 75,
   border: "1px solid #e5e5e5",
   transition: "all 0.3s ease-in-out",
   "&:hover": {

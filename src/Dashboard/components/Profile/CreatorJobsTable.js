@@ -128,6 +128,7 @@ const CreatorJobsTable = (props) => {
                     <Button to={`/jobs/${job?._id}`} component={RouterLink}>
                       View
                     </Button>
+                    {/*auth.user._id === job._id */}
                     <Button
                       sx={{ backgroundColor: "#2c6399" }}
                       to={`/jobs/${job?._id}/update`}
