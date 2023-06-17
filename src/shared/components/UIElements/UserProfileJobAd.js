@@ -34,7 +34,7 @@ const StyledMediaCard = styled(CardMedia)({
 
 const UserProfileJobAd = (props) => {
   return (
-    <Link to={`/jobs/${props.id}`}>
+    <Link to={`/jobs/${props.id}`} sx={{ textDecoration: "none" }}>
       <StyledJobAdCard>
         <CardActionArea>
           <CardContent>

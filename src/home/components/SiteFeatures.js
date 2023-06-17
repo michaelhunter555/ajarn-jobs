@@ -87,6 +87,7 @@ const SiteFeatures = () => {
                   component="h3"
                   variant="button"
                   color="text.secondary"
+                  sx={{ textDecoration: "none" }}
                 >
                   {label}
                 </Typography>

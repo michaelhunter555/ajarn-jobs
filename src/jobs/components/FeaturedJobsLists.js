@@ -35,6 +35,7 @@ const FeaturedJobsLists = (props) => {
             to={`/jobs/${school._id}`}
             color="text.secondary"
             variant="body2"
+            sx={{ textDecoration: "none" }}
           >
             <FeaturedJobs
               id={school?._id}

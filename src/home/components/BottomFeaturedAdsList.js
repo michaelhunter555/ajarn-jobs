@@ -54,7 +54,12 @@ const BottomFeaturedAdsList = (props) => {
           </ListItem>
         ))}
       {footerJobs?.slice(0, 3)?.map((job, i) => (
-        <Link component={RouterLink} key={job._id} to={`/jobs/${job._id}`}>
+        <Link
+          sx={{ textDecoration: "none" }}
+          component={RouterLink}
+          key={job._id}
+          to={`/jobs/${job._id}`}
+        >
           <ListItem>
             <BottomFeaturedAds
               image={`${process.env.REACT_APP_IMAGE}${job?.image}`}

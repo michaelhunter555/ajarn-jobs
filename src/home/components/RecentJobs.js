@@ -31,7 +31,7 @@ const RecentJobs = (props) => {
       {props.homeJobs &&
         recentJobsLimit?.map((job) => (
           <Link
-            style={{ color: "rgb(92, 92, 92)" }}
+            style={{ color: "rgb(92, 92, 92)", textDecoration: "none" }}
             key={job?._id}
             to={`/jobs/${job?._id}`}
           >

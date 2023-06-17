@@ -65,7 +65,7 @@ const Teachers = () => {
     <>
       <ErrorModal onClear={clearError} error={error} />
       <ThemeProvider theme={customThemeForTeachers}>
-        <Grid container spacing={3} sx={{ width: "90%" }}>
+        <Grid container spacing={3} sx={{ width: "90%", marginTop: "3.5rem" }}>
           <Grid item xs={12} xl={3}>
             {isLoading && (
               <Skeleton
