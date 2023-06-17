@@ -356,6 +356,7 @@ const TeacherDashboard = () => {
       <Grid
         container
         spacing={1}
+        justifyContent="center"
         sx={{
           maxWidth: "90%",
           margin: "0 auto",
