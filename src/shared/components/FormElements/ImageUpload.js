@@ -95,7 +95,7 @@ const ImageUpload = (props) => {
         >
           <StyledImageUpload>
             {filePreviewUrl && <img src={filePreviewUrl} alt="preview" />}
-            {auth.isLoggedIn && authHasImage && (
+            {!filePreviewUrl && auth.isLoggedIn && authHasImage && (
               <img
                 src={`${process.env.REACT_APP_IMAGE}${auth.user?.image}`}
                 alt="preview"
