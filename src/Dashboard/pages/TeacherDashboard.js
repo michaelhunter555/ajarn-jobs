@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Button, Grid, Skeleton, Stack } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
@@ -35,6 +36,16 @@ const COVER_LETTER = "cover-letter";
 const CREATOR = "creator";
 const SETTINGS = "settings";
 const LOGOUT = "logout";
+
+const JobAdGridContainer = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  marginBottom: "1rem",
+  gap: "5px",
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+  },
+}));
 
 const TeacherDashboard = () => {
   const userId = useParams().id;
@@ -377,7 +388,7 @@ const TeacherDashboard = () => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Grid
+          <JobAdGridContainer
             item
             sx={{
               display: "flex",
@@ -423,7 +434,7 @@ const TeacherDashboard = () => {
                 />
               )}
             </Grid>
-          </Grid>
+          </JobAdGridContainer>
 
           <Grid
             item
