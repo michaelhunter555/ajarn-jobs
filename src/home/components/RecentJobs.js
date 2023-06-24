@@ -8,6 +8,9 @@ import { styled } from "@mui/material/styles";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import RecentJobItems from "./RecentJobItems";
 
+const StyledTitle = styled("h2")({
+  color: "#002379",
+});
 const RecentJobs = (props) => {
   if (props.homeJobs?.length === 0) {
     return (
@@ -16,9 +19,6 @@ const RecentJobs = (props) => {
       </div>
     );
   }
-  const StyledTitle = styled("h2")({
-    color: "#002379",
-  });
 
   const recentJobsLimit = props.homeJobs.slice(0, 3);
 

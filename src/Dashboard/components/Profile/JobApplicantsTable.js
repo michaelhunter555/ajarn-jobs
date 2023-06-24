@@ -79,17 +79,19 @@ const JobApplicantsTable = () => {
       <TableContainer>
         <Table>
           <TableHead>
-            {tableRows?.map((item, i) => (
-              <TableCell key={i}>
-                <Typography
-                  color={item.color}
-                  variant={item.variant}
-                  sx={item.style}
-                >
-                  {item.text}
-                </Typography>
-              </TableCell>
-            ))}
+            <TableRow>
+              {tableRows?.map((item, i) => (
+                <TableCell key={i}>
+                  <Typography
+                    color={item.color}
+                    variant={item.variant}
+                    sx={item.style}
+                  >
+                    {item.text}
+                  </Typography>
+                </TableCell>
+              ))}
+            </TableRow>
           </TableHead>
           <TableBody>
             {isLoading ? (

@@ -106,6 +106,26 @@ export const useJob = () => {
     [sendRequest, updateUser, auth.user, auth.token]
   );
 
+  //Patch - activate teacher buffet
+  const activateTeacherBuffet = useCallback(
+    async (userId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_JOBS}/activate-buffet/${userId}`,
+          "PATCH",
+          JSON.stringify({ buffetIsActive: true, lastActiveDate: new Date() }),
+          { "Content-Type": "application/json" }
+        );
+        const updatedUser = {
+          ...auth.user,
+          buffetIsActive: response.buffetIsActive,
+        };
+        updateUser(updatedUser);
+      } catch (err) {}
+    },
+    [auth.user, sendRequest, updateUser]
+  );
+
   //DELETE job by userId
   const deleteJobById = useCallback(
     async (jobId, userId) => {
@@ -139,6 +159,7 @@ export const useJob = () => {
   return {
     client,
     jobs,
+    activateTeacherBuffet,
     getAllJobs,
     getJobById,
     addJobByUserId,

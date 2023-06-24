@@ -96,17 +96,19 @@ const CreatorJobsTable = (props) => {
     <TableContainer>
       <Table>
         <TableHead>
-          {tableRows.map((item, i) => (
-            <TableCell key={i}>
-              <Typography
-                sx={item.style}
-                color={item.color}
-                variant={item.variant}
-              >
-                {item.text}
-              </Typography>
-            </TableCell>
-          ))}
+          <TableRow>
+            {tableRows.map((item, i) => (
+              <TableCell key={i}>
+                <Typography
+                  sx={item.style}
+                  color={item.color}
+                  variant={item.variant}
+                >
+                  {item.text}
+                </Typography>
+              </TableCell>
+            ))}
+          </TableRow>
         </TableHead>
         <TableBody>
           {isLoading || isDeleting ? (

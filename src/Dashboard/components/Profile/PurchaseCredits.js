@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import StarIcon from "@mui/icons-material/StarBorder";
 import {
@@ -10,13 +10,31 @@ import {
   CardHeader,
   Container,
   Grid,
+  Modal,
+  Paper,
+  Stack,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useUser } from "../../../shared/hooks/user-hook";
+
+const StyleCreditsModal = styled(Paper)({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgColor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  padding: 7,
+  margin: "2rem auto",
+  borderRadius: 8,
+});
 
 const tiers = [
   {
@@ -48,10 +66,29 @@ const tiers = [
 
 const PurchaseCredits = () => {
   const auth = useContext(AuthContext);
+  const [openModal, setOpenModal] = useState(false);
+  const [price, setPrice] = useState("");
+  const [totalCredits, setTotalCredits] = useState(0);
+  const [isClicked, setIsClicked] = useState(false); //acts as basic debouncer for users who might repeat click
   const { addCredits, isPostLoading, error, clearError } = useUser();
 
   const purchaseCreditsHandler = (amount) => {
-    addCredits(auth.user?._id, amount);
+    if (!isClicked) {
+      setIsClicked(true);
+      addCredits(auth.user?._id, amount);
+      setOpenModal(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isPostLoading) {
+      setIsClicked(false);
+    }
+  }, [isPostLoading]);
+
+  const confirmCreditsHandler = (val) => {
+    setTotalCredits(val);
+    setOpenModal((prev) => !prev);
   };
 
   return (
@@ -104,12 +141,48 @@ const PurchaseCredits = () => {
                 </CardContent>
                 <CardActions>
                   <Button
-                    onClick={() => purchaseCreditsHandler(tier.credits)}
+                    onClick={() => confirmCreditsHandler(tier.credits)}
                     fullWidth
                     variant={tier.buttonVariant}
                   >
                     {tier.buttonText}
                   </Button>
+                  <Modal
+                    open={openModal}
+                    onClose={confirmCreditsHandler}
+                    aria-labelledby="add-credits-modal"
+                    aria-describedby="final step before adding credits"
+                  >
+                    <StyleCreditsModal>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 2,
+                        }}
+                      >
+                        <Typography variant="body1" color="text.secondary">
+                          Confirm Credit Amount
+                        </Typography>
+                        <Typography variant="subtitle2" color="text.secondary">
+                          You are about to purchase{" "}
+                          <b>{totalCredits} credits</b>.
+                        </Typography>
+                        <Stack
+                          direction="column"
+                          justifyContent="flex-end"
+                          alignItems="center"
+                        >
+                          <Button
+                            onClick={() => purchaseCreditsHandler(totalCredits)}
+                            variant={tier.buttonVariant}
+                          >
+                            Complete Purchase
+                          </Button>
+                        </Stack>
+                      </Box>
+                    </StyleCreditsModal>
+                  </Modal>
                 </CardActions>
               </Card>
             </Grid>

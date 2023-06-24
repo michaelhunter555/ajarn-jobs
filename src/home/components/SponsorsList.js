@@ -23,11 +23,14 @@ const StyledTitle = styled("h2")({
 
 const SponsorsList = (props) => {
   const { sponsor } = props;
+
+  const sponsorsLimit = sponsor.slice(0, 3);
+
   return (
     <>
       <StyledTitle>Sponsors</StyledTitle>
       <StyledPaper elevation={0}>
-        {sponsor.map((supporter, i) => (
+        {sponsorsLimit.map((supporter, i) => (
           <StyledLink key={supporter.id} to={`/jobs/${supporter._id}`}>
             <Sponsors
               logo={`${process.env.REACT_APP_IMAGE}${supporter?.image}`}
