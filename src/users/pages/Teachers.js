@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { Grid, Skeleton } from "@mui/material/";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
+import CustomModal from "../../shared/components/UIElements/CustomModal";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -21,20 +22,6 @@ const customThemeForTeachers = createTheme({
     },
   },
 });
-
-const GlassBlurOverlay = styled("div")(({ theme }) => ({
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-  backdropFilter: "blur(8px)",
-  zIndex: 10,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}));
 
 const Teachers = () => {
   const auth = useContext(AuthContext);
@@ -60,7 +47,7 @@ const Teachers = () => {
   } = useQuery(["teachers"], () => getTeachers());
 
   useEffect(() => {
-    if (!auth.isLoggedIn) {
+    if (!auth.isLoggedIn || !auth.user.buffetIsActive) {
       setBlur(true);
       return;
     }
@@ -76,7 +63,8 @@ const Teachers = () => {
         }
 
         const data = await response.json();
-        setBlur(data.user.buffetIsActive);
+        const { buffetIsActive } = data.user;
+        setBlur(!buffetIsActive);
       } catch (err) {
         console.log("there was an error retrieving teachers - Msg: " + err);
       }
@@ -103,10 +91,20 @@ const Teachers = () => {
       );
     });
 
-  console.log("BUFFET IS ACTIVE:", blur);
+  console.log("BUFFET IS BLURRED:", blur);
 
   return (
     <>
+      {!isLoading && blur && (
+        <CustomModal
+          error="Teacher Buffet is not active."
+          open={blur}
+          noCredits="Please activate buffet to view teacher profiles"
+          handleClose={blur}
+          buttonVariant="contained"
+          alternateButtonVariant="outlined"
+        />
+      )}
       <ErrorModal onClear={clearError} error={error} />
       <ThemeProvider theme={customThemeForTeachers}>
         <Grid container spacing={3} sx={{ width: "90%", marginTop: "3.5rem" }}>

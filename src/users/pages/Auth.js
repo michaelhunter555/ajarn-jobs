@@ -104,9 +104,12 @@ const Auth = () => {
           }),
           { "Content-type": "application/json" }
         );
-        const { userId, token, image } = response;
+        const { userId, token, image, buffetIsActive } = response;
 
-        auth.login({ _id: userId, image: image }, token);
+        auth.login(
+          { _id: userId, image: image, buffetIsActive: buffetIsActive },
+          token
+        );
         navigate(`/`);
       } catch (err) {
         //error handling done in custom hook
@@ -126,9 +129,12 @@ const Auth = () => {
           formData
         );
 
-        const { userId, token, image } = response;
+        const { userId, token, image, buffetIsActive } = response;
 
-        auth.login({ _id: userId, image: image }, token);
+        auth.login(
+          { _id: userId, image: image, buffetIsActive: buffetIsActive },
+          token
+        );
         navigate("/");
       } catch (err) {
         //error handling done in custom hook

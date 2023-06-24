@@ -9,18 +9,21 @@ import {
   Box,
   Button,
   Card,
+  CircularProgress,
   Divider,
   FormControl,
   Grid,
   InputLabel,
   Link,
   MenuItem,
+  Modal,
   Paper,
   Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import NewJob from "../../../jobs/pages/NewJob";
@@ -28,6 +31,7 @@ import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useCreator } from "../../../shared/hooks/creator-hook";
 import { useForm } from "../../../shared/hooks/form-hook";
+import { useJob } from "../../../shared/hooks/jobs-hook";
 //import { useJob } from "../../../shared/hooks/jobs-hook";
 import { thaiCities } from "../../../shared/util/ThaiData";
 import CreatorJobsTable from "./CreatorJobsTable";
@@ -35,12 +39,28 @@ import CreatorTabs from "./CreatorTabs";
 import JobApplicantsTable from "./JobApplicantsTable";
 import PurchaseCredits from "./PurchaseCredits";
 
+const StyledModal = styled(Paper)({
+  display: "flex",
+  flexDirection: "column",
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  padding: 7,
+  borderRadius: 7,
+});
+
 const date = new Date();
 const today = date.toISOString().split("T")[0];
 
 const Creator = ({ creatorItem, jobsCount }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
+  const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(
     auth.user && auth.user.creator === null
   );
@@ -85,7 +105,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
   //create and delete creator account
   const { deleteCreator, updateCreator, isPostLoading, error, clearError } =
     useCreator();
-  //const { jobs, getJobsByUserId } = useJob();
+  const { activateTeacherBuffet } = useJob();
 
   const getJobs = async () => {
     try {
@@ -183,6 +203,17 @@ const Creator = ({ creatorItem, jobsCount }) => {
 
   const handleEditing = () => {
     setIsEditing((prev) => !prev);
+  };
+
+  const activateTeacherBuffetHandler = () => {
+    if (user?.buffetIsActive === false) {
+      activateTeacherBuffet(user?._id);
+    }
+    setOpen(false);
+  };
+
+  const modalHandler = () => {
+    setOpen((prev) => !prev);
   };
 
   //components rendered from tab navigation
@@ -476,18 +507,49 @@ const Creator = ({ creatorItem, jobsCount }) => {
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>
-                      <Typography variant="body1" color="text.secondary">
-                        Find Teachers
-                      </Typography>
+                      {isPostLoading && (
+                        <>
+                          <CircularProgress />
+                        </>
+                      )}
+                      {!isPostLoading && (
+                        <>
+                          <Typography variant="body1" color="text.secondary">
+                            Find Teachers
+                          </Typography>
 
-                      <Button
-                        sx={{ fontSize: 9 }}
-                        startIcon={<ElectricBoltIcon />}
-                        color="success"
-                        variant="outlined"
-                      >
-                        24hr Buffet!
-                      </Button>
+                          <Button
+                            sx={{ fontSize: 9 }}
+                            startIcon={<ElectricBoltIcon />}
+                            color="success"
+                            variant="outlined"
+                            onClick={modalHandler}
+                          >
+                            24hr Buffet!
+                          </Button>
+                        </>
+                      )}
+                      <Modal open={open} onClose={modalHandler}>
+                        <StyledModal>
+                          <Typography variant="h5" color="text.primary">
+                            Confirm Buffet Activation
+                          </Typography>
+                          <Typography
+                            variant="subttitle2"
+                            color="text.secondary"
+                          >
+                            You are about activate a teacher buffet for 2
+                            credits for 24 hours. Please confirm.
+                          </Typography>
+                          <Button
+                            sx={{ margin: "2rem auto" }}
+                            variant="contained"
+                            onClick={activateTeacherBuffetHandler}
+                          >
+                            Begin Buffet
+                          </Button>
+                        </StyledModal>
+                      </Modal>
                     </Paper>
                   </Stack>
                   <Stack

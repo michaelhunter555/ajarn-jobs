@@ -114,16 +114,21 @@ export const useJob = () => {
           `${process.env.REACT_APP_JOBS}/activate-buffet/${userId}`,
           "PATCH",
           JSON.stringify({ buffetIsActive: true, lastActiveDate: new Date() }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
+        console.log("USERB-BUFFET RESPONSE:", response.user);
         const updatedUser = {
           ...auth.user,
-          buffetIsActive: response.buffetIsActive,
+          buffetIsActive: response.user.buffetIsActive, //NEEDS TO BE CHANGED TO response.user.buffetIsActive this is only for testing purposes with existing users who do not have this new property
+          credits: response.user.credits,
         };
         updateUser(updatedUser);
       } catch (err) {}
     },
-    [auth.user, sendRequest, updateUser]
+    [auth.user, sendRequest, updateUser, auth.token]
   );
 
   //DELETE job by userId

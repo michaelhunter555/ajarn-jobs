@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, Stack, Typography } from "@mui/material";
 
 import { AuthContext } from "../../context/auth-context";
 
@@ -20,7 +20,8 @@ const style = {
 
 const CustomModal = (props) => {
   const auth = useContext(AuthContext);
-  const { isLoggedIn, credits } = auth;
+  const navigate = useNavigate();
+  const { isLoggedIn, credits, buffetIsActive } = auth;
   const handleClose = () => {
     props.handleClose();
   };
@@ -41,15 +42,42 @@ const CustomModal = (props) => {
             {props.noCredits || props.signIn}
           </Typography>
           {!isLoggedIn && (
-            <Button component={Link} to={`/auth`}>
-              {" "}
-              login{" "}
-            </Button>
+            <Stack direction="row" spacing={1}>
+              <Button component={Link} variant="contained" to={`/auth`}>
+                {" "}
+                login{" "}
+              </Button>
+              <Button
+                variant={props.alternateButtonVariant}
+                component={Link}
+                onClick={() => navigate(-1)}
+              >
+                go back
+              </Button>
+            </Stack>
           )}
           {isLoggedIn && credits === 0 && (
             <Button component={Link} to={`/users/${auth.user._id}`}>
               Get Credits
             </Button>
+          )}
+          {isLoggedIn && !buffetIsActive && (
+            <Stack direction="row" spacing={1}>
+              <Button
+                variant={props.buttonVariant}
+                component={Link}
+                to={`/users/${auth.user._id}`}
+              >
+                Get Credits & Activate Buffet
+              </Button>
+              <Button
+                variant={props.alternateButtonVariant}
+                component={Link}
+                onClick={() => navigate(-1)}
+              >
+                go back
+              </Button>
+            </Stack>
           )}
         </Box>
       </Modal>
