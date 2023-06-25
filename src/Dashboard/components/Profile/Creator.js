@@ -6,6 +6,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -105,7 +106,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
   //create and delete creator account
   const { deleteCreator, updateCreator, isPostLoading, error, clearError } =
     useCreator();
-  const { activateTeacherBuffet } = useJob();
+  const { activateTeacherBuffet, isPostLoading: buffetIsLoading } = useJob();
 
   const getJobs = async () => {
     try {
@@ -215,6 +216,10 @@ const Creator = ({ creatorItem, jobsCount }) => {
   const modalHandler = () => {
     setOpen((prev) => !prev);
   };
+  const buffetStartTime = new Date(auth.user?.lastActiveBuffet);
+  const getDifference = date.getTime() - buffetStartTime.getTime();
+  const twentyFourHours = 24 * 60 * 60 * 1000;
+  const getTimeLeft = Math.abs(getDifference - twentyFourHours);
 
   //components rendered from tab navigation
   const renderComponent = () => {
@@ -507,28 +512,57 @@ const Creator = ({ creatorItem, jobsCount }) => {
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>
-                      {isPostLoading && (
+                      {buffetIsLoading && (
                         <>
                           <CircularProgress />
                         </>
                       )}
-                      {!isPostLoading && (
+                      {!buffetIsLoading && (
                         <>
                           <Typography variant="body1" color="text.secondary">
-                            Find Teachers
+                            Teacher Buffet
                           </Typography>
-
-                          <Button
-                            sx={{ fontSize: 9 }}
-                            startIcon={<ElectricBoltIcon />}
-                            color="success"
-                            variant="outlined"
-                            onClick={modalHandler}
+                          <Alert
+                            sx={{
+                              marginTop: 1,
+                              paddingTop: 0,
+                              paddingBottom: 0,
+                              padding: "0 0.5rem",
+                              borderRadius: 8,
+                            }}
+                            severity={
+                              user?.buffetIsActive ? "success" : "warning"
+                            }
+                            icon={false}
                           >
-                            24hr Buffet!
-                          </Button>
+                            <Typography
+                              variant="subtitle2"
+                              color="text.secondary"
+                              sx={{ margin: 0, padding: 0 }}
+                            >
+                              {user?.buffetIsActive
+                                ? `Active - ${(
+                                    getTimeLeft /
+                                    (60 * 60 * 1000)
+                                  ).toFixed(0)} hours left.`
+                                : "Inactive"}
+                            </Typography>
+                          </Alert>
+
+                          {!auth.user?.buffetIsActive && (
+                            <Button
+                              sx={{ fontSize: 9 }}
+                              startIcon={<ElectricBoltIcon />}
+                              color="success"
+                              variant="outlined"
+                              onClick={modalHandler}
+                            >
+                              24hr Buffet!
+                            </Button>
+                          )}
                         </>
                       )}
+
                       <Modal open={open} onClose={modalHandler}>
                         <StyledModal>
                           <Typography variant="h5" color="text.primary">
@@ -545,6 +579,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
                             sx={{ margin: "2rem auto" }}
                             variant="contained"
                             onClick={activateTeacherBuffetHandler}
+                            disabled={auth.user?.buffetIsActive}
                           >
                             Begin Buffet
                           </Button>
