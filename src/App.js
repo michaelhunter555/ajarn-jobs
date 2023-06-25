@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import BlogPage from "./blog/pages/BlogPage";
+import IncomeDirectory from "./blog/pages/IncomeDirectory";
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
 import JobDetailsPage from "./jobs/pages/JobDetailsPage";
@@ -94,6 +95,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/income-directory" element={<IncomeDirectory />} />
         <Route path="/users/:id" element={<TeacherDashboard />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/job/new" element={<NewJob />} />
@@ -109,6 +111,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/income-directory" element={<IncomeDirectory />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
         <Route path="/teachers" element={<Teachers />} />

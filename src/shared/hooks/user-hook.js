@@ -90,6 +90,28 @@ export const useUser = () => {
     [sendRequest, updateUser, auth.user]
   );
 
+  //POST
+  const incomeDirectoryPost = useCallback(
+    async (userId, incomePost) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/income-directory/${userId}`,
+          "POST",
+          JSON.stringify({ userIncomeData: incomePost }),
+          { "Content-Type": "application/json" }
+        );
+        const updatedUser = {
+          ...auth.user,
+          incomeDirectory: response.user.incomeDirectory,
+        };
+        updateUser(updatedUser);
+      } catch (err) {
+        console.log("Income Directory Post Error:" + err);
+      }
+    },
+    [auth.user, updateUser, sendRequest]
+  );
+
   return {
     users,
     getAllUsers,
@@ -97,6 +119,7 @@ export const useUser = () => {
     updateUserProfile,
     addCredits,
     applyToJob,
+    incomeDirectoryPost,
     isLoading,
     isPostLoading,
     error,

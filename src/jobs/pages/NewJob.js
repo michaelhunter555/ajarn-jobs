@@ -1,4 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   FormLabel,
@@ -7,26 +11,26 @@ import {
   Paper,
   Skeleton,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import Button from "../../shared/components/FormElements/Button";
-import Input from "../../shared/components/FormElements/Input";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Button from '../../shared/components/FormElements/Button';
+import Input from '../../shared/components/FormElements/Input';
+import CustomModal from '../../shared/components/UIElements/CustomModal';
 //import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "../../shared/context/auth-context";
-import { useForm } from "../../shared/hooks/form-hook";
-import { useJob } from "../../shared/hooks/jobs-hook";
+import { AuthContext } from '../../shared/context/auth-context';
+import { useForm } from '../../shared/hooks/form-hook';
+import { useJob } from '../../shared/hooks/jobs-hook';
 import {
   coreJobRequirements,
   fullTimeSalaries,
   partTimeSalaries,
   thaiCities,
-} from "../../shared/util/ThaiData";
+} from '../../shared/util/ThaiData';
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
-} from "../../shared/util/validators";
+} from '../../shared/util/validators';
 
 const StyledForm = styled("form")({
   listStyle: "none",
@@ -202,7 +206,7 @@ const NewJob = () => {
           </Typography>
         </BoxContent>
       </Modal>
-      <ErrorModal error={error} onClear={clearError} />
+      <CustomModal error={error} handleClose={clearError} />
       {!isPostLoading && (
         <StyledForm onSubmit={jobSubmitHandler}>
           <Grid container direction="row">

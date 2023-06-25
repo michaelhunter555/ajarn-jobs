@@ -65,7 +65,7 @@ const BottomFeatured = () => {
           their daily expenses are. Get a better idea...
         </StyledText>
         <CardActions>
-          <Button component={RouterLink} to="/">
+          <Button component={RouterLink} to="/income-directory">
             Read More
           </Button>
         </CardActions>
