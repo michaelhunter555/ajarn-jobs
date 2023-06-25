@@ -82,38 +82,37 @@ const UserContributions = () => {
                       src={`/static/images/avatar/${i + 1}.jpg`}
                     />
                   </ListItemAvatar>
+
                   <ListItemText
                     primary={
                       <>
-                        <Stack direction="row" spacing={2}>
-                          <Typography>{val?.jobTitle}</Typography>
-                          <Typography>{val?.monthlySalary} p/m</Typography>
-                        </Stack>
+                        <Typography>{val?.jobTitle}</Typography>
+                        <Typography>{val?.monthlySalary} p/m</Typography>
                       </>
                     }
                     secondary={
                       <>
-                        <Stack alignItems="center" direction="row" spacing={1}>
-                          <Typography
-                            sx={{ display: "inline" }}
-                            component="span"
-                            variant="body2"
-                            color="text.primary"
-                          >
-                            {val?.postDate?.split("T")[0]}
-                          </Typography>
-                          {" — " + val?.lifestyle}
-                        </Stack>
+                        <Typography
+                          sx={{ display: "inline" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {val?.postDate?.split("T")[0]}
+                        </Typography>
+                        {" — " + val?.lifestyle}
                       </>
                     }
                   />
-                  <Button
-                    variant="contained"
-                    component={Link}
-                    to={`/income-details/${val?._id}`}
-                  >
-                    Read Post
-                  </Button>
+                  <Stack justifyContent="flex-end" alignItems="center">
+                    <Button
+                      variant="contained"
+                      component={Link}
+                      to={`/income-details/${val?._id}`}
+                    >
+                      Read Post
+                    </Button>
+                  </Stack>
                 </ListItem>
                 {i - userIncomeData?.length - 1 && (
                   <Divider variant="inset" light />

@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import BlogPage from "./blog/pages/BlogPage";
 import IncomeDirectory from "./blog/pages/IncomeDirectory";
+import IncomeDirectoryDetails from "./blog/pages/IncomeDirectoryDetails";
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
 import JobDetailsPage from "./jobs/pages/JobDetailsPage";
@@ -96,6 +97,10 @@ function App() {
         <Route path="/" element={<Home />} exact="true" />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/income-directory" element={<IncomeDirectory />} />
+        <Route
+          path="/income-details/:id"
+          element={<IncomeDirectoryDetails />}
+        />
         <Route path="/users/:id" element={<TeacherDashboard />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/job/new" element={<NewJob />} />
@@ -112,6 +117,10 @@ function App() {
         <Route path="/" element={<Home />} exact="true" />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/income-directory" element={<IncomeDirectory />} />
+        <Route
+          path="/income-details/:id"
+          element={<IncomeDirectoryDetails />}
+        />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
         <Route path="/teachers" element={<Teachers />} />
