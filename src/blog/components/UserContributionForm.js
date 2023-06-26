@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   FormLabel,
   Paper,
@@ -16,7 +17,7 @@ import { useUser } from "../../shared/hooks/user-hook";
 const UserContributionForm = () => {
   const auth = useContext(AuthContext);
   const [toggleForm, setToggleForm] = useState(false);
-  const { incomeDirectoryPost, isLoading, error, clearError } = useUser();
+  const { incomeDirectoryPost, isPostLoading, error, clearError } = useUser();
   const [formState, inputHandler, setFormData] = useForm(
     {
       jobTitle: {
@@ -116,7 +117,7 @@ const UserContributionForm = () => {
         color={toggleForm ? "error" : "info"}
         sx={{ marginBottom: 2 }}
         onClick={toggleFormHandler}
-        disabled={!auth.isLoggedIn || auth.user.incomeDirectory}
+        disabled={!auth.isLoggedIn || !!auth.user.incomeDirectory}
       >
         {!toggleForm && auth.isLoggedIn
           ? "Make Contribution"
@@ -125,7 +126,8 @@ const UserContributionForm = () => {
           : ""}
         {!auth.isLoggedIn && "Sign-up / Login"}
       </Button>
-      {toggleForm && (
+      {isPostLoading && <CircularProgress />}
+      {toggleForm && !isPostLoading && (
         <Paper elevation={0} sx={{ borderRadius: 7, padding: 3 }}>
           <form onSubmit={submitIncomeDirectoryInfoHandler}>
             <FormControl fullWidth>

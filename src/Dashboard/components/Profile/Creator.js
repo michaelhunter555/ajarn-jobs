@@ -519,16 +519,20 @@ const Creator = ({ creatorItem, jobsCount }) => {
                       )}
                       {!buffetIsLoading && (
                         <>
-                          <Typography variant="body1" color="text.secondary">
+                          <Typography
+                            variant="body1"
+                            color="text.secondary"
+                            sx={{ padding: 0, margin: 0 }}
+                          >
                             Teacher Buffet
                           </Typography>
-                          <Alert
+                          {/* <Alert
                             sx={{
                               marginTop: 1,
                               paddingTop: 0,
                               paddingBottom: 0,
                               padding: "0 0.5rem",
-                              borderRadius: 8,
+                              borderRadius: 18,
                             }}
                             severity={
                               user?.buffetIsActive ? "success" : "warning"
@@ -547,7 +551,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
                                   ).toFixed(0)} hours left.`
                                 : "Inactive"}
                             </Typography>
-                          </Alert>
+                          </Alert> */}
 
                           {!auth.user?.buffetIsActive && (
                             <Button
@@ -560,6 +564,33 @@ const Creator = ({ creatorItem, jobsCount }) => {
                               24hr Buffet!
                             </Button>
                           )}
+                          <Alert
+                            sx={{
+                              marginTop: 1,
+                              paddingTop: 0,
+                              paddingBottom: 0,
+                              padding: "0 0.5rem",
+                              borderRadius: 18,
+                              justifyContent: "center",
+                            }}
+                            severity={
+                              user?.buffetIsActive ? "success" : "warning"
+                            }
+                            icon={false}
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              color="text.secondary"
+                              sx={{ margin: 0, padding: 0 }}
+                            >
+                              {user?.buffetIsActive
+                                ? `Active - ${(
+                                    getTimeLeft /
+                                    (60 * 60 * 1000)
+                                  ).toFixed(0)} hours left.`
+                                : "Not Active"}
+                            </Typography>
+                          </Alert>
                         </>
                       )}
 

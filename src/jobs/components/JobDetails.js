@@ -142,8 +142,11 @@ const JobDetails = (props) => {
 
                 <Typography color="text.secondary" variant="subtitle2">
                   You currently{" "}
-                  {auth.user?.resume ? "have a resume" : "don't have a resume "}{" "}
-                  on file. {auth.user?.resume ? "✅" : "Please add one.⛔"}
+                  {auth.user?.resume?.length > 0
+                    ? "have a resume"
+                    : "don't have a resume "}{" "}
+                  on file.{" "}
+                  {auth.user?.resume?.length > 0 ? "✅" : "Please add one.⛔"}
                 </Typography>
                 <Typography color="text.secondary" variant="subtitle2">
                   You currently{" "}

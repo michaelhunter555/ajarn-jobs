@@ -12,9 +12,11 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 
+import { useUser } from "../../shared/hooks/user-hook";
 import UserContributionForm from "./UserContributionForm";
 
 const UserContributions = () => {
+  const { isPostLoading } = useUser();
   const getUserIncomeData = async () => {
     try {
       const response = await fetch(
@@ -52,10 +54,10 @@ const UserContributions = () => {
         <Stack direction="column" spacing={2} sx={{ margin: "2rem 2rem" }}>
           <Typography variant="h4" color="text.primary">
             {" "}
-            Welcome To the Income Directory
+            Welcome To The Income Directory
           </Typography>
           <Typography variant="subtitle2" color="text.secondary">
-            See what other teachers are earning and how they're living
+            See what other teachers are earning and how they're living.
           </Typography>
           <Typography variant="subtitle2" color="text.secondary">
             This is a user contributed section of our website and would advise
@@ -100,11 +102,11 @@ const UserContributions = () => {
                         >
                           {val?.postDate?.split("T")[0]}
                         </Typography>
-                        {" — " + val?.lifestyle}
+                        {" — " + val?.lifestyle?.substring(0, 40) + "..."}
                       </>
                     }
                   />
-                  <Stack justifyContent="flex-end" alignItems="center">
+                  <Stack justifyContent="flex-end">
                     <Button
                       variant="contained"
                       component={Link}
@@ -114,6 +116,7 @@ const UserContributions = () => {
                     </Button>
                   </Stack>
                 </ListItem>
+
                 {i - userIncomeData?.length - 1 && (
                   <Divider variant="inset" light />
                 )}

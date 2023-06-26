@@ -45,7 +45,7 @@ const StyledBoxContent = styled(Box)({
   pr: { md: 0 },
 });
 
-const StyledGlassCard = styled(Card)(({ theme }) => ({
+export const StyledGlassCard = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   justifyContent: "flex-start",
