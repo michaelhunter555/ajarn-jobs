@@ -26,7 +26,7 @@ import {
 } from "../../../shared/util/ThaiData";
 
 const TeacherSettings = (props) => {
-  const [isSchool, setIsSchool] = useState(props.isSchool);
+  const [isTeacher, setIsTeacher] = useState(props.isTeacher);
   const [isHidden, setIsHidden] = useState(props.isHidden);
   const user = props.user;
   const [formState, inputHandler] = useForm(
@@ -115,7 +115,7 @@ const TeacherSettings = (props) => {
   };
 
   const handleRoleToggle = () => {
-    setIsSchool((prev) => !prev);
+    setIsTeacher((prev) => !prev);
     props.onClickToggle();
   };
 
@@ -131,8 +131,8 @@ const TeacherSettings = (props) => {
   return (
     <Card>
       <Typography>
-        <Switch checked={!isSchool} onChange={handleRoleToggle} />
-        {isSchool ? "Teacher looking for a job" : "Employer looking to hire"}
+        <Switch checked={!isTeacher} onChange={handleRoleToggle} />
+        {isTeacher ? "Teacher looking for a job" : "Employer looking to hire"}
       </Typography>
       <Typography>
         <Switch checked={!isHidden} onChange={handleVisibilityToggle} />

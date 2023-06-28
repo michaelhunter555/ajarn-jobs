@@ -610,9 +610,14 @@ const Creator = ({ creatorItem, jobsCount }) => {
                             sx={{ margin: "2rem auto" }}
                             variant="contained"
                             onClick={activateTeacherBuffetHandler}
-                            disabled={auth.user?.buffetIsActive}
+                            disabled={
+                              auth.user?.buffetIsActive ||
+                              auth.user?.credits < 2
+                            }
                           >
-                            Begin Buffet
+                            {auth.user?.credits >= 2
+                              ? "Begin Buffet"
+                              : "Not enough credits"}
                           </Button>
                         </StyledModal>
                       </Modal>

@@ -121,7 +121,7 @@ const StyledGlassTeflAd = styled(Card)(({ theme }) => ({
       "linear-gradient(90deg, transparent, rgba(98, 250, 255, 0.219), transparent)",
   },
   "&:hover::after": {
-    animation: "shine 1s infinite alternate",
+    animation: "shine 1s ", //infinite alternate
     animationTimingFunction: "cubic-bezier(0, 0.6, 0.5, 0.4)",
   },
   "@keyframes shine": {
@@ -188,7 +188,6 @@ const UserJobs = () => {
 
   let button;
   let actionItem;
-  let teflAd;
 
   if (auth.isLoggedIn && auth.user?.userType === "employer") {
     button = (
@@ -200,47 +199,6 @@ const UserJobs = () => {
       <Button variant="text" component={RouterLink} to="/auth">
         Learn More
       </Button>
-    );
-  } else if (auth.isLoggedIn && auth.user?.userType === "teacher") {
-    teflAd = (
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        sx={{ margin: "1rem auto" }}
-      >
-        <StyledGlassTeflAd>
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            sx={{ display: "flex", alignItems: "center", borderRadius: "8px" }}
-          >
-            <CardMedia
-              sx={{ padding: 1 }}
-              component="img"
-              image={RemoteLifestyleImg}
-              alt="temp-lifestyle-tefl"
-            />
-          </Grid>
-          <Grid item xs={12} sm={8} sx={{ margin: "0 0.5rem", padding: 1 }}>
-            <Typography variant="body1" sx={{ fontWeight: 550 }}>
-              Harvard TEFL - 120 Hour Course{" "}
-              <Chip
-                sx={{ fontSize: 10, borderRadius: "6px" }}
-                label="Ad"
-                size="small"
-              />
-            </Typography>
-
-            <Typography variant="subtitle2" color="text.secondary">
-              Get Qaulified, find work, earn more.
-            </Typography>
-          </Grid>
-        </StyledGlassTeflAd>
-      </Grid>
     );
   } else if (!auth.isLoggedIn) {
     button = (
@@ -271,6 +229,50 @@ const UserJobs = () => {
     </Box>
   );
 
+  let teflAd = (
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+      sx={{ margin: "1rem auto" }}
+    >
+      <StyledGlassTeflAd>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          sx={{ display: "flex", alignItems: "center", borderRadius: "8px" }}
+        >
+          <CardMedia
+            sx={{ padding: 1 }}
+            component="img"
+            image={RemoteLifestyleImg}
+            alt="temp-lifestyle-tefl"
+          />
+        </Grid>
+        <Grid item xs={12} sm={8} sx={{ margin: "0 0.5rem", padding: 1 }}>
+          <Typography
+            variant="body1"
+            sx={{ fontWeight: 550, color: "#464646" }}
+          >
+            Barvard TEFL - 120 Hour Course{" "}
+            <Chip
+              sx={{ fontSize: 10, borderRadius: "6px" }}
+              label="Ad"
+              size="small"
+            />
+          </Typography>
+
+          <Typography variant="subtitle2" color="text.secondary">
+            Get Qaulified, find work, earn more.
+          </Typography>
+        </Grid>
+      </StyledGlassTeflAd>
+    </Grid>
+  );
+
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
@@ -299,7 +301,7 @@ const UserJobs = () => {
             />
           )}
           {!isLoading && <JobFilters onFilterChange={handleFilterChange} />}
-          <Stack>{teflAd}</Stack>
+          {!isLoading && <Stack>{teflAd}</Stack>}
         </UsersJobFilterDiv>
 
         <UserJobListDiv>

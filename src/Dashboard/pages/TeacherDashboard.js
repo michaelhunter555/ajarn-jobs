@@ -104,11 +104,6 @@ const TeacherDashboard = () => {
   const { isLoading: userProfileLoading, error: getUserProfileError } =
     useQuery(["userInfo", userId], () => getUserInformation(userId));
 
-  //does the user have a resume?
-  const authHasResume = !auth.user?.resume
-    ? "Add Work History Item"
-    : "Add More Work";
-
   //GET users current jobs for creator dash and
   useEffect(() => {
     getJobsByUserId(userId);
@@ -212,6 +207,10 @@ const TeacherDashboard = () => {
     auth.updateUser(creatorItem);
   };
 
+  //does the user have a resume?
+  const authHasResume =
+    auth.user?.resume?.length === 0 ? "Add Work History Item" : "Add More Work";
+
   const {
     id,
     name,
@@ -302,13 +301,13 @@ const TeacherDashboard = () => {
             </>
           );
         case SETTINGS:
-          const isTeacher = auth.user?.userType === "teacher";
+          const isTeacher = auth.user?.userType === TEACHER;
           const isHidden = auth.user?.isHidden;
           return (
             <>
               {!isPostLoading && (
                 <TeacherSettings
-                  isSchool={isTeacher}
+                  isTeacher={isTeacher}
                   user={auth.user}
                   onClickToggle={handleRoleChange}
                   onProfileUpdate={handleProfileUpdate}

@@ -46,6 +46,17 @@ export const fullTimeSalaries = [
   "over THB 100k/mo.",
 ];
 
+export const blogCategories = [
+  "Teaching",
+  "Thai Life",
+  "Learning Thai",
+  "Current Events",
+  "Sponsored",
+  "How to",
+  "Dos and Donts",
+  "General",
+];
+
 //list of partime incomes.
 export const partTimeSalaries = [
   "at least 250THB/hour",
