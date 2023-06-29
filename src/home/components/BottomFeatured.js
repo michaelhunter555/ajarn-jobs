@@ -50,7 +50,7 @@ const BottomFeatured = () => {
           and what you should look out for from employers.
         </StyledText>
         <CardActions>
-          <Button component={RouterLink} to="/">
+          <Button component={RouterLink} to="/content">
             Read More
           </Button>
         </CardActions>

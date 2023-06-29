@@ -55,6 +55,7 @@ export const blogCategories = [
   "How to",
   "Dos and Donts",
   "General",
+  "Question",
 ];
 
 //list of partime incomes.

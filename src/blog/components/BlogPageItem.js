@@ -10,9 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import DummyImage from "../../assets/geoff-greenwood-rH1aA4TqGms-unsplash.jpg";
-
-const BlogPageItem = ({ blog }) => {
+const BlogPageItem = ({ content }) => {
+  console.log("Auth Image:", content?.author?.image);
   return (
     <Grid
       container
@@ -31,11 +30,16 @@ const BlogPageItem = ({ blog }) => {
           }}
         >
           <Typography variant="h3" component="div">
-            Article Title
+            {content?.title}
           </Typography>
-          <CardMedia component="img" alt="dummy_image" image={DummyImage} />
+          <CardMedia
+            component="img"
+            alt="dummy_image"
+            sx={{ height: 100, width: 100 }}
+            image={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
+          />
           <CardContent>
-            <Typography variant="body1">Article Content</Typography>
+            <Typography variant="body1">{content?.postContent}</Typography>
           </CardContent>
           <CardActions>
             <Button>Maybe Yes</Button>
@@ -45,7 +49,8 @@ const BlogPageItem = ({ blog }) => {
       </Grid>
       {/**sidebar below */}
       <Grid item xs={12} sm={6} md={4}>
-        <Card sx={{ display: "flex", justifyContent: "center" }}>
+        <Card>
+          <Button>Make a Post!</Button>
           <Typography variant="h5" component="h2" color="text.secondary">
             Other Posts
           </Typography>

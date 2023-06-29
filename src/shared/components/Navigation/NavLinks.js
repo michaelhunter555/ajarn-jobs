@@ -55,16 +55,18 @@ const NavLinks = (props) => {
         </NavLink>
       </li>
 
-      {/*<li>
-        <NavLink to="/blog">
+      <li>
+        <NavLink to="/content">
           <Typography
-            sx={{ fontWeight: location.pathname === "/blog" ? 700 : "inherit" }}
+            sx={{
+              fontWeight: location.pathname === "/content" ? 700 : "inherit",
+            }}
             variant="button"
           >
-            Blog
+            Content
           </Typography>
         </NavLink>
-          </li> */}
+      </li>
 
       {auth.isLoggedIn && (
         <li>

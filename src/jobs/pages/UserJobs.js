@@ -94,7 +94,7 @@ const FeaturedJobListDiv = styled("div")(({ theme }) => ({
   },
 }));
 
-const StyledGlassTeflAd = styled(Card)(({ theme }) => ({
+export const StyledGlassTeflAd = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   justifyContent: "flex-start",

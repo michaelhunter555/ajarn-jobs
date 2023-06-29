@@ -1,10 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
 
-import { Box, Button, Modal, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Modal,
+  Stack,
+  Typography,
+} from '@mui/material';
 
-import { AuthContext } from "../../context/auth-context";
+import { AuthContext } from '../../context/auth-context';
 
 const style = {
   position: "absolute",
@@ -39,7 +48,7 @@ const CustomModal = (props) => {
             {props.success || props.error}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {props.noCredits || props.signIn}
+            {props.noCredits || props.signIn || props.errorMessage}
           </Typography>
           {!isLoggedIn && (
             <Stack direction="row" spacing={1}>

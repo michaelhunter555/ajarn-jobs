@@ -31,7 +31,7 @@ export const useJob = () => {
               company: auth.user.creator.company,
               companySize: auth.user.creator.companySize,
               headquarters: auth.user.creator.headquarters,
-              eastablished: auth.user.creator.established,
+              established: auth.user.creator.established,
               presence: auth.user.creator.presence,
               about: auth.user.creator.about,
             },

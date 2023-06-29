@@ -67,6 +67,7 @@ const UserContributions = () => {
           <UserContributionForm />
         </Stack>
       </Grid>
+
       <Grid item xs={12} sm={6}>
         <Stack sx={{ margin: "2rem 2rem" }}>
           {isLoading && <CircularProgress />}
