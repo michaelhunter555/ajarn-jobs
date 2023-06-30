@@ -119,16 +119,19 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
           Add a Post or Ask a Question! Get the perspectives of others.
         </Typography>
         <Button
-          disabled={toggleForm}
+          disabled={toggleForm || !auth.isLoggedIn}
           variant="contained"
           onClick={toggleContentFormHandler}
         >
-          Add a post
+          {!auth.isLoggedIn ? "login to post" : "Add a post"}
         </Button>
         {isPostLoading && <CircularProgress />}
 
         {toggleForm && !isPostLoading && (
-          <Paper elevation={0} sx={{ margin: "2rem auto" }}>
+          <Paper
+            elevation={1}
+            sx={{ margin: "2rem auto", padding: 2, borderRadius: "18px" }}
+          >
             <form onSubmit={submitContentPostHandler}>
               <Stack direction="column" justifyContent="flex-end">
                 <FormControl>
@@ -177,7 +180,7 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
                   <TextField
                     fullWidth
                     multiline
-                    rows={4}
+                    rows={6}
                     id="postContent"
                     type="text"
                     helperText="Ask a question or share a post."

@@ -14,10 +14,10 @@ import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useUser } from "../../shared/hooks/user-hook";
 
-const UserContributionForm = () => {
+const UserContributionForm = ({ onSubmit }) => {
   const auth = useContext(AuthContext);
   const [toggleForm, setToggleForm] = useState(false);
-  const { incomeDirectoryPost, isPostLoading, error, clearError } = useUser();
+  const { incomeDirectoryPost, isPostLoading } = useUser();
   const [formState, inputHandler, setFormData] = useForm(
     {
       jobTitle: {
@@ -100,6 +100,7 @@ const UserContributionForm = () => {
 
     try {
       incomeDirectoryPost(auth.user?._id, incomeDirectoryInputs);
+      onSubmit();
     } catch (err) {
       console.log(err);
     }

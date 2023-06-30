@@ -1,17 +1,24 @@
 import React from "react";
 
+import CommentIcon from "@mui/icons-material/Comment";
+import ShareIcon from "@mui/icons-material/Share";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
+  Avatar,
   Button,
   Card,
-  CardActions,
   CardContent,
-  CardMedia,
+  Chip,
+  Divider,
   Grid,
+  OutlinedInput,
+  Paper,
+  Stack,
   Typography,
 } from "@mui/material";
 
 const BlogPageItem = ({ content }) => {
-  console.log("Auth Image:", content?.author?.image);
   return (
     <Grid
       container
@@ -22,30 +29,114 @@ const BlogPageItem = ({ content }) => {
       spacing={2}
     >
       <Grid item xs={12} sm={6} md={8}>
-        <Card
+        <Paper
+          elevation={0}
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            padding: 2,
           }}
         >
-          <Typography variant="h3" component="div">
-            {content?.title}
-          </Typography>
-          <CardMedia
-            component="img"
-            alt="dummy_image"
-            sx={{ height: 100, width: 100 }}
-            image={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
-          />
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Avatar
+              sx={{ width: 100, height: 100, margin: "0 2rem" }}
+              alt="dummy_image"
+              src={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
+            />
+            <Typography variant="h3" component="div">
+              {content?.title}
+            </Typography>
+            <Divider orientation="vertical" flexItem />
+            <Stack
+              sx={{
+                border: "2px solid #e7e4e4",
+                borderRadius: "5px",
+                padding: 2,
+              }}
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Typography variant="subtitle2" color="text.secondary">
+                {content?.postDate?.split("T")[0]}
+              </Typography>
+              <Chip label={content?.category} size="small" />
+            </Stack>
+          </Stack>
           <CardContent>
             <Typography variant="body1">{content?.postContent}</Typography>
           </CardContent>
-          <CardActions>
-            <Button>Maybe Yes</Button>
-            <Button> Maybe No</Button>
-          </CardActions>
-        </Card>
+          <Grid container direction="row" justify="center" spacing={2}>
+            <Grid item>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <CommentIcon color="action" sx={{ fontSize: 20 }} />
+                <Typography
+                  color="text.secondary"
+                  variant="subtitle2"
+                  sx={{ fontSize: 14, fontWeight: 550 }}
+                >
+                  {content?.comments?.length} comments
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <ThumbUpIcon color="action" sx={{ fontSize: 20 }} />
+                <Typography
+                  color="text.secondary"
+                  variant="subtitle2"
+                  sx={{ fontSize: 14, fontWeight: 550 }}
+                >
+                  0
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
+                <Typography
+                  color="text.secondary"
+                  variant="subtitle2"
+                  sx={{ fontSize: 14, fontWeight: 550 }}
+                >
+                  0
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography
+                  color="text.secondary"
+                  variant="subtitle2"
+                  sx={{ fontSize: 14, fontWeight: 550 }}
+                >
+                  Share
+                </Typography>
+                <ShareIcon color="action" sx={{ fontSize: 20 }} />
+              </Stack>
+            </Grid>
+          </Grid>
+        </Paper>
+        <Divider variant="inset" />
+        <Paper
+          elevation={0}
+          sx={{
+            padding: 2,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "3px",
+          }}
+        >
+          <OutlinedInput
+            sx={{ borderRadius: 1, maxWidth: "80%" }}
+            fullWidth
+            multiline
+            rows={4}
+            id="comment"
+            type="text"
+          />
+        </Paper>
       </Grid>
       {/**sidebar below */}
       <Grid item xs={12} sm={6} md={4}>

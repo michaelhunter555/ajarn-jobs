@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 
+import moment from "moment";
 import { Link } from "react-router-dom";
 
 import CommentIcon from "@mui/icons-material/Comment";
@@ -15,8 +16,8 @@ import {
   Divider,
   Grid,
   List,
-  ListItem,
   ListItemAvatar,
+  ListItemButton,
   ListItemText,
   Paper,
   Stack,
@@ -26,12 +27,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import RemoteLifestyleImg from "../../assets/contribute.png";
 import { StyledGlassTeflAd } from "../../jobs/pages/UserJobs";
-import { AuthContext } from "../../shared/context/auth-context";
+import BlogFilter from "../components/BlogFilter";
 import BlogPostForm from "../components/BlogPostForm";
 
 const AddNewBlogPost = () => {
-  const auth = useContext(AuthContext);
-
+  const [filter, setFilter] = useState();
   const getAllBlogPosts = async () => {
     const response = await fetch(`${process.env.REACT_APP_BLOG}`);
 
@@ -46,7 +46,6 @@ const AddNewBlogPost = () => {
   const {
     data: blogPosts,
     isLoading,
-    error,
     refetch,
   } = useQuery(["AllBlogPosts"], () => getAllBlogPosts());
 
@@ -54,9 +53,31 @@ const AddNewBlogPost = () => {
     refetch();
   };
 
+  const handleFilterChange = (filterData) => {
+    setFilter(filterData);
+  };
+
+  const filteredContent =
+    blogPosts &&
+    blogPosts.filter((searchContent) => {
+      return (
+        (!filter?.category ||
+          searchContent?.category
+            ?.toLowerCase()
+            ?.includes(filter?.category?.toLowerCase())) &&
+        (!filter?.date ||
+          moment(searchContent?.date).format("YYYY-MM-DD") >=
+            moment(filter?.date).format("YYYY-MM-DD")) &&
+        (!filter?.search ||
+          searchContent.title
+            .toLowerCase()
+            .includes(filter.search.toLowerCase()))
+      );
+    });
+
   let noPostsYet;
 
-  if (blogPosts?.length === 0) {
+  if (filteredContent?.length === 0) {
     noPostsYet = (
       <Paper
         sx={{
@@ -69,10 +90,10 @@ const AddNewBlogPost = () => {
         }}
       >
         <Typography variant="h5" color="text.secondary">
-          There are no posts yet.
+          There are no posts that match your search.
         </Typography>
         <Typography variant="outlined" color="text.secondary">
-          Add a Post!
+          Check back later or get conversation started!
         </Typography>
       </Paper>
     );
@@ -127,14 +148,13 @@ const AddNewBlogPost = () => {
       container
       direction="row"
       justifyContent="center"
-      spacing={1}
+      spacing={0}
       sx={{ margin: 5, padding: 5 }}
     >
       <Grid
         item
         xs={12}
         sm={6}
-        md={5}
         sx={{ display: "flex", justifyContent: "center" }}
       >
         <Stack direction="column" spacing={1}>
@@ -151,20 +171,26 @@ const AddNewBlogPost = () => {
           <BlogPostForm onBlogPostCreated={incomingBlogPostHandler} />
         </Stack>
       </Grid>
-      <Grid item xs={12} sm={6} md={7}>
+      <Grid item xs={12} sm={6}>
         <Stack sx={{ margin: "0 2rem" }}>
           <Box sx={{ width: "50%" }}>{teflAd}</Box>
-          <Grid Container>
+          <BlogFilter onDataChange={handleFilterChange} />
+
+          <Grid container>
             {isLoading && <CircularProgress />}
             {noPostsYet}
             {!isLoading &&
-              blogPosts &&
-              blogPosts?.map((val, i) => (
+              filteredContent &&
+              filteredContent?.map((val, i) => (
                 <List
                   key={val._id}
                   sx={{ width: "100%", bgcolor: "background.paper" }}
                 >
-                  <ListItem alignItems="flex-start">
+                  <ListItemButton
+                    component={Link}
+                    to={`/content/${val?._id}`}
+                    alignItems="flex-start"
+                  >
                     <ListItemAvatar>
                       <Avatar
                         alt={val.title}
@@ -248,7 +274,7 @@ const AddNewBlogPost = () => {
                         Read Post
                       </Button>
                     </Stack>
-                  </ListItem>
+                  </ListItemButton>
 
                   {i - blogPosts?.length - 1 && (
                     <Divider variant="inset" light />

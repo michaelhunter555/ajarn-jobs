@@ -12,11 +12,9 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useQuery } from "@tanstack/react-query";
 
-import { useUser } from "../../shared/hooks/user-hook";
 import UserContributionForm from "./UserContributionForm";
 
 const UserContributions = () => {
-  const { isPostLoading } = useUser();
   const getUserIncomeData = async () => {
     try {
       const response = await fetch(
@@ -37,10 +35,11 @@ const UserContributions = () => {
     data: userIncomeData,
     refetch,
     isLoading,
-    error,
   } = useQuery(["infoDirectory"], () => getUserIncomeData());
 
-  console.log("USER INCOME DATA:", userIncomeData);
+  const getFreshData = () => {
+    refetch();
+  };
 
   return (
     <Grid
@@ -64,7 +63,7 @@ const UserContributions = () => {
             to do your own due dilligent research before settling on an salary
             that is ideal for you.
           </Typography>
-          <UserContributionForm />
+          <UserContributionForm onSubmit={getFreshData} />
         </Stack>
       </Grid>
 

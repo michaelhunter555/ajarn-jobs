@@ -25,9 +25,7 @@ const BlogPage = () => {
     return data.blogPost;
   };
 
-  const { data: content, isLoading } = useQuery(["blogDetails"], () =>
-    getBlogPostById()
-  );
+  const { data: content } = useQuery(["blogDetails"], () => getBlogPostById());
 
   return <BlogPageItem content={content} />;
 };

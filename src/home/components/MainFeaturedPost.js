@@ -5,6 +5,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -13,6 +14,7 @@ import {
   Divider,
   Grid,
   Paper,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -20,7 +22,7 @@ import { styled } from "@mui/material/styles";
 const StyledPaper = styled(Paper)({
   position: "relative",
   backgroundColor: "grey.800",
-  color: "#fff",
+  color: "#002379",
   height: "auto",
   objectFit: "contain",
   backgroundRepeat: "no-repeat",
@@ -35,7 +37,7 @@ const StyledBoxOverlay = styled(Box)({
   right: 0,
   left: 0,
   borderRadius: "5px",
-  backgroundColor: "rgba(0,0,0,.5)",
+  backgroundColor: "rgba(0,0,0,.1)",
 });
 
 const StyledBoxContent = styled(Box)({
@@ -105,7 +107,7 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
 }));
 
 const StyledDivider = styled(Divider)(({ theme }) => ({
-  color: "white",
+  color: "black",
   position: "relative",
   [theme.breakpoints.down("sm")]: {
     display: "none",
@@ -113,107 +115,128 @@ const StyledDivider = styled(Divider)(({ theme }) => ({
 }));
 
 const MainFeaturedPost = (props) => {
-  const { post } = props;
+  const { post, isLoading } = props;
 
   return (
     <>
       {/*featured post */}
-      <StyledPaper
-        sx={{ backgroundImage: `url(${post[0].image})`, borderRadius: "5px" }}
-      >
-        <StyledBoxOverlay />
-        <Grid container>
-          <Grid item md={6}>
-            <StyledBoxContent>
-              <Typography
-                variant="h3"
-                component="h2"
-                color="inherit"
-                gutterBottom
-              >
-                {post[0].title}
-              </Typography>
-              <Typography variant="h5" component="h3" color="inherit" paragraph>
-                {post[0].content}
-              </Typography>
-              <Button
-                variant="contained"
-                component={Link}
-                to={`/posts/${post.id}`}
-              >
-                Read more
-              </Button>
-            </StyledBoxContent>
-          </Grid>
-        </Grid>
-
-        <StyledDivider variant="middle">More Content</StyledDivider>
-
-        <Box
-          sx={{ padding: "0 0 1rem 0", margin: "0 0 0 0.5rem", width: "100%" }}
+      {!isLoading && (
+        <StyledPaper
+          sx={{
+            backgroundImage: `url(${post[0]?.image})`,
+            borderRadius: "5px",
+          }}
         >
-          <Grid container spacing={2}>
-            {/*next posts after 1st or featured post */}
-            {post.slice(1).map((posts, i) => (
-              <Grid item key={i} xs={12} sm={6}>
-                <Link key={i} to="/">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      flexWrap: "wrap",
-                      justifyContent: "flex-start",
-                      position: "relative",
-                    }}
-                  >
-                    <StyledGlassCard elevation={3}>
-                      <CardMedia
-                        component="img"
-                        image={posts.image}
-                        alt={`${posts.author}-${posts.title}`}
-                        sx={{
-                          width: 70,
-                          borderRight: "1px solid #bbbbbb",
-                        }}
-                      />
-                      <StyledBox>
-                        <StyledCardContent>
-                          <Box sx={{ overflowWrap: "break-word" }}>
-                            <Typography
-                              component="h2"
-                              variant="h6"
-                              color="text.primary"
-                              sx={{
-                                fontSize: 12,
-                                wordWrap: "break-word",
-                                maxWidth: "100%",
-                              }}
-                            >
-                              {posts.title.length > 50
-                                ? posts.title.substring(0, 50) + "..."
-                                : posts.title}
-                            </Typography>
-                          </Box>
-                          <Box>
-                            <Typography
-                              variant="subtitle1"
-                              color="text.primary"
-                              component="h3"
-                              sx={{ fontSize: 10 }}
-                            >
-                              By {posts.author}
-                            </Typography>
-                          </Box>
-                        </StyledCardContent>
-                      </StyledBox>
-                    </StyledGlassCard>
-                  </Box>
-                </Link>
-              </Grid>
-            ))}
+          <StyledBoxOverlay />
+          <Grid container>
+            <Grid item md={6}>
+              <StyledBoxContent>
+                <Avatar
+                  alt={`${post[0]?.author}--${post[0]?.title}`}
+                  src={`${process.env.REACT_APP_IMAGE}${post[0]?.author?.image}`}
+                />
+                <Typography
+                  variant="h3"
+                  component="h2"
+                  color="inherit"
+                  gutterBottom
+                >
+                  {post[0]?.title}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  component="h3"
+                  color="inherit"
+                  paragraph
+                >
+                  {post[0]?.postContent}
+                </Typography>
+                <Button
+                  variant="contained"
+                  component={Link}
+                  to={`/content/${post[0]?._id}`}
+                >
+                  Read more
+                </Button>
+              </StyledBoxContent>
+            </Grid>
           </Grid>
-        </Box>
-      </StyledPaper>
+
+          <StyledDivider variant="middle">More Content</StyledDivider>
+
+          <Box
+            sx={{
+              padding: "0 0 1rem 0",
+              margin: "0 0 0 0.5rem",
+              width: "100%",
+            }}
+          >
+            <Grid container spacing={2}>
+              {/*next posts after 1st or featured post */}
+              {post?.slice(1, 3).map((posts, i) => (
+                <Grid item key={i} xs={12} sm={6}>
+                  <Link key={i} to={`/content/${posts?._id}`}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        justifyContent: "flex-start",
+                        position: "relative",
+                      }}
+                    >
+                      <StyledGlassCard elevation={3}>
+                        <CardMedia
+                          component="img"
+                          image={`${process.env.REACT_APP_IMAGE}${posts?.author?.image}`}
+                          alt={`${posts?.name}-${posts?.title}`}
+                          sx={{
+                            width: 70,
+                            borderRight: "1px solid #bbbbbb",
+                          }}
+                        />
+                        <StyledBox>
+                          <StyledCardContent>
+                            <Box sx={{ overflowWrap: "break-word" }}>
+                              <Typography
+                                component="h2"
+                                variant="h6"
+                                color="text.primary"
+                                sx={{
+                                  fontSize: 12,
+                                  wordWrap: "break-word",
+                                  maxWidth: "100%",
+                                }}
+                              >
+                                {posts?.title?.length > 50
+                                  ? posts?.title?.substring(0, 50) + "..."
+                                  : posts?.title}
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <Typography
+                                variant="subtitle1"
+                                color="text.primary"
+                                component="h3"
+                                sx={{ fontSize: 10 }}
+                              >
+                                By {posts?.name}
+                              </Typography>
+                            </Box>
+                          </StyledCardContent>
+                        </StyledBox>
+                      </StyledGlassCard>
+                    </Box>
+                  </Link>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        </StyledPaper>
+      )}
+      {isLoading && (
+        <Skeleton variant="rectangular" sx={{ height: 393, width: 761 }} />
+      )}
     </>
   );
 };
