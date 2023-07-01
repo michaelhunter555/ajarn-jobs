@@ -4,18 +4,18 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useQuery } from "@tanstack/react-query";
 
 import Footer from "../../shared/components/UIElements/Footer";
 import JobAd from "../../shared/components/UIElements/JobAd";
 import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
 import { useHttpClient } from "../../shared/hooks/http-hook";
-//import { useHttpClient } from "../../shared/hooks/http-hook";
-import BlogContent from "../components/BlogContent";
 import BottomFeatured from "../components/BottomFeatured";
 import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
+import FeaturedContentList from "../components/FeaturedContentList";
+import JobContent from "../components/JobContent";
 import RecentJobs from "../components/RecentJobs";
 import SiteFeatures from "../components/SiteFeatures";
-import SponsorsList from "../components/SponsorsList";
 import Tefl from "../components/Tefl";
 import UrgentJobs from "../components/UrgentJobs";
 
@@ -57,7 +57,6 @@ const StyledHomeFeaturedTop = styled("div")(({ theme }) => ({
 const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
   backgroundColor: "rgb(255, 255, 255)",
   gridColumn: "2/3",
-  height: "auto",
   borderRadius: "15px",
   [theme.breakpoints.down("md")]: {
     gridColumn: 1,
@@ -84,7 +83,7 @@ const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
   },
 }));
 
-const StyledHomeFeaturedSponsors = styled("div")(({ theme }) => ({
+const StyledHomeFeaturedContentList = styled("div")(({ theme }) => ({
   textAlign: "center",
   boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
   overflow: "auto",
@@ -127,18 +126,30 @@ const Home = () => {
 
   useEffect(() => {
     const getFeaturedJobs = async () => {
-      const response = await sendRequest("http://localhost:5000/api/jobs");
+      const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
       console.log("FEATURED JOBS HOME.JS:", response.jobs);
       setHomeJobs(response.jobs);
     };
     getFeaturedJobs();
   }, [sendRequest]);
 
+  const getAllContent = async () => {
+    const response = await fetch(`${process.env.REACT_APP_BLOG}`);
+    if (!response.ok) {
+      throw new Error("There was an error trying to get content posts.");
+    }
+    const data = await response.json();
+    return data.blogList;
+  };
+
+  const { data: contentList } = useQuery(["homeContentList"], () =>
+    getAllContent()
+  );
+
   const filterFeaturedJobs = homeJobs?.filter(
     (job) => job?.jobType === "featured"
   );
 
-  //console.log("JOBS DATA:", filterFeaturedJobs);
   const randomFeaturedJob = filterFeaturedJobs
     ? filterFeaturedJobs[Math.floor(Math.random() * filterFeaturedJobs?.length)]
     : null;
@@ -203,11 +214,11 @@ const Home = () => {
         </StyledHomeFeaturedJobs>
         {/* lower middle-column*/}
         <StyledHomeFeaturedContent>
-          <BlogContent />
+          <JobContent />
           {/** {state && <JobDetails />} */}
         </StyledHomeFeaturedContent>
         {/* lower-right column*/}
-        <StyledHomeFeaturedSponsors>
+        <StyledHomeFeaturedContentList>
           {isLoading && (
             <JobAdSkeleton
               sx={{
@@ -218,11 +229,11 @@ const Home = () => {
               variant="rectangular"
             />
           )}
-          {!isLoading && <SponsorsList sponsor={filterFeaturedJobs} />}
+          {!isLoading && <FeaturedContentList posts={contentList} />}
           <Button component={RouterLink} to="/jobs">
             Become a Sponsor
           </Button>
-        </StyledHomeFeaturedSponsors>
+        </StyledHomeFeaturedContentList>
       </StyledGridContainer>
       <div>
         <SiteFeatures />

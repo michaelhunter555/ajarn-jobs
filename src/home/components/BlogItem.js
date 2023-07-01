@@ -33,6 +33,7 @@ const StyledAuthor = styled("p")({
 
 const BlogItem = (props) => {
   const { posts } = props;
+
   return (
     <Card>
       <StyledDiv>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { MdVerified } from 'react-icons/md';
+import { MdVerified } from "react-icons/md";
 
 import {
   Avatar,
@@ -12,8 +12,8 @@ import {
   ListItemText,
   Stack,
   Tooltip,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledList = styled(List)(({ theme }) => ({
   width: "100%",
@@ -47,7 +47,7 @@ const Sponsors = (props) => {
           <ListItemAvatar>
             <StyledAvatar
               alt={props.companyId}
-              src={props.logo}
+              src={props.contentImage}
               variant="square"
             />
           </ListItemAvatar>
@@ -55,8 +55,8 @@ const Sponsors = (props) => {
             <ListItemText
               primary={
                 <>
-                  {props.company}
-                  <Tooltip title={`${props.company} has been verified!`}>
+                  {props.title}
+                  <Tooltip title={`${props.name} has been verified!`}>
                     <IconButton small="true">
                       <MdVerified style={{ color: "#85c3fd" }} size={16} />
                     </IconButton>
@@ -65,7 +65,7 @@ const Sponsors = (props) => {
               }
               secondary={
                 <>
-                  {props.salary} - {props.location}
+                  {props.category} - {props.postDate}
                 </>
               }
             />

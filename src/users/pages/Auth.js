@@ -104,7 +104,16 @@ const Auth = () => {
           }),
           { "Content-type": "application/json" }
         );
-        const { userId, token, image, buffetIsActive, blogPosts } = response;
+        const {
+          userId,
+          token,
+          image,
+          buffetIsActive,
+          blogPosts,
+          resume,
+          coverLetter,
+          incomeDirectory,
+        } = response;
 
         auth.login(
           {
@@ -112,6 +121,9 @@ const Auth = () => {
             image: image,
             buffetIsActive: buffetIsActive,
             blogPosts: blogPosts,
+            resume: resume,
+            coverLetter: coverLetter,
+            incomeDirectory: incomeDirectory,
           },
           token
         );
@@ -134,7 +146,16 @@ const Auth = () => {
           formData
         );
 
-        const { userId, token, image, buffetIsActive, blogPosts } = response;
+        const {
+          userId,
+          token,
+          image,
+          buffetIsActive,
+          blogPosts,
+          resume,
+          coverLetter,
+          incomeDirectory,
+        } = response;
 
         auth.login(
           {
@@ -142,6 +163,9 @@ const Auth = () => {
             image: image,
             buffetIsActive: buffetIsActive,
             blogPosts: blogPosts,
+            resume: resume,
+            coverLetter: coverLetter,
+            incomeDirectory: incomeDirectory,
           },
           token
         );

@@ -50,17 +50,17 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   },
 }));
 
-const SiteFeatures = () => {
-  //arrange items in array of objects
-  const items = [
-    { label: "Jobs", img: Jobs, link: `/jobs` },
-    { label: "Schools", img: SchoolImage, link: `/school` },
-    { label: "Thai Life", img: ThaiLifeTwo, link: `/thai-life` },
-    { label: "Skills Tests", img: SkillsTests, link: `skills-test` },
-    { label: "Interviews", img: Interviews, link: `/interviews` },
-    { label: "Contribute", img: Contribute, link: `/contribute` },
-  ];
+//arrange items in array of objects
+const items = [
+  { label: "Jobs", img: Jobs, link: `/jobs` },
+  { label: "Schools", img: SchoolImage, link: `/school` },
+  { label: "Thai Life", img: ThaiLifeTwo, link: `/thai-life` },
+  { label: "Skills Tests", img: SkillsTests, link: `skills-test` },
+  { label: "Interviews", img: Interviews, link: `/interviews` },
+  { label: "Contribute", img: Contribute, link: `/contribute` },
+];
 
+const SiteFeatures = () => {
   return (
     <StyledBoxWrapper>
       {/*map over items with destructured values */}

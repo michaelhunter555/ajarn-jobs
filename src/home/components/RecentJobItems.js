@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   Avatar,
@@ -8,8 +8,8 @@ import {
   ListItemButton,
   ListItemText,
   Stack,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledList = styled(List)(({ theme }) => ({
   width: "100%",
