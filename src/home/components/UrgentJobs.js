@@ -3,15 +3,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
-import {
-  Card,
-  CardContent,
-  Chip,
-  Link,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { Card, Chip, Link, List, ListItem, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledJobText = styled(Typography)(({ theme }) => ({
@@ -30,27 +22,24 @@ const UrgentJobs = (props) => {
 
   return (
     <Card>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          <Chip
-            label={`Urgent - ${today}`}
-            size={"small"}
-            color="error"
-            icon={<WorkOutlineIcon />}
-          />
-        </Typography>
-        <List>
-          {urgentJobLimit.map((jobs, i) => (
-            <Link key={jobs.id} component={RouterLink} to={`/jobs/${jobs._id}`}>
-              <ListItem key={jobs._id}>
-                <StyledJobText color="text.secondary">
-                  {i + 1}. {jobs.title}
-                </StyledJobText>
-              </ListItem>
-            </Link>
-          ))}
-        </List>
-      </CardContent>
+      <Chip
+        label={`Urgent - ${today}`}
+        size={"small"}
+        color="error"
+        icon={<WorkOutlineIcon />}
+      />
+
+      <List>
+        {urgentJobLimit.map((jobs, i) => (
+          <Link key={jobs.id} component={RouterLink} to={`/jobs/${jobs._id}`}>
+            <ListItem key={jobs._id}>
+              <StyledJobText color="text.secondary">
+                {i + 1}. {jobs.title}
+              </StyledJobText>
+            </ListItem>
+          </Link>
+        ))}
+      </List>
     </Card>
   );
 };

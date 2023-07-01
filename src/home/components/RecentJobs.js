@@ -32,6 +32,7 @@ const StyledPaper = styled(Paper)({
     borderRadius: "4px",
   },
 });
+
 const RecentJobs = (props) => {
   if (props.homeJobs?.length === 0) {
     return (

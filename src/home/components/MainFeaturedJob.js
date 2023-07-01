@@ -8,7 +8,6 @@ import {
   Alert,
   Avatar,
   Box,
-  CardContent,
   Chip,
   Divider,
   Grid,
@@ -27,7 +26,6 @@ import FeaturedJobDetails from "./FeaturedJobDetails";
 
 const StyledPaper = styled(Paper)({
   position: "relative",
-  color: "#002379",
   height: "auto",
   objectFit: "contain",
   backgroundRepeat: "no-repeat",
@@ -37,10 +35,12 @@ const StyledPaper = styled(Paper)({
 
 const StyledBoxContent = styled(Box)({
   display: "flex",
-  justifyContent: "flex-end",
+  justifyContent: "center",
   flexDirection: "column",
-  margin: "0rem 2rem",
+  margin: "1rem 0 0 0",
+  padding: "1rem 2rem",
   height: "auto",
+  borderLeft: "1px solid #e3e3e3",
 });
 
 export const StyledGlassPaper = styled(Paper)(({ theme }) => ({
@@ -49,7 +49,7 @@ export const StyledGlassPaper = styled(Paper)(({ theme }) => ({
   justifyContent: "flex-start",
   position: "relative",
   border: "1px solid rgba(216, 216, 216, 0.5)",
-  color: "black",
+
   fontSize: "16px",
   fontWeight: "bold",
   padding: "0 20px 0 0",
@@ -116,18 +116,18 @@ const StyledContentGrid = styled(Box)({
   },
 });
 
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  flex: "1 0 auto",
-  background: theme.palette.background.glass,
-}));
+// const StyledCardContent = styled(CardContent)(({ theme }) => ({
+//   flex: "1 0 auto",
+//   background: theme.palette.background.glass,
+// }));
 
-const StyledDivider = styled(Divider)(({ theme }) => ({
-  color: "black",
-  position: "relative",
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-  },
-}));
+// const StyledDivider = styled(Divider)(({ theme }) => ({
+//   color: "black",
+//   position: "relative",
+//   [theme.breakpoints.down("sm")]: {
+//     display: "none",
+//   },
+// }));
 
 const MainFeaturedJob = ({ jobs, isLoading }) => {
   const [selectedJob, setSelectedJob] = useState(null);
@@ -148,9 +148,9 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
           }}
         >
           <Grid container>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={4.5}>
               <Alert severity="info">Featured jobs</Alert>
-              <StyledContentGrid item xs={12} md={4}>
+              <StyledContentGrid item xs={12} md={4.5}>
                 {jobs
                   ?.filter((job) => job.jobType === "featured")
                   ?.map((job, i) => (
@@ -177,13 +177,13 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                 spacing={1}
                               >
                                 <Chip
-                                  sx={{ fontSize: 10 }}
+                                  sx={{ fontSize: 11 }}
                                   size="small"
                                   label={job?.location}
                                 />
                                 <Typography
                                   variant="subtitle2"
-                                  sx={{ fontSize: 11 }}
+                                  sx={{ fontSize: 12 }}
                                 >
                                   {job?.datePosted?.split("T")[0]}
                                 </Typography>
@@ -195,8 +195,8 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                               <Typography
                                 variant="body2"
                                 component="span"
-                                color="text.secondary"
-                                sx={{ fontSize: 11 }}
+                                color="text.primary"
+                                sx={{ fontSize: 12 }}
                               >
                                 {job?.hours}
                                 {" — " + job?.salary}
@@ -204,7 +204,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                               <Typography
                                 variant="subtitle2"
                                 color="text.secondary"
-                                sx={{ fontSize: 11 }}
+                                sx={{ fontSize: 12 }}
                               >
                                 {job?.description?.substring(0, 40) + "..."}
                               </Typography>
@@ -226,7 +226,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                 </Stack>
               </StyledContentGrid>
             </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={7.5}>
               <StyledBoxContent>
                 {selectedJob && (
                   <FeaturedJobDetails job={selectedJob} isLoading={isLoading} />

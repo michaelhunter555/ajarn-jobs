@@ -58,6 +58,7 @@ const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
   backgroundColor: "rgb(255, 255, 255)",
   gridColumn: "2/3",
   borderRadius: "15px",
+  overflow: "auto",
   [theme.breakpoints.down("md")]: {
     gridColumn: 1,
     gridRow: 2,
@@ -185,7 +186,7 @@ const Home = () => {
           {isLoading && (
             <JobAdSkeleton
               sx={{
-                height: "150px",
+                height: "130px",
                 borderRadius: "6px",
               }}
               num={1}
@@ -212,11 +213,13 @@ const Home = () => {
             View All Jobs
           </Button>
         </StyledHomeFeaturedJobs>
+
         {/* lower middle-column*/}
         <StyledHomeFeaturedContent>
           <JobContent />
           {/** {state && <JobDetails />} */}
         </StyledHomeFeaturedContent>
+
         {/* lower-right column*/}
         <StyledHomeFeaturedContentList>
           {isLoading && (

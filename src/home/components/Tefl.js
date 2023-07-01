@@ -1,15 +1,7 @@
 import React from "react";
 
 import InfoIcon from "@mui/icons-material/Info";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Chip,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Card, CardContent, Chip, Tooltip, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledTeflCard = styled(Card)({
@@ -40,9 +32,6 @@ const Tefl = (props) => {
           Get Qualified and start Teaching.
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
     </StyledTeflCard>
   );
 };

@@ -1,17 +1,7 @@
 import React, { useContext, useState } from "react";
 
-import {
-  FaClipboardList,
-  FaClock,
-  FaGraduationCap,
-  FaMapMarkerAlt,
-  FaMoneyBill,
-} from "react-icons/fa";
 import { Link as RouterLink } from "react-router-dom";
 
-import BusinessIcon from "@mui/icons-material/Business";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
   Avatar,
   Box,
@@ -30,6 +20,7 @@ import { styled } from "@mui/material/styles";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useUser } from "../../shared/hooks/user-hook";
+import JobRequirements from "./JobRequirements";
 
 const StyledBoxModal = styled(Paper)({
   position: "absolute",
@@ -45,6 +36,27 @@ const StyledBoxModal = styled(Paper)({
   padding: 14,
 });
 
+const StyledBoxContainer = styled(Box)({
+  padding: "0 3rem 0 0 ",
+  overflowY: "auto",
+  maxHeight: 370,
+  pointerEvents: "auto",
+  "&::-webkit-scrollbar": {
+    width: "8px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    background: "#b5b5b5",
+    borderRadius: "4px",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    background: "#8b8b8d",
+  },
+  "&::-webkit-scrollbar-track": {
+    background: "#f1f1f1",
+    borderRadius: "4px",
+  },
+});
+
 const FeaturedJobDetails = ({ job, isLoading }) => {
   const auth = useContext(AuthContext);
   const [open, setOpen] = useState(false);
@@ -58,49 +70,6 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
   const applyJobModalHandler = () => {
     setOpen((prev) => !prev);
   };
-
-  const jobSpecifications = [
-    { text: "Location", icon: <FaMapMarkerAlt />, data: job?.location },
-    {
-      text: "Requirements",
-      icon: <FaGraduationCap />,
-      data: job?.requirements,
-    },
-    { text: "Salary", icon: <FaMoneyBill />, data: job?.salary },
-    {
-      text: "Work Permit",
-      icon: <FaClipboardList />,
-      data: job?.workPermit ? "✅" : "⛔",
-    },
-    { text: "Hours", icon: <FaClock />, data: job?.hours },
-  ];
-
-  const jobInformation = [
-    { variant: "h5", component: "h2", text: job?.title },
-    {
-      variant: "subtitle2",
-      component: "h3",
-      text: <Chip size="small" label={job?.creator?.company} />,
-    },
-    {
-      variant: "subtitle2",
-      component: "h3",
-      icon: <LocationOnIcon size="inherit" />,
-      text: "location " + job?.creator?.headquarters,
-    },
-    {
-      variant: "subtitle2",
-      component: "h3",
-      icon: <BusinessIcon size="inherit" />,
-      text: job?.creator?.companySize + " employees",
-    },
-    {
-      variant: "subtitle2",
-      component: "h3",
-      icon: <VerifiedUserIcon size="inherit" />,
-      text: "established in " + job?.creator?.established,
-    },
-  ];
 
   let userCantApply = true;
 
@@ -121,9 +90,9 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
           size="small"
           sx={{ borderRadius: "17px" }}
           onClick={applyJobModalHandler}
-          variant="outlined"
+          variant="contained"
         >
-          Apply Now
+          Apply
         </Button>
         <Modal open={open} onClose={applyJobModalHandler}>
           <StyledBoxModal>
@@ -213,7 +182,7 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
         sx={{ borderRadius: "17px" }}
         component={RouterLink}
         to="/auth"
-        variant="outlined"
+        variant="contained"
       >
         login/join
       </Button>
@@ -223,14 +192,7 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
-      <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          margin: "0 auto",
-          padding: "0.5rem",
-        }}
-      >
+      <StyledBoxContainer>
         <Grid spacing={2} container direction="column">
           <Grid xs={12} item sx={{ display: "flex", flexDirection: "column" }}>
             {isPostLoading && (
@@ -265,7 +227,11 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
               >
                 {/**grid item 1 */}
                 <Grid item>
-                  <Stack direction="row" alignItems="center" spacing={2}>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-evenly"
+                  >
                     <Avatar
                       variant="circular"
                       src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
@@ -279,14 +245,14 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
                     <Stack direction="column">
                       <Typography>{job?.title}</Typography>
                       <Typography
-                        sx={{ fontSize: 11 }}
+                        sx={{ fontSize: 12 }}
                         varaint="subtitle1"
                         color="text.secondary"
                       >
                         {job?.creator?.company}
                       </Typography>
                       <Typography
-                        sx={{ fontSize: 11 }}
+                        sx={{ fontSize: 12 }}
                         varaint="subtitle1"
                         color="text.secondary"
                       >
@@ -302,9 +268,25 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
                 {/**grid item 3 */}
                 {!isLoading && !isPostLoading && (
                   <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
-                    <Chip label={job?.location} size="small" />
-                    <Typography>{job?.description}</Typography>
-                    <Typography>{job?.creator?.about}</Typography>
+                    <Typography
+                      color="text.primary"
+                      variant="subtitle2"
+                      sx={{ fontSize: 12 }}
+                    >
+                      {job?.creator?.about}
+                    </Typography>
+                    <JobRequirements jobSpecs={job} />
+                    <Stack direction="column" sx={{ margin: "1rem 0" }}>
+                      <Typography variant="h5" color="text.secondary">
+                        Details
+                      </Typography>
+                      <Chip
+                        label={`Job location: ${job?.location}`}
+                        size="small"
+                        sx={{ borderRadius: 0 }}
+                      />
+                      <Typography>{job?.description}</Typography>
+                    </Stack>
                   </Grid>
                 )}
               </Grid>
@@ -357,7 +339,7 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
             </Grid>
           </Grid>
         </Grid>
-      </Box>
+      </StyledBoxContainer>
     </>
   );
 };
