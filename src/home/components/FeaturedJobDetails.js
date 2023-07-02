@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
+import ForwardOutlinedIcon from "@mui/icons-material/ForwardOutlined";
+import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import {
   Avatar,
   Box,
@@ -230,11 +232,7 @@ const FeaturedJobDetails = ({ job }) => {
               >
                 {/**grid item 1 */}
                 <Grid item>
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-evenly"
-                  >
+                  <Stack direction="row" spacing={1}>
                     <Avatar
                       variant="circular"
                       src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
@@ -254,13 +252,20 @@ const FeaturedJobDetails = ({ job }) => {
                       >
                         {job?.creator?.company}
                       </Typography>
-                      <Typography
-                        sx={{ fontSize: 12 }}
-                        varaint="subtitle1"
-                        color="text.secondary"
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        sx={{ flexGrow: 0 }}
                       >
-                        {job?.salary}
-                      </Typography>
+                        <Chip
+                          label={job?.salary}
+                          size="small"
+                          icon={
+                            <PaymentsTwoToneIcon style={{ color: "#1e8d41" }} />
+                          }
+                          sx={{ fontSize: 12 }}
+                        />
+                      </Stack>
                     </Stack>
                     <Stack justifyContent="flex-end">{outlinedButton}</Stack>
                   </Stack>
@@ -272,23 +277,41 @@ const FeaturedJobDetails = ({ job }) => {
                 {!isPostLoading && (
                   <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
                     <Typography
+                      color="text.secondary"
+                      sx={{ fontSize: 11, fontWeight: 600 }}
+                    >
+                      Description:
+                    </Typography>
+                    <Typography
                       color="text.primary"
                       variant="subtitle2"
                       sx={{ fontSize: 12 }}
                     >
                       {job?.creator?.about}
                     </Typography>
+                    <Typography
+                      color="text.secondary"
+                      sx={{ fontSize: 11, fontWeight: 600, margin: "0.5rem 0" }}
+                    >
+                      Specifications:
+                    </Typography>
                     <JobRequirements jobSpecs={job} />
                     <Stack direction="column" sx={{ margin: "1rem 0" }}>
-                      <Typography variant="h5" color="text.secondary">
-                        Details
+                      <Typography
+                        color="text.secondary"
+                        sx={{ fontSize: 11, fontWeight: 600 }}
+                      >
+                        Details:
                       </Typography>
+
                       <Chip
                         label={`Job location: ${job?.location}`}
                         size="small"
-                        sx={{ borderRadius: 0 }}
+                        sx={{ borderRadius: 5 }}
                       />
-                      <Typography>{job?.description}</Typography>
+                      <Typography variant="body2" color="text.primary">
+                        {job?.description}
+                      </Typography>
                     </Stack>
                   </Grid>
                 )}
@@ -313,19 +336,26 @@ const FeaturedJobDetails = ({ job }) => {
                     sx={{
                       display: "flex",
                       flexDirection: "row",
+                      alignItems: "center",
                       width: "100%",
                       flexWrap: "wrap",
+                      gap: "6px",
+                      marginBottom: "1rem",
                     }}
                   >
                     {job?.creator?.presence?.map((item, i) => (
-                      <Chip
-                        key={i}
-                        clickable
-                        label={item}
-                        variant="outlined"
-                        sx={{ margin: "1rem 8px 8px 0" }}
-                      />
+                      <Chip key={i} clickable label={item} variant="outlined" />
                     ))}
+                    <Button
+                      sx={{ borderRadius: "17px" }}
+                      endIcon={<ForwardOutlinedIcon />}
+                      size="small"
+                      variant="outlined"
+                      component={RouterLink}
+                      to={`/jobs/${job._id}`}
+                    >
+                      View Job{" "}
+                    </Button>
                   </Box>
                 </Paper>
               )}

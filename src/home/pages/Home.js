@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import Footer from "../../shared/components/UIElements/Footer";
 import JobAd from "../../shared/components/UIElements/JobAd";
 import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
-import { useHttpClient } from "../../shared/hooks/http-hook";
+//import { useHttpClient } from "../../shared/hooks/http-hook";
 import BottomFeatured from "../components/BottomFeatured";
 import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
 import FeaturedContentList from "../components/FeaturedContentList";
@@ -122,18 +122,7 @@ const StyledTeflWrapper = styled("div")(({ theme }) => ({
 }));
 
 const Home = () => {
-  const { sendRequest } = useHttpClient();
-  const [randomHomeJob, setRandomHomeJob] = useState([]);
-
-  useEffect(() => {
-    const getFeaturedJobs = async () => {
-      const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
-      console.log("FEATURED JOBS HOME.JS:", response.jobs);
-      setRandomHomeJob(response.jobs);
-    };
-    getFeaturedJobs();
-  }, [sendRequest]);
-
+  //GET Jobs for API Cache
   const getJobsData = async () => {
     const response = await fetch(`${process.env.REACT_APP_JOBS}`);
 
@@ -148,6 +137,7 @@ const Home = () => {
     getJobsData()
   );
 
+  //GET all user content for API Cache
   const getAllContent = async () => {
     const response = await fetch(`${process.env.REACT_APP_BLOG}`);
     if (!response.ok) {
@@ -161,10 +151,12 @@ const Home = () => {
     getAllContent()
   );
 
-  const filterFeaturedJobs = randomHomeJob?.filter(
+  //Filter jobs for featured
+  const filterFeaturedJobs = homeJobs?.filter(
     (job) => job?.jobType === "featured"
   );
 
+  //Randomize the job
   const randomFeaturedJob = filterFeaturedJobs
     ? filterFeaturedJobs[Math.floor(Math.random() * filterFeaturedJobs?.length)]
     : null;
@@ -253,7 +245,7 @@ const Home = () => {
             />
           )}
           {!isLoading && <FeaturedContentList posts={contentList} />}
-          <Button component={RouterLink} to="/jobs">
+          <Button component={RouterLink} to="/content">
             Make a post
           </Button>
         </StyledHomeFeaturedContentList>

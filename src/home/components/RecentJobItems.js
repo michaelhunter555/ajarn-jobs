@@ -8,6 +8,7 @@ import {
   ListItemButton,
   ListItemText,
   Stack,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -44,7 +45,17 @@ const RecentJobItems = (props) => {
         </ListItemAvatar>
         <Stack spacing={0}>
           <ListItemText
-            primary={props.salary}
+            primary={
+              <>
+                <Typography
+                  sx={{ fontSize: 13 }}
+                  variant="subtitle2"
+                  color="text.primary"
+                >
+                  {props.salary}
+                </Typography>
+              </>
+            }
             secondary={
               <>
                 {props.location} - {props.creationDate}

@@ -57,7 +57,7 @@ const items = [
   { label: "Thai Life", img: ThaiLifeTwo, link: `/thai-life` },
   { label: "Skills Tests", img: SkillsTests, link: `skills-test` },
   { label: "Interviews", img: Interviews, link: `/interviews` },
-  { label: "Contribute", img: Contribute, link: `/contribute` },
+  { label: "Content", img: Contribute, link: `/content` },
 ];
 
 const SiteFeatures = () => {

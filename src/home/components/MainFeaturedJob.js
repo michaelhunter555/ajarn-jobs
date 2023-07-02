@@ -1,9 +1,10 @@
-import 'animate.css';
+import "animate.css";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import {
   Alert,
   Avatar,
@@ -18,10 +19,10 @@ import {
   Paper,
   Stack,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import FeaturedJobDetails from './FeaturedJobDetails';
+import FeaturedJobDetails from "./FeaturedJobDetails";
 
 const StyledPaper = styled(Paper)({
   position: "relative",
@@ -141,7 +142,9 @@ const StyledContentGrid = styled(Box)({
 // }));
 
 const MainFeaturedJob = ({ jobs, isLoading }) => {
-  const [selectedJob, setSelectedJob] = useState(jobs.length > 0 ?  jobs[0] : null);
+  const [selectedJob, setSelectedJob] = useState(
+    jobs.length > 0 ? jobs[0] : null
+  );
 
   const selectJobHandler = (job) => {
     setSelectedJob(job);
@@ -187,7 +190,10 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                               spacing={1}
                             >
                               <Chip
-                                sx={{ fontSize: 11 }}
+                                icon={<LocationOnOutlinedIcon />}
+                                sx={{
+                                  fontSize: 11,
+                                }}
                                 size="small"
                                 label={job?.location}
                               />

@@ -4,6 +4,8 @@ import { MdVerified } from "react-icons/md";
 
 import {
   Avatar,
+  Box,
+  Chip,
   Divider,
   IconButton,
   List,
@@ -12,6 +14,7 @@ import {
   ListItemText,
   Stack,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -43,7 +46,7 @@ const Sponsors = (props) => {
   return (
     <>
       <StyledList>
-        <ListItemButton alignItems="flex-start">
+        <ListItemButton component="div" alignItems="flex-start">
           <ListItemAvatar>
             <StyledAvatar
               alt={props.companyId}
@@ -53,19 +56,55 @@ const Sponsors = (props) => {
           </ListItemAvatar>
           <Stack spacing={0}>
             <ListItemText
+              component="div"
               primary={
                 <>
-                  {props.title}
-                  <Tooltip title={`${props.name} has been verified!`}>
-                    <IconButton small="true">
-                      <MdVerified style={{ color: "#85c3fd" }} size={16} />
-                    </IconButton>
-                  </Tooltip>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Chip
+                      size="small"
+                      label={props.category}
+                      sx={{ fontSize: "11px" }}
+                    />
+                  </Stack>
                 </>
               }
               secondary={
                 <>
-                  {props.category} - {props.postDate}
+                  <Stack direction="row" alignItems="center">
+                    <Typography
+                      variant="body1"
+                      color="text.primary"
+                      sx={{ fontSize: "12px" }}
+                    >
+                      {props.title}
+                    </Typography>
+                    <Tooltip title={`${props.name} has been verified!`}>
+                      <IconButton small="true">
+                        <MdVerified style={{ color: "#85c3fd" }} size={16} />
+                      </IconButton>
+                    </Tooltip>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      sx={{ fontSize: "11px" }}
+                    >
+                      {props.postDate}
+                    </Typography>
+                  </Stack>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-start",
+                    }}
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      sx={{ fontSize: "12px" }}
+                    >
+                      {props.postContent}
+                    </Typography>
+                  </Box>
                 </>
               }
             />

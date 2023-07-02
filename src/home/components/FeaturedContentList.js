@@ -48,11 +48,11 @@ const FeaturedContentList = (props) => {
             <StyledLink key={post?._id} to={`/content/${post._id}`}>
               <Sponsors
                 contentImage={`${process.env.REACT_APP_IMAGE}${post?.author?.image}`}
-                postContent={post?.postContent?.substring(0, 25) + "..."}
+                postContent={post?.postContent}
                 title={post?.title}
                 name={post?.name}
                 category={post?.category}
-                postDate={post?.postDate}
+                postDate={post?.postDate?.split("T")[0]}
               />
             </StyledLink>
           ))}
