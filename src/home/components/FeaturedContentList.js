@@ -12,10 +12,10 @@ const StyledPaper = styled(Paper)({
   overflowY: "auto",
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {
-    width: "8px",
+    width: "4px",
   },
   "&::-webkit-scrollbar-thumb": {
-    background: "#b5b5b5",
+    background: "#fff",
     borderRadius: "4px",
   },
   "&::-webkit-scrollbar-thumb:hover": {

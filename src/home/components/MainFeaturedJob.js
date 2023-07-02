@@ -1,8 +1,8 @@
-import "animate.css";
+import 'animate.css';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import {
   Alert,
@@ -16,13 +16,12 @@ import {
   ListItemButton,
   ListItemText,
   Paper,
-  Skeleton,
   Stack,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import FeaturedJobDetails from "./FeaturedJobDetails";
+import FeaturedJobDetails from './FeaturedJobDetails';
 
 const StyledPaper = styled(Paper)({
   position: "relative",
@@ -101,10 +100,10 @@ const StyledContentGrid = styled(Box)({
   maxHeight: 360,
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {
-    width: "8px",
+    width: "4px",
   },
   "&::-webkit-scrollbar-thumb": {
-    background: "#b5b5b5",
+    background: "transparent",
     borderRadius: "0px",
   },
   "&::-webkit-scrollbar-thumb:hover": {
@@ -113,6 +112,18 @@ const StyledContentGrid = styled(Box)({
   "&::-webkit-scrollbar-track": {
     background: "#f1f1f1",
     borderRadius: "0px",
+  },
+  "&:hover": {
+    "&::-webkit-scrollbar-thumb": {
+      background: "#b5b5b5",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      transition: "background 1s ease-in",
+      background: "#8b8b8d",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1",
+    },
   },
 });
 
@@ -130,8 +141,7 @@ const StyledContentGrid = styled(Box)({
 // }));
 
 const MainFeaturedJob = ({ jobs, isLoading }) => {
-  const [selectedJob, setSelectedJob] = useState(null);
-  console.log("JOBS - MAIN FEATURED:", jobs);
+  const [selectedJob, setSelectedJob] = useState(jobs.length > 0 ?  jobs[0] : null);
 
   const selectJobHandler = (job) => {
     setSelectedJob(job);
@@ -141,104 +151,98 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
   return (
     <>
       {/*featured post */}
-      {!isLoading && (
-        <StyledPaper
-          sx={{
-            borderRadius: "5px",
-          }}
-        >
-          <Grid container>
-            <Grid item xs={12} md={4.5}>
-              <Alert severity="info">Featured jobs</Alert>
-              <StyledContentGrid item xs={12} md={4.5}>
-                {jobs
-                  ?.filter((job) => job.jobType === "featured")
-                  ?.map((job, i) => (
-                    <List key={job?._id}>
-                      <ListItemButton
-                        sx={{ paddingTop: 0, paddingBottom: 0 }}
-                        component={Link}
-                        key={job?._id}
-                        onClick={() => selectJobHandler(job)}
-                      >
-                        <ListItemAvatar>
-                          <Avatar
-                            src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
-                            alt={`${job?.name}-${job?.title}`}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText
-                          component="div"
-                          primary={
-                            <>
-                              <Stack
-                                direction="row"
-                                alignItems="flex-end"
-                                spacing={1}
-                              >
-                                <Chip
-                                  sx={{ fontSize: 11 }}
-                                  size="small"
-                                  label={job?.location}
-                                />
-                                <Typography
-                                  variant="subtitle2"
-                                  sx={{ fontSize: 12 }}
-                                >
-                                  {job?.datePosted?.split("T")[0]}
-                                </Typography>
-                              </Stack>
-                            </>
-                          }
-                          secondary={
-                            <>
-                              <Typography
-                                variant="body2"
-                                component="span"
-                                color="text.primary"
-                                sx={{ fontSize: 12 }}
-                              >
-                                {job?.hours}
-                                {" — " + job?.salary}
-                              </Typography>
+
+      <StyledPaper
+        sx={{
+          borderRadius: "5px",
+        }}
+      >
+        <Grid container>
+          <Grid item xs={12} md={4.5} order={{ xs: 2, md: 1 }}>
+            <Alert severity="info">Featured jobs</Alert>
+            <StyledContentGrid item xs={12} md={4.5}>
+              {jobs
+                ?.filter((job) => job.jobType === "featured")
+                ?.map((job, i) => (
+                  <List key={job?._id}>
+                    <ListItemButton
+                      sx={{ paddingTop: 0, paddingBottom: 0 }}
+                      component={Link}
+                      key={job?._id}
+                      onClick={() => selectJobHandler(job)}
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                          alt={`${job?.name}-${job?.title}`}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        component="div"
+                        primary={
+                          <>
+                            <Stack
+                              direction="row"
+                              alignItems="flex-end"
+                              spacing={1}
+                            >
+                              <Chip
+                                sx={{ fontSize: 11 }}
+                                size="small"
+                                label={job?.location}
+                              />
                               <Typography
                                 variant="subtitle2"
-                                color="text.secondary"
                                 sx={{ fontSize: 12 }}
                               >
-                                {job?.description?.substring(0, 40) + "..."}
+                                {job?.datePosted?.split("T")[0]}
                               </Typography>
-                            </>
-                          }
-                        />
-                      </ListItemButton>
-                      {i - jobs?.length - 1 && <Divider light />}
-                    </List>
-                  ))}
-                <Stack justifyContent="center" alignItems="center">
-                  <ListItemButton
-                    sx={{ display: "flex", alignItems: "center" }}
-                    component={Link}
-                    to="/jobs/"
-                  >
-                    View all jobs
-                  </ListItemButton>
-                </Stack>
-              </StyledContentGrid>
-            </Grid>
-            <Grid item xs={12} md={7.5}>
-              <StyledBoxContent>
-                {selectedJob && (
-                  <FeaturedJobDetails job={selectedJob} isLoading={isLoading} />
-                )}
-              </StyledBoxContent>
-            </Grid>
+                            </Stack>
+                          </>
+                        }
+                        secondary={
+                          <>
+                            <Typography
+                              variant="body2"
+                              component="span"
+                              color="text.primary"
+                              sx={{ fontSize: 12 }}
+                            >
+                              {job?.hours}
+                              {" — " + job?.salary}
+                            </Typography>
+                            <Typography
+                              variant="subtitle2"
+                              color="text.secondary"
+                              sx={{ fontSize: 12 }}
+                            >
+                              {job?.description?.substring(0, 40) + "..."}
+                            </Typography>
+                          </>
+                        }
+                      />
+                    </ListItemButton>
+                    {i - jobs?.length - 1 && <Divider light />}
+                  </List>
+                ))}
+              <Stack justifyContent="center" alignItems="center">
+                <ListItemButton
+                  sx={{ display: "flex", alignItems: "center" }}
+                  component={Link}
+                  to="/jobs/"
+                >
+                  View all jobs
+                </ListItemButton>
+              </Stack>
+            </StyledContentGrid>
           </Grid>
-        </StyledPaper>
-      )}
-      {isLoading && (
-        <Skeleton variant="rectangular" sx={{ height: 393, width: 761 }} />
-      )}
+          <Grid item xs={12} md={7.5} order={{ xs: 1, md: 2 }}>
+            <StyledBoxContent>
+              {selectedJob && <FeaturedJobDetails job={selectedJob} />}
+            </StyledBoxContent>
+          </Grid>
+        </Grid>
+      </StyledPaper>
     </>
   );
 };

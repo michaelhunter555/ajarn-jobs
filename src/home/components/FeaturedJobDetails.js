@@ -36,28 +36,41 @@ const StyledBoxModal = styled(Paper)({
   padding: 14,
 });
 
-const StyledBoxContainer = styled(Box)({
+const StyledBoxContainer = styled(Box)(({ theme, yScroll }) => ({
   padding: "0 3rem 0 0 ",
   overflowY: "auto",
-  maxHeight: 370,
+  maxHeight: 360,
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {
-    width: "8px",
+    width: "4px",
   },
   "&::-webkit-scrollbar-thumb": {
-    background: "#b5b5b5",
+    background: "transparent",
     borderRadius: "4px",
   },
   "&::-webkit-scrollbar-thumb:hover": {
+    transition: "background 1s ease-in",
     background: "#8b8b8d",
   },
   "&::-webkit-scrollbar-track": {
-    background: "#f1f1f1",
+    background: "transparent",
     borderRadius: "4px",
   },
-});
+  "&:hover": {
+    "&::-webkit-scrollbar-thumb": {
+      background: "#b5b5b5",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      transition: "background 1s ease-in",
+      background: "#8b8b8d",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1",
+    },
+  },
+}));
 
-const FeaturedJobDetails = ({ job, isLoading }) => {
+const FeaturedJobDetails = ({ job }) => {
   const auth = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const { applyToJob, error, clearError, isPostLoading } = useUser();
@@ -206,18 +219,8 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
                 }}
               />
             )}
-            {isLoading && (
-              <Skeleton
-                variant="rectangular"
-                sx={{
-                  borderRadius: "15px",
-                  marginTop: 10,
-                  height: 260,
-                  width: 692,
-                }}
-              />
-            )}
-            {!isLoading && !isPostLoading && (
+
+            {!isPostLoading && (
               <Grid
                 container
                 direction="row"
@@ -266,7 +269,7 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
                 {/**grid item 2 */}
 
                 {/**grid item 3 */}
-                {!isLoading && !isPostLoading && (
+                {!isPostLoading && (
                   <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
                     <Typography
                       color="text.primary"
@@ -302,19 +305,9 @@ const FeaturedJobDetails = ({ job, isLoading }) => {
                 }}
               />
             )}
-            {isLoading && (
-              <Skeleton
-                variant="rectangular"
-                sx={{
-                  borderRadius: "15px",
-                  marginTop: 4,
-                  height: 177,
-                  width: 692,
-                }}
-              />
-            )}
+
             <Grid item>
-              {!isLoading && !isPostLoading && (
+              {!isPostLoading && (
                 <Paper sx={{ padding: 0, borderRadius: "15px" }} elevation={0}>
                   <Box
                     sx={{

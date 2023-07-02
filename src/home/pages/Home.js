@@ -122,17 +122,31 @@ const StyledTeflWrapper = styled("div")(({ theme }) => ({
 }));
 
 const Home = () => {
-  const { isLoading, sendRequest } = useHttpClient();
-  const [homeJobs, setHomeJobs] = useState([]);
+  const { sendRequest } = useHttpClient();
+  const [randomHomeJob, setRandomHomeJob] = useState([]);
 
   useEffect(() => {
     const getFeaturedJobs = async () => {
       const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
       console.log("FEATURED JOBS HOME.JS:", response.jobs);
-      setHomeJobs(response.jobs);
+      setRandomHomeJob(response.jobs);
     };
     getFeaturedJobs();
   }, [sendRequest]);
+
+  const getJobsData = async () => {
+    const response = await fetch(`${process.env.REACT_APP_JOBS}`);
+
+    if (!response.ok) {
+      throw new Error("There was an error with retrieving the jobs Data.");
+    }
+    const data = await response.json();
+    return data.jobs;
+  };
+
+  const { data: homeJobs, isLoading } = useQuery(["homePageJobs"], () =>
+    getJobsData()
+  );
 
   const getAllContent = async () => {
     const response = await fetch(`${process.env.REACT_APP_BLOG}`);
@@ -147,7 +161,7 @@ const Home = () => {
     getAllContent()
   );
 
-  const filterFeaturedJobs = homeJobs?.filter(
+  const filterFeaturedJobs = randomHomeJob?.filter(
     (job) => job?.jobType === "featured"
   );
 
@@ -216,8 +230,14 @@ const Home = () => {
 
         {/* lower middle-column*/}
         <StyledHomeFeaturedContent>
-          <JobContent />
-          {/** {state && <JobDetails />} */}
+          {isLoading && (
+            <JobAdSkeleton
+              num={1}
+              sx={{ height: 400, width: 760 }}
+              variant="rectangular"
+            />
+          )}
+          {!isLoading && <JobContent featuredJobs={homeJobs} />}
         </StyledHomeFeaturedContent>
 
         {/* lower-right column*/}
@@ -234,7 +254,7 @@ const Home = () => {
           )}
           {!isLoading && <FeaturedContentList posts={contentList} />}
           <Button component={RouterLink} to="/jobs">
-            Become a Sponsor
+            Make a post
           </Button>
         </StyledHomeFeaturedContentList>
       </StyledGridContainer>

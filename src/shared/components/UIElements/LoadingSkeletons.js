@@ -1,13 +1,30 @@
 import React from "react";
 
-import { Skeleton } from "@mui/material";
+import { Skeleton, styled } from "@mui/material";
+
+const JobAdSkeletonStyles = styled(Skeleton)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    height: "100%",
+    width: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "100%",
+    width: "100%",
+  },
+}));
 
 //job ad skeleton
 export const JobAdSkeleton = (props) => {
   let skeletons = [];
 
   for (let i = 0; i < props.num; i++) {
-    skeletons.push(<Skeleton sx={props.sx} variant={props.variant} />);
+    if (props.num === 0 || undefined) {
+      props.num = 1;
+    }
+
+    skeletons.push(
+      <JobAdSkeletonStyles sx={props.sx} variant={props.variant} />
+    );
   }
 
   return (
