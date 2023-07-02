@@ -1,4 +1,10 @@
-import React from "react";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+import React, { useContext, useEffect, useState } from "react";
+
+import { EditorState } from "draft-js";
+import { convertToRaw, Editor } from "react-draft-wysiwyg";
+import { useParams } from "react-router-dom";
 
 import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
@@ -6,19 +12,70 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
   Avatar,
+  Box,
   Button,
   Card,
   CardContent,
   Chip,
   Divider,
   Grid,
-  OutlinedInput,
   Paper,
   Stack,
   Typography,
 } from "@mui/material";
 
+import { AuthContext } from "../../shared/context/auth-context";
+import { useComment } from "../../shared/hooks/content-hook";
+import { useForm } from "../../shared/hooks/form-hook";
+
 const BlogPageItem = ({ content }) => {
+  const auth = useContext(AuthContext);
+  const { user } = auth;
+  const blogId = useParams().bid;
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const [toggleEditor, setToggleEditor] = useState(true);
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      postComment: {
+        value: "",
+        isValid: false,
+      },
+    },
+    false
+  );
+  const { addComment, isPostLoading, error, clearError } = useComment();
+
+  useEffect(() => {
+    if (formState.isValid) {
+      setFormData(
+        {
+          postComment: formState.inputs.postComment.value,
+        },
+        true
+      );
+    }
+  });
+
+  const handleCommentSubmit = () => {
+    const contentState = editorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    const comment = JSON.stringify({ postComment: rawContent });
+
+    try {
+      addComment(user?._id, blogId, comment);
+    } catch (err) {}
+
+    if (!error) {
+      setEditorState(Editor.createEmpty());
+    }
+  };
+
+  const handleEditorChange = (newEditorState) => {
+    setEditorState(newEditorState);
+  };
+
   return (
     <Grid
       container
@@ -71,6 +128,8 @@ const BlogPageItem = ({ content }) => {
               <Stack direction="row" alignItems="center" spacing={1}>
                 <CommentIcon color="action" sx={{ fontSize: 20 }} />
                 <Typography
+                  component={Button}
+                  onClick={() => setToggleEditor((prev) => !prev)}
                   color="text.secondary"
                   variant="subtitle2"
                   sx={{ fontSize: 14, fontWeight: 550 }}
@@ -81,14 +140,17 @@ const BlogPageItem = ({ content }) => {
             </Grid>
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <ThumbUpIcon color="action" sx={{ fontSize: 20 }} />
-                <Typography
-                  color="text.secondary"
-                  variant="subtitle2"
-                  sx={{ fontSize: 14, fontWeight: 550 }}
+                <Button
+                  endIcon={<ThumbUpIcon color="action" sx={{ fontSize: 20 }} />}
                 >
-                  0
-                </Typography>
+                  <Typography
+                    color="text.secondary"
+                    variant="subtitle2"
+                    sx={{ fontSize: 14, fontWeight: 550 }}
+                  >
+                    0
+                  </Typography>
+                </Button>
               </Stack>
             </Grid>
             <Grid item>
@@ -124,18 +186,44 @@ const BlogPageItem = ({ content }) => {
             padding: 2,
             display: "flex",
             justifyContent: "center",
+            flexDirection: "column",
             alignItems: "center",
             gap: "3px",
           }}
         >
-          <OutlinedInput
-            sx={{ borderRadius: 1, maxWidth: "80%" }}
-            fullWidth
-            multiline
-            rows={4}
-            id="comment"
-            type="text"
-          />
+          {toggleEditor && (
+            <Box
+              sx={{
+                width: "90%",
+                height: "auto",
+                border: "1px solid f1f1f1",
+                borderRadius: "0 0 8px 8px",
+                backgroundColor: "#f1f1f1",
+              }}
+            >
+              <Editor
+                style={{ padding: "2px" }}
+                editorState={editorState}
+                onEditorStateChange={handleEditorChange}
+              />
+              <Stack direction="row" justifyContent="flex-end">
+                <Button onClick={handleCommentSubmit}>Submit</Button>
+              </Stack>
+            </Box>
+          )}
+          {content?.comments?.length === 0 && (
+            <Typography variant="h4">No comments yet. Be the first!</Typography>
+          )}
+          {content?.comments?.length !== 0 &&
+            content?.comments?.map((comment, i) => (
+              <Card key={comment?.userId}>
+                <Stack>
+                  <Typography>{comment?.userId?.name}</Typography>
+                  <Typography>{comment?.userId?.userType}</Typography>
+                  <Typography>{comment?.userId?.workExperience}</Typography>
+                </Stack>
+              </Card>
+            ))}
         </Paper>
       </Grid>
       {/**sidebar below */}

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import moment from "moment";
-import { Link } from "react-router-dom";
+import moment from 'moment';
+import { Link } from 'react-router-dom';
 
-import CommentIcon from "@mui/icons-material/Comment";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import CommentIcon from '@mui/icons-material/Comment';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import {
   Avatar,
   Box,
@@ -22,16 +22,18 @@ import {
   Paper,
   Stack,
   Typography,
-} from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 
-import RemoteLifestyleImg from "../../assets/contribute.png";
-import { StyledGlassTeflAd } from "../../jobs/pages/UserJobs";
-import BlogFilter from "../components/BlogFilter";
-import BlogPostForm from "../components/BlogPostForm";
+import RemoteLifestyleImg from '../../assets/contribute.png';
+import { StyledGlassTeflAd } from '../../jobs/pages/UserJobs';
+import BlogFilter from '../components/BlogFilter';
+import BlogPostForm from '../components/BlogPostForm';
 
 const AddNewBlogPost = () => {
   const [filter, setFilter] = useState();
+  
+  
   const getAllBlogPosts = async () => {
     const response = await fetch(`${process.env.REACT_APP_BLOG}`);
 

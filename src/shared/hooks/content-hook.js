@@ -9,7 +9,7 @@ export const useContent = () => {
   const { isLoading, postIsLoading, sendRequest, error, clearError } =
     useHttpClient();
 
-  //create a blog post
+  //create a blog post - POST
   const createContentPost = useCallback(
     async (userId, blogPost) => {
       const { title, postContent, category } = blogPost;
@@ -108,5 +108,42 @@ export const useContent = () => {
     createContentPost,
     updateContentPost,
     deleteContentPost,
+  };
+};
+
+export const useComment = () => {
+  const auth = useContext(AuthContext);
+  // const { updateUser } = auth;
+  const { postIsLoading, sendRequest, error, clearError } = useHttpClient();
+
+  //POST Comment
+  const addComment = useCallback(
+    async (userId, blogId, comment) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_BLOG}/add-comment/${userId}/post/${blogId}`,
+          "POST",
+          comment,
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("There was an error creating a comment post.");
+        }
+      } catch (err) {
+        console.log("ERROR FROM USE COMMENT HOOK:", err);
+      }
+    },
+    [sendRequest, auth.token]
+  );
+
+  return {
+    addComment,
+    postIsLoading,
+    error,
+    clearError,
   };
 };
