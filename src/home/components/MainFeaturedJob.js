@@ -33,62 +33,18 @@ const StyledPaper = styled(Paper)({
   verticalAlign: "bottom",
 });
 
-const StyledBoxContent = styled(Box)({
+const StyledBoxContent = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   flexDirection: "column",
   margin: "1rem 0 0 0",
   padding: "1rem 2rem",
   height: "auto",
-  borderLeft: "1px solid #e3e3e3",
-});
-
-export const StyledGlassPaper = styled(Paper)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "flex-start",
-  position: "relative",
-  border: "1px solid rgba(216, 216, 216, 0.5)",
-
-  fontSize: "16px",
-  fontWeight: "bold",
-  padding: "0 20px 0 0",
-  borderRadius: "6px",
-  overflow: "hidden",
-
-  background:
-    "linear-gradient(135deg, hsla(360, 100%, 100%, 0.9), hsla(360, 100%, 100%, 0.9) 9.37%, hsla(360, 100%, 100%, 0.9) 54.69%, hsla(360, 100%, 100%, 0.9) 66.15%, hsla(360, 1000%, 100%, 0.9))",
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    top: "0",
-    left: "-200%",
-    width: "200%",
-    height: "100%",
-    transform: "skewX(-20deg)",
-    backgroundImage:
-      "linear-gradient(90deg, transparent, rgba(98, 250, 255, 0.219), transparent)",
-  },
-  "&:hover::after": {
-    animation: "shine 1s infinite alternate",
-    animationTimingFunction: "cubic-bezier(0, 0.6, 0.5, 0.4)",
-  },
-  "@keyframes shine": {
-    "0%": {
-      left: "-200%",
-    },
-    "60%": {
-      left: "100%",
-    },
-    "100%": {
-      left: "100%",
-    },
-  },
   [theme.breakpoints.down("md")]: {
-    margin: "0.5rem 0.5rem 0",
+    padding: 0,
   },
   [theme.breakpoints.down("sm")]: {
-    margin: "0.5rem 1rem 0",
+    padding: 0,
   },
 }));
 
@@ -98,7 +54,7 @@ const StyledContentGrid = styled(Box)({
   gap: "5px",
   margin: "0rem auto",
   flexDirection: "column",
-  maxHeight: 360,
+  maxHeight: 400,
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {
     width: "4px",
@@ -127,19 +83,6 @@ const StyledContentGrid = styled(Box)({
     },
   },
 });
-
-// const StyledCardContent = styled(CardContent)(({ theme }) => ({
-//   flex: "1 0 auto",
-//   background: theme.palette.background.glass,
-// }));
-
-// const StyledDivider = styled(Divider)(({ theme }) => ({
-//   color: "black",
-//   position: "relative",
-//   [theme.breakpoints.down("sm")]: {
-//     display: "none",
-//   },
-// }));
 
 const MainFeaturedJob = ({ jobs, isLoading }) => {
   const [selectedJob, setSelectedJob] = useState(

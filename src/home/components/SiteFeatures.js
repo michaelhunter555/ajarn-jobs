@@ -54,9 +54,9 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
 const items = [
   { label: "Jobs", img: Jobs, link: `/jobs` },
   { label: "Schools", img: SchoolImage, link: `/school` },
-  { label: "Thai Life", img: ThaiLifeTwo, link: `/thai-life` },
+  { label: "Incomes", img: ThaiLifeTwo, link: `/income-directory` },
   { label: "Skills Tests", img: SkillsTests, link: `skills-test` },
-  { label: "Interviews", img: Interviews, link: `/interviews` },
+  { label: "Teachers", img: Interviews, link: `/teachers` },
   { label: "Content", img: Contribute, link: `/content` },
 ];
 

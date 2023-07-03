@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import moment from 'moment';
-import { Link } from 'react-router-dom';
+import moment from "moment";
+import { Link } from "react-router-dom";
 
-import CommentIcon from '@mui/icons-material/Comment';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import CommentIcon from "@mui/icons-material/Comment";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
   Avatar,
   Box,
   Button,
-  CardMedia,
   Chip,
   CircularProgress,
   Divider,
@@ -22,18 +21,16 @@ import {
   Paper,
   Stack,
   Typography,
-} from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+} from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
-import RemoteLifestyleImg from '../../assets/contribute.png';
-import { StyledGlassTeflAd } from '../../jobs/pages/UserJobs';
-import BlogFilter from '../components/BlogFilter';
-import BlogPostForm from '../components/BlogPostForm';
+import TeflBanner from "../../shared/components/UIElements/TeflBanner";
+import BlogFilter from "../components/BlogFilter";
+import BlogPostForm from "../components/BlogPostForm";
 
 const AddNewBlogPost = () => {
   const [filter, setFilter] = useState();
-  
-  
+
   const getAllBlogPosts = async () => {
     const response = await fetch(`${process.env.REACT_APP_BLOG}`);
 
@@ -101,50 +98,6 @@ const AddNewBlogPost = () => {
     );
   }
 
-  let teflAd = (
-    <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      alignItems="center"
-      sx={{ margin: "1rem auto" }}
-    >
-      <StyledGlassTeflAd>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          sx={{ display: "flex", alignItems: "center", borderRadius: "8px" }}
-        >
-          <CardMedia
-            sx={{ padding: 1 }}
-            component="img"
-            image={RemoteLifestyleImg}
-            alt="temp-lifestyle-tefl"
-          />
-        </Grid>
-        <Grid item xs={12} sm={8} sx={{ margin: "0 0.5rem", padding: 1 }}>
-          <Typography
-            variant="body1"
-            sx={{ fontWeight: 550, color: "#464646" }}
-          >
-            Barvard TEFL - 120 Hour Course{" "}
-            <Chip
-              sx={{ fontSize: 10, borderRadius: "6px" }}
-              label="Ad"
-              size="small"
-            />
-          </Typography>
-
-          <Typography variant="subtitle2" color="text.secondary">
-            Get Qaulified, find work, earn more.
-          </Typography>
-        </Grid>
-      </StyledGlassTeflAd>
-    </Grid>
-  );
-
   return (
     <Grid
       container
@@ -175,7 +128,9 @@ const AddNewBlogPost = () => {
       </Grid>
       <Grid item xs={12} sm={6}>
         <Stack sx={{ margin: "0 2rem" }}>
-          <Box sx={{ width: "50%" }}>{teflAd}</Box>
+          <Box sx={{ width: "50%" }}>
+            <TeflBanner />
+          </Box>
           <BlogFilter onDataChange={handleFilterChange} />
 
           <Grid container>

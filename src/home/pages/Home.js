@@ -23,7 +23,7 @@ const StyledGridContainer = styled("div")(({ theme }) => ({
   display: "grid",
   justifyContent: "center",
   alignItems: "start",
-  gridTemplateColumns: "20% 45% 20%",
+  gridTemplateColumns: "20% 50% 20%",
   gridAutoRows: "auto",
   margin: "6rem 0 2rem 0",
   gap: "6px",
@@ -167,8 +167,19 @@ const Home = () => {
       <StyledGridContainer>
         {/* top-left column*/}
         <StyledTeflWrapper>
-          <Tefl />
+          {!isLoading && <Tefl />}
+          {isLoading && (
+            <JobAdSkeleton
+              sx={{
+                height: "130px",
+                borderRadius: "6px",
+              }}
+              num={1}
+              variant="rectangular"
+            />
+          )}
         </StyledTeflWrapper>
+
         <StyledHomeFeaturedTop>
           {isLoading && (
             <JobAdSkeleton
@@ -225,7 +236,7 @@ const Home = () => {
           {isLoading && (
             <JobAdSkeleton
               num={1}
-              sx={{ height: 400, width: 760 }}
+              sx={{ height: 420, width: 855 }}
               variant="rectangular"
             />
           )}

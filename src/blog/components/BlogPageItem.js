@@ -1,9 +1,11 @@
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "draft-js/dist/Draft.css";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
-import { EditorState } from "draft-js";
-import { convertToRaw, Editor } from "react-draft-wysiwyg";
+import { convertToRaw, EditorState } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import { FaChalkboardTeacher, FaSchool } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 import CommentIcon from "@mui/icons-material/Comment";
@@ -26,7 +28,15 @@ import {
 
 import { AuthContext } from "../../shared/context/auth-context";
 import { useComment } from "../../shared/hooks/content-hook";
-import { useForm } from "../../shared/hooks/form-hook";
+
+const styledComments = {
+  minHeight: "250px",
+  height: "auto",
+  padding: " 0 20px",
+  borderRadius: "0 0 8px 8px",
+  border: "2px solid #dbdbdb",
+  boxSizing: "border-box",
+};
 
 const BlogPageItem = ({ content }) => {
   const auth = useContext(AuthContext);
@@ -36,36 +46,27 @@ const BlogPageItem = ({ content }) => {
     EditorState.createEmpty()
   );
   const [toggleEditor, setToggleEditor] = useState(true);
-  const [formState, inputHandler, setFormData] = useForm(
-    {
-      postComment: {
-        value: "",
-        isValid: false,
-      },
-    },
-    false
-  );
-  const { addComment, isPostLoading, error, clearError } = useComment();
-
-  useEffect(() => {
-    if (formState.isValid) {
-      setFormData(
-        {
-          postComment: formState.inputs.postComment.value,
-        },
-        true
-      );
-    }
-  });
+  const {
+    addComment,
+    comments: userComments,
+    isPostLoading,
+    error,
+    clearError,
+  } = useComment();
 
   const handleCommentSubmit = () => {
     const contentState = editorState.getCurrentContent();
+    //console.log("const contentState =", contentState);
     const rawContent = convertToRaw(contentState);
-    const comment = JSON.stringify({ postComment: rawContent });
+    //console.log("const rawContent =", rawContent.blocks[0].text);
+    const comment = JSON.stringify({ postComment: rawContent.blocks[0].text });
+    //console.log("const comment = ", comment);
 
     try {
       addComment(user?._id, blogId, comment);
-    } catch (err) {}
+    } catch (err) {
+      console.log("HandleCommentSubmit Error - POST:", error);
+    }
 
     if (!error) {
       setEditorState(Editor.createEmpty());
@@ -155,26 +156,34 @@ const BlogPageItem = ({ content }) => {
             </Grid>
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
-                <Typography
-                  color="text.secondary"
-                  variant="subtitle2"
-                  sx={{ fontSize: 14, fontWeight: 550 }}
+                <Button
+                  endIcon={
+                    <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
+                  }
                 >
-                  0
-                </Typography>
+                  <Typography
+                    color="text.secondary"
+                    variant="subtitle2"
+                    sx={{ fontSize: 14, fontWeight: 550 }}
+                  >
+                    0
+                  </Typography>
+                </Button>
               </Stack>
             </Grid>
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography
-                  color="text.secondary"
-                  variant="subtitle2"
-                  sx={{ fontSize: 14, fontWeight: 550 }}
+                <Button
+                  endIcon={<ShareIcon color="action" sx={{ fontSize: 20 }} />}
                 >
-                  Share
-                </Typography>
-                <ShareIcon color="action" sx={{ fontSize: 20 }} />
+                  <Typography
+                    color="text.secondary"
+                    variant="subtitle2"
+                    sx={{ fontSize: 14, fontWeight: 550 }}
+                  >
+                    Share
+                  </Typography>
+                </Button>
               </Stack>
             </Grid>
           </Grid>
@@ -185,44 +194,80 @@ const BlogPageItem = ({ content }) => {
           sx={{
             padding: 2,
             display: "flex",
-            justifyContent: "center",
             flexDirection: "column",
-            alignItems: "center",
             gap: "3px",
           }}
         >
           {toggleEditor && (
             <Box
               sx={{
-                width: "90%",
-                height: "auto",
-                border: "1px solid f1f1f1",
-                borderRadius: "0 0 8px 8px",
-                backgroundColor: "#f1f1f1",
+                width: "100%",
+                ...styledComments,
               }}
             >
               <Editor
-                style={{ padding: "2px" }}
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}
               />
-              <Stack direction="row" justifyContent="flex-end">
-                <Button onClick={handleCommentSubmit}>Submit</Button>
-              </Stack>
             </Box>
           )}
+          <Stack direction="row" justifyContent="flex-end">
+            <Button disabled={!auth.isLoggedIn} onClick={handleCommentSubmit}>
+              Submit
+            </Button>
+          </Stack>
+        </Paper>
+        <Paper
+          elevation={0}
+          sx={{
+            marginTop: "1rem",
+            height: 200,
+            borderRadius: 8,
+            display: "flex",
+            padding: 4,
+          }}
+        >
           {content?.comments?.length === 0 && (
             <Typography variant="h4">No comments yet. Be the first!</Typography>
           )}
           {content?.comments?.length !== 0 &&
             content?.comments?.map((comment, i) => (
-              <Card key={comment?.userId}>
-                <Stack>
-                  <Typography>{comment?.userId?.name}</Typography>
-                  <Typography>{comment?.userId?.userType}</Typography>
-                  <Typography>{comment?.userId?.workExperience}</Typography>
+              <Box
+                key={comment?.userId}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  gap: 3,
+                }}
+              >
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Avatar
+                      sx={{ height: 70, width: 70 }}
+                      alt={`${comment?.userId?.name}-${comment?.userId?.userType}`}
+                      src={`${process.env.REACT_APP_IMAGE}${comment?.userId?.image}`}
+                    />
+                  </Stack>
+                  <Stack alignItems="flex-start">
+                    <Typography>{comment?.userId?.name}</Typography>
+                    <Chip
+                      label={comment?.userId?.userType}
+                      icon={
+                        comment?.userId?.userType === "teacher" ? (
+                          <FaChalkboardTeacher />
+                        ) : (
+                          <FaSchool />
+                        )
+                      }
+                    />
+                    <Typography>
+                      Teacher Exp: {comment?.userId?.workExperience}
+                    </Typography>
+                  </Stack>
                 </Stack>
-              </Card>
+                <Typography>{comment?.comment}</Typography>
+              </Box>
             ))}
         </Paper>
       </Grid>

@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import PaymentsIcon from '@mui/icons-material/Payments';
-import PlaceIcon from '@mui/icons-material/Place';
-import PunchClockIcon from '@mui/icons-material/PunchClock';
+import PaymentsIcon from "@mui/icons-material/Payments";
+import PlaceIcon from "@mui/icons-material/Place";
+import PunchClockIcon from "@mui/icons-material/PunchClock";
 import {
   Card,
   CardActionArea,
@@ -13,8 +13,8 @@ import {
   Chip,
   Grid,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledMediaCard = styled(CardMedia)({
   width: "75%",
@@ -33,6 +33,7 @@ const StyledChipDiv = styled(Typography)(({ theme }) => ({
   flexWrap: "wrap",
   gap: "5px",
   color: theme.palette.text.secondary,
+  marginBottom: "0.5rem",
 }));
 
 const JobAd = (props) => {
@@ -56,7 +57,7 @@ const JobAd = (props) => {
                 <Typography
                   gutterBottom
                   color="primary"
-                  variant="h5"
+                  variant="h6"
                   component="div"
                 >
                   {job?.creator?.company} -{" "}
@@ -84,7 +85,7 @@ const JobAd = (props) => {
                 </StyledChipDiv>
                 <Typography variant="body2" color="text.secondary">
                   {job?.description?.length > 120
-                    ? job?.description.substring(0, 120) + "..."
+                    ? job?.description.substring(0, 150) + "..."
                     : job?.description}
                 </Typography>
               </Grid>

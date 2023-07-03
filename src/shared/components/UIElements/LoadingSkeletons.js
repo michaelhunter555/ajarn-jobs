@@ -1,6 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { Skeleton, styled } from "@mui/material";
+import {
+  Skeleton,
+  styled,
+} from '@mui/material';
 
 const JobAdSkeletonStyles = styled(Skeleton)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
@@ -21,7 +24,6 @@ export const JobAdSkeleton = (props) => {
     if (props.num === 0 || undefined) {
       props.num = 1;
     }
-
     skeletons.push(
       <JobAdSkeletonStyles sx={props.sx} variant={props.variant} />
     );

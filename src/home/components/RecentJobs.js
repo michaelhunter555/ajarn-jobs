@@ -1,27 +1,27 @@
-import React from 'react';
+import React from "react";
 
-import { MdOutlineFiberNew } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { MdOutlineFiberNew } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-import { Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Paper } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import { getTimeDifference } from '../../shared/util/getTimeDifference';
-import RecentJobItems from './RecentJobItems';
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
+import RecentJobItems from "./RecentJobItems";
 
 const StyledTitle = styled("h2")({
   color: "#002379",
 });
 
 const StyledPaper = styled(Paper)({
-  maxHeight: 300,
+  maxHeight: 340,
   overflowY: "auto",
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {
     width: "4px",
   },
   "&::-webkit-scrollbar-thumb": {
-    background: "#fff",
+    background: "transparent",
     borderRadius: "4px",
   },
   "&::-webkit-scrollbar-thumb:hover": {
@@ -30,6 +30,18 @@ const StyledPaper = styled(Paper)({
   "&::-webkit-scrollbar-track": {
     background: "#f1f1f1",
     borderRadius: "4px",
+  },
+  "&:hover": {
+    "&::-webkit-scrollbar-thumb": {
+      background: "#b5b5b5",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      transition: "background 1s ease-in",
+      background: "#8b8b8d",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1",
+    },
   },
 });
 

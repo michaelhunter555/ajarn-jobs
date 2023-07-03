@@ -8,14 +8,14 @@ import { styled } from "@mui/material/styles";
 import Sponsors from "./Sponsors";
 
 const StyledPaper = styled(Paper)({
-  maxHeight: 300,
+  maxHeight: 340,
   overflowY: "auto",
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {
     width: "4px",
   },
   "&::-webkit-scrollbar-thumb": {
-    background: "#fff",
+    background: "transparent",
     borderRadius: "4px",
   },
   "&::-webkit-scrollbar-thumb:hover": {
@@ -24,6 +24,18 @@ const StyledPaper = styled(Paper)({
   "&::-webkit-scrollbar-track": {
     background: "#f1f1f1",
     borderRadius: "4px",
+  },
+  "&:hover": {
+    "&::-webkit-scrollbar-thumb": {
+      background: "#b5b5b5",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      transition: "background 1s ease-in",
+      background: "#8b8b8d",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1",
+    },
   },
 });
 

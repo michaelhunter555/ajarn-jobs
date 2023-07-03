@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 
 import { AuthContext } from "../context/auth-context";
 import { useHttpClient } from "./http-hook";
@@ -111,9 +111,11 @@ export const useContent = () => {
   };
 };
 
+//************UseComment Hook*************
+
 export const useComment = () => {
   const auth = useContext(AuthContext);
-  // const { updateUser } = auth;
+  const [comments, setComments] = useState([]);
   const { postIsLoading, sendRequest, error, clearError } = useHttpClient();
 
   //POST Comment
@@ -129,10 +131,8 @@ export const useComment = () => {
             Authorization: "Bearer " + auth.token,
           }
         );
-
-        if (!response.ok) {
-          throw new Error("There was an error creating a comment post.");
-        }
+        setComments(response.blogComments);
+        console.log("addComments - POST - Response: ", response.blogComments);
       } catch (err) {
         console.log("ERROR FROM USE COMMENT HOOK:", err);
       }
@@ -142,6 +142,7 @@ export const useComment = () => {
 
   return {
     addComment,
+    comments,
     postIsLoading,
     error,
     clearError,

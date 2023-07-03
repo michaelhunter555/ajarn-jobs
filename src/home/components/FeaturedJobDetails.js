@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
+import ElectricBoltOutlinedIcon from "@mui/icons-material/ElectricBoltOutlined";
 import ForwardOutlinedIcon from "@mui/icons-material/ForwardOutlined";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import {
@@ -41,7 +42,7 @@ const StyledBoxModal = styled(Paper)({
 const StyledBoxContainer = styled(Box)(({ theme, yScroll }) => ({
   padding: "0 3rem 0 0 ",
   overflowY: "auto",
-  maxHeight: 360,
+  maxHeight: 400,
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {
     width: "4px",
@@ -102,8 +103,9 @@ const FeaturedJobDetails = ({ job }) => {
     outlinedButton = (
       <>
         <Button
+          endIcon={<ElectricBoltOutlinedIcon />}
           size="small"
-          sx={{ borderRadius: "17px" }}
+          sx={{ borderRadius: "15px" }}
           onClick={applyJobModalHandler}
           variant="contained"
         >
