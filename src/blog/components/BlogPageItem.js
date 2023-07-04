@@ -1,17 +1,26 @@
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "draft-js/dist/Draft.css";
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'draft-js/dist/Draft.css';
 
-import React, { useContext, useState } from "react";
+import React, {
+  useContext,
+  useState,
+} from 'react';
 
-import { convertToRaw, EditorState } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import { FaChalkboardTeacher, FaSchool } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import {
+  convertToRaw,
+  EditorState,
+} from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import {
+  FaChalkboardTeacher,
+  FaSchool,
+} from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
 
-import CommentIcon from "@mui/icons-material/Comment";
-import ShareIcon from "@mui/icons-material/Share";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import CommentIcon from '@mui/icons-material/Comment';
+import ShareIcon from '@mui/icons-material/Share';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import {
   Avatar,
   Box,
@@ -19,18 +28,23 @@ import {
   Card,
   CardContent,
   Chip,
+  CircularProgress,
   Divider,
   Grid,
   Paper,
   Stack,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 
-import { AuthContext } from "../../shared/context/auth-context";
-import { useComment } from "../../shared/hooks/content-hook";
+import { AuthContext } from '../../shared/context/auth-context';
+import {
+  useComment,
+  useContent,
+} from '../../shared/hooks/content-hook';
+import { getTimeDifference } from '../../shared/util/getTimeDifference';
 
 const styledComments = {
-  minHeight: "250px",
   height: "auto",
   padding: " 0 20px",
   borderRadius: "0 0 8px 8px",
@@ -46,36 +60,62 @@ const BlogPageItem = ({ content }) => {
     EditorState.createEmpty()
   );
   const [toggleEditor, setToggleEditor] = useState(true);
+  const [isLiked, setIsLiked] = useState(true);
+  const [isDisliked, setIsDisliked] = useState(true);
+  const { addComment, getComments, error } = useComment();
   const {
-    addComment,
-    comments: userComments,
+    isLoading,
     isPostLoading,
-    error,
-    clearError,
-  } = useComment();
+    likeContentPost,
+    dislikeContentPost,
+    contentPostLikes,
+    contentPostDislikes,
+  } = useContent();
+
+  const {
+    data: usersComments,
+    isLoading: commentsIsLoading,
+    refetch,
+  } = useQuery(["commentsByBlogId", blogId], () => getComments(blogId));
 
   const handleCommentSubmit = () => {
     const contentState = editorState.getCurrentContent();
-    //console.log("const contentState =", contentState);
     const rawContent = convertToRaw(contentState);
-    //console.log("const rawContent =", rawContent.blocks[0].text);
     const comment = JSON.stringify({ postComment: rawContent.blocks[0].text });
-    //console.log("const comment = ", comment);
 
     try {
       addComment(user?._id, blogId, comment);
     } catch (err) {
       console.log("HandleCommentSubmit Error - POST:", error);
     }
-
     if (!error) {
       setEditorState(Editor.createEmpty());
+      refetch();
     }
   };
 
   const handleEditorChange = (newEditorState) => {
     setEditorState(newEditorState);
   };
+
+  const handlePostLike = () => {
+    likeContentPost(blogId, user?._id, isLiked);
+
+    setIsLiked((prev) => !prev);
+  };
+
+  const handlePostDislike = () => {
+    dislikeContentPost(blogId, user?._id, isDisliked);
+    setIsDisliked((prev) => !prev);
+  };
+
+  const commentIndex =
+    content &&
+    content?.interactions?.findIndex(
+      (interaction) => interaction?.userId === user?._id
+    );
+  const usersInteraction = content?.interactions[commentIndex];
+  const userAlreadyLiked = usersInteraction?.like === true;
 
   return (
     <Grid
@@ -98,7 +138,7 @@ const BlogPageItem = ({ content }) => {
           <Stack direction="row" alignItems="center" spacing={1}>
             <Avatar
               sx={{ width: 100, height: 100, margin: "0 2rem" }}
-              alt="dummy_image"
+              alt={`${content?.title}--${content?._id}`}
               src={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
             />
             <Typography variant="h3" component="div">
@@ -141,34 +181,61 @@ const BlogPageItem = ({ content }) => {
             </Grid>
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Button
-                  endIcon={<ThumbUpIcon color="action" sx={{ fontSize: 20 }} />}
-                >
-                  <Typography
-                    color="text.secondary"
-                    variant="subtitle2"
-                    sx={{ fontSize: 14, fontWeight: 550 }}
+                {!isPostLoading && (
+                  <Button
+                    onClick={handlePostLike}
+                    disabled={!auth.isLoggedIn}
+                    endIcon={
+                      <ThumbUpIcon
+                        color={
+                          auth.isLoggedIn && userAlreadyLiked
+                            ? "primary"
+                            : "action"
+                        }
+                        sx={{ fontSize: 20 }}
+                      />
+                    }
                   >
-                    0
-                  </Typography>
-                </Button>
+                    <Typography
+                      color="text.secondary"
+                      variant="subtitle2"
+                      sx={{ fontSize: 14, fontWeight: 550 }}
+                    >
+                      {
+                        content?.interactions?.filter(
+                          (action) => action.like === true
+                        )?.length
+                      }
+                    </Typography>
+                  </Button>
+                )}
+                {isPostLoading && <CircularProgress size="12px" />}
               </Stack>
             </Grid>
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Button
-                  endIcon={
-                    <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
-                  }
-                >
-                  <Typography
-                    color="text.secondary"
-                    variant="subtitle2"
-                    sx={{ fontSize: 14, fontWeight: 550 }}
+                {!isPostLoading && (
+                  <Button
+                    onClick={handlePostDislike}
+                    disabled={!auth.isLoggedIn}
+                    endIcon={
+                      <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
+                    }
                   >
-                    0
-                  </Typography>
-                </Button>
+                    <Typography
+                      color="text.secondary"
+                      variant="subtitle2"
+                      sx={{ fontSize: 14, fontWeight: 550 }}
+                    >
+                      {
+                        content?.interactions?.filter(
+                          (action) => action.dislike === true
+                        )?.length
+                      }
+                    </Typography>
+                  </Button>
+                )}
+                {isPostLoading && <CircularProgress size="12px" />}
               </Stack>
             </Grid>
             <Grid item>
@@ -209,31 +276,41 @@ const BlogPageItem = ({ content }) => {
                 editorState={editorState}
                 onEditorStateChange={handleEditorChange}
               />
+              <Stack direction="row" justifyContent="flex-end">
+                <Button
+                  variant="contained"
+                  sx={{ borderRadius: "20px", marginBottom: "0.5rem" }}
+                  disabled={!auth.isLoggedIn}
+                  onClick={handleCommentSubmit}
+                >
+                  {!auth.isLoggedIn ? "Login" : "Submit"}
+                </Button>
+              </Stack>
             </Box>
           )}
-          <Stack direction="row" justifyContent="flex-end">
-            <Button disabled={!auth.isLoggedIn} onClick={handleCommentSubmit}>
-              Submit
-            </Button>
-          </Stack>
         </Paper>
+        <Divider flexItem light variant="inset" />
         <Paper
           elevation={0}
           sx={{
-            marginTop: "1rem",
-            height: 200,
-            borderRadius: 8,
+            height: content?.comments?.length === 0 ? 200 : "",
             display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
             padding: 4,
+            boxSizing: "border-box",
+            margin: "0 0 5rem 0",
           }}
         >
-          {content?.comments?.length === 0 && (
+          {usersComments?.length === 0 && (
             <Typography variant="h4">No comments yet. Be the first!</Typography>
           )}
-          {content?.comments?.length !== 0 &&
-            content?.comments?.map((comment, i) => (
+          {commentsIsLoading && <CircularProgress />}
+          {!commentsIsLoading &&
+            usersComments?.length !== 0 &&
+            usersComments?.map((comment, i) => (
               <Box
-                key={comment?.userId}
+                key={i}
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -250,9 +327,21 @@ const BlogPageItem = ({ content }) => {
                     />
                   </Stack>
                   <Stack alignItems="flex-start">
-                    <Typography>{comment?.userId?.name}</Typography>
+                    <Stack direction="row" alignItems="center">
+                      <Typography varaint="body1" color="text.primary">
+                        {comment?.userId?.name} ·{" "}
+                      </Typography>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        {getTimeDifference(comment?.commentDate)}
+                      </Typography>
+                    </Stack>
                     <Chip
-                      label={comment?.userId?.userType}
+                      label={`${comment?.userId?.userType}
+                      ${
+                        comment?.userId?.userType === "teacher"
+                          ? " | " + comment?.userId?.workExperience + " years"
+                          : ""
+                      } `}
                       icon={
                         comment?.userId?.userType === "teacher" ? (
                           <FaChalkboardTeacher />
@@ -261,12 +350,12 @@ const BlogPageItem = ({ content }) => {
                         )
                       }
                     />
-                    <Typography>
-                      Teacher Exp: {comment?.userId?.workExperience}
-                    </Typography>
                   </Stack>
                 </Stack>
                 <Typography>{comment?.comment}</Typography>
+                {i - usersComments?.length - 1 && (
+                  <Divider light sx={{ width: "100%", margin: "0.5rem 0" }} />
+                )}
               </Box>
             ))}
         </Paper>

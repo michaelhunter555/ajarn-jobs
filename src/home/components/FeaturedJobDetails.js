@@ -71,6 +71,11 @@ const StyledBoxContainer = styled(Box)(({ theme, yScroll }) => ({
       background: "#f1f1f1",
     },
   },
+  [theme.breakpoints.down("md")]: {
+    maxWidth: "auto",
+    display: "flex",
+    padding: "0 0.5rem",
+  },
 }));
 
 const FeaturedJobDetails = ({ job }) => {

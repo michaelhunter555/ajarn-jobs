@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import FeaturedJobDetails from "./FeaturedJobDetails";
 
 const StyledPaper = styled(Paper)({
@@ -144,7 +145,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                 variant="subtitle2"
                                 sx={{ fontSize: 12 }}
                               >
-                                {job?.datePosted?.split("T")[0]}
+                                {getTimeDifference(job?.datePosted)}
                               </Typography>
                             </Stack>
                           </>

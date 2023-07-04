@@ -209,7 +209,11 @@ const AddNewBlogPost = () => {
                             color="text.secondary"
                             variant="subtitle2"
                           >
-                            {val?.comments?.length}
+                            {
+                              val?.interactions?.filter(
+                                (action) => action?.like === true
+                              )?.length
+                            }
                           </Typography>
                           <ThumbUpIcon color="action" fontSize="small" />
                         </Stack>
@@ -218,7 +222,11 @@ const AddNewBlogPost = () => {
                             color="text.secondary"
                             variant="subtitle2"
                           >
-                            {val?.comments?.length}
+                            {
+                              val?.interactions?.filter(
+                                (action) => action?.dislike === true
+                              )?.length
+                            }
                           </Typography>
                           <ThumbDownIcon color="action" fontSize="small" />
                         </Stack>
