@@ -1,26 +1,17 @@
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import 'draft-js/dist/Draft.css';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "draft-js/dist/Draft.css";
 
-import React, {
-  useContext,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import {
-  convertToRaw,
-  EditorState,
-} from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import {
-  FaChalkboardTeacher,
-  FaSchool,
-} from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { convertToRaw, EditorState } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import { FaChalkboardTeacher, FaSchool } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
-import CommentIcon from '@mui/icons-material/Comment';
-import ShareIcon from '@mui/icons-material/Share';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import CommentIcon from "@mui/icons-material/Comment";
+import ShareIcon from "@mui/icons-material/Share";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
   Avatar,
   Box,
@@ -34,15 +25,12 @@ import {
   Paper,
   Stack,
   Typography,
-} from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+} from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 
-import { AuthContext } from '../../shared/context/auth-context';
-import {
-  useComment,
-  useContent,
-} from '../../shared/hooks/content-hook';
-import { getTimeDifference } from '../../shared/util/getTimeDifference';
+import { AuthContext } from "../../shared/context/auth-context";
+import { useComment, useContent } from "../../shared/hooks/content-hook";
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
 const styledComments = {
   height: "auto",
@@ -52,7 +40,7 @@ const styledComments = {
   boxSizing: "border-box",
 };
 
-const BlogPageItem = ({ content }) => {
+const BlogPageItem = ({ content, refetchLikeState }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const blogId = useParams().bid;
@@ -64,12 +52,14 @@ const BlogPageItem = ({ content }) => {
   const [isDisliked, setIsDisliked] = useState(true);
   const { addComment, getComments, error } = useComment();
   const {
-    isLoading,
-    isPostLoading,
     likeContentPost,
     dislikeContentPost,
-    contentPostLikes,
-    contentPostDislikes,
+    totalLikes,
+    totalDislikes,
+    getTotalLikes,
+    getTotalDislikes,
+    isPostDislikeLoading,
+    isPostLikeLoading,
   } = useContent();
 
   const {
@@ -77,6 +67,19 @@ const BlogPageItem = ({ content }) => {
     isLoading: commentsIsLoading,
     refetch,
   } = useQuery(["commentsByBlogId", blogId], () => getComments(blogId));
+
+  useEffect(() => {
+    if (!isPostLikeLoading || !isPostDislikeLoading) {
+      getTotalLikes(blogId);
+    }
+  }, [getTotalLikes, blogId, isPostLikeLoading, isPostDislikeLoading]);
+  console.log("TotalLikes:", totalLikes);
+
+  useEffect(() => {
+    if (!isPostDislikeLoading || !isPostLikeLoading) {
+      getTotalDislikes(blogId);
+    }
+  }, [getTotalDislikes, blogId, isPostDislikeLoading, isPostLikeLoading]);
 
   const handleCommentSubmit = () => {
     const contentState = editorState.getCurrentContent();
@@ -99,23 +102,49 @@ const BlogPageItem = ({ content }) => {
   };
 
   const handlePostLike = () => {
-    likeContentPost(blogId, user?._id, isLiked);
-
-    setIsLiked((prev) => !prev);
+    likeContentPost(blogId, user?._id, isLiked)
+      .then(() => {
+        refetchLikeState();
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLiked(!isLiked);
+      });
   };
 
   const handlePostDislike = () => {
-    dislikeContentPost(blogId, user?._id, isDisliked);
-    setIsDisliked((prev) => !prev);
+    dislikeContentPost(blogId, user?._id, isDisliked)
+      .then(() => {
+        refetchLikeState();
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsDisliked((prev) => !prev);
+      });
   };
 
-  const commentIndex =
+  //postlike checking
+  const likedPostIndex =
     content &&
     content?.interactions?.findIndex(
       (interaction) => interaction?.userId === user?._id
     );
-  const usersInteraction = content?.interactions[commentIndex];
-  const userAlreadyLiked = usersInteraction?.like === true;
+  const userAlreadyLiked =
+    likedPostIndex !== -1 &&
+    content?.interactions[likedPostIndex]?.like === true;
+
+  //postdislike checking
+  const dislikePostIndex =
+    content &&
+    content?.interactions?.findIndex(
+      (interaction) => interaction?.userId === user?._id
+    );
+
+  const userAlreadyDisliked =
+    dislikePostIndex !== -1 &&
+    content?.interactions[dislikePostIndex]?.dislike === true;
+
+  console.log(userAlreadyDisliked);
 
   return (
     <Grid
@@ -167,25 +196,29 @@ const BlogPageItem = ({ content }) => {
           <Grid container direction="row" justify="center" spacing={2}>
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <CommentIcon color="action" sx={{ fontSize: 20 }} />
-                <Typography
-                  component={Button}
+                <Button
                   onClick={() => setToggleEditor((prev) => !prev)}
-                  color="text.secondary"
-                  variant="subtitle2"
-                  sx={{ fontSize: 14, fontWeight: 550 }}
+                  startIcon={
+                    <CommentIcon color="action" sx={{ fontSize: 20 }} />
+                  }
                 >
-                  {content?.comments?.length} comments
-                </Typography>
+                  <Typography
+                    color="text.secondary"
+                    variant="subtitle2"
+                    sx={{ fontSize: 14, fontWeight: 550 }}
+                  >
+                    {content?.comments?.length} comments
+                  </Typography>
+                </Button>
               </Stack>
             </Grid>
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
-                {!isPostLoading && (
+                {!isPostLikeLoading && (
                   <Button
                     onClick={handlePostLike}
                     disabled={!auth.isLoggedIn}
-                    endIcon={
+                    startIcon={
                       <ThumbUpIcon
                         color={
                           auth.isLoggedIn && userAlreadyLiked
@@ -201,25 +234,31 @@ const BlogPageItem = ({ content }) => {
                       variant="subtitle2"
                       sx={{ fontSize: 14, fontWeight: 550 }}
                     >
-                      {
-                        content?.interactions?.filter(
-                          (action) => action.like === true
-                        )?.length
-                      }
+                      {totalLikes > 1
+                        ? totalLikes + " Likes"
+                        : totalLikes + " Like"}
                     </Typography>
                   </Button>
                 )}
-                {isPostLoading && <CircularProgress size="12px" />}
+                {isPostLikeLoading && <CircularProgress size="12px" />}
               </Stack>
             </Grid>
+
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
-                {!isPostLoading && (
+                {!isPostDislikeLoading && (
                   <Button
                     onClick={handlePostDislike}
                     disabled={!auth.isLoggedIn}
-                    endIcon={
-                      <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
+                    startIcon={
+                      <ThumbDownIcon
+                        color={
+                          auth.isLoggedIn && userAlreadyDisliked
+                            ? "error"
+                            : "action"
+                        }
+                        sx={{ fontSize: 20 }}
+                      />
                     }
                   >
                     <Typography
@@ -227,17 +266,25 @@ const BlogPageItem = ({ content }) => {
                       variant="subtitle2"
                       sx={{ fontSize: 14, fontWeight: 550 }}
                     >
-                      {
-                        content?.interactions?.filter(
-                          (action) => action.dislike === true
-                        )?.length
-                      }
+                      {totalDislikes > 1
+                        ? totalDislikes + " Dislikes"
+                        : totalDislikes + " Dislike"}
                     </Typography>
                   </Button>
                 )}
-                {isPostLoading && <CircularProgress size="12px" />}
+                {isPostDislikeLoading && (
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="center"
+                    sx={{ margin: "0 auto" }}
+                  >
+                    <CircularProgress size="12px" />
+                  </Stack>
+                )}
               </Stack>
             </Grid>
+
             <Grid item>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Button
@@ -283,7 +330,7 @@ const BlogPageItem = ({ content }) => {
                   disabled={!auth.isLoggedIn}
                   onClick={handleCommentSubmit}
                 >
-                  {!auth.isLoggedIn ? "Login" : "Submit"}
+                  {!auth.isLoggedIn ? "Login" : "Comment"}
                 </Button>
               </Stack>
             </Box>
@@ -305,7 +352,18 @@ const BlogPageItem = ({ content }) => {
           {usersComments?.length === 0 && (
             <Typography variant="h4">No comments yet. Be the first!</Typography>
           )}
-          {commentsIsLoading && <CircularProgress />}
+          {commentsIsLoading && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          )}
           {!commentsIsLoading &&
             usersComments?.length !== 0 &&
             usersComments?.map((comment, i) => (
@@ -313,7 +371,7 @@ const BlogPageItem = ({ content }) => {
                 key={i}
                 sx={{
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   flexDirection: "column",
                   gap: 3,
                 }}
@@ -352,7 +410,48 @@ const BlogPageItem = ({ content }) => {
                     />
                   </Stack>
                 </Stack>
+
                 <Typography>{comment?.comment}</Typography>
+
+                <Grid container direction="row" spacing={1} alignItems="center">
+                  <Grid item>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Button
+                        disabled={!auth.isLoggedIn}
+                        endIcon={
+                          <ThumbUpIcon color="action" sx={{ fontSize: 20 }} />
+                        }
+                      >
+                        <Typography
+                          color="text.secondary"
+                          variant="subtitle2"
+                          sx={{ fontSize: 14, fontWeight: 550 }}
+                        >
+                          0
+                        </Typography>
+                      </Button>
+                    </Stack>
+                  </Grid>
+
+                  <Grid item>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Button
+                        disabled={!auth.isLoggedIn}
+                        endIcon={
+                          <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
+                        }
+                      >
+                        <Typography
+                          color="text.secondary"
+                          variant="subtitle2"
+                          sx={{ fontSize: 14, fontWeight: 550 }}
+                        >
+                          0
+                        </Typography>
+                      </Button>
+                    </Stack>
+                  </Grid>
+                </Grid>
                 {i - usersComments?.length - 1 && (
                   <Divider light sx={{ width: "100%", margin: "0.5rem 0" }} />
                 )}

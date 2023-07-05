@@ -1,14 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import BlogPageItem from '../components/BlogPageItem';
+import BlogPageItem from "../components/BlogPageItem";
 
 const BlogPage = () => {
   const blogId = useParams().bid;
-  
 
   const getBlogPostById = async () => {
     const response = await fetch(
@@ -21,11 +20,14 @@ const BlogPage = () => {
     }
     const data = await response.json();
     console.log(data);
+
     return data.blogPost;
   };
-  const { data: content } = useQuery(["blogDetails"], () => getBlogPostById());
+  const { data: content, refetch } = useQuery(["blogDetails"], () =>
+    getBlogPostById()
+  );
 
-  return <BlogPageItem content={content} />;
+  return <BlogPageItem content={content} refetchLikeState={refetch} />;
 };
 
 export default BlogPage;

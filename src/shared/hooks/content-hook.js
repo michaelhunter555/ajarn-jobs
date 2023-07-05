@@ -8,9 +8,41 @@ export const useContent = () => {
   const auth = useContext(AuthContext);
   const [contentPostLikes, setContentPostLikes] = useState(0);
   const [contentPostDislikes, setContentPostDislikes] = useState(0);
+  const [isPostLikeLoading, setIsPostLikeLoading] = useState(false);
+  const [isPostDislikeLoading, setIsPostDislikeLoading] = useState(false);
   const { updateUser } = auth;
   const { isLoading, isPostLoading, sendRequest, error, clearError } =
     useHttpClient();
+  const [totalLikes, setTotalLikes] = useState(0);
+  const [totalDislikes, setTotalDislikes] = useState(0);
+
+  //GET Total likes
+  const getTotalLikes = useCallback(
+    async (blogId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_BLOG}/post/likes/${blogId}`
+        );
+        setTotalLikes(response.postLikeCount);
+        return response.postLikeCount;
+      } catch (err) {}
+    },
+    [sendRequest]
+  );
+
+  //GET Total likes
+  const getTotalDislikes = useCallback(
+    async (blogId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_BLOG}/post/dislikes/${blogId}`
+        );
+        setTotalDislikes(response.postDislikeCount);
+        return response.postDislikeCount;
+      } catch (err) {}
+    },
+    [sendRequest]
+  );
 
   //create a blog post - POST
   const createContentPost = useCallback(
@@ -78,7 +110,7 @@ export const useContent = () => {
   //PATCH like content post
   const likeContentPost = useCallback(
     async (blogId, userId, contentLiked) => {
-      console.log("likedContent before call:", blogId, userId, contentLiked);
+      setIsPostLikeLoading(true);
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_BLOG}/post/${blogId}/like/${userId}`,
@@ -93,8 +125,7 @@ export const useContent = () => {
             Authorization: "Bearer " + auth.token,
           }
         );
-        console.log("likedContent after call:", blogId, userId, contentLiked);
-        console.log("response after call:", response.contentLikes);
+        setIsPostLikeLoading(false);
         setContentPostLikes(response.contentLikes);
       } catch (err) {
         console.log("like content Post Error:", err);
@@ -106,6 +137,7 @@ export const useContent = () => {
   //PATCH dislike content post
   const dislikeContentPost = useCallback(
     async (blogId, userId, contentDisliked) => {
+      setIsPostDislikeLoading(true);
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_BLOG}/post/${blogId}/dislike/${userId}`,
@@ -118,6 +150,7 @@ export const useContent = () => {
             Authorization: "Bearer " + auth.token,
           }
         );
+        setIsPostDislikeLoading(false);
         setContentPostDislikes(response.contentDislikes);
       } catch (err) {
         console.log("dislike Content Post Error:", err);
@@ -157,10 +190,16 @@ export const useContent = () => {
   return {
     isLoading,
     isPostLoading,
+    isPostLikeLoading,
+    isPostDislikeLoading,
     error,
     clearError,
     dislikeContentPost,
     likeContentPost,
+    getTotalLikes,
+    getTotalDislikes,
+    totalLikes,
+    totalDislikes,
     createContentPost,
     contentPostLikes,
     contentPostDislikes,

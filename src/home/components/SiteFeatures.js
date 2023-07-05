@@ -2,7 +2,14 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import Contribute from "../../assets/contribute.png";
@@ -14,6 +21,7 @@ import SkillsTests from "../../assets/skillsTest.png";
 
 const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
+
   flexWrap: "nowrap",
   minWidth: 100,
   margin: "0 0 1rem 0",
@@ -35,6 +43,7 @@ const StyledBoxWrapper = styled(Box)(({ theme }) => ({
 const StyledCardBackground = styled(Card)(({ theme }) => ({
   margin: "0.2rem",
   display: "flex",
+  gap: "1rem",
   flexDirection: "column",
   justifyContent: "flex-start",
   minWidth: 150,
@@ -60,42 +69,74 @@ const items = [
   { label: "Content", img: Contribute, link: `/content` },
 ];
 
-const SiteFeatures = () => {
+const SiteFeatures = ({ isLoading }) => {
   return (
     <StyledBoxWrapper>
-      {/*map over items with destructured values */}
-      {items.map(({ label, img, link }, i) => {
-        return (
-          <Link key={i} to={link}>
-            <StyledCardBackground raised={false}>
-              <CardMedia
-                component="img"
-                image={img}
-                alt={`${label}-card#-${i}`}
-                sx={{ height: 100 }}
-              />
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+      {isLoading ? (
+        Array.from({ length: 6 }).map((_, i) => (
+          <StyledCardBackground raised={false} key={i}>
+            <Skeleton variant="rectangular" height={100} />
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                align="center"
+                component="h3"
+                variant="button"
+                color="text.secondary"
+                sx={{ textDecoration: "none" }}
               >
-                <Typography
-                  align="center"
-                  component="h3"
-                  variant="button"
-                  color="text.secondary"
-                  sx={{ textDecoration: "none" }}
-                >
-                  {label}
-                </Typography>
-              </CardContent>
-            </StyledCardBackground>
-          </Link>
-        );
-      })}
+                <Skeleton variant="text" width={100} />
+              </Typography>
+            </CardContent>
+          </StyledCardBackground>
+        ))
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          {items.map(({ label, img, link }, i) => {
+            return (
+              <Link key={i} to={link}>
+                <StyledCardBackground raised={false}>
+                  <CardMedia
+                    component="img"
+                    image={img}
+                    alt={`${label}-card#-${i}`}
+                    sx={{ height: 100 }}
+                  />
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography
+                      align="center"
+                      component="h3"
+                      variant="button"
+                      color="text.secondary"
+                      sx={{ textDecoration: "none" }}
+                    >
+                      {label}
+                    </Typography>
+                  </CardContent>
+                </StyledCardBackground>
+              </Link>
+            );
+          })}
+        </Box>
+      )}
     </StyledBoxWrapper>
   );
 };

@@ -65,6 +65,7 @@ const FeaturedContentList = (props) => {
                 name={post?.name}
                 category={post?.category}
                 postDate={post?.postDate?.split("T")[0]}
+                userType={post?.author?.userType}
               />
             </StyledLink>
           ))}

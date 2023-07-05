@@ -106,12 +106,7 @@ const AddNewBlogPost = () => {
       spacing={0}
       sx={{ margin: 5, padding: 5 }}
     >
-      <Grid
-        item
-        xs={12}
-        sm={6}
-        sx={{ display: "flex", justifyContent: "center" }}
-      >
+      <Grid item xs={12} sm={6}>
         <Stack direction="column" spacing={1}>
           <Typography variant="h3" color="text.primary">
             Welcome to Ajarn Content!

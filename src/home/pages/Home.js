@@ -26,7 +26,7 @@ const StyledGridContainer = styled("div")(({ theme }) => ({
   gridTemplateColumns: "20% 50% 20%",
   gridAutoRows: "auto",
   margin: "6rem 0 2rem 0",
-  gap: "6px",
+  gap: "15px",
 
   [theme.breakpoints.down("md")]: {
     gridTemplateColumns: "100%",
@@ -56,6 +56,7 @@ const StyledHomeFeaturedTop = styled("div")(({ theme }) => ({
 
 const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
   backgroundColor: "rgb(255, 255, 255)",
+  boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
   gridColumn: "2/3",
   borderRadius: "15px",
   overflow: "auto",
@@ -71,7 +72,7 @@ const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
 
 const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
   textAlign: "center",
-  boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
+  boxShadow: "0 0 5px rgba(112, 180, 247, 0.5)",
   overflow: "auto",
   borderRadius: "5px",
   [theme.breakpoints.down("md")]: {
@@ -86,7 +87,7 @@ const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
 
 const StyledHomeFeaturedContentList = styled("div")(({ theme }) => ({
   textAlign: "center",
-  boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
+  boxShadow: "0 0 5px rgba(112, 180, 247, 0.5)",
   overflow: "auto",
   borderRadius: "5px",
   [theme.breakpoints.down("md")]: {
@@ -111,6 +112,11 @@ const StyledUrgentJobsWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledTeflWrapper = styled("div")(({ theme }) => ({
+  display: "flex",
+  flex: "1 1 auto",
+  flexDirection: "column",
+  alignItems: "stretch",
+
   [theme.breakpoints.down("md")]: {
     gridColumn: 1,
     gridRow: 6,
@@ -262,10 +268,10 @@ const Home = () => {
         </StyledHomeFeaturedContentList>
       </StyledGridContainer>
       <div>
-        <SiteFeatures />
+        <SiteFeatures isLoading={isLoading} />
       </div>
       <div>
-        <BottomFeatured />
+        <BottomFeatured isLoading={isLoading} />
       </div>
       <div>
         <h2 style={{ textAlign: "center" }}>Jobs You may like:</h2>{" "}

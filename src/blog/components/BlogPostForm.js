@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "draft-js/dist/Draft.css";
+
+import React, { useContext, useState } from "react";
+
+import { convertToRaw, EditorState } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
 
 import {
   Box,
@@ -20,12 +26,22 @@ import { useContent } from "../../shared/hooks/content-hook";
 import { useForm } from "../../shared/hooks/form-hook";
 import { blogCategories } from "../../shared/util/ThaiData";
 
+const styledComments = {
+  height: "auto",
+  padding: " 0 20px",
+  borderRadius: "0 0 8px 8px",
+  border: "2px solid #dbdbdb",
+  boxSizing: "border-box",
+};
+
 const BlogPostForm = ({ onBlogPostCreated }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const [toggleForm, setToggleForm] = useState(false);
+  const [toggleForm, setToggleForm] = useState(auth.isLoggedIn);
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
   const { createContentPost, isPostLoading, error, clearError } = useContent();
-
   const [formState, inputHandler, setFormData] = useForm(
     {
       title: {
@@ -44,42 +60,49 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
     false
   );
 
-  useEffect(() => {
-    if (formState.isValid) {
-      setFormData(
-        {
-          title: {
-            value: formState.inputs.title.value,
-            isValid: true,
-          },
-          postContent: {
-            value: formState.inputs.postContent.value,
-            isValid: true,
-          },
-          category: {
-            value: formState.inputs.category.value,
-            isValid: true,
-          },
-        },
-        true
-      );
-    }
-  }, [formState, setFormData]);
+  // useEffect(() => {
+  //   console.log("FORM RE-Rendered");
+  //   if (formState.isValid) {
+  //     const formInputs = {
+  //       title: {
+  //         value: formState.inputs.title.value,
+  //         isValid: true,
+  //       },
+  //       postContent: {
+  //         value: formState.inputs.postContent.value,
+  //         isValid: true,
+  //       },
+  //       category: {
+  //         value: formState.inputs.category.value,
+  //         isValid: true,
+  //       },
+  //     };
+  //     setFormData(formInputs, true);
+  //   }
+  // }, [formState, setFormData]);
+
+  console.log(formState);
 
   const submitContentPostHandler = async (event) => {
     event.preventDefault();
+    const contentState = editorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    const postData = rawContent.blocks[0].text;
 
     const contentPostInputs = {
       title: formState.inputs.title.value,
-      postContent: formState.inputs.postContent.value,
       category: formState.inputs.category.value,
+      postContent: postData,
     };
 
     console.log("blogPostForm Inputs:", contentPostInputs); // check if the inputs are showing
 
     try {
-      createContentPost(user?._id, contentPostInputs);
-      onBlogPostCreated();
+      createContentPost(user?._id, contentPostInputs)
+        .then(() => {
+          onBlogPostCreated();
+        })
+        .catch((err) => console.log(err));
     } catch (error) {
       console.log(`There was an error creating the content post: ${error}`);
     }
@@ -109,6 +132,16 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
 
   const toggleContentFormHandler = () => {
     setToggleForm((prev) => !prev);
+  };
+
+  const handleEditorChange = (newEditorState) => {
+    setEditorState(newEditorState);
+
+    const contentState = newEditorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    const postData = rawContent.blocks[0].text;
+
+    inputHandler("postContent", postData, postData.length >= 7);
   };
 
   return (
@@ -177,7 +210,7 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
 
                 <FormControl>
                   <FormLabel>What would you like to ask or share?</FormLabel>
-                  <TextField
+                  {/* <TextField
                     fullWidth
                     multiline
                     rows={6}
@@ -192,7 +225,19 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
                         event.target.value !== ""
                       )
                     }
-                  ></TextField>
+                  ></TextField> */}
+                  <Box
+                    sx={{
+                      width: "100%",
+                      ...styledComments,
+                    }}
+                  >
+                    <Editor
+                      id="postContent"
+                      editorState={editorState}
+                      onEditorStateChange={handleEditorChange}
+                    />
+                  </Box>
                 </FormControl>
               </Stack>
               <Stack
@@ -204,7 +249,7 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
                 <Button
                   variant="contained"
                   type="submit"
-                  disabled={!formState.isValid}
+                  disabled={!formState.isValid || !auth.isLoggedIn}
                 >
                   Submit
                 </Button>

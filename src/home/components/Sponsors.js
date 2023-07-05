@@ -78,7 +78,9 @@ const Sponsors = (props) => {
                     >
                       {props.title}
                     </Typography>
-                    <Tooltip title={`${props.name} has been verified!`}>
+                    <Tooltip
+                      title={`${props.name} is a ${props.userType} posting`}
+                    >
                       <IconButton small="true">
                         <MdVerified style={{ color: "#85c3fd" }} size={16} />
                       </IconButton>

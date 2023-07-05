@@ -87,7 +87,7 @@ const StyledContentGrid = styled(Box)({
 
 const MainFeaturedJob = ({ jobs, isLoading }) => {
   const [selectedJob, setSelectedJob] = useState(
-    jobs.length > 0 ? jobs[0] : null
+    jobs?.length > 0 ? jobs[0] : null
   );
 
   const selectJobHandler = (job) => {

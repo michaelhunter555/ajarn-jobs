@@ -9,6 +9,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -34,42 +35,74 @@ const StyledBoxContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const StyledText = styled(Typography)({
+const StyledText = styled(Typography)(({ theme }) => ({
   padding: "1rem",
-});
+}));
 
-const BottomFeatured = () => {
+const BottomFeatured = ({ isLoading }) => {
   return (
     <StyledBoxContainer>
-      <Card>
-        <CardContent>
-          <CardMedia component="img" alt="thai-guide" src={ThaiBanner} />
-        </CardContent>
-        <StyledText>
-          First Teaching Job? Learn about your rights as an employee in Kingdom
-          and what you should look out for from employers.
-        </StyledText>
-        <CardActions>
-          <Button component={RouterLink} to="/content">
-            Read More
-          </Button>
-        </CardActions>
-      </Card>
+      {isLoading &&
+        Array.from({ length: 1 }).map((_, i) => (
+          <Card key={i}>
+            <CardContent>
+              <Skeleton width="100%" height={30} />
+            </CardContent>
+            <StyledText sx={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Skeleton width="80%" />
+            </StyledText>
+            <CardActions sx={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Skeleton width="80%" />
+            </CardActions>
+          </Card>
+        ))}
+      {isLoading &&
+        Array.from({ length: 1 }).map((_, i) => (
+          <Card key={i}>
+            <CardContent>
+              <Skeleton width="100%" height={30} />
+            </CardContent>
+            <StyledText sx={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Skeleton width="80%" />
+            </StyledText>
+            <CardActions sx={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Skeleton width="80%" />
+            </CardActions>
+          </Card>
+        ))}
+      {!isLoading && (
+        <Card>
+          <CardContent>
+            <CardMedia component="img" alt="thai-guide" src={ThaiBanner} />
+          </CardContent>
+          <StyledText>
+            First Teaching Job? Learn about your rights as an employee in
+            Kingdom and what you should look out for from employers.
+          </StyledText>
+          <CardActions>
+            <Button component={RouterLink} to="/content">
+              Read More
+            </Button>
+          </CardActions>
+        </Card>
+      )}
 
-      <Card>
-        <CardContent>
-          <CardMedia component="img" alt="thai-guide" src={ThailandIncome} />
-        </CardContent>
-        <StyledText>
-          See what other teachers are making, where they are living and what
-          their daily expenses are. Get a better idea...
-        </StyledText>
-        <CardActions>
-          <Button component={RouterLink} to="/income-directory">
-            Read More
-          </Button>
-        </CardActions>
-      </Card>
+      {!isLoading && (
+        <Card>
+          <CardContent>
+            <CardMedia component="img" alt="thai-guide" src={ThailandIncome} />
+          </CardContent>
+          <StyledText>
+            See what other teachers are making, where they are living and what
+            their daily expenses are. Get a better idea...
+          </StyledText>
+          <CardActions>
+            <Button component={RouterLink} to="/income-directory">
+              Read More
+            </Button>
+          </CardActions>
+        </Card>
+      )}
     </StyledBoxContainer>
   );
 };
