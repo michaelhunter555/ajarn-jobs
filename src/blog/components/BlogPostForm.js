@@ -3,7 +3,9 @@ import "draft-js/dist/Draft.css";
 
 import React, { useContext, useState } from "react";
 
+import DOMPurify from "dompurify";
 import { convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
 
 import {
@@ -87,12 +89,14 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
     event.preventDefault();
     const contentState = editorState.getCurrentContent();
     const rawContent = convertToRaw(contentState);
-    const postData = rawContent.blocks[0].text;
+    const postData = draftToHtml(rawContent);
+
+    const sanitizedPostData = DOMPurify.sanitize(postData);
 
     const contentPostInputs = {
       title: formState.inputs.title.value,
       category: formState.inputs.category.value,
-      postContent: postData,
+      postContent: sanitizedPostData,
     };
 
     console.log("blogPostForm Inputs:", contentPostInputs); // check if the inputs are showing

@@ -3,7 +3,9 @@ import "draft-js/dist/Draft.css";
 
 import React, { useContext, useEffect, useState } from "react";
 
+import DOMPurify from "dompurify";
 import { convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
 import { FaChalkboardTeacher, FaSchool } from "react-icons/fa";
 import { useParams } from "react-router-dom";
@@ -84,16 +86,21 @@ const BlogPageItem = ({ content, refetchLikeState }) => {
   const handleCommentSubmit = () => {
     const contentState = editorState.getCurrentContent();
     const rawContent = convertToRaw(contentState);
-    const comment = JSON.stringify({ postComment: rawContent.blocks[0].text });
+    const commentHtml = draftToHtml(rawContent);
+    const sanitizedComment = DOMPurify.sanitize(commentHtml);
+    const comment = JSON.stringify({ postComment: sanitizedComment });
 
     try {
-      addComment(user?._id, blogId, comment);
+      addComment(user?._id, blogId, comment)
+        .then(() => {
+          refetch();
+        })
+        .catch((err) => console.log(err));
     } catch (err) {
       console.log("HandleCommentSubmit Error - POST:", error);
     }
     if (!error) {
-      setEditorState(Editor.createEmpty());
-      refetch();
+      setEditorState(EditorState.createEmpty());
     }
   };
 
@@ -170,7 +177,7 @@ const BlogPageItem = ({ content, refetchLikeState }) => {
               alt={`${content?.title}--${content?._id}`}
               src={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
             />
-            <Typography variant="h3" component="div">
+            <Typography variant="h4" component="div">
               {content?.title}
             </Typography>
             <Divider orientation="vertical" flexItem />
@@ -191,7 +198,10 @@ const BlogPageItem = ({ content, refetchLikeState }) => {
             </Stack>
           </Stack>
           <CardContent>
-            <Typography variant="body1">{content?.postContent}</Typography>
+            <Typography
+              variant="body1"
+              dangerouslySetInnerHTML={{ __html: content?.postContent }}
+            />
           </CardContent>
           <Grid container direction="row" justify="center" spacing={2}>
             <Grid item>

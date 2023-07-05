@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import moment from "moment";
 import { Link } from "react-router-dom";
+import sanitizeHtml from "sanitize-html";
 
 import CommentIcon from "@mui/icons-material/Comment";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
@@ -25,6 +26,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 import TeflBanner from "../../shared/components/UIElements/TeflBanner";
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import BlogFilter from "../components/BlogFilter";
 import BlogPostForm from "../components/BlogPostForm";
 
@@ -92,7 +94,7 @@ const AddNewBlogPost = () => {
           There are no posts that match your search.
         </Typography>
         <Typography variant="outlined" color="text.secondary">
-          Check back later or get conversation started!
+          Check back later or get the conversation started!
         </Typography>
       </Paper>
     );
@@ -163,7 +165,7 @@ const AddNewBlogPost = () => {
                             <Chip size="small" label={val?.category} />
                           </Stack>
                           <Typography variant="subtitle2">
-                            {val?.postDate?.split("T")[0]}{" "}
+                            {getTimeDifference(val?.postDate)}
                           </Typography>
                         </>
                       }
@@ -172,12 +174,16 @@ const AddNewBlogPost = () => {
                           <Typography
                             sx={{ display: "inline" }}
                             component="span"
-                            variant="body2"
+                            variant="subtitle2"
                             color="text.primary"
                           >
-                            {val?.name}
+                            Posted By {val?.name}
                           </Typography>
-                          {" — " + val?.postContent?.substring(0, 40) + "..."}
+                          {" - "}
+                          {sanitizeHtml(val?.postContent, {
+                            allowedTags: [],
+                            allowedAttributes: {},
+                          }).substring(0, 40) + "..."}
                         </>
                       }
                     />

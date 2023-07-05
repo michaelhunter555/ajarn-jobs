@@ -287,7 +287,7 @@ const FeaturedJobDetails = ({ job }) => {
                       color="text.secondary"
                       sx={{ fontSize: 11, fontWeight: 600 }}
                     >
-                      Description:
+                      About:
                     </Typography>
                     <Typography
                       color="text.primary"

@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import PaymentsIcon from '@mui/icons-material/Payments';
-import PlaceIcon from '@mui/icons-material/Place';
-import PunchClockIcon from '@mui/icons-material/PunchClock';
+import PaymentsIcon from "@mui/icons-material/Payments";
+import PlaceIcon from "@mui/icons-material/Place";
+import PunchClockIcon from "@mui/icons-material/PunchClock";
 import {
   Card,
   CardActionArea,
@@ -15,8 +15,8 @@ import {
   List,
   Stack,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const StyledJobAdCard = styled(Card)(({ theme, featured }) => ({
   backgroundColor: featured ? "#fffef9" : "",
@@ -51,7 +51,7 @@ const JobAdsList = (props) => {
 
   return (
     <>
-      {job.map((school, i) => (
+      {job?.map((school, i) => (
         <List key={school?._id}>
           <Link to={`/jobs/${school?._id}`} style={{ textDecoration: "none" }}>
             <StyledJobAdCard

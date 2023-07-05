@@ -1,6 +1,7 @@
 import React from "react";
 
 import { MdVerified } from "react-icons/md";
+import sanitizeHtml from "sanitize-html";
 
 import {
   Avatar,
@@ -43,6 +44,16 @@ const StyledAvatar = styled(Avatar)({
 });
 
 const Sponsors = (props) => {
+  const sanitizedPostContent = sanitizeHtml(props.postContent, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
+
+  const truncatedContent =
+    sanitizedPostContent.length > 80
+      ? sanitizedPostContent.substring(0, 80) + "..."
+      : sanitizedPostContent;
+
   return (
     <>
       <StyledList>
@@ -104,7 +115,7 @@ const Sponsors = (props) => {
                       color="text.secondary"
                       sx={{ fontSize: "12px" }}
                     >
-                      {props.postContent}
+                      {truncatedContent}
                     </Typography>
                   </Box>
                 </>

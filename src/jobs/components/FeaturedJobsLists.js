@@ -27,7 +27,7 @@ const FeaturedJobsLists = (props) => {
     <StyledFeaturedJobs>
       <h2>Featured jobs:</h2>
       {props?.sponsors
-        .filter((listing) => listing?.jobType === "featured")
+        ?.filter((listing) => listing?.jobType === "featured")
         .map((school) => (
           <Typography
             component={Link}

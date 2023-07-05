@@ -79,8 +79,8 @@ const BottomFeatured = ({ isLoading }) => {
             First Teaching Job? Learn about your rights as an employee in
             Kingdom and what you should look out for from employers.
           </StyledText>
-          <CardActions>
-            <Button component={RouterLink} to="/content">
+          <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button variant="contained" component={RouterLink} to="/content">
               Read More
             </Button>
           </CardActions>
@@ -96,8 +96,12 @@ const BottomFeatured = ({ isLoading }) => {
             See what other teachers are making, where they are living and what
             their daily expenses are. Get a better idea...
           </StyledText>
-          <CardActions>
-            <Button component={RouterLink} to="/income-directory">
+          <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to="/income-directory"
+            >
               Read More
             </Button>
           </CardActions>
