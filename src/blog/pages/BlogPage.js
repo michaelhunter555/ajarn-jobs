@@ -19,15 +19,38 @@ const BlogPage = () => {
       );
     }
     const data = await response.json();
-    console.log(data);
-
     return data.blogPost;
   };
-  const { data: content, refetch } = useQuery(["blogDetails"], () =>
-    getBlogPostById()
+  const {
+    data: content,
+    refetch,
+    isLoading,
+  } = useQuery(["blogDetails"], () => getBlogPostById());
+
+  const getBlogList = async () => {
+    const response = await fetch(`${process.env.REACT_APP_BLOG}`);
+
+    if (!response.ok) {
+      throw new Error(
+        "There was an error retreiving the blog details for this post."
+      );
+    }
+
+    const data = await response.json();
+    return data.blogList;
+  };
+
+  const { data: blogList } = useQuery(["otherContentPosts"], () =>
+    getBlogList()
   );
 
-  return <BlogPageItem content={content} refetchLikeState={refetch} />;
+  return (
+    <BlogPageItem
+      content={content}
+      refetchLikeState={refetch}
+      isLoading={isLoading}
+    />
+  );
 };
 
 export default BlogPage;

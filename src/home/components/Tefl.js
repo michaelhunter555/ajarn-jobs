@@ -28,7 +28,11 @@ const Tefl = (props) => {
 
         <Typography variant="h5">125-Hour TEFL Course</Typography>
 
-        <Typography variant="subtitle2" color="text.secondary">
+        <Typography
+          sx={{ fontSize: "13px" }}
+          variant="subtitle2"
+          color="text.secondary"
+        >
           Get Qualified and start Teaching.
         </Typography>
       </CardContent>

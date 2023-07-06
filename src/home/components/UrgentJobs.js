@@ -7,9 +7,7 @@ import { Card, Chip, Link, List, ListItem, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledJobText = styled(Typography)(({ theme }) => ({
-  fontSize: "16px",
-
-  ...theme.typography.button,
+  fontSize: "14px",
 }));
 
 const UrgentJobs = (props) => {

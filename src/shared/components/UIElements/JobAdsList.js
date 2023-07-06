@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
+import sanitizeHtml from "sanitize-html";
 
 import PaymentsIcon from "@mui/icons-material/Payments";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -48,6 +49,16 @@ const StyledChip = styled(Chip)(({ theme, featured }) => ({
 
 const JobAdsList = (props) => {
   const { job } = props;
+
+  const sanitizedJobPostContent = sanitizeHtml(job?.description, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
+
+  const truncatedDescription =
+    sanitizedJobPostContent.length > 60
+      ? sanitizedJobPostContent.subtring(0, 60) + "..."
+      : sanitizedJobPostContent;
 
   return (
     <>
@@ -125,9 +136,10 @@ const JobAdsList = (props) => {
                         />
                       </StyledChipDiv>
                       <Typography variant="body2" color="text.secondary">
-                        {school?.description.length > 60
-                          ? school?.description.substring(0, 60) + "..."
-                          : school?.description}
+                        {sanitizeHtml(school?.description, {
+                          allowedTags: [],
+                          allowedAttributes: {},
+                        }).substring(0, 60) + "..."}
                       </Typography>
                     </Grid>
                   </Grid>

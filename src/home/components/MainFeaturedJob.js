@@ -3,6 +3,7 @@ import "animate.css";
 import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
+import sanitizeHtml from "sanitize-html";
 
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import {
@@ -166,7 +167,10 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                               color="text.secondary"
                               sx={{ fontSize: 12 }}
                             >
-                              {job?.description?.substring(0, 40) + "..."}
+                              {sanitizeHtml(job?.description, {
+                                allowedTags: [],
+                                allowedAttributes: {},
+                              })?.substring(0, 40) + "..."}
                             </Typography>
                           </>
                         }

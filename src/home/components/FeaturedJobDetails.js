@@ -316,9 +316,11 @@ const FeaturedJobDetails = ({ job }) => {
                         size="small"
                         sx={{ borderRadius: 5 }}
                       />
-                      <Typography variant="body2" color="text.primary">
-                        {job?.description}
-                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.primary"
+                        dangerouslySetInnerHTML={{ __html: job?.description }}
+                      />
                     </Stack>
                   </Grid>
                 )}

@@ -44,7 +44,7 @@ const BottomFeatured = ({ isLoading }) => {
     <StyledBoxContainer>
       {isLoading &&
         Array.from({ length: 1 }).map((_, i) => (
-          <Card key={i}>
+          <Card key={i} sx={{ borderRadius: "18px" }}>
             <CardContent>
               <Skeleton width="100%" height={30} />
             </CardContent>
@@ -58,7 +58,7 @@ const BottomFeatured = ({ isLoading }) => {
         ))}
       {isLoading &&
         Array.from({ length: 1 }).map((_, i) => (
-          <Card key={i}>
+          <Card key={i} sx={{ borderRadius: "18px" }}>
             <CardContent>
               <Skeleton width="100%" height={30} />
             </CardContent>
@@ -71,7 +71,7 @@ const BottomFeatured = ({ isLoading }) => {
           </Card>
         ))}
       {!isLoading && (
-        <Card>
+        <Card sx={{ borderRadius: "18px" }}>
           <CardContent>
             <CardMedia component="img" alt="thai-guide" src={ThaiBanner} />
           </CardContent>
@@ -79,8 +79,13 @@ const BottomFeatured = ({ isLoading }) => {
             First Teaching Job? Learn about your rights as an employee in
             Kingdom and what you should look out for from employers.
           </StyledText>
-          <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="contained" component={RouterLink} to="/content">
+          <CardActions>
+            <Button
+              sx={{ borderRadius: "18px" }}
+              variant="outlined"
+              component={RouterLink}
+              to="/content"
+            >
               Read More
             </Button>
           </CardActions>
@@ -88,7 +93,7 @@ const BottomFeatured = ({ isLoading }) => {
       )}
 
       {!isLoading && (
-        <Card>
+        <Card sx={{ borderRadius: "15px" }}>
           <CardContent>
             <CardMedia component="img" alt="thai-guide" src={ThailandIncome} />
           </CardContent>
@@ -96,9 +101,10 @@ const BottomFeatured = ({ isLoading }) => {
             See what other teachers are making, where they are living and what
             their daily expenses are. Get a better idea...
           </StyledText>
-          <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <CardActions>
             <Button
-              variant="contained"
+              sx={{ borderRadius: "15px" }}
+              variant="outlined"
               component={RouterLink}
               to="/income-directory"
             >

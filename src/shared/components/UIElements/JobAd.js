@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
+import sanitizeHtml from "sanitize-html";
 
 import PaymentsIcon from "@mui/icons-material/Payments";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -38,6 +39,13 @@ const StyledChipDiv = styled(Typography)(({ theme }) => ({
 
 const JobAd = (props) => {
   const { job } = props;
+
+  const sanitizedJobAd = sanitizeHtml(job?.description);
+
+  const truncatedJobDescrition =
+    sanitizedJobAd.length > 120
+      ? sanitizedJobAd.substring(0, 120)
+      : sanitizedJobAd;
 
   return (
     <Link to={`/jobs/${job?._id}`} style={{ textDecoration: "none" }}>
@@ -84,9 +92,7 @@ const JobAd = (props) => {
                   />
                 </StyledChipDiv>
                 <Typography variant="body2" color="text.secondary">
-                  {job?.description?.length > 120
-                    ? job?.description.substring(0, 150) + "..."
-                    : job?.description}
+                  {truncatedJobDescrition}
                 </Typography>
               </Grid>
             </Grid>

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
+import sanitizeHtml from "sanitize-html";
 
 import { Button, Grid, Skeleton, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -410,7 +411,10 @@ const TeacherDashboard = () => {
                   id={jobAd[0]?._id}
                   logo={`${process.env.REACT_APP_IMAGE}${jobAd[0]?.image}`}
                   title={jobAd[0]?.title}
-                  description={jobAd[0]?.description}
+                  description={sanitizeHtml(jobAd[0]?.description, {
+                    allowedTags: [],
+                    allowedAttributes: {},
+                  })}
                 />
               )}
             </Grid>
@@ -442,6 +446,7 @@ const TeacherDashboard = () => {
               display: "flex",
               justifyContet: "flex-start",
               flexDirection: "column",
+              marginBottom: 10,
             }}
           >
             {homeDashLoadingState && (

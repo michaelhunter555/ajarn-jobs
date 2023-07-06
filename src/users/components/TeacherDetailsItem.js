@@ -246,9 +246,12 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
               </Box>
 
               <Divider />
-              <Typography color="text.secondary" variant="subtitle2" paragraph>
-                {teacher?.coverLetter}
-              </Typography>
+              <Typography
+                color="text.secondary"
+                variant="subtitle2"
+                paragraph
+                dangerouslySetInnerHTML={{ __html: teacher?.coverLetter }}
+              />
             </Paper>
           )}
           {isLoading && (

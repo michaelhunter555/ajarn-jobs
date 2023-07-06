@@ -1,35 +1,57 @@
 import React, { useCallback, useContext, useState } from "react";
 
+import DOMPurify from "dompurify";
+import { convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import { Editor } from "react-draft-wysiwyg";
+import sanitizeHtml from "sanitize-html";
+
 import {
+  Box,
   Button,
   Divider,
   Grid,
   Paper,
   Skeleton,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
 
+const styledRichCoverLetterText = {
+  height: "auto",
+  padding: " 0 20px",
+  borderRadius: "0 0 8px 8px",
+  border: "1px solid #eee",
+  boxSizing: "border-box",
+};
+
 const CoverLetter = () => {
   const auth = useContext(AuthContext);
   const { user, updateUser } = auth;
   const [isEditing, setIsEditing] = useState(user?.coverLetter === "");
   const [isLoading, setIsLoading] = useState(false);
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
   const [formState, inputHandler] = useForm(
     {
       coverLetter: {
         value: user.coverLetter || "",
-        isValid: true,
+        isValid: false,
       },
     },
-    true
+    false
   );
 
   const updateCoverLetterHandler = useCallback(async () => {
+    const contentState = editorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    const postData = draftToHtml(rawContent);
+    const sanitizedPostData = DOMPurify.sanitize(postData);
+
     try {
       setIsLoading(true);
       const response = await fetch(
@@ -37,7 +59,7 @@ const CoverLetter = () => {
         {
           method: "PATCH",
           body: JSON.stringify({
-            coverLetter: formState.inputs.coverLetter.value,
+            coverLetter: sanitizedPostData,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -57,15 +79,23 @@ const CoverLetter = () => {
       };
 
       updateUser(updatedCoverLetter);
+      setEditorState(EditorState.createEmpty());
       setIsLoading(false);
       setIsEditing(false);
     } catch (err) {
       console.log("an error has occured in coverLetter update:" + err);
     }
-  }, [user, updateUser, formState.inputs.coverLetter.value]);
+  }, [user, updateUser, editorState]);
 
-  // const temps = !isPostLoading && !isEditing
-  // const skeleton = isPostLoading
+  const handleEditorChange = (content) => {
+    setEditorState(content);
+    const currentContent = editorState.getCurrentContent();
+    const rawContent = convertToRaw(currentContent);
+    const postData = rawContent.blocks[0].text;
+    inputHandler("coverLetter", postData, postData.length >= 5);
+  };
+
+  console.log(formState);
 
   return (
     <>
@@ -110,7 +140,10 @@ const CoverLetter = () => {
                     Cover Letter:
                   </Typography>
                   <Typography variant="body1" color="text.secondary">
-                    {auth.user?.coverLetter}
+                    {sanitizeHtml(auth.user?.coverLetter, {
+                      allowedTags: [],
+                      allowedAttributes: {},
+                    })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -157,7 +190,7 @@ const CoverLetter = () => {
                 <Typography color="text.secondary" variant="h5" component="h2">
                   Cover Letter:
                 </Typography>
-                <TextField
+                {/* <TextField
                   helperText="Write a compelling cover letter for employers to view"
                   multiline={true}
                   fullWidth
@@ -171,12 +204,21 @@ const CoverLetter = () => {
                       event.target.value !== ""
                     )
                   }
-                />
+                /> */}
+                <Box sx={{ ...styledRichCoverLetterText, width: "100%" }}>
+                  <Editor
+                    editorState={editorState}
+                    onEditorStateChange={handleEditorChange}
+                  />
+                </Box>
               </Grid>
             </Grid>
           </Grid>
           <Stack direction="row">
-            <Button onClick={updateCoverLetterHandler}>
+            <Button
+              disabled={!formState.isValid}
+              onClick={updateCoverLetterHandler}
+            >
               {auth.user?.coverLetter ? "Update" : "Save"}
             </Button>
             <Button onClick={() => setIsEditing(false)}>Cancel</Button>

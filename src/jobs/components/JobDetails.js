@@ -444,7 +444,10 @@ const JobDetails = (props) => {
                 </Box>
 
                 <Divider />
-                {job?.description}
+                <Typography
+                  variant="body1"
+                  dangerouslySetInnerHTML={{ __html: job?.description }}
+                />
               </Paper>
             )}
           </Grid>

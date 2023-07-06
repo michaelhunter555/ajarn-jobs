@@ -101,6 +101,7 @@ const SiteFeatures = ({ isLoading }) => {
           sx={{
             display: "flex",
             flexDirection: "row",
+            gap: "1rem",
           }}
         >
           {items.map(({ label, img, link }, i) => {

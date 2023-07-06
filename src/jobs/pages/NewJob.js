@@ -1,36 +1,46 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "draft-js/dist/Draft.css";
+
+import React, { useContext, useEffect, useState } from "react";
+
+import DOMPurify from "dompurify";
+import { convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import { Editor } from "react-draft-wysiwyg";
 
 import {
+  Box,
   FormLabel,
   Grid,
   Modal,
   Paper,
   Skeleton,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import Button from '../../shared/components/FormElements/Button';
-import Input from '../../shared/components/FormElements/Input';
-import CustomModal from '../../shared/components/UIElements/CustomModal';
+import Button from "../../shared/components/FormElements/Button";
+import Input from "../../shared/components/FormElements/Input";
+import CustomModal from "../../shared/components/UIElements/CustomModal";
 //import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useForm } from '../../shared/hooks/form-hook';
-import { useJob } from '../../shared/hooks/jobs-hook';
+import { AuthContext } from "../../shared/context/auth-context";
+import { useForm } from "../../shared/hooks/form-hook";
+import { useJob } from "../../shared/hooks/jobs-hook";
 import {
   coreJobRequirements,
   fullTimeSalaries,
   partTimeSalaries,
   thaiCities,
-} from '../../shared/util/ThaiData';
-import {
-  VALIDATOR_MINLENGTH,
-  VALIDATOR_REQUIRE,
-} from '../../shared/util/validators';
+} from "../../shared/util/ThaiData";
+import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
+
+const styledRichJobText = {
+  height: "auto",
+  padding: " 0 20px",
+  borderRadius: "0 0 8px 8px",
+  border: "2px solid #dbdbdb",
+  boxSizing: "border-box",
+};
 
 const StyledForm = styled("form")({
   listStyle: "none",
@@ -61,6 +71,11 @@ const NewJob = () => {
   const [jobIsBasic, setJobIsBasic] = useState(true);
   const [jobCost, setJobCost] = useState(5);
   const [success, setSuccess] = useState(false);
+
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+
   const [workPermitOffered, setWorkPermitOffered] = useState(true);
   const { addJobByUserId, isPostLoading, error, clearError } = useJob();
   //our onInput props(1,2,3) takes 3 arguments(Refer to Input.js). these values will be used to locate the id, value and validate.
@@ -146,8 +161,12 @@ const NewJob = () => {
 
   const jobSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log("formState:", formState);
-    console.log("formState.inputs:", formState.inputs);
+
+    const contentState = editorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    const postData = draftToHtml(rawContent);
+
+    const sanitizedJobPostData = DOMPurify.sanitize(postData);
 
     //new job data expected fields
     const newJob = {
@@ -157,7 +176,7 @@ const NewJob = () => {
       salary: formState.inputs.salary.value,
       requirements: formState.inputs.requirements.value,
       hours: formState.inputs.hours.value,
-      description: formState.inputs.description.value,
+      description: sanitizedJobPostData,
       workPermit: formState.inputs.workPermit.value,
     };
     //pass userId & object as argument to POST request
@@ -171,6 +190,7 @@ const NewJob = () => {
       await addJobByUserId(auth.user?._id, newJob, jobCost);
       if (!error) {
         setSuccess(true);
+        setEditorState(Editor.createEmpty());
       }
     } catch (err) {
       console.log(err);
@@ -180,6 +200,17 @@ const NewJob = () => {
   const clearModalHandler = () => {
     setSuccess(false);
   };
+
+  //make sure inputs are valid
+  const handleEditorChange = (newEditorState) => {
+    setEditorState(newEditorState);
+    const contentState = newEditorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    const postData = rawContent.blocks[0].text;
+    inputHandler("description", postData, postData.length >= 7);
+  };
+
+  console.log(formState);
 
   return (
     <>
@@ -208,7 +239,7 @@ const NewJob = () => {
       </Modal>
       <CustomModal error={error} handleClose={clearError} />
       {!isPostLoading && (
-        <StyledForm onSubmit={jobSubmitHandler}>
+        <StyledForm onSubmit={jobSubmitHandler} sx={{ marginBottom: 1 }}>
           <Grid container direction="row">
             Total: {jobCost}
             <Grid item xs={12}>
@@ -322,18 +353,14 @@ const NewJob = () => {
                 options={coreJobRequirements}
               />
             </Grid>
-            <Grid item xs={12}>
-              <Input
-                sx={{ width: "100%" }}
-                id="description"
-                rows={4}
-                element="textarea"
-                label="Description"
-                validators={[VALIDATOR_MINLENGTH(7)]}
-                errorText="please enter a valid description of min 7 characters"
-                onInput={inputHandler}
-                type="text"
-              />
+            <Grid item xs={12} sx={{ margin: "0 0 1rem 0 " }}>
+              <Box sx={{ ...styledRichJobText, width: "100%" }}>
+                <Editor
+                  id="description"
+                  editorState={editorState}
+                  onEditorStateChange={handleEditorChange}
+                />
+              </Box>
             </Grid>
           </Grid>
           <Button type="submit" disabled={!formState.isValid}>

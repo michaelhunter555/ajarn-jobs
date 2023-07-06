@@ -1,11 +1,22 @@
 import React from "react";
 
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme, featured }) => ({
   backgroundColor: featured ? "#fffef9" : "#fafafa",
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
+  borderRadius: "18px",
   display: "flex",
   minWidth: "auto",
 
@@ -60,6 +71,18 @@ const BottomFeaturedAds = (props) => {
             {props?.salary} - {props?.hours}
           </Typography>
         </StyledCardContent>
+        <CardActions sx={{ display: "flex", alignItems: "flex-end" }}>
+          <Button
+            sx={{
+              borderRadius: "18px",
+            }}
+            variant="outlined"
+            component={Link}
+            to={`/jobs/${props.id}`}
+          >
+            view
+          </Button>
+        </CardActions>
       </StyledBox>
     </StyledCard>
   );
