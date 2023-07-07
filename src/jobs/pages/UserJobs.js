@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Footer from "../../shared/components/UIElements/Footer";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
 import TeflBanner from "../../shared/components/UIElements/TeflBanner";
@@ -19,7 +20,7 @@ import JobFilters from "../components/JobFilters";
 
 const StyledUserJobsDiv = styled("div")(({ theme }) => ({
   maxWidth: "85%",
-  margin: "5rem auto",
+  margin: "0 auto 3rem",
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "15px",
@@ -235,6 +236,7 @@ const UserJobs = () => {
           {!isLoading && <FeaturedJobsLists sponsors={jobs} />}
         </FeaturedJobListDiv>
       </StyledUserJobsDiv>
+      <Footer />
     </>
   );
 };

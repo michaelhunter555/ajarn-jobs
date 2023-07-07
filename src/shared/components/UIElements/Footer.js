@@ -4,14 +4,14 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import { Box, Grid, Paper, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const FooterStyles = styled(Box)(({ theme }) => ({
+const FooterStyles = styled("footer")(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
+  backgroundColor: theme.palette.background.paper,
   flexDirection: "row",
-  width: "100%",
   borderRadius: "6px 6px 0px 0px",
   bottom: 0,
   margin: "auto 0",
@@ -48,7 +48,7 @@ const Copyright = (props) => {
 
 const Footer = () => {
   return (
-    <FooterStyles component={Paper} elevation={0}>
+    <FooterStyles elevation={0}>
       <Grid container direction="column" justifyContent="flex-start">
         <Copyright />
       </Grid>

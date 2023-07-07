@@ -17,7 +17,6 @@ import ThaiLifeTwo from "../../assets/geoff-greenwood-rH1aA4TqGms-unsplash.jpg";
 import Interviews from "../../assets/interviews.png";
 import Jobs from "../../assets/mario-heller-hXLkFpvKRys-unsplash.jpg";
 import SchoolImage from "../../assets/sangga-rima-roman-selia-bgQgAKagQB4-unsplash.jpg";
-import SkillsTests from "../../assets/skillsTest.png";
 
 const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -33,10 +32,12 @@ const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     minWidth: "unset",
     paddingLeft: "7.5rem",
+    paddingRight: "1rem",
   },
   [theme.breakpoints.down("sm")]: {
     minWidth: "unset",
-    paddingLeft: "22.5rem",
+    paddingLeft: "15.5rem",
+    paddingRight: "1rem",
   },
 }));
 
@@ -64,7 +65,6 @@ const items = [
   { label: "Jobs", img: Jobs, link: `/jobs` },
   { label: "Schools", img: SchoolImage, link: `/school` },
   { label: "Incomes", img: ThaiLifeTwo, link: `/income-directory` },
-  { label: "Skills Tests", img: SkillsTests, link: `skills-test` },
   { label: "Teachers", img: Interviews, link: `/teachers` },
   { label: "Content", img: Contribute, link: `/content` },
 ];
@@ -73,7 +73,7 @@ const SiteFeatures = ({ isLoading }) => {
   return (
     <StyledBoxWrapper>
       {isLoading ? (
-        Array.from({ length: 6 }).map((_, i) => (
+        Array.from({ length: 5 }).map((_, i) => (
           <StyledCardBackground raised={false} key={i}>
             <Skeleton variant="rectangular" height={100} />
             <CardContent

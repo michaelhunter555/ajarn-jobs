@@ -15,6 +15,7 @@ export const useJob = () => {
     try {
       const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
       setJobs(response.jobs);
+      return response.jobs;
     } catch {}
   }, [sendRequest]);
 
@@ -75,6 +76,7 @@ export const useJob = () => {
           `${process.env.REACT_APP_JOBS}/${jobId}`
         );
         setJobs(response.job);
+        return response.job;
       } catch (err) {}
     },
     [sendRequest]

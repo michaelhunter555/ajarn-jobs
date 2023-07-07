@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
-
 import {
   Box,
   Button,
@@ -51,20 +49,24 @@ const BottomFeaturedAds = (props) => {
       />
       <StyledBox>
         <StyledCardContent>
-          <Typography component="div" variant="h5">
+          <Typography
+            component="div"
+            variant="h5"
+            sx={{ fontSize: 15, fontWeight: 600 }}
+          >
             {props?.title.trim().length > 20
               ? props.title.substring(0, 20) + "..."
               : props.title}
           </Typography>
           <Typography
-            variant="subtitle1"
+            variant="subtitle2"
             color="text.secondary"
             component="div"
           >
             {props?.location}
           </Typography>
           <Typography
-            variant="subtitle1"
+            variant="subtitle2"
             color="text.secondary"
             component="div"
           >
@@ -77,8 +79,6 @@ const BottomFeaturedAds = (props) => {
               borderRadius: "18px",
             }}
             variant="outlined"
-            component={Link}
-            to={`/jobs/${props.id}`}
           >
             view
           </Button>

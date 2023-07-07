@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import CustomModal from "../../shared/components/UIElements/CustomModal";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Footer from "../../shared/components/UIElements/Footer";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import TeacherFilter from "../components/TeacherFilter";
@@ -47,11 +48,10 @@ const Teachers = () => {
   } = useQuery(["teachers"], () => getTeachers());
 
   useEffect(() => {
-    if (!auth.isLoggedIn || !auth.user.buffetIsActive) {
+    if (!auth.isLoggedIn || !auth.user?.buffetIsActive) {
       setBlur(true);
       return;
     }
-
     const checkUserBuffetStatus = async () => {
       try {
         const response = await fetch(
@@ -107,7 +107,7 @@ const Teachers = () => {
       )}
       <ErrorModal onClear={clearError} error={error} />
       <ThemeProvider theme={customThemeForTeachers}>
-        <Grid container spacing={3} sx={{ width: "90%", marginTop: "3.5rem" }}>
+        <Grid container spacing={3} sx={{ width: "90%", margin: "0 0 2rem 0" }}>
           <Grid item xs={12} xl={3}>
             {isLoading && (
               <Skeleton
@@ -124,6 +124,7 @@ const Teachers = () => {
           </Grid>
         </Grid>
       </ThemeProvider>
+      <Footer />
     </>
   );
 };

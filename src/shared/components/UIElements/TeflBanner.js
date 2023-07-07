@@ -81,6 +81,7 @@ const TeflBanner = () => {
         </Grid>
         <Grid item xs={12} sm={8} sx={{ margin: "0 0.5rem", padding: 1 }}>
           <Typography
+            component="div"
             variant="body1"
             sx={{ fontWeight: 550, color: "#464646" }}
           >

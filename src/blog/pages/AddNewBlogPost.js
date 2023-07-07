@@ -5,6 +5,7 @@ import moment from "moment";
 import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
+import Footer from "../../shared/components/UIElements/Footer";
 import TeflBanner from "../../shared/components/UIElements/TeflBanner";
 import BlogFilter from "../components/BlogFilter";
 import BlogPostForm from "../components/BlogPostForm";
@@ -57,41 +58,44 @@ const AddNewBlogPost = () => {
     });
 
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      spacing={0}
-      sx={{ margin: 5, padding: 5 }}
-    >
-      <Grid item xs={12} sm={6}>
-        <Stack direction="column" spacing={1}>
-          <Typography variant="h3" color="text.primary">
-            Welcome to Ajarn Content!
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Here you will find user submitted posts and questions
-          </Typography>
-          <Typography variant="subtitle2" color="text.secondary">
-            As always due your due dillegence as an online netizen
-          </Typography>
-          <Divider />
-          <BlogPostForm onBlogPostCreated={incomingBlogPostHandler} />
-        </Stack>
+    <>
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        spacing={0}
+        sx={{ margin: "0 auto", padding: 5 }}
+      >
+        <Grid item xs={12} sm={6}>
+          <Stack direction="column" spacing={1}>
+            <Typography variant="h3" color="text.primary">
+              Welcome to Ajarn Content!
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Here you will find user submitted posts and questions
+            </Typography>
+            <Typography variant="subtitle2" color="text.secondary">
+              As always due your due dillegence as an online netizen
+            </Typography>
+            <Divider />
+            <BlogPostForm onBlogPostCreated={incomingBlogPostHandler} />
+          </Stack>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Stack sx={{ margin: "0 2rem" }}>
+            <Box sx={{ width: "50%" }}>
+              <TeflBanner />
+            </Box>
+            <BlogFilter onDataChange={handleFilterChange} />
+            <ContentPostList
+              isLoading={isLoading}
+              filteredContent={filteredContent}
+            />
+          </Stack>
+        </Grid>
       </Grid>
-      <Grid item xs={12} sm={6}>
-        <Stack sx={{ margin: "0 2rem" }}>
-          <Box sx={{ width: "50%" }}>
-            <TeflBanner />
-          </Box>
-          <BlogFilter onDataChange={handleFilterChange} />
-          <ContentPostList
-            isLoading={isLoading}
-            filteredContent={filteredContent}
-          />
-        </Stack>
-      </Grid>
-    </Grid>
+      <Footer />
+    </>
   );
 };
 

@@ -25,7 +25,7 @@ const StyledGridContainer = styled("div")(({ theme }) => ({
   alignItems: "start",
   gridTemplateColumns: "20% 50% 20%",
   gridAutoRows: "auto",
-  margin: "6rem 0 2rem 0",
+  margin: "0rem 0 2rem 0",
   gap: "15px",
 
   [theme.breakpoints.down("md")]: {
@@ -277,7 +277,7 @@ const Home = () => {
         <h2 style={{ textAlign: "center" }}>Jobs You may like:</h2>{" "}
         <BottomFeaturedAdsList isLoading={isLoading} footerJobs={homeJobs} />
       </div>
-      <div style={{ margin: "0 auto" }}>
+      <div>
         <Footer />
       </div>
     </>

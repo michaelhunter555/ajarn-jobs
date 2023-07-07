@@ -14,15 +14,16 @@ const TeacherDetails = () => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
-    try {
-      const getUserData = async () => {
+    const getUserData = async () => {
+      try {
         const response = await sendRequest(
           `${process.env.REACT_APP_USERS}/${userId}`
         );
         setUserData(response.user);
-      };
-      getUserData();
-    } catch (err) {}
+        return response.user;
+      } catch (err) {}
+    };
+    getUserData();
   }, [userId, sendRequest]);
 
   return (

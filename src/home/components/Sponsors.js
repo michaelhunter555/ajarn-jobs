@@ -56,9 +56,9 @@ const Sponsors = (props) => {
 
   return (
     <>
-      <StyledList>
+      <StyledList component="div">
         <ListItemButton component="div" alignItems="flex-start">
-          <ListItemAvatar>
+          <ListItemAvatar component="div">
             <StyledAvatar
               alt={props.companyId}
               src={props.contentImage}
@@ -72,17 +72,27 @@ const Sponsors = (props) => {
                 <>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Chip
+                      component="div"
                       size="small"
                       label={props.category}
                       sx={{ fontSize: "11px" }}
                     />
+                    <Typography
+                      component="div"
+                      variant="subtitle2"
+                      color="text.secondary"
+                      sx={{ fontSize: "11px", flexWrap: "nowrap" }}
+                    >
+                      {props.postDate}
+                    </Typography>
                   </Stack>
                 </>
               }
               secondary={
                 <>
-                  <Stack direction="row" alignItems="center">
+                  <Stack component="span" direction="row" alignItems="center">
                     <Typography
+                      component="span"
                       variant="body1"
                       color="text.primary"
                       sx={{ fontSize: "12px" }}
@@ -90,27 +100,23 @@ const Sponsors = (props) => {
                       {props.title}
                     </Typography>
                     <Tooltip
+                      component="span"
                       title={`${props.name} is a ${props.userType} posting`}
                     >
-                      <IconButton small="true">
+                      <IconButton component="span" small="true">
                         <MdVerified style={{ color: "#85c3fd" }} size={16} />
                       </IconButton>
                     </Tooltip>
-                    <Typography
-                      variant="subtitle2"
-                      color="text.secondary"
-                      sx={{ fontSize: "11px" }}
-                    >
-                      {props.postDate}
-                    </Typography>
                   </Stack>
                   <Box
+                    component="span"
                     sx={{
                       display: "flex",
                       justifyContent: "flex-start",
                     }}
                   >
                     <Typography
+                      component="span"
                       variant="subtitle2"
                       color="text.secondary"
                       sx={{ fontSize: "12px" }}

@@ -3,9 +3,9 @@ import React, { useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import {
-  Box,
   Button,
   ButtonGroup,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -92,6 +92,9 @@ const CreatorJobsTable = (props) => {
     }
   };
 
+  const creatorHasJobs = creatorJobs && creatorJobs.length > 0;
+  console.log("Creator has jobs?:", creatorHasJobs);
+
   return (
     <TableContainer>
       <Table>
@@ -114,7 +117,30 @@ const CreatorJobsTable = (props) => {
           {isLoading || isDeleting ? (
             <TableRow>
               <TableCell>
-                <Box sx={{ display: "flex", width: "100%" }}>Loading...</Box>
+                <Skeleton width="100%" />
+              </TableCell>
+              <TableCell>
+                <Skeleton width="100%" />
+              </TableCell>
+              <TableCell>
+                <Skeleton width="100%" />
+              </TableCell>
+              <TableCell>
+                <Skeleton width="100%" />
+              </TableCell>
+              <TableCell>
+                <Skeleton width="100%" />
+              </TableCell>
+              <TableCell>
+                <Skeleton width="100%" />
+              </TableCell>
+            </TableRow>
+          ) : !isLoading && !creatorHasJobs ? (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <Typography variant="subtitle2" color="text.secondary">
+                  No applicants yet! Check back later.
+                </Typography>
               </TableCell>
             </TableRow>
           ) : (

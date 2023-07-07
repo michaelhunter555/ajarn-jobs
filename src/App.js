@@ -1,19 +1,18 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import AddNewBlogPost from "./blog/pages/AddNewBlogPost";
-import BlogPage from "./blog/pages/BlogPage";
-import IncomeDirectory from "./blog/pages/IncomeDirectory";
-import IncomeDirectoryDetails from "./blog/pages/IncomeDirectoryDetails";
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
-import JobDetailsPage from "./jobs/pages/JobDetailsPage";
-import NewJob from "./jobs/pages/NewJob";
-import UpdateJob from "./jobs/pages/UpdateJob";
-import UserJobs from "./jobs/pages/UserJobs";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
 import {
@@ -24,18 +23,33 @@ import {
   USE_CREDITS,
 } from "./shared/context/authActions";
 import { authReducer, initialState } from "./shared/context/authReducer";
-import Login from "./users/pages/Auth";
-import TeacherDetails from "./users/pages/TeacherDetails";
-import Teachers from "./users/pages/Teachers";
 
 const queryClient = new QueryClient();
 
 let logoutTimer;
 
 function App() {
+  //Auth context Management
   const [state, dispatch] = useReducer(authReducer, initialState);
+  //tokenExpiration Tracking
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
+  //Lazily loaded components
+  const Login = lazy(() => import("./users/pages/Auth"));
+  const Teachers = lazy(() => import("./users/pages/Teachers"));
+  const TeacherDetails = lazy(() => import("./users/pages/TeacherDetails"));
+  const UserJobs = lazy(() => import("./jobs/pages/UserJobs"));
+  const JobDetailsPage = lazy(() => import("./jobs/pages/JobDetailsPage"));
+  const NewJob = lazy(() => import("./jobs/pages/NewJob"));
+  const UpdateJob = lazy(() => import("./jobs/pages/UpdateJob"));
+  const BlogPage = lazy(() => import("./blog/pages/BlogPage"));
+  const AddNewBlogPost = lazy(() => import("./blog/pages/AddNewBlogPost"));
+  const IncomeDirectory = lazy(() => import("./blog/pages/IncomeDirectory"));
+  const IncomeDirectoryDetails = lazy(() =>
+    import("./blog/pages/IncomeDirectoryDetails")
+  );
+
+  //AuthReducer & Context management for login
   const login = useCallback((userId, token, expirationDate) => {
     dispatch({ type: LOGIN, user: userId, token: token });
 
@@ -52,6 +66,7 @@ function App() {
     );
   }, []);
 
+  //log user in if they come back and their login token is still valid
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     if (
@@ -61,14 +76,16 @@ function App() {
     ) {
       login(userData.userId, userData.token, new Date(userData.tokenExpires));
     }
-  }, [login]);
+  }, [login, state.token]);
 
+  //logout user and set to null if they wish to logout
   const logout = useCallback(() => {
     dispatch({ type: LOGOUT });
     setTokenExpirationDate(null);
     localStorage.removeItem("userData");
   }, []);
 
+  //log user out after their token expires
   useEffect(() => {
     if (state.token && tokenExpirationDate) {
       const timeRemaining =
@@ -79,6 +96,7 @@ function App() {
     }
   }, [state.token, logout, tokenExpirationDate]);
 
+  //update total credit counts
   const addCredits = useCallback((amount) => {
     dispatch({ type: ADD_CREDITS, amount });
   }, []);
@@ -87,6 +105,7 @@ function App() {
     dispatch({ type: USE_CREDITS, amount });
   }, []);
 
+  //update user object to reflect latest database data
   const updatedUser = useCallback((updatedUser) => {
     dispatch({ type: UPDATE_USER, user: updatedUser });
   }, []);
@@ -152,7 +171,9 @@ function App() {
       >
         <Router>
           <MainNavigation />
-          <main>{routes}</main>
+          <Suspense fallback={<></>}>
+            <main>{routes}</main>
+          </Suspense>
         </Router>
       </AuthContext.Provider>
     </QueryClientProvider>

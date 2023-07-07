@@ -30,7 +30,7 @@ const StyleCreditsModal = styled(Paper)({
   width: 400,
   bgColor: "background.paper",
   border: "1px solid #000",
-  boxShadow: 24,
+  boxShadow: 5,
   padding: 7,
   margin: "2rem auto",
   borderRadius: 8,

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 
+import { debounce } from "lodash";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Avatar, Box, Button, Typography } from "@mui/material";
@@ -7,10 +8,24 @@ import { styled } from "@mui/material/styles";
 
 import { AuthContext } from "../../context/auth-context";
 
+const DebouncedNav = ({ children, to, exact }) => {
+  const navigate = useNavigate();
+  const debouncedNavLink = debounce(() => {
+    navigate(to);
+  }, 500);
+
+  return (
+    <NavLink to={to} exact={exact} onClick={debouncedNavLink}>
+      {children}
+    </NavLink>
+  );
+};
+
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+
   //const userId = useParams().uid
 
   const logoutHandler = () => {
@@ -21,29 +36,29 @@ const NavLinks = (props) => {
   return (
     <StyledNavLinks>
       <li>
-        <NavLink to="/" exact="true">
+        <DebouncedNav to="/" exact="true">
           <Typography
             sx={{ fontWeight: location.pathname === "/" ? 700 : "inherit" }}
             variant="button"
           >
             Home
           </Typography>
-        </NavLink>
+        </DebouncedNav>
       </li>
 
       <li>
-        <NavLink to="/jobs">
+        <DebouncedNav to="/jobs">
           <Typography
             sx={{ fontWeight: location.pathname === "/jobs" ? 700 : "inherit" }}
             variant="button"
           >
             Jobs
           </Typography>
-        </NavLink>
+        </DebouncedNav>
       </li>
 
       <li>
-        <NavLink to="/teachers">
+        <DebouncedNav to="/teachers">
           <Typography
             sx={{
               fontWeight: location.pathname === "/teachers" ? 700 : "inherit",
@@ -52,11 +67,11 @@ const NavLinks = (props) => {
           >
             Teachers
           </Typography>
-        </NavLink>
+        </DebouncedNav>
       </li>
 
       <li>
-        <NavLink to="/content">
+        <DebouncedNav to="/content">
           <Typography
             sx={{
               fontWeight: location.pathname === "/content" ? 700 : "inherit",
@@ -65,12 +80,12 @@ const NavLinks = (props) => {
           >
             Content
           </Typography>
-        </NavLink>
+        </DebouncedNav>
       </li>
 
       {auth.isLoggedIn && (
         <li>
-          <NavLink to={`/users/${auth.user?._id}`}>
+          <DebouncedNav to={`/users/${auth.user?._id}`}>
             <Typography
               sx={{
                 fontWeight:
@@ -82,13 +97,13 @@ const NavLinks = (props) => {
             >
               Dashboard
             </Typography>
-          </NavLink>
+          </DebouncedNav>
         </li>
       )}
 
       {!auth.isLoggedIn && (
         <li>
-          <NavLink to="/auth">
+          <DebouncedNav to="/auth">
             <Typography
               sx={{
                 fontWeight: location.pathname === "/auth" ? 700 : "inherit",
@@ -97,7 +112,7 @@ const NavLinks = (props) => {
             >
               Login
             </Typography>
-          </NavLink>
+          </DebouncedNav>
         </li>
       )}
 

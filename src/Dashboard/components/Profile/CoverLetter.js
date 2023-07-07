@@ -4,7 +4,6 @@ import DOMPurify from "dompurify";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
-import sanitizeHtml from "sanitize-html";
 
 import {
   Box,
@@ -139,12 +138,11 @@ const CoverLetter = () => {
                   >
                     Cover Letter:
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    {sanitizeHtml(auth.user?.coverLetter, {
-                      allowedTags: [],
-                      allowedAttributes: {},
-                    })}
-                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    dangerouslySetInnerHTML={{ __html: auth.user?.coverLetter }}
+                  />
                 </Grid>
               </Grid>
             </Grid>

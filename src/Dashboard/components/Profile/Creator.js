@@ -1,14 +1,10 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import BusinessIcon from '@mui/icons-material/Business';
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import BusinessIcon from "@mui/icons-material/Business";
+import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
   Alert,
   Box,
@@ -27,22 +23,22 @@ import {
   Stack,
   TextField,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { useQuery } from '@tanstack/react-query';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useQuery } from "@tanstack/react-query";
 
-import NewJob from '../../../jobs/pages/NewJob';
-import ErrorModal from '../../../shared/components/UIElements/ErrorModal';
-import { AuthContext } from '../../../shared/context/auth-context';
-import { useCreator } from '../../../shared/hooks/creator-hook';
-import { useForm } from '../../../shared/hooks/form-hook';
-import { useJob } from '../../../shared/hooks/jobs-hook';
+import NewJob from "../../../jobs/pages/NewJob";
+import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
+import { AuthContext } from "../../../shared/context/auth-context";
+import { useCreator } from "../../../shared/hooks/creator-hook";
+import { useForm } from "../../../shared/hooks/form-hook";
+import { useJob } from "../../../shared/hooks/jobs-hook";
 //import { useJob } from "../../../shared/hooks/jobs-hook";
-import { thaiCities } from '../../../shared/util/ThaiData';
-import CreatorJobsTable from './CreatorJobsTable';
-import CreatorTabs from './CreatorTabs';
-import JobApplicantsTable from './JobApplicantsTable';
-import PurchaseCredits from './PurchaseCredits';
+import { thaiCities } from "../../../shared/util/ThaiData";
+import CreatorJobsTable from "./CreatorJobsTable";
+import CreatorTabs from "./CreatorTabs";
+import JobApplicantsTable from "./JobApplicantsTable";
+import PurchaseCredits from "./PurchaseCredits";
 
 const StyledModal = styled(Paper)({
   display: "flex",
@@ -126,7 +122,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
     }
   };
 
-  const { data: jobs } = useQuery(["JobApplicants", user?._id], () =>
+  const { data: jobs, isLoading } = useQuery(["JobApplicants", user?._id], () =>
     getJobs()
   );
 
@@ -221,7 +217,6 @@ const Creator = ({ creatorItem, jobsCount }) => {
     setOpen((prev) => !prev);
   };
 
-  
   const buffetStartTime = new Date(auth.user?.lastActiveBuffet);
   const getDifference = date.getTime() - buffetStartTime.getTime();
   const twentyFourHours = 24 * 60 * 60 * 1000;
@@ -500,10 +495,12 @@ const Creator = ({ creatorItem, jobsCount }) => {
                         Applicants
                       </Typography>
                       <Typography variant="h4" color="text.secondary">
-                        {jobs?.reduce(
-                          (acc, job) => acc + job?.applicants.length,
-                          0
-                        )}
+                        {isLoading && <CircularProgress />}
+                        {!isLoading &&
+                          jobs?.reduce(
+                            (acc, job) => acc + job?.applicants.length,
+                            0
+                          )}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>

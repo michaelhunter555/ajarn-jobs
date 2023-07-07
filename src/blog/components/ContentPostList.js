@@ -20,8 +20,39 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
+
+const StyledGridContainer = styled(Grid)({
+  overflowY: "scroll",
+  maxHeight: 500,
+  "&::-webkit-scrollbar": {
+    width: "4px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    background: "transparent",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    background: "#8b8b8d",
+  },
+  "&::-webkit-scrollbar-track": {
+    background: "#f1f1f1",
+    borderRadius: "0px",
+  },
+  "&:hover": {
+    "&::-webkit-scrollbar-thumb": {
+      background: "#b5b5b5",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      transition: "background 1s ease-in",
+      background: "#8b8b8d",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1",
+    },
+  },
+});
 
 const ContentPostList = ({ isLoading, filteredContent }) => {
   let noPostsYet;
@@ -48,7 +79,7 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
   }
 
   return (
-    <Grid container>
+    <StyledGridContainer container>
       {isLoading && <CircularProgress />}
       {noPostsYet}
       {!isLoading &&
@@ -147,7 +178,7 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
             )}
           </List>
         ))}
-    </Grid>
+    </StyledGridContainer>
   );
 };
 

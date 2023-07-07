@@ -8,6 +8,11 @@ a {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+
+  margin: 0;
+  padding: 0;
   max-width: 90%;
   margin: 0 auto;
   margin-top: 5rem;
@@ -17,6 +22,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f9f9f9;
+}
+
+#root {
+  flex: 1;
 }
 /* Target the scrollbar track */
 ::-webkit-scrollbar-track {

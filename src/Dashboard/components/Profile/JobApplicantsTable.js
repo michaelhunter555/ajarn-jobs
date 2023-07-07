@@ -3,8 +3,8 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import {
-  Box,
   Button,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -96,14 +96,28 @@ const JobApplicantsTable = () => {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={5}>
-                  <Box sx={{ display: "flex", width: "100%" }}>Loading...</Box>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
                 </TableCell>
               </TableRow>
             ) : !isLoading && !hasApplicants ? (
               <TableRow>
                 <TableCell colSpan={5}>
-                  <Typography>No applicants yet! Check back later.</Typography>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    No applicants yet! Check back later.
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : (

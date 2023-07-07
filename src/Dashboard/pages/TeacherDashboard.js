@@ -102,8 +102,21 @@ const TeacherDashboard = () => {
   } = useHttpClient();
 
   //update auth object to reflect most current database
+  const getUserProfileInfo = async (userId) => {
+    const response = await fetch(`${process.env.REACT_APP_USERS}/${userId}`);
+    if (!response.ok) {
+      throw new Error("There was an error with profile informatin retrievl.");
+    }
+    const data = await response.json();
+    auth.updateUser(data.user);
+    return data.user;
+  };
   const { isLoading: userProfileLoading, error: getUserProfileError } =
-    useQuery(["userInfo", userId], () => getUserInformation(userId));
+    useQuery(["userInfo", userId], () => getUserProfileInfo(userId));
+
+  // useEffect(() => {
+  //   getUserInformation(userId)
+  // }, [userId, getUserInformation])
 
   //GET users current jobs for creator dash and
   useEffect(() => {
@@ -342,6 +355,7 @@ const TeacherDashboard = () => {
 
   //dashboard loading state
   const homeDashLoadingState =
+    //userProfileIsLoading, jobsIsLoading, jobAdIsLoading
     userProfileLoading || jobsIsLoading || jobAdIsLoading;
 
   const error =

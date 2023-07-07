@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   Card,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -17,7 +18,6 @@ import Button from "../../shared/components/FormElements/Button";
 import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 import Input from "../../shared/components/FormElements/Input";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -190,7 +190,7 @@ const Auth = () => {
     <>
       <ErrorModal onClear={clearError} error={error} />
       <StyledFormCard>
-        {isPostLoading && <LoadingSpinner asOverlay />}
+        {isPostLoading && <CircularProgress />}
         <form onSubmit={authSubmitHandler}>
           {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} />}
           {!isLoginMode && (

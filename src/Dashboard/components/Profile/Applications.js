@@ -3,6 +3,7 @@ import React, { useContext } from "react";
 import {
   Box,
   Paper,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -30,7 +31,7 @@ const Applications = () => {
     }
   };
 
-  const { data: jobs } = useQuery(["userApplications"], () =>
+  const { data: jobs, isLoading } = useQuery(["userApplications"], () =>
     getAppliedUserJobs()
   );
 
@@ -39,42 +40,82 @@ const Applications = () => {
     job?.applicants?.some((applicant) => applicant?.userId === auth?.user?._id)
   );
 
+  let apps = auth?.user?.applications?.length;
+
   return (
     <>
       <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "5px",
+        }}
       >
-        Total Applications:
-        <Typography variant="h2">{auth.user?.applications?.length}</Typography>
+        <Typography variant="subtitle2">You have applied to:</Typography>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          {apps} {apps > 0 && apps < 1 ? " job" : " jobs"}
+        </Typography>
       </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableCell>Date</TableCell>
-            <TableCell>Company</TableCell>
-            <TableCell>Title</TableCell>
-            <TableCell>Location</TableCell>
-            <TableCell>Salary</TableCell>
-            <TableCell>Hours</TableCell>
+            <TableRow>
+              <TableCell>Date</TableCell>
+              <TableCell>Company</TableCell>
+              <TableCell>Title</TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell>Salary</TableCell>
+              <TableCell>Hours</TableCell>
+            </TableRow>
           </TableHead>
           <TableBody>
-            {userApplied?.map((job, i) => (
-              <TableRow key={job?._id}>
+            {isLoading ? (
+              <TableRow>
                 <TableCell>
-                  {
-                    //loop through all applicants and make sure it only matches auth Id.
-                    job?.applicants
-                      ?.find((app) => app.userId === auth?.user?._id)
-                      ?.applicationDate.split("T")[0]
-                  }
+                  <Skeleton width="100%" />
                 </TableCell>
-                <TableCell>{job?.creator?.company}</TableCell>
-                <TableCell>{job?.title}</TableCell>
-                <TableCell>{job?.location}</TableCell>
-                <TableCell>{job?.salary}</TableCell>
-                <TableCell>{job?.hours}</TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
+                <TableCell>
+                  <Skeleton width="100%" />
+                </TableCell>
               </TableRow>
-            ))}
+            ) : !isLoading && userApplied.length === 0 ? (
+              <TableRow>
+                <TableCell>
+                  <Typography></Typography>
+                </TableCell>
+              </TableRow>
+            ) : (
+              userApplied?.map((job, i) => (
+                <TableRow key={job?._id}>
+                  <TableCell>
+                    {
+                      //loop through all applicants and make sure it only matches auth Id.
+                      job?.applicants
+                        ?.find((app) => app.userId === auth?.user?._id)
+                        ?.applicationDate.split("T")[0]
+                    }
+                  </TableCell>
+                  <TableCell>{job?.creator?.company}</TableCell>
+                  <TableCell>{job?.title}</TableCell>
+                  <TableCell>{job?.location}</TableCell>
+                  <TableCell>{job?.salary}</TableCell>
+                  <TableCell>{job?.hours}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

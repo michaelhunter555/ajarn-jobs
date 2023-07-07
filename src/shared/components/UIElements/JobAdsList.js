@@ -50,16 +50,6 @@ const StyledChip = styled(Chip)(({ theme, featured }) => ({
 const JobAdsList = (props) => {
   const { job } = props;
 
-  const sanitizedJobPostContent = sanitizeHtml(job?.description, {
-    allowedTags: [],
-    allowedAttributes: {},
-  });
-
-  const truncatedDescription =
-    sanitizedJobPostContent.length > 60
-      ? sanitizedJobPostContent.subtring(0, 60) + "..."
-      : sanitizedJobPostContent;
-
   return (
     <>
       {job?.map((school, i) => (

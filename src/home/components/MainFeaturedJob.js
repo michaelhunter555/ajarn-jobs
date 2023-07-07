@@ -112,72 +112,76 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
               {jobs
                 ?.filter((job) => job.jobType === "featured")
                 ?.map((job, i) => (
-                  <List key={job?._id}>
-                    <ListItemButton
-                      sx={{ paddingTop: 0, paddingBottom: 0 }}
-                      component={Link}
-                      key={job?._id}
-                      onClick={() => selectJobHandler(job)}
-                    >
-                      <ListItemAvatar>
-                        <Avatar
-                          src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
-                          alt={`${job?.name}-${job?.title}`}
-                        />
-                      </ListItemAvatar>
-                      <ListItemText
-                        component="div"
-                        primary={
-                          <>
-                            <Stack
-                              direction="row"
-                              alignItems="flex-end"
-                              spacing={1}
-                            >
-                              <Chip
-                                icon={<LocationOnOutlinedIcon />}
-                                sx={{
-                                  fontSize: 11,
-                                }}
-                                size="small"
-                                label={job?.location}
-                              />
+                  <React.Fragment key={job?._id}>
+                    <List>
+                      <ListItemButton
+                        sx={{ paddingTop: 0, paddingBottom: 0 }}
+                        component={Link}
+                        key={job?._id}
+                        onClick={() => selectJobHandler(job)}
+                      >
+                        <ListItemAvatar>
+                          <Avatar
+                            src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                            alt={`${job?.name}-${job?.title}`}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={
+                            <>
+                              <Stack
+                                direction="row"
+                                alignItems="flex-end"
+                                spacing={1}
+                              >
+                                <Chip
+                                  icon={<LocationOnOutlinedIcon />}
+                                  sx={{
+                                    fontSize: 11,
+                                  }}
+                                  size="small"
+                                  label={job?.location}
+                                />
+                                <Typography
+                                  variant="subtitle2"
+                                  component="span"
+                                  sx={{ fontSize: 12 }}
+                                >
+                                  {getTimeDifference(job?.datePosted)}
+                                </Typography>
+                              </Stack>
+                            </>
+                          }
+                          secondary={
+                            <>
                               <Typography
-                                variant="subtitle2"
+                                variant="body2"
+                                component="span"
+                                color="text.primary"
                                 sx={{ fontSize: 12 }}
                               >
-                                {getTimeDifference(job?.datePosted)}
+                                {job?.hours}
+                                {" — " + job?.salary}
                               </Typography>
-                            </Stack>
-                          </>
-                        }
-                        secondary={
-                          <>
-                            <Typography
-                              variant="body2"
-                              component="span"
-                              color="text.primary"
-                              sx={{ fontSize: 12 }}
-                            >
-                              {job?.hours}
-                              {" — " + job?.salary}
-                            </Typography>
-                            <Typography
-                              variant="subtitle2"
-                              color="text.secondary"
-                              sx={{ fontSize: 12 }}
-                            >
-                              {sanitizeHtml(job?.description, {
-                                allowedTags: [],
-                                allowedAttributes: {},
-                              })?.substring(0, 40) + "..."}
-                            </Typography>
-                          </>
-                        }
-                      />
-                    </ListItemButton>
-                    {i - jobs?.length - 1 && <Divider light />}
-                  </List>
+
+                              <Typography
+                                variant="subtitle2"
+                                color="text.secondary"
+                                component="span"
+                                sx={{ fontSize: 12 }}
+                              >
+                                {sanitizeHtml(job?.description, {
+                                  allowedTags: [],
+                                  allowedAttributes: {},
+                                })?.substring(0, 40) + "..."}
+                              </Typography>
+                            </>
+                          }
+                        />
+                      </ListItemButton>
+                      {i < jobs?.length - 1 && <Divider light />}
+                    </List>
+                  </React.Fragment>
                 ))}
               <Stack justifyContent="center" alignItems="center">
                 <ListItemButton

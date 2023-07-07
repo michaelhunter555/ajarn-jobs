@@ -160,7 +160,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
       direction="row"
       justifyContent="center"
       alignItems="start"
-      sx={{ maxWidth: "75%", margin: "0 auto" }}
+      sx={{ maxWidth: "75%", margin: "2rem auto" }}
       spacing={2}
     >
       {!isLoading && (

@@ -15,6 +15,7 @@ export const useUser = () => {
     try {
       const response = await sendRequest(`${process.env.REACT_APP_USERS}`);
       setUsers(response.users);
+      return response.users;
     } catch (err) {}
   }, [sendRequest]);
 
