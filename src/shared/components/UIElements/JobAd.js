@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import PaymentsIcon from "@mui/icons-material/Payments";
+import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import PlaceIcon from "@mui/icons-material/Place";
 import PunchClockIcon from "@mui/icons-material/PunchClock";
 import {
@@ -37,6 +37,10 @@ const StyledChipDiv = styled(Typography)(({ theme }) => ({
   marginBottom: "0.5rem",
 }));
 
+const StyledChip = styled(Chip)({
+  border: "1px solid #e1e1e1",
+});
+
 const JobAd = (props) => {
   const { job } = props;
 
@@ -64,7 +68,7 @@ const JobAd = (props) => {
               <Grid item xs={8} sm={8} md={8} lg={9} xl={10}>
                 <Typography
                   gutterBottom
-                  color="primary"
+                  sx={{ color: "#3b3f43" }}
                   variant="h6"
                   component="div"
                 >
@@ -75,20 +79,23 @@ const JobAd = (props) => {
                 </Typography>
 
                 <StyledChipDiv variant="body2" component="div">
-                  <Chip
+                  <StyledChip
+                    variant="outlined"
                     label={job?.location}
                     size={"small"}
-                    icon={<PlaceIcon />}
+                    icon={<PlaceIcon style={{ color: "#47acbb" }} />}
                   />
-                  <Chip
+                  <StyledChip
+                    variant="outlined"
                     label={job?.salary}
                     size={"small"}
-                    icon={<PaymentsIcon />}
+                    icon={<PaymentsTwoToneIcon style={{ color: "#1e8d41" }} />}
                   />
-                  <Chip
+                  <StyledChip
+                    variant="outlined"
                     label={job?.hours}
                     size={"small"}
-                    icon={<PunchClockIcon />}
+                    icon={<PunchClockIcon style={{ color: "#514949" }} />}
                   />
                 </StyledChipDiv>
                 <Typography variant="body2" color="text.secondary">

@@ -47,7 +47,7 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   gap: "1rem",
   flexDirection: "column",
   justifyContent: "flex-start",
-  minWidth: 150,
+  minWidth: 170,
   borderRadius: "6px",
   "&:hover": {
     boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",

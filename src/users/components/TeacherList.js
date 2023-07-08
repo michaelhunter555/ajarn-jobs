@@ -35,10 +35,6 @@ const TeacherList = ({ teachers, isLoading }) => {
               height={335}
               width={261}
             />
-            <Skeleton sx={{ margin: "0rem auto" }} variant="text" width={260} />
-            <Skeleton sx={{ margin: "0rem auto" }} variant="text" width={260} />
-            <Skeleton sx={{ margin: "0rem auto" }} variant="text" width={260} />
-            <Skeleton sx={{ margin: "0rem auto" }} variant="text" width={260} />
           </Grid>
         ))}
 
@@ -50,6 +46,7 @@ const TeacherList = ({ teachers, isLoading }) => {
                 id={teacher._id}
                 name={teacher.name}
                 currentLocation={teacher.location}
+                education={teacher.education}
                 nationality={teacher.nationality}
                 workExperience={teacher.workExperience}
                 image={`${process.env.REACT_APP_IMAGE}${teacher.image}`}

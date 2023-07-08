@@ -1,3 +1,5 @@
+import "../../../index.css";
+
 import React from "react";
 
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -14,7 +16,8 @@ const FooterStyles = styled("footer")(({ theme }) => ({
   flexDirection: "row",
   borderRadius: "6px 6px 0px 0px",
   bottom: 0,
-  margin: "auto 0",
+  left: 0,
+  right: 0,
   padding: "2rem 2rem",
 }));
 
@@ -48,7 +51,7 @@ const Copyright = (props) => {
 
 const Footer = () => {
   return (
-    <FooterStyles elevation={0}>
+    <FooterStyles>
       <Grid container direction="column" justifyContent="flex-start">
         <Copyright />
       </Grid>

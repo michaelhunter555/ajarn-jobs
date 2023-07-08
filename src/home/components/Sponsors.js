@@ -104,7 +104,7 @@ const Sponsors = (props) => {
                       title={`${props.name} is a ${props.userType} posting`}
                     >
                       <IconButton component="span" small="true">
-                        <MdVerified style={{ color: "#85c3fd" }} size={16} />
+                        <MdVerified style={{ color: "#66bac6" }} size={16} />
                       </IconButton>
                     </Tooltip>
                   </Stack>

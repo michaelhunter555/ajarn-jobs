@@ -1,3 +1,5 @@
+import "./index.css";
+
 import React, {
   lazy,
   Suspense,
@@ -172,7 +174,7 @@ function App() {
         <Router>
           <MainNavigation />
           <Suspense fallback={<></>}>
-            <main>{routes}</main>
+            <main className="main">{routes}</main>
           </Suspense>
         </Router>
       </AuthContext.Provider>

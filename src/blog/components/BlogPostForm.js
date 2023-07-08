@@ -39,7 +39,7 @@ const styledComments = {
 const BlogPostForm = ({ onBlogPostCreated }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const [toggleForm, setToggleForm] = useState(auth.isLoggedIn);
+  const [toggleForm, setToggleForm] = useState(true);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );

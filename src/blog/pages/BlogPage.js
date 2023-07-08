@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 
 import { useQuery } from "@tanstack/react-query";
 
-import Footer from "../../shared/components/UIElements/Footer";
 import BlogPageItem from "../components/BlogPageItem";
 
 const BlogPage = () => {
@@ -84,7 +83,6 @@ const BlogPage = () => {
         refetchLikeState={refetch}
         isLoading={isLoading}
       />
-      <Footer />
     </>
   );
 };

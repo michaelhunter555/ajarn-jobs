@@ -2,6 +2,9 @@ import React, { useContext } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
+import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import {
   Button,
   ButtonGroup,
@@ -139,7 +142,7 @@ const CreatorJobsTable = (props) => {
             <TableRow>
               <TableCell colSpan={5}>
                 <Typography variant="subtitle2" color="text.secondary">
-                  No applicants yet! Check back later.
+                  No active jobs for this account.
                 </Typography>
               </TableCell>
             </TableRow>
@@ -154,7 +157,7 @@ const CreatorJobsTable = (props) => {
                     disableElevation
                   >
                     <Button to={`/jobs/${job?._id}`} component={RouterLink}>
-                      View
+                      <VisibilityTwoToneIcon />
                     </Button>
                     {/*auth.user._id === job._id */}
                     <Button
@@ -162,14 +165,14 @@ const CreatorJobsTable = (props) => {
                       to={`/jobs/${job?._id}/update`}
                       component={RouterLink}
                     >
-                      Edit
+                      <EditTwoToneIcon />
                     </Button>
                     <Button
                       to={`/users/${user?._id}`}
                       color="error"
                       onClick={() => deleteJobHandler(job?._id)}
                     >
-                      Delete
+                      <DeleteForeverTwoToneIcon />
                     </Button>
                   </ButtonGroup>
                 </TableCell>

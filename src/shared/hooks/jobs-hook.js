@@ -85,18 +85,22 @@ export const useJob = () => {
   //PATCH Job by userId
   const updateJobById = useCallback(
     async (jobId, updatedInfo) => {
+      const { title, description } = updatedInfo;
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_JOBS}/${jobId}`,
           "PATCH",
-          JSON.stringify({ creatorId: updatedInfo }),
+          JSON.stringify({
+            title: title,
+            description: description,
+          }),
           {
             "Content-Type": "application/json",
             Authorization: "Bearer " + auth.token,
           }
         );
-        const jobToUpdate = auth.user.jobs.map((job) =>
-          job._id === response.job._id ? response.job : job
+        const jobToUpdate = auth.user?.jobs.map((job) =>
+          job?._id === response.job._id ? response.job : job
         );
         const updatedJob = {
           ...auth.user,

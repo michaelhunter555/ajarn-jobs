@@ -222,6 +222,8 @@ const Creator = ({ creatorItem, jobsCount }) => {
   const twentyFourHours = 24 * 60 * 60 * 1000;
   const getTimeLeft = Math.abs(getDifference - twentyFourHours);
 
+  // getTimeLeft / (60 * 60 * 1000)
+
   //components rendered from tab navigation
   const renderComponent = () => {
     switch (creatorProfileTab) {
@@ -436,7 +438,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
                   spacing={1}
                 >
                   <Grid>
-                    <BusinessIcon color="inherit" />
+                    <BusinessIcon style={{ color: "#176e7b" }} />
                   </Grid>
                   <Grid>
                     <Typography variant="subtitle2" color="text.secondary">
@@ -447,7 +449,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
 
                 <Stack direction="row" spacing={1}>
                   <Grid>
-                    <LocationOnIcon color="info" />
+                    <LocationOnIcon style={{ color: "#176e7b" }} />
                   </Grid>
                   <Grid>
                     <Typography variant="subtitle2" color="text.secondary">
@@ -458,7 +460,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
 
                 <Stack direction="row" spacing={1}>
                   <Grid>
-                    <VerifiedUserIcon color="info" />
+                    <VerifiedUserIcon style={{ color: "#176e7b" }} />
                   </Grid>
                   <Grid>
                     <Typography variant="subtitle2" color="text.secondary">

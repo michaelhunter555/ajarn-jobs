@@ -234,6 +234,7 @@ const TeacherDashboard = () => {
     image,
     highestCertification,
     about,
+    education,
   } = selectedCard || {};
 
   //sidebar component rendering
@@ -492,12 +493,14 @@ const TeacherDashboard = () => {
               <TeacherItem
                 id={id}
                 name={name}
+                education={education}
                 currentLocation={location}
                 nationality={nationality}
                 workExperience={workExperience}
                 image={`${process.env.REACT_APP_IMAGE}${image}`}
                 degree={highestCertification}
                 about={about}
+                width={200}
               />
             )
           )}

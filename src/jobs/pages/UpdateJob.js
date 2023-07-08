@@ -1,8 +1,24 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
+import DOMPurify from "dompurify";
+import {
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+  EditorState,
+} from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import { Editor } from "react-draft-wysiwyg";
 import { useParams } from "react-router-dom";
 
-import { Box, Grid, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import Button from "../../shared/components/FormElements/Button";
@@ -21,11 +37,21 @@ const UpdateJobStylesForm = styled("form")({
   background: "white",
 });
 
+const styledRichJobUpdateJobText = {
+  height: "auto",
+  padding: " 0 20px",
+  borderRadius: "0 0 8px 8px",
+  border: "2px solid #dbdbdb",
+  boxSizing: "border-box",
+  marginBottom: "1rem",
+};
+
 const UpdateJob = () => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const jobId = useParams().jid;
-  const { jobs, getJobsByUserId, updateJobById, isLoading } = useJob();
+  const { jobs, getJobsByUserId, updateJobById, isLoading, isPostLoading } =
+    useJob();
   const identifiedJob = jobs?.find((j) => j?._id === jobId);
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -39,6 +65,19 @@ const UpdateJob = () => {
       },
     },
     true
+  );
+
+  const initializeEditorState = (description) => {
+    const blocksFromHTML = convertFromHTML(description);
+    const contentState = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+
+    return EditorState.createWithContent(contentState);
+  };
+  const [editorState, setEditorState] = useState(() =>
+    initializeEditorState(identifiedJob?.description || "")
   );
 
   useEffect(() => {
@@ -65,21 +104,37 @@ const UpdateJob = () => {
 
   const jobUpdateHandler = (event) => {
     event.preventDefault();
+    const content = editorState.getCurrentContent();
+    const rawContent = convertToRaw(content);
+    const postData = draftToHtml(rawContent);
+    const sanitizedDescription = DOMPurify.sanitize(postData);
 
     const updatedJob = {
       title: formState.inputs.title.value,
-      description: formState.inputs.description.value,
+      description: sanitizedDescription,
     };
-    updateJobById(jobId, updatedJob);
+
+    try {
+      updateJobById(jobId, updatedJob);
+    } catch (err) {
+      console.log("error in updateJob component", err);
+    }
   };
 
   if (isLoading) {
-    return (
-      <div>
-        <h2>Loading...</h2>
-      </div>
-    );
+    return <CircularProgress />;
   }
+
+  const handleEditorChange = (editorContent) => {
+    setEditorState(editorContent);
+    const content = editorState.getCurrentContent();
+    const rawContent = convertToRaw(content);
+    const postData = rawContent.blocks[0].text;
+
+    inputHandler("description", postData, postData.length >= 5);
+  };
+
+  console.log("updateJob formState", formState);
 
   return (
     <>
@@ -90,18 +145,31 @@ const UpdateJob = () => {
           alignItems: "center",
           height: 100,
           flexDirection: "column",
+          gap: "15px",
         }}
       >
         <Grid>
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="h6" color="text.secondary">
             At this current time, only the title & description can be updated.
           </Typography>
         </Grid>
-        <Grid>
+        <Grid
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            maxWidth: "50%",
+          }}
+        >
           <Typography variant="subtitle2" color="text.secondary">
-            If there were any major errors, please contact us at
-            helpdesk@ajarnjobs.com
+            If there were any errors regarding, location, salary or work-Permit.
+            You must delete your current job and create a new one.
           </Typography>
+          <Alert severity="info">
+            Please copy and paste your current description before updating to
+            avoid format issues.
+          </Alert>
         </Grid>
       </Box>
       <UpdateJobStylesForm onSubmit={jobUpdateHandler}>
@@ -115,26 +183,20 @@ const UpdateJob = () => {
             inputHandler("title", event.target.value, event.target.value !== "")
           }
         />
+        <Box sx={{ width: "100%", ...styledRichJobUpdateJobText }}>
+          <Editor
+            id="description"
+            editorState={editorState}
+            onEditorStateChange={handleEditorChange}
+          />
+        </Box>
 
-        <TextField
-          sx={{ margin: "1rem auto" }}
-          fullWidth
-          multiline
-          rows={3}
-          id="description"
-          label="Description"
-          defaultValue={identifiedJob?.description}
-          onChange={(event) =>
-            inputHandler(
-              "description",
-              event.target.value,
-              event.target.value !== ""
-            )
-          }
-        />
-        <Button type="submit" disabled={!formState.isValid}>
-          Update Job
-        </Button>
+        {!isPostLoading && (
+          <Button type="submit" disabled={!formState.isValid}>
+            Update Job
+          </Button>
+        )}
+        {isPostLoading && <CircularProgress />}
       </UpdateJobStylesForm>
     </>
   );

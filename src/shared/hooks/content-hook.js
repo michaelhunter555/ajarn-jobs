@@ -10,11 +10,34 @@ export const useContent = () => {
   const [contentPostDislikes, setContentPostDislikes] = useState(0);
   const [isPostLikeLoading, setIsPostLikeLoading] = useState(false);
   const [isPostDislikeLoading, setIsPostDislikeLoading] = useState(false);
+  const [content, setContent] = useState([]);
   const { updateUser } = auth;
   const { isLoading, isPostLoading, sendRequest, error, clearError } =
     useHttpClient();
   const [totalLikes, setTotalLikes] = useState(0);
   const [totalDislikes, setTotalDislikes] = useState(0);
+
+  //GET blogPostById
+  const getBlogPostById = useCallback(
+    async (blogId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_BLOG}/post/${blogId}`
+        );
+        if (!response.ok) {
+          throw new Error(
+            "There was an error retreiving the blog details for this post."
+          );
+        }
+        const data = await response.json();
+        setContent(data.blogPost);
+        return data.blogPost;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [sendRequest]
+  );
 
   //GET Total likes
   const getTotalLikes = useCallback(
@@ -196,10 +219,12 @@ export const useContent = () => {
     clearError,
     dislikeContentPost,
     likeContentPost,
+    getBlogPostById,
     getTotalLikes,
     getTotalDislikes,
     totalLikes,
     totalDislikes,
+    content,
     createContentPost,
     contentPostLikes,
     contentPostDislikes,

@@ -246,7 +246,7 @@ const Home = () => {
               variant="rectangular"
             />
           )}
-          {!isLoading && <JobContent featuredJobs={homeJobs} />}
+          {!isLoading && <JobContent featuredJobs={filterFeaturedJobs} />}
         </StyledHomeFeaturedContent>
 
         {/* lower-right column*/}

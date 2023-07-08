@@ -227,7 +227,7 @@ const JobDetails = (props) => {
           justifyContent: "center",
           alignItems: "center",
           width: "80%",
-          margin: "7rem auto",
+          margin: "0rem auto",
         }}
       >
         <Grid

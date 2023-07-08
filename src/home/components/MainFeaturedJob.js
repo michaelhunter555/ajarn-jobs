@@ -86,6 +86,11 @@ const StyledContentGrid = styled(Box)({
   },
 });
 
+const StyledChip = styled(Chip)({
+  border: "1px solid #e1e1e1",
+  backgroundColor: "#f7f7f7",
+});
+
 const MainFeaturedJob = ({ jobs, isLoading }) => {
   const [selectedJob, setSelectedJob] = useState(
     jobs?.length > 0 ? jobs[0] : null
@@ -110,7 +115,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
             <Alert severity="info">Featured jobs</Alert>
             <StyledContentGrid item xs={12} md={4.5}>
               {jobs
-                ?.filter((job) => job.jobType === "featured")
+                ?.filter((job) => job?.jobType === "featured")
                 ?.map((job, i) => (
                   <React.Fragment key={job?._id}>
                     <List>
@@ -134,8 +139,13 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                 alignItems="flex-end"
                                 spacing={1}
                               >
-                                <Chip
-                                  icon={<LocationOnOutlinedIcon />}
+                                <StyledChip
+                                  clickable
+                                  icon={
+                                    <LocationOnOutlinedIcon
+                                      style={{ color: "#47acbb" }}
+                                    />
+                                  }
                                   sx={{
                                     fontSize: 11,
                                   }}
@@ -153,7 +163,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                             </>
                           }
                           secondary={
-                            <>
+                            <Stack component="span" direction="column">
                               <Typography
                                 variant="body2"
                                 component="span"
@@ -175,7 +185,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                   allowedAttributes: {},
                                 })?.substring(0, 40) + "..."}
                               </Typography>
-                            </>
+                            </Stack>
                           }
                         />
                       </ListItemButton>

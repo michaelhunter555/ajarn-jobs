@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import PaymentsIcon from "@mui/icons-material/Payments";
+import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import PlaceIcon from "@mui/icons-material/Place";
 import PunchClockIcon from "@mui/icons-material/PunchClock";
 import {
@@ -44,7 +44,8 @@ const StyledMediaCard = styled(CardMedia)({
 });
 
 const StyledChip = styled(Chip)(({ theme, featured }) => ({
-  backgroundColor: featured ? "#f7f1d0" : "#e5e5e5",
+  backgroundColor: featured ? "#f7f1d0" : "",
+  border: featured ? "" : "1px solid #e1e1e1",
 }));
 
 const JobAdsList = (props) => {
@@ -73,9 +74,11 @@ const JobAdsList = (props) => {
                     <Grid item xs={8} sm={8} md={8} lg={9} xl={10}>
                       <Stack spacing={0} alignItems="start">
                         <Typography
-                          color="primary"
-                          variant="body1"
-                          sx={{ fontSize: "17px", fontWeight: 500 }}
+                          variant="h6"
+                          sx={{
+                            color: "#5e6063",
+                            fontSize: "20px",
+                          }}
                           component="div"
                         >
                           {school?.creator?.company} -{" "}
@@ -107,21 +110,35 @@ const JobAdsList = (props) => {
                       </Stack>
                       <StyledChipDiv variant="body2" component="div">
                         <StyledChip
+                          clickable
+                          variant={
+                            school?.jobType === "featured" ? "" : "outlined"
+                          }
                           label={school?.location}
                           size={"small"}
-                          icon={<PlaceIcon />}
+                          icon={<PlaceIcon style={{ color: "#47acbb" }} />}
                           featured={school?.jobType === "featured"}
                         />
                         <StyledChip
+                          clickable
+                          variant={
+                            school?.jobType === "featured" ? "" : "outlined"
+                          }
                           label={school?.salary}
                           size={"small"}
-                          icon={<PaymentsIcon />}
+                          icon={
+                            <PaymentsTwoToneIcon style={{ color: "#1e8d41" }} />
+                          }
                           featured={school?.jobType === "featured"}
                         />
                         <StyledChip
+                          clickable
+                          variant={
+                            school?.jobType === "featured" ? "" : "outlined"
+                          }
                           label={school?.hours}
                           size={"small"}
-                          icon={<PunchClockIcon />}
+                          icon={<PunchClockIcon style={{ color: "#514949" }} />}
                           featured={school?.jobType === "featured"}
                         />
                       </StyledChipDiv>

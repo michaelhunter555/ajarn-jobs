@@ -3,18 +3,22 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
-import EmailIcon from "@mui/icons-material/Email";
 import PlaceIcon from "@mui/icons-material/Place";
 import PublicIcon from "@mui/icons-material/Public";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import {
+  Avatar,
   Box,
   Button,
   Card,
+  CardActions,
   CardContent,
   CardMedia,
+  Chip,
   Divider,
   Grid,
+  Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -22,12 +26,17 @@ import { styled } from "@mui/material/styles";
 import CustomModal from "../../shared/components/UIElements/CustomModal";
 import { AuthContext } from "../../shared/context/auth-context";
 
+//import { useUniversityLogo } from "../../shared/hooks/use-university";
+
 const StyledGlassCard = styled(Card)(({ theme }) => ({
   margin: "0 auto",
   minWidth: "100%",
   position: "relative",
   overflow: "hidden",
   background: "white",
+  borderRadius: "18px",
+  maxWidth: 300,
+
   [theme.breakpoints.down("md")]: {
     margin: "0.5rem 0.5rem 0",
   },
@@ -39,6 +48,16 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
 const TeacherItem = (props) => {
   const auth = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
+  // const { universityLogo, getUniversityLogo } = useUniversityLogo(
+  //   props?.education
+  // );
+
+  // useEffect(() => {
+  //   if (props.education === "") {
+  //     return;
+  //   }
+  //   getUniversityLogo();
+  // }, [getUniversityLogo, props.education]);
 
   const handleModalOpen = () => {
     setOpenModal(true);
@@ -47,41 +66,6 @@ const TeacherItem = (props) => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-
-  let viewProfileButton;
-  let contactTeacherButton;
-
-  if (!auth.isLoggedIn || auth?.user?.credits === 0) {
-    viewProfileButton = (
-      <Button sx={{ margin: "0 auto" }} onClick={handleModalOpen}>
-        View Profile
-      </Button>
-    );
-    contactTeacherButton = (
-      <Button sx={{ margin: "0 auto" }} onClick={handleModalOpen}>
-        <EmailIcon color="primary" sx={{ fontSize: 16 }} /> Contact
-      </Button>
-    );
-  } else {
-    viewProfileButton = (
-      <Button
-        component={Link}
-        to={`/teachers/${props?.id}`}
-        sx={{ margin: "0 auto" }}
-      >
-        View Profile
-      </Button>
-    );
-
-    contactTeacherButton = (
-      <Button
-        sx={{ margin: "0 auto", paddingLeft: "0.5rem" }}
-        onClick={() => console.log("MODAL")}
-      >
-        <EmailIcon color="primary" sx={{ fontSize: 16 }} /> Contact
-      </Button>
-    );
-  }
 
   const errorHeader = !auth.isLoggedIn
     ? "Please Login"
@@ -106,8 +90,8 @@ const TeacherItem = (props) => {
         />
       )}
       <Grid container direction="row" item>
-        <StyledGlassCard>
-          <CardContent sx={{ lineHeight: 1 }}>
+        <StyledGlassCard onClick={handleModalOpen} sx={{ width: props.width }}>
+          <CardContent sx={{ lineHeight: 1, padding: "16px 16px 0 16px" }}>
             <CardMedia
               component="img"
               image={props?.image}
@@ -118,9 +102,27 @@ const TeacherItem = (props) => {
                 margin: "0 auto",
               }}
             />
-            <Typography component="h2" variant="h6">
-              {props?.name}
-            </Typography>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography component="h2" variant="h6">
+                {props?.name}
+              </Typography>
+              {props?.education && (
+                <Chip
+                  sx={{ backgroundColor: "transparent" }}
+                  avatar={
+                    <Tooltip
+                      title={`Degree from ${props?.education?.split(".")[0]}`}
+                      placement="top"
+                    >
+                      <Avatar
+                        alt={`${props?.education}--${props?.name}`}
+                        src={`https://logo.clearbit.com/${props?.education.toLowerCase()}`}
+                      />
+                    </Tooltip>
+                  }
+                />
+              )}
+            </Stack>
             {/*2 x 2 */}
             <Grid container spacing={2} direction="row">
               <Grid item>
@@ -172,19 +174,20 @@ const TeacherItem = (props) => {
               </Typography>
             </Box>
           </CardContent>
-          <Grid
-            container
-            direction="row"
-            sx={{
-              borderTop: "1px solid #e5e5e5",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {viewProfileButton}
-            <Divider orientation="vertical" flexItem />
-            {contactTeacherButton}
-          </Grid>
+          <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              component={Link}
+              to={`/teachers/${props?.id}`}
+              variant="outlined"
+              sx={{
+                color: "#128cb1",
+                borderRadius: "18px",
+                "&:hover": { color: "#128cb1" },
+              }}
+            >
+              View
+            </Button>
+          </CardActions>
         </StyledGlassCard>
       </Grid>
     </>

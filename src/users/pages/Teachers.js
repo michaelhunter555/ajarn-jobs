@@ -21,6 +21,11 @@ const customThemeForTeachers = createTheme({
       lg: 1200,
       xl: 1807,
     },
+    palette: {
+      primary: {
+        main: "#128cb1",
+      },
+    },
   },
 });
 

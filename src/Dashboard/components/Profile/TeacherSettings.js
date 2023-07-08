@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   FormControl,
   FormHelperText,
   Grid,
@@ -24,6 +25,8 @@ import {
   thaiCities,
   yearsOfExperience,
 } from "../../../shared/util/ThaiData";
+
+const uniRegex = /^[a-zA-Z]+(\.[a-zA-Z]+)*\.(edu|ac\.uk|co\.uk|edu\.uk)$/;
 
 const TeacherSettings = (props) => {
   const [isTeacher, setIsTeacher] = useState(props.isTeacher);
@@ -57,7 +60,7 @@ const TeacherSettings = (props) => {
       },
       education: {
         value: user.education,
-        isValid: true,
+        isValid: false,
       },
       highestCertification: {
         value: user.highestCertification,
@@ -217,7 +220,7 @@ const TeacherSettings = (props) => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={7}>
+          <Grid item xs={12} sm={6} md={6}>
             <FormControl fullWidth>
               <InputLabel id="highestCertification-select">
                 Highest Certification
@@ -241,6 +244,27 @@ const TeacherSettings = (props) => {
                   </MenuItem>
                 ))}
               </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <FormControl>
+              <TextField
+                multiline
+                fullWidth
+                helperText="Add university domain(i.e. harvard.edu)"
+                label="University logos"
+                variant="outlined"
+                id="education"
+                defaultValue={formState.inputs.education.value}
+                onChange={(event) =>
+                  userArrayHandler(
+                    "education",
+                    event.target.value,
+                    uniRegex.test(event.target.value)
+                  )
+                }
+              />
             </FormControl>
           </Grid>
 
@@ -337,13 +361,16 @@ const TeacherSettings = (props) => {
           />
         </Grid>
         <FormControl>
-          <Button
-            variant="outlined"
-            onClick={updateProfileHandler}
-            type="submit"
-          >
-            Save
-          </Button>
+          {props.isPostLoading && <CircularProgress />}
+          {!props.isLoading && (
+            <Button
+              variant="outlined"
+              onClick={updateProfileHandler}
+              type="submit"
+            >
+              Save
+            </Button>
+          )}
         </FormControl>
       </CardContent>
     </Card>
