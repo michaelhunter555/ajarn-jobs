@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
 import CommentIcon from "@mui/icons-material/Comment";
@@ -11,6 +12,7 @@ import {
   CircularProgress,
   Divider,
   Grid,
+  Link,
   List,
   ListItemAvatar,
   ListItemButton,
@@ -22,11 +24,11 @@ import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
-import BlogPageItem from "./BlogPageItem";
 
 const StyledGridContainer = styled(Grid)({
   overflowY: "scroll",
   maxHeight: "100vh",
+  borderRadius: "18px 0 0 18px",
   "&::-webkit-scrollbar": {
     width: "4px",
   },
@@ -54,11 +56,13 @@ const StyledGridContainer = styled(Grid)({
   },
 });
 
-const SideBlogList = ({ refetchComments, contentPosts, pageLoading }) => {
-  const [selectedPost, setSelectedPost] = useState(
-    contentPosts ? contentPosts : null
-  );
+const StyledLink = styled(Link)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  textDecoration: "none",
+  ...theme.typography.subtitle2,
+}));
 
+const SideBlogList = ({ contentPosts }) => {
   const getBlogList = async () => {
     const response = await fetch(`${process.env.REACT_APP_BLOG}`);
 
@@ -75,14 +79,8 @@ const SideBlogList = ({ refetchComments, contentPosts, pageLoading }) => {
     getBlogList()
   );
 
-  const selectPostHandler = (post) => {
-    setSelectedPost(post);
-    refetchComments();
-  };
-
   return (
-    <Grid container direction="row">
-      <BlogPageItem isLoading={pageLoading} content={selectedPost} />
+    <Grid container direction="row" sx={{ margin: "2rem auto" }}>
       <StyledGridContainer>
         {isLoading && <CircularProgress />}
         {!isLoading &&
@@ -92,88 +90,87 @@ const SideBlogList = ({ refetchComments, contentPosts, pageLoading }) => {
               key={val?._id}
               sx={{ width: "100%", bgcolor: "background.paper" }}
             >
-              <ListItemButton
-                onClick={() => selectPostHandler(val)}
-                alignItems="flex-start"
-              >
-                <ListItemAvatar>
-                  <Avatar
-                    alt={val?.title}
-                    src={`${process.env.REACT_APP_IMAGE}${val?.author?.image}`}
+              <StyledLink component={RouterLink} to={`/content/${val?._id}`}>
+                <ListItemButton alignItems="flex-start">
+                  <ListItemAvatar>
+                    <Avatar
+                      alt={val?.title}
+                      src={`${process.env.REACT_APP_IMAGE}${val?.author?.image}`}
+                    />
+                  </ListItemAvatar>
+
+                  <ListItemText
+                    component="div"
+                    primary={
+                      <>
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          <Typography>{val?.title}</Typography>
+                          <Chip
+                            size="small"
+                            sx={{ backgroundColor: "#d2fdf2" }}
+                            label={val?.category}
+                          />
+                        </Stack>
+                        <Chip label={getTimeDifference(val?.postDate)} />
+                      </>
+                    }
+                    secondary={
+                      <>
+                        <Typography
+                          sx={{ display: "inline" }}
+                          component="span"
+                          variant="subtitle2"
+                          color="text.primary"
+                        >
+                          Posted By {val?.name}
+                        </Typography>
+                        {" - "}
+                        {sanitizeHtml(val?.postContent, {
+                          allowedTags: [],
+                          allowedAttributes: {},
+                        })?.substring(0, 40) + "..."}
+                      </>
+                    }
                   />
-                </ListItemAvatar>
 
-                <ListItemText
-                  component="div"
-                  primary={
-                    <>
-                      <Stack direction="row" alignItems="center" spacing={2}>
-                        <Typography>{val?.title}</Typography>
-                        <Chip
-                          size="small"
-                          sx={{ backgroundColor: "#d2fdf2" }}
-                          label={val?.category}
-                        />
+                  <Stack justifyContent="flex-end">
+                    <Stack
+                      direction="row"
+                      justifyContent="space-evenly"
+                      alignItems="center"
+                      spacing={2}
+                      sx={{ marginBottom: "2px" }}
+                    >
+                      <Stack>
+                        <Typography color="text.secondary" variant="subtitle2">
+                          {val?.comments?.length}
+                        </Typography>
+                        <CommentIcon color="action" fontSize="small" />
                       </Stack>
-                      <Chip label={getTimeDifference(val?.postDate)} />
-                    </>
-                  }
-                  secondary={
-                    <>
-                      <Typography
-                        sx={{ display: "inline" }}
-                        component="span"
-                        variant="subtitle2"
-                        color="text.primary"
-                      >
-                        Posted By {val?.name}
-                      </Typography>
-                      {" - "}
-                      {sanitizeHtml(val?.postContent, {
-                        allowedTags: [],
-                        allowedAttributes: {},
-                      })?.substring(0, 40) + "..."}
-                    </>
-                  }
-                />
-
-                <Stack justifyContent="flex-end">
-                  <Stack
-                    direction="row"
-                    justifyContent="space-evenly"
-                    alignItems="center"
-                    spacing={2}
-                    sx={{ marginBottom: "2px" }}
-                  >
-                    <Stack>
-                      <Typography color="text.secondary" variant="subtitle2">
-                        {val?.comments?.length}
-                      </Typography>
-                      <CommentIcon color="action" fontSize="small" />
-                    </Stack>
-                    <Stack>
-                      <Typography color="text.secondary" variant="subtitle2">
-                        {
-                          val?.interactions?.filter(
-                            (action) => action?.like === true
-                          )?.length
-                        }
-                      </Typography>
-                      <ThumbUpIcon color="action" fontSize="small" />
-                    </Stack>
-                    <Stack>
-                      <Typography color="text.secondary" variant="subtitle2">
-                        {
-                          val?.interactions?.filter(
-                            (action) => action?.dislike === true
-                          )?.length
-                        }
-                      </Typography>
-                      <ThumbDownIcon color="action" fontSize="small" />
+                      <Stack>
+                        <Typography color="text.secondary" variant="subtitle2">
+                          {
+                            val?.interactions?.filter(
+                              (action) => action?.like === true
+                            )?.length
+                          }
+                        </Typography>
+                        <ThumbUpIcon color="action" fontSize="small" />
+                      </Stack>
+                      <Stack>
+                        <Typography color="text.secondary" variant="subtitle2">
+                          {
+                            val?.interactions?.filter(
+                              (action) => action?.dislike === true
+                            )?.length
+                          }
+                        </Typography>
+                        <ThumbDownIcon color="action" fontSize="small" />
+                      </Stack>
                     </Stack>
                   </Stack>
-                </Stack>
-              </ListItemButton>
+                </ListItemButton>
+              </StyledLink>
 
               {i - blogList?.length - 1 && <Divider variant="inset" light />}
             </List>

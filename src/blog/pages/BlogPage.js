@@ -2,38 +2,14 @@ import React from "react";
 
 import { useParams } from "react-router-dom";
 
+import { Grid } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import BlogPageItem from "../components/BlogPageItem";
+import SideBlogList from "../components/SideBlogList";
 
 const BlogPage = () => {
   const blogId = useParams().bid;
-  // const [content, setContent] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   const getBlogPostById = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `${process.env.REACT_APP_BLOG}/post/${blogId}`
-  //       );
-  //       if (!response.ok) {
-  //         throw new Error(
-  //           "There was an error retreiving the blog details for this post."
-  //         );
-  //       }
-  //       const data = await response.json();
-  //       setContent(data.blogPost);
-  //       setIsLoading(false);
-  //       return data.blogPost;
-  //     } catch (err) {
-  //       setIsLoading(false);
-  //       console.log(err);
-  //     }
-  //   };
-  //   getBlogPostById();
-  // }, [content, blogId]);
 
   const getBlogPostById = async () => {
     try {
@@ -51,39 +27,27 @@ const BlogPage = () => {
       console.log(err);
     }
   };
-
   const {
     data: content,
     refetch,
     isLoading,
-  } = useQuery(["blogDetails"], () => getBlogPostById());
+  } = useQuery(["blogDetails", blogId], () => getBlogPostById());
 
-  //blog list
-  const getBlogList = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BLOG}`);
-
-    if (!response.ok) {
-      throw new Error(
-        "There was an error retreiving the blog details for this post."
-      );
-    }
-
-    const data = await response.json();
-    return data.blogList;
-  };
-
-  const { data: blogList } = useQuery(["otherContentPosts"], () =>
-    getBlogList()
-  );
+  console.log("blogPage Content", content);
 
   return (
-    <>
-      <BlogPageItem
-        content={content}
-        refetchLikeState={refetch}
-        isLoading={isLoading}
-      />
-    </>
+    <Grid container direction="row" alignItems="start" spacing={1}>
+      <Grid item xs={12} sm={8}>
+        <BlogPageItem
+          content={content}
+          refetchLikeState={refetch}
+          isLoading={isLoading}
+        />
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <SideBlogList />
+      </Grid>
+    </Grid>
   );
 };
 

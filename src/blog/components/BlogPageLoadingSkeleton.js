@@ -13,13 +13,14 @@ import {
 
 const BlogPageLoadingSkeleton = () => {
   return (
-    <Grid item xs={12} sm={6} md={8}>
+    <>
       <Paper
         elevation={0}
         sx={{
           display: "flex",
           flexDirection: "column",
           padding: 2,
+          borderRadius: "18px",
         }}
       >
         <Stack direction="row" alignItems="center" spacing={1}>
@@ -118,25 +119,21 @@ const BlogPageLoadingSkeleton = () => {
                 />
               </Stack>
               <Stack alignItems="flex-start">
-                <Stack direction="row" alignItems="center">
+                <Stack direction="column" alignItems="center">
                   <Typography variant="body1" color="text.primary">
-                    <Skeleton width={100} />
+                    <Skeleton width={200} />
                   </Typography>
                   <Typography variant="subtitle2" color="text.secondary">
-                    <Skeleton width={100} />
+                    <Skeleton width={250} />
                   </Typography>
                 </Stack>
-                <Skeleton width={100} />
+                <Skeleton width={250} />
               </Stack>
-
-              <Typography>
-                <Skeleton width={300} />
-              </Typography>
             </Stack>
           </Box>
         ))}
       </Paper>
-    </Grid>
+    </>
   );
 };
 

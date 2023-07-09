@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import CustomModal from "../../shared/components/UIElements/CustomModal";
+//import CustomModal from "../../shared/components/UIElements/CustomModal";
 import { AuthContext } from "../../shared/context/auth-context";
 
 //import { useUniversityLogo } from "../../shared/hooks/use-university";
@@ -81,14 +81,6 @@ const TeacherItem = (props) => {
 
   return (
     <>
-      {openModal && (
-        <CustomModal
-          noCredits={errorReason}
-          error={errorHeader}
-          open={openModal}
-          handleClose={handleCloseModal}
-        />
-      )}
       <Grid container direction="row" item>
         <StyledGlassCard onClick={handleModalOpen} sx={{ width: props.width }}>
           <CardContent sx={{ lineHeight: 1, padding: "16px 16px 0 16px" }}>
