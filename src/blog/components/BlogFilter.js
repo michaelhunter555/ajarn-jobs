@@ -22,10 +22,11 @@ const last14Days = moment().subtract(14, "days");
 const last30Days = moment().subtract(30, "days");
 
 const searchDates = [
-  { id: "today", date: currentDate },
-  { id: "7 days", date: last7Days },
+  { id: "All", date: null },
+  { id: "Today", date: currentDate },
+  { id: "7 Days", date: last7Days },
   { id: "14 Days", date: last14Days },
-  { id: "30 days", date: last30Days },
+  { id: "30 Days", date: last30Days },
 ];
 
 const BlogFilter = ({ onDataChange }) => {
@@ -39,13 +40,14 @@ const BlogFilter = ({ onDataChange }) => {
   };
 
   const dateChangeHandler = (selectedDate) => {
-    setDate(selectedDate);
+    const formattedDate = moment(selectedDate).startOf("day").toISOString();
+    setDate(formattedDate);
     onDataChange({
       search,
-      date: moment(selectedDate).format("YYYY-MM-DD"),
+      date: formattedDate,
       category,
     });
-    console.log(moment(selectedDate).format("YYYY-MM-DD"));
+    console.log("SELECTED DATE - was compared", formattedDate);
   };
 
   const categoryChangeHandler = (event) => {
@@ -90,12 +92,13 @@ const BlogFilter = ({ onDataChange }) => {
       <Stack spacing={1} direction="row" sx={{ margin: "1rem 0 0 0" }}>
         {searchDates.map(({ id, date }, i) => (
           <Chip
+            variant="outlined"
             sx={{ minWidth: 75 }}
             id={id}
             clickable={true}
             label={id}
             value={date}
-            onClick={() => dateChangeHandler(date)}
+            onClick={() => dateChangeHandler(date)} // Convert date to ISO string before passing to handler
             key={i}
           />
         ))}

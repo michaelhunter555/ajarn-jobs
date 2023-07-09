@@ -62,29 +62,6 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
     false
   );
 
-  // useEffect(() => {
-  //   console.log("FORM RE-Rendered");
-  //   if (formState.isValid) {
-  //     const formInputs = {
-  //       title: {
-  //         value: formState.inputs.title.value,
-  //         isValid: true,
-  //       },
-  //       postContent: {
-  //         value: formState.inputs.postContent.value,
-  //         isValid: true,
-  //       },
-  //       category: {
-  //         value: formState.inputs.category.value,
-  //         isValid: true,
-  //       },
-  //     };
-  //     setFormData(formInputs, true);
-  //   }
-  // }, [formState, setFormData]);
-
-  console.log(formState);
-
   const submitContentPostHandler = async (event) => {
     event.preventDefault();
     const contentState = editorState.getCurrentContent();

@@ -125,7 +125,6 @@ const SiteFeatures = ({ isLoading }) => {
                     <Typography
                       align="center"
                       component="h3"
-                      variant="button"
                       color="text.secondary"
                       sx={{ textDecoration: "none" }}
                     >

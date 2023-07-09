@@ -42,20 +42,26 @@ const AddNewBlogPost = () => {
   const filteredContent =
     blogPosts &&
     blogPosts.filter((searchContent) => {
+      const postDate = moment(searchContent?.postDate); // Use postDate instead of date
+      const searchDate = moment(filter?.date); // Parse the string into a moment object
+
+      console.log("Dates compared to Selected Date:", searchContent?.postDate);
       return (
         (!filter?.category ||
           searchContent?.category
             ?.toLowerCase()
             ?.includes(filter?.category?.toLowerCase())) &&
         (!filter?.date ||
-          moment(searchContent?.date).format("YYYY-MM-DD") >=
-            moment(filter?.date).format("YYYY-MM-DD")) &&
+          (searchDate.isSameOrBefore(postDate, "day") &&
+            postDate.isSameOrAfter(searchDate, "day"))) &&
         (!filter?.search ||
           searchContent.title
             .toLowerCase()
             .includes(filter.search.toLowerCase()))
       );
     });
+
+  console.log("filter date", moment(filter?.date).format("YYYY-MM-DD"));
 
   return (
     <>

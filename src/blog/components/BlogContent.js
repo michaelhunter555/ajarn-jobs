@@ -9,6 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
+
 const BlogContent = ({ content }) => {
   return (
     <>
@@ -18,9 +20,25 @@ const BlogContent = ({ content }) => {
           alt={`${content?.title}--${content?._id}`}
           src={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
         />
-        <Typography variant="h4" component="div">
-          {content?.title}
-        </Typography>
+        <Stack
+          direction="column"
+          alignItems="flex-start"
+          justifyContent="flex-start"
+        >
+          <Typography variant="h4" component="div">
+            {content?.title}
+          </Typography>
+          <Typography variant="subtitle2" component="span">
+            By {content?.author?.name}
+          </Typography>
+          <Chip
+            sx={{ flexShrink: 1 }}
+            variant="outlined"
+            size="small"
+            component="span"
+            label={`posting as a ${content?.author?.userType}`}
+          />
+        </Stack>
         <Divider orientation="vertical" flexItem />
         <Stack
           sx={{
@@ -35,7 +53,7 @@ const BlogContent = ({ content }) => {
           <Typography variant="subtitle2" color="text.secondary">
             {content?.postDate?.split("T")[0]}
           </Typography>
-          <Chip label={content?.category} size="small" />
+          <CategoryChip category={content?.category} />
         </Stack>
       </Stack>
       <CardContent>

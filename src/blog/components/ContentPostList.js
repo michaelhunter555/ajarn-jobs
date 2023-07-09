@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
 const StyledGridContainer = styled(Grid)({
@@ -107,13 +108,13 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
                   <>
                     <Stack direction="row" alignItems="center" spacing={2}>
                       <Typography>{val?.title}</Typography>
-                      <Chip
-                        size="small"
-                        sx={{ backgroundColor: "#d2fdf2" }}
-                        label={val?.category}
-                      />
+                      <CategoryChip category={val?.category} />
                     </Stack>
-                    <Chip label={getTimeDifference(val?.postDate)} />
+                    <Chip
+                      variant="outlined"
+                      size="small"
+                      label={getTimeDifference(val?.postDate)}
+                    />
                   </>
                 }
                 secondary={

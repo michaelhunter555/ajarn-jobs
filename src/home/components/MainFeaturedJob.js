@@ -168,6 +168,14 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                 variant="body2"
                                 component="span"
                                 color="text.primary"
+                                sx={{ fontSize: 12, fontWeight: 600 }}
+                              >
+                                {job?.title}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                component="span"
+                                color="text.primary"
                                 sx={{ fontSize: 12 }}
                               >
                                 {job?.hours}
@@ -193,7 +201,11 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                     </List>
                   </React.Fragment>
                 ))}
-              <Stack justifyContent="center" alignItems="center">
+              <Stack
+                justifyContent="center"
+                alignItems="center"
+                sx={{ backgroundColor: "#f9f9f9" }}
+              >
                 <ListItemButton
                   sx={{ display: "flex", alignItems: "center" }}
                   component={Link}

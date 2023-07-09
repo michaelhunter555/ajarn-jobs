@@ -23,6 +23,8 @@ import {
 import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
+import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
+import TeflBanner from "../../shared/components/UIElements/TeflBanner";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
 const StyledGridContainer = styled(Grid)({
@@ -81,6 +83,7 @@ const SideBlogList = ({ contentPosts }) => {
 
   return (
     <Grid container direction="row" sx={{ margin: "2rem auto" }}>
+      <TeflBanner />
       <StyledGridContainer>
         {isLoading && <CircularProgress />}
         {!isLoading &&
@@ -104,14 +107,15 @@ const SideBlogList = ({ contentPosts }) => {
                     primary={
                       <>
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          <Typography>{val?.title}</Typography>
-                          <Chip
-                            size="small"
-                            sx={{ backgroundColor: "#d2fdf2" }}
-                            label={val?.category}
-                          />
+                          <Typography sx={{ fontWeight: 600 }}>
+                            {val?.title}
+                          </Typography>
+                          <CategoryChip category={val?.category} />
                         </Stack>
-                        <Chip label={getTimeDifference(val?.postDate)} />
+                        <Chip
+                          size="small"
+                          label={getTimeDifference(val?.postDate)}
+                        />
                       </>
                     }
                     secondary={

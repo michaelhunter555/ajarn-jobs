@@ -93,7 +93,7 @@ const BottomFeatured = ({ isLoading }) => {
       )}
 
       {!isLoading && (
-        <Card sx={{ borderRadius: "15px" }}>
+        <Card sx={{ borderRadius: "18px" }}>
           <CardContent>
             <CardMedia component="img" alt="thai-guide" src={ThailandIncome} />
           </CardContent>
@@ -103,7 +103,7 @@ const BottomFeatured = ({ isLoading }) => {
           </StyledText>
           <CardActions>
             <Button
-              sx={{ borderRadius: "15px" }}
+              sx={{ borderRadius: "18px" }}
               variant="outlined"
               component={RouterLink}
               to="/income-directory"

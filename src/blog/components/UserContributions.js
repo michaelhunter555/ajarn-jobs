@@ -2,14 +2,22 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { Button, CircularProgress, Grid, Stack } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
+import {
+  Avatar,
+  Button,
+  Chip,
+  CircularProgress,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import UserContributionForm from "./UserContributionForm";
@@ -36,6 +44,8 @@ const UserContributions = () => {
     refetch,
     isLoading,
   } = useQuery(["infoDirectory"], () => getUserIncomeData());
+
+  console.log(userIncomeData);
 
   const getFreshData = () => {
     refetch();
@@ -87,10 +97,43 @@ const UserContributions = () => {
 
                   <ListItemText
                     primary={
-                      <>
-                        <Typography>{val?.jobTitle}</Typography>
-                        <Typography>{val?.monthlySalary} p/m</Typography>
-                      </>
+                      <Stack component="span" direction="column">
+                        <Stack
+                          component="span"
+                          direction="row"
+                          alignItems="center"
+                          spacing={1}
+                        >
+                          {val?.userId?.location && (
+                            <Chip
+                              variant="outlined"
+                              size="small"
+                              component="span"
+                              label={val?.userId?.location}
+                              icon={
+                                <LocationOnOutlinedIcon
+                                  style={{ color: "#47acbb" }}
+                                />
+                              }
+                            />
+                          )}
+                          <Chip
+                            variant="outlined"
+                            size="small"
+                            component="span"
+                            label={`${val?.monthlySalary} p/m`}
+                            icon={
+                              <PaymentsTwoToneIcon
+                                style={{ color: "#1e8d41" }}
+                              />
+                            }
+                          />
+                        </Stack>
+
+                        <Typography component="span">
+                          {val?.jobTitle}
+                        </Typography>
+                      </Stack>
                     }
                     secondary={
                       <>
