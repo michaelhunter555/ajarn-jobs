@@ -15,6 +15,7 @@ import {
   Paper,
   Skeleton,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -94,42 +95,93 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 <Typography color="text.secondary" variant="h5" component="h2">
                   {teacher?.name}
                 </Typography>
+
                 <Typography variant="subtitle2" component="div">
                   <Chip label={teacher?.userType} size="small" />
                 </Typography>
-                <Typography
-                  variant="subtitle2"
-                  color="text.secondary"
-                  component="div"
-                >
-                  <LocationOnIcon size="inherit" /> lives in {teacher?.location}
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="subtitle2"
-                  component="div"
-                >
-                  <LanguageIcon size="inherit" />
-                  Nationality: {teacher?.nationality}
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="subtitle2"
-                  component="div"
-                >
-                  <SchoolIcon size="inherit" />
-                  Education: {teacher?.highestCertification}
-                </Typography>
 
-                <Typography
-                  color="text.secondary"
-                  variant="subtitle2"
-                  component="div"
-                >
-                  <WorkIcon size="inherit" /> Teaching for{" "}
-                  {teacher?.workExperience}-
-                  {teacher?.workExperience > 1 ? "years" : "year"}
-                </Typography>
+                <Stack direction="row" alignItems="center">
+                  <Box>
+                    <LocationOnIcon size="inherit" sx={{ color: "#646464" }} />
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      lives in {teacher?.location}
+                    </Typography>
+                  </Box>
+                </Stack>
+
+                <Stack direction="row" alignItems="center">
+                  <Box>
+                    <LanguageIcon size="inherit" sx={{ color: "#646464" }} />
+                  </Box>
+                  <Box>
+                    <Typography
+                      color="text.secondary"
+                      variant="subtitle2"
+                      component="div"
+                    >
+                      Nationality: {teacher?.nationality}
+                    </Typography>
+                  </Box>
+                </Stack>
+
+                <Stack direction="row" alignItems="center">
+                  <Box>
+                    <SchoolIcon size="inherit" sx={{ color: "#646464" }} />
+                  </Box>
+                  <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    <Typography
+                      color="text.secondary"
+                      variant="subtitle2"
+                      component="div"
+                    >
+                      Education: {teacher?.highestCertification}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    {teacher?.education && (
+                      <Chip
+                        sx={{ backgroundColor: "transparent" }}
+                        avatar={
+                          <Tooltip
+                            title={`Degree from ${
+                              teacher?.education?.split(".")[0]
+                            }`}
+                            placement="top"
+                          >
+                            <Avatar
+                              alt={`${teacher?.education}--${teacher?.name}`}
+                              src={`https://logo.clearbit.com/${teacher?.education.toLowerCase()}`}
+                            />
+                          </Tooltip>
+                        }
+                      />
+                    )}
+                  </Box>
+                </Stack>
+
+                <Stack direction="row" alignItems="center">
+                  <Box>
+                    <WorkIcon size="inherit" sx={{ color: "#646464" }} />
+                  </Box>
+                  <Box>
+                    <Typography
+                      color="text.secondary"
+                      variant="subtitle2"
+                      component="div"
+                    >
+                      {teacher?.workExperience}
+                      {teacher?.workExperience > 1 ? " years" : " year"} of
+                      experience
+                    </Typography>
+                  </Box>
+                </Stack>
+
                 <Divider flexItem sx={{ margin: "0.5rem 0" }} />
                 <Typography variant="subtitle2" component="div">
                   <Typography
@@ -139,7 +191,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   >
                     Skills:
                   </Typography>
-                  <Stack spacing={1} direction="row">
+                  <Stack spacing={2} direction="row">
                     {teacher?.skill?.split(",").map((skills, i) => (
                       <Chip clickable key={i} label={skills} />
                     ))}
@@ -192,7 +244,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   variant="left"
                   sx={{ margin: "0 0 0.5rem 0" }}
                 />
-                <Typography variant="subtitle2" component="h3">
+                <Stack direction="row" alignItems="center" spacing={1}>
                   {teacher?.interests?.split(",").map((interest, i) => (
                     <Chip
                       clickable
@@ -201,7 +253,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                       variant="outlined"
                     />
                   ))}
-                </Typography>
+                </Stack>
               </Paper>
             </Grid>
           )}

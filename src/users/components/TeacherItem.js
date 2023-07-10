@@ -81,8 +81,11 @@ const TeacherItem = (props) => {
 
   return (
     <>
-      <Grid container direction="row" item>
-        <StyledGlassCard onClick={handleModalOpen} sx={{ width: props.width }}>
+      <Grid container direction="row" justifyContent="center">
+        <StyledGlassCard
+          onClick={handleModalOpen}
+          sx={{ maxWidth: props?.width }}
+        >
           <CardContent sx={{ lineHeight: 1, padding: "16px 16px 0 16px" }}>
             <CardMedia
               component="img"

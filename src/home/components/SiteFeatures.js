@@ -1,12 +1,13 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import {
   Box,
   Card,
   CardContent,
   CardMedia,
+  Link,
   Skeleton,
   Typography,
 } from "@mui/material";
@@ -106,7 +107,7 @@ const SiteFeatures = ({ isLoading }) => {
         >
           {items.map(({ label, img, link }, i) => {
             return (
-              <Link key={i} to={link}>
+              <Link component={RouterLink} key={i} to={link}>
                 <StyledCardBackground raised={false}>
                   <CardMedia
                     component="img"
@@ -126,7 +127,7 @@ const SiteFeatures = ({ isLoading }) => {
                       align="center"
                       component="h3"
                       color="text.secondary"
-                      sx={{ textDecoration: "none" }}
+                      sx={{ fontWeight: 600 }}
                     >
                       {label}
                     </Typography>

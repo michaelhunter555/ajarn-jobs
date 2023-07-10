@@ -39,26 +39,26 @@ const TeacherList = ({ teachers, isLoading }) => {
         ))}
 
       {teachers?.map((teacher, i) => (
-        <Grid item key={teacher._id} xs={12} sm={6} md={3}>
+        <Grid item key={teacher?._id} xs={12} sm={6} md={3}>
           {(() => {
             const teacherItem = (
               <TeacherItem
-                id={teacher._id}
-                name={teacher.name}
-                currentLocation={teacher.location}
-                education={teacher.education}
-                nationality={teacher.nationality}
-                workExperience={teacher.workExperience}
-                image={`${process.env.REACT_APP_IMAGE}${teacher.image}`}
-                degree={teacher.highestCertification}
-                about={teacher.about}
+                id={teacher?._id}
+                name={teacher?.name}
+                currentLocation={teacher?.location}
+                education={teacher?.education}
+                nationality={teacher?.nationality}
+                workExperience={teacher?.workExperience}
+                image={`${process.env.REACT_APP_IMAGE}${teacher?.image}`}
+                degree={teacher?.highestCertification}
+                about={teacher?.about}
               />
             );
 
             if (auth?.isLoggedIn) {
               if (auth?.user?.credits > 0) {
                 return (
-                  <Link to={`/teachers/${teacher._id}`}>{teacherItem}</Link>
+                  <Link to={`/teachers/${teacher?._id}`}>{teacherItem}</Link>
                 );
               } else {
                 return teacherItem;

@@ -45,7 +45,6 @@ const StyledMediaCard = styled(CardMedia)({
 
 const StyledChip = styled(Chip)(({ theme, featured }) => ({
   backgroundColor: featured ? "#f7f1d0" : "",
-  border: featured ? "" : "1px solid #e1e1e1",
 }));
 
 const JobAdsList = (props) => {

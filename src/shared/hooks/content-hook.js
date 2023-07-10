@@ -1,5 +1,7 @@
 import { useCallback, useContext, useState } from "react";
 
+import _ from "lodash";
+
 import { AuthContext } from "../context/auth-context";
 import { useHttpClient } from "./http-hook";
 
@@ -157,6 +159,14 @@ export const useContent = () => {
     [auth.token, sendRequest]
   );
 
+  const throttledLike = _.throttle(
+    (...args) => {
+      likeContentPost(...args);
+    },
+    500,
+    { trailing: false }
+  );
+
   //PATCH dislike content post
   const dislikeContentPost = useCallback(
     async (blogId, userId, contentDisliked) => {
@@ -219,6 +229,7 @@ export const useContent = () => {
     clearError,
     dislikeContentPost,
     likeContentPost,
+    throttledLike,
     getBlogPostById,
     getTotalLikes,
     getTotalDislikes,

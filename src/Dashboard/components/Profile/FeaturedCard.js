@@ -27,6 +27,9 @@ const StyledCard = styled(Card)(({ theme }) => ({
   justifyContent: "flex-start",
   flexDirection: "column",
   position: "relative",
+  [theme.breakpoints.down("sm")]: {
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const StyledImageOverlay = styled(Box)(({ theme }) => ({

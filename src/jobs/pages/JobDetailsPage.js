@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useParams } from "react-router-dom";
+
+import { useQuery } from "@tanstack/react-query";
 
 //import { useQuery } from "@tanstack/react-query";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
@@ -9,11 +11,27 @@ import JobDetails from "../components/JobDetails";
 
 const JobDetailsPage = () => {
   const jobId = useParams().jid;
-  const { jobs, getJobById, isLoading, error, clearError } = useJob();
-  useEffect(() => {
-    getJobById(jobId);
-  });
-  //const { data: jobs } = useQuery(["jobDetailsPage"], () => getJobById(jobId));
+  const { getJobById, error, clearError } = useJob();
+  // useEffect(() => {
+  //   getJobById(jobId);
+  // });
+
+  const getJobDetails = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_JOBS}/${jobId}`);
+      if (!response.ok) {
+        throw new Error("There was an error with the request");
+      }
+      const data = await response.json();
+      return data.job;
+    } catch (err) {
+      console.log("Error in jobDetails:", err);
+    }
+  };
+
+  const { data: jobs, isLoading } = useQuery(["jobDetailsPage", jobId], () =>
+    getJobDetails(jobId)
+  );
 
   return (
     <>

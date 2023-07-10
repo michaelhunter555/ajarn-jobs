@@ -36,29 +36,29 @@ const NavLinks = (props) => {
   return (
     <StyledNavLinks>
       <li>
-        <DebouncedNav to="/" exact="true">
+        <NavLink to="/" exact={true}>
           <Typography
             sx={{ fontWeight: location.pathname === "/" ? 700 : "inherit" }}
             variant="button"
           >
             Home
           </Typography>
-        </DebouncedNav>
+        </NavLink>
       </li>
 
       <li>
-        <DebouncedNav to="/jobs">
+        <NavLink to="/jobs">
           <Typography
             sx={{ fontWeight: location.pathname === "/jobs" ? 700 : "inherit" }}
             variant="button"
           >
             Jobs
           </Typography>
-        </DebouncedNav>
+        </NavLink>
       </li>
 
       <li>
-        <DebouncedNav to="/teachers">
+        <NavLink to="/teachers">
           <Typography
             sx={{
               fontWeight: location.pathname === "/teachers" ? 700 : "inherit",
@@ -67,11 +67,11 @@ const NavLinks = (props) => {
           >
             Teachers
           </Typography>
-        </DebouncedNav>
+        </NavLink>
       </li>
 
       <li>
-        <DebouncedNav to="/content">
+        <NavLink to="/content">
           <Typography
             sx={{
               fontWeight: location.pathname === "/content" ? 700 : "inherit",
@@ -80,12 +80,12 @@ const NavLinks = (props) => {
           >
             Content
           </Typography>
-        </DebouncedNav>
+        </NavLink>
       </li>
 
       {auth.isLoggedIn && (
         <li>
-          <DebouncedNav to={`/users/${auth.user?._id}`}>
+          <NavLink to={`/users/${auth.user?._id}`}>
             <Typography
               sx={{
                 fontWeight:
@@ -97,13 +97,13 @@ const NavLinks = (props) => {
             >
               Dashboard
             </Typography>
-          </DebouncedNav>
+          </NavLink>
         </li>
       )}
 
       {!auth.isLoggedIn && (
         <li>
-          <DebouncedNav to="/auth">
+          <NavLink to="/auth">
             <Typography
               sx={{
                 fontWeight: location.pathname === "/auth" ? 700 : "inherit",
@@ -112,7 +112,7 @@ const NavLinks = (props) => {
             >
               Login
             </Typography>
-          </DebouncedNav>
+          </NavLink>
         </li>
       )}
 
@@ -193,7 +193,7 @@ const StyledNavLinks = styled("ul")`
   }
 
   li {
-    margin: 0 0.5rem;
+    margin: 1rem 0.5rem;
   }
 
   a {

@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import EastIcon from "@mui/icons-material/East";
+import ViewListIcon from "@mui/icons-material/ViewList";
 import { Box, Button, Card, Divider, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
@@ -124,8 +125,6 @@ const UserJobs = () => {
     );
   });
 
-  console.log("AUTH_OBJ-JOBS:", auth.user);
-
   //if not filter.location or dummyjobs[lowercase][includes] + (filter[location][lowercase])
 
   let button;
@@ -232,6 +231,17 @@ const UserJobs = () => {
               variant="rectangular"
               num={4}
             />
+          )}
+          {!isLoading && (
+            <Stack>
+              <Button
+                component={RouterLink}
+                to={`/modern-view/jobs`}
+                startIcon={<ViewListIcon />}
+              >
+                Switch to Dyanmic list
+              </Button>
+            </Stack>
           )}
           {!isLoading && <FeaturedJobsLists sponsors={jobs} />}
         </FeaturedJobListDiv>

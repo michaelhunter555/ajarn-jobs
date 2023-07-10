@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@mui/material";
 
-const JobRequirements = ({ jobSpecs, isLoading }) => {
+const JobRequirements = ({ jobSpecs, isLoading, fontSize }) => {
   const jobSpecifications = [
     { text: "Location", icon: <FaMapMarkerAlt />, data: jobSpecs?.location },
     {
@@ -39,17 +39,27 @@ const JobRequirements = ({ jobSpecs, isLoading }) => {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontSize: 12 }}>Location</TableCell>
-            <TableCell sx={{ fontSize: 12 }}>Requirements</TableCell>
-            <TableCell sx={{ fontSize: 12 }}>Salary</TableCell>
-            <TableCell sx={{ fontSize: 12 }}>Visa</TableCell>
-            <TableCell sx={{ fontSize: 12 }}>Hours</TableCell>
+            <TableCell sx={{ fontSize: fontSize, fontWeight: 600 }}>
+              Location
+            </TableCell>
+            <TableCell sx={{ fontSize: fontSize, fontWeight: 600 }}>
+              Requirements
+            </TableCell>
+            <TableCell sx={{ fontSize: fontSize, fontWeight: 600 }}>
+              Salary
+            </TableCell>
+            <TableCell sx={{ fontSize: fontSize, fontWeight: 600 }}>
+              Visa
+            </TableCell>
+            <TableCell sx={{ fontSize: fontSize, fontWeight: 600 }}>
+              Hours
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           <TableRow>
             {jobSpecifications?.map((item, i) => (
-              <TableCell sx={{ fontSize: 12 }} key={i}>
+              <TableCell sx={{ fontSize: fontSize }} key={i}>
                 {item.data}
               </TableCell>
             ))}

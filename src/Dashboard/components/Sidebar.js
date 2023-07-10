@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -7,6 +7,8 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import SettingsIcon from "@mui/icons-material/Settings";
 import WorkIcon from "@mui/icons-material/Work";
 import {
+  BottomNavigation,
+  BottomNavigationAction,
   Divider,
   List,
   ListItemButton,
@@ -17,7 +19,7 @@ import { styled } from "@mui/material/styles";
 
 import { AuthContext } from "../../shared/context/auth-context";
 
-const HorizontalSideBar = styled("div")(({ theme }) => ({
+const VerticalSideBar = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   height: "100%",
@@ -27,6 +29,16 @@ const HorizontalSideBar = styled("div")(({ theme }) => ({
   background: "white",
   [theme.breakpoints.down("md")]: {
     display: "none",
+  },
+}));
+
+const StyledBottomNav = styled(BottomNavigation)(({ theme }) => ({
+  display: "none",
+  [theme.breakpoints.down("sm")]: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "1rem",
   },
 }));
 
@@ -107,7 +119,7 @@ const Sidebar = ({ onMenuItemClick }) => {
   });
 
   return (
-    <HorizontalSideBar elevated="true">
+    <VerticalSideBar elevated="true">
       <List>
         {filteredSidebar.map((item, i) => (
           <React.Fragment key={i}>
@@ -121,8 +133,64 @@ const Sidebar = ({ onMenuItemClick }) => {
           </React.Fragment>
         ))}
       </List>
-    </HorizontalSideBar>
+    </VerticalSideBar>
   );
 };
 
 export default Sidebar;
+
+export const BottomMobileNav = ({ onMenuItemClick }) => {
+  const { user } = useContext(AuthContext);
+  const userType = user?.userType;
+  const [value, setValue] = useState(0); // Add a state for the selected tab
+
+  const filteredSidebar = menuItems.filter((val) => {
+    if (val.componentName === "creator" && userType === "teacher") {
+      return false;
+    }
+
+    if (val.componentName === "job-listings" && userType === "teacher") {
+      return false;
+    }
+
+    if (val.componentName === "applications" && userType === "employer") {
+      return false;
+    }
+
+    if (val.componentName === "cover-letter" && userType === "employer") {
+      return false;
+    }
+
+    if (val.componentName === "resume" && userType === "employer") {
+      return false;
+    }
+
+    if (val.componentName === "logout") {
+      return false;
+    }
+    return true;
+  });
+
+  const handleSidebarClick = (componentName, index) => {
+    setValue(index); // Set the selected tab
+    onMenuItemClick(componentName);
+  };
+
+  return (
+    <StyledBottomNav
+      value={value}
+      onChange={(event, newValue) => setValue(newValue)}
+    >
+      {filteredSidebar.map((mobileItem, i) => (
+        <BottomNavigationAction
+          sx={{ opacity: 1 }}
+          label={mobileItem.text}
+          icon={mobileItem.icon}
+          value={i}
+          onClick={() => handleSidebarClick(mobileItem.componentName, i)}
+          key={i}
+        />
+      ))}
+    </StyledBottomNav>
+  );
+};

@@ -15,6 +15,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
+import AlternateUserJobs from "./jobs/pages/AlternateUserJobs";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
 import {
@@ -125,6 +126,7 @@ function App() {
           element={<IncomeDirectoryDetails />}
         />
         <Route path="/users/:id" element={<TeacherDashboard />} />
+        <Route path="/modern-view/jobs" element={<AlternateUserJobs />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/job/new" element={<NewJob />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
@@ -147,6 +149,7 @@ function App() {
           path="/income-details/:id"
           element={<IncomeDirectoryDetails />}
         />
+        <Route path="/modern-view/jobs" element={<AlternateUserJobs />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/jobs/:jid" element={<JobDetailsPage />} />
         <Route path="/teachers" element={<Teachers />} />

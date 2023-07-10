@@ -36,6 +36,8 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
     refetch,
   } = useQuery(["commentsByBlogId", blogId], () => getComments(blogId));
 
+  console.log(usersComments.length);
+
   const handleCommentSubmit = () => {
     const contentState = editorState.getCurrentContent();
     const rawContent = convertToRaw(contentState);
@@ -52,9 +54,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
     } catch (err) {
       console.log("HandleCommentSubmit Error - POST:", error);
     }
-    if (!error) {
-      setEditorState(EditorState.createEmpty());
-    }
+    setEditorState(EditorState.createEmpty());
   };
 
   const handleEditorChange = (newEditorState) => {
@@ -92,7 +92,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
                         variant="subtitle2"
                         sx={{ fontSize: 14, fontWeight: 550 }}
                       >
-                        {content?.comments?.length} comments
+                        {usersComments?.length} comments
                       </Typography>
                     </Button>
                   </Stack>

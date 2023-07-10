@@ -20,6 +20,7 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
   const [isDisliked, setIsDisliked] = useState(false);
   const {
     likeContentPost,
+    throttledLike,
     dislikeContentPost,
     totalLikes,
     totalDislikes,

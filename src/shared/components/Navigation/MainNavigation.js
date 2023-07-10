@@ -116,4 +116,5 @@ const MainNavigationHeader = styled("nav")`
 `;
 const MainNavigationDrawer = styled("nav")`
   height: 100%;
+  margin: 1rem auto;
 `;

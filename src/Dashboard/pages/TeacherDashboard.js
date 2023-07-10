@@ -25,7 +25,7 @@ import FeaturedCard from "../components/Profile/FeaturedCard";
 import ProfileInformation from "../components/Profile/ProfileInformation";
 import TeacherSettings from "../components/Profile/TeacherSettings";
 import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
-import Sidebar from "../components/Sidebar";
+import Sidebar, { BottomMobileNav } from "../components/Sidebar";
 
 const TEACHER = "teacher";
 const EMPLOYER = "employer";
@@ -461,7 +461,7 @@ const TeacherDashboard = () => {
               display: "flex",
               justifyContet: "flex-start",
               flexDirection: "column",
-              marginBottom: 10,
+              marginBottom: 5,
             }}
           >
             {homeDashLoadingState && (
@@ -476,7 +476,12 @@ const TeacherDashboard = () => {
             {!homeDashLoadingState && renderComponent()}
           </Grid>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid
+          item
+          xs={12}
+          md={3}
+          sx={{ xs: { display: "flex", justifyContent: "center" } }}
+        >
           {homeDashLoadingState ? (
             <>
               <Skeleton
@@ -506,6 +511,8 @@ const TeacherDashboard = () => {
           )}
         </Grid>
       </Grid>
+
+      <BottomMobileNav onMenuItemClick={handleMenuItemClick} />
     </>
   );
 };

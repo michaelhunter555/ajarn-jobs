@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 
-import { Avatar, Box, Chip, Divider, Paper, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Chip,
+  Divider,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import ProfileTabs from "./ProfileTabs";
@@ -11,6 +20,9 @@ const StyledProfileContainer = styled(Paper)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "flex-start",
   marginBottom: theme.spacing(5),
+  [theme.breakpoints.down("sm")]: {
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 const StyledBackgroundBox = styled(Box)(({ theme }) => ({
@@ -37,6 +49,7 @@ const ProfileInformation = ({ user }) => {
     image,
     education,
     WorkExperience,
+    highestCertification,
     interests,
     name,
     about,
@@ -80,6 +93,17 @@ const ProfileInformation = ({ user }) => {
         );
       case "resume":
         return <CollapsibleTable teacherResume={resume} />;
+      case "education":
+        return (
+          <Stack alignItems="center">
+            <Typography paragraph sx={{ margin: "1.5rem" }}>
+              You have a {highestCertification} from{" "}
+              {education?.slice(0, 1).toUpperCase() +
+                education?.slice(1).split(".")[0]}
+              .
+            </Typography>
+          </Stack>
+        );
       default:
         return <Typography paragraph>{about}</Typography>;
     }
@@ -95,7 +119,22 @@ const ProfileInformation = ({ user }) => {
           />
           <Typography variant="h5">{name}</Typography>
           <Typography variant="subtitle1">{location}</Typography>
-          <Typography variant="subtitle2">{education}</Typography>
+          {education && (
+            <Chip
+              sx={{ backgroundColor: "transparent" }}
+              avatar={
+                <Tooltip
+                  title={`Degree from ${education?.split(".")[0]}`}
+                  placement="top"
+                >
+                  <Avatar
+                    alt={`${education}--${name}`}
+                    src={`https://logo.clearbit.com/${education.toLowerCase()}`}
+                  />
+                </Tooltip>
+              }
+            />
+          )}
           <Typography variant="body1">{WorkExperience}</Typography>
           <Box sx={{ display: "flex", flexDirection: "row" }}>
             {interests?.split(",").map((interest, i) => {

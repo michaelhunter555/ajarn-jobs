@@ -83,9 +83,9 @@ const SideBlogList = ({ contentPosts }) => {
 
   return (
     <Grid container direction="row" sx={{ margin: "2rem auto" }}>
-      <TeflBanner />
+      {!isLoading && <TeflBanner />}
+      {isLoading && <CircularProgress />}
       <StyledGridContainer>
-        {isLoading && <CircularProgress />}
         {!isLoading &&
           blogList &&
           blogList?.map((val, i) => (

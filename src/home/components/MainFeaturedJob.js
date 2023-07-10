@@ -10,6 +10,7 @@ import {
   Alert,
   Avatar,
   Box,
+  Button,
   Chip,
   Divider,
   Grid,
@@ -50,13 +51,13 @@ const StyledBoxContent = styled(Box)(({ theme }) => ({
   },
 }));
 
-const StyledContentGrid = styled(Box)({
+const StyledContentGrid = styled(Box)(({ theme }) => ({
   overflowY: "scroll",
   display: "flex",
   gap: "5px",
   margin: "0rem auto",
   flexDirection: "column",
-  maxHeight: 400,
+
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {
     width: "4px",
@@ -84,14 +85,14 @@ const StyledContentGrid = styled(Box)({
       background: "#f1f1f1",
     },
   },
-});
+}));
 
 const StyledChip = styled(Chip)({
   border: "1px solid #e1e1e1",
   backgroundColor: "#f7f7f7",
 });
 
-const MainFeaturedJob = ({ jobs, isLoading }) => {
+const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
   const [selectedJob, setSelectedJob] = useState(
     jobs?.length > 0 ? jobs[0] : null
   );
@@ -104,7 +105,6 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
   return (
     <>
       {/*featured post */}
-
       <StyledPaper
         sx={{
           borderRadius: "5px",
@@ -112,11 +112,103 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
       >
         <Grid container>
           <Grid item xs={12} md={4.5} order={{ xs: 2, md: 1 }}>
-            <Alert severity="info">Featured jobs</Alert>
-            <StyledContentGrid item xs={12} md={4.5}>
-              {jobs
-                ?.filter((job) => job?.jobType === "featured")
-                ?.map((job, i) => (
+            <Alert severity="info">
+              {featured ? "Featured jobs" : "All Jobs"}
+            </Alert>
+            <StyledContentGrid item xs={12} md={4.5} sx={{ maxHeight: height }}>
+              {featured &&
+                jobs
+                  ?.filter((job) => job?.jobType === "featured")
+                  ?.map((job, i) => (
+                    <React.Fragment key={job?._id}>
+                      <List>
+                        <ListItemButton
+                          sx={{ paddingTop: 0, paddingBottom: 0 }}
+                          component={Link}
+                          key={job?._id}
+                          onClick={() => selectJobHandler(job)}
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                              alt={`${job?.name}-${job?.title}`}
+                            />
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={
+                              <>
+                                <Stack
+                                  direction="row"
+                                  alignItems="flex-end"
+                                  spacing={1}
+                                >
+                                  <StyledChip
+                                    clickable
+                                    icon={
+                                      <LocationOnOutlinedIcon
+                                        style={{ color: "#47acbb" }}
+                                      />
+                                    }
+                                    sx={{
+                                      fontSize: 11,
+                                    }}
+                                    size="small"
+                                    label={job?.location}
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    component="span"
+                                    sx={{ fontSize: 12 }}
+                                  >
+                                    {getTimeDifference(job?.datePosted)}
+                                  </Typography>
+                                </Stack>
+                              </>
+                            }
+                            secondary={
+                              <Stack component="span" direction="column">
+                                <Typography
+                                  variant="body2"
+                                  component="span"
+                                  color="text.primary"
+                                  sx={{ fontSize: 12, fontWeight: 600 }}
+                                >
+                                  {job?.title}
+                                </Typography>
+                                <Typography
+                                  variant="body2"
+                                  component="span"
+                                  color="text.primary"
+                                  sx={{ fontSize: 12 }}
+                                >
+                                  {job?.hours}
+                                  {" — " + job?.salary}
+                                </Typography>
+
+                                <Typography
+                                  variant="subtitle2"
+                                  color="text.secondary"
+                                  component="span"
+                                  sx={{ fontSize: 12 }}
+                                >
+                                  {sanitizeHtml(job?.description, {
+                                    allowedTags: [],
+                                    allowedAttributes: {},
+                                  })?.substring(0, 40) + "..."}
+                                </Typography>
+                              </Stack>
+                            }
+                          />
+                        </ListItemButton>
+                        {i < jobs?.length - 1 && <Divider light />}
+                      </List>
+                    </React.Fragment>
+                  ))}
+
+              {/**TEMP SPLIT - DO NOT REMOVE */}
+
+              {!featured &&
+                jobs?.map((job, i) => (
                   <React.Fragment key={job?._id}>
                     <List>
                       <ListItemButton
@@ -147,7 +239,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                     />
                                   }
                                   sx={{
-                                    fontSize: 11,
+                                    fontSize: 14,
                                   }}
                                   size="small"
                                   label={job?.location}
@@ -155,7 +247,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                 <Typography
                                   variant="subtitle2"
                                   component="span"
-                                  sx={{ fontSize: 12 }}
+                                  sx={{ fontSize: 14 }}
                                 >
                                   {getTimeDifference(job?.datePosted)}
                                 </Typography>
@@ -168,7 +260,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                 variant="body2"
                                 component="span"
                                 color="text.primary"
-                                sx={{ fontSize: 12, fontWeight: 600 }}
+                                sx={{ fontSize: 14, fontWeight: 600 }}
                               >
                                 {job?.title}
                               </Typography>
@@ -176,7 +268,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                 variant="body2"
                                 component="span"
                                 color="text.primary"
-                                sx={{ fontSize: 12 }}
+                                sx={{ fontSize: 14 }}
                               >
                                 {job?.hours}
                                 {" — " + job?.salary}
@@ -186,7 +278,7 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                                 variant="subtitle2"
                                 color="text.secondary"
                                 component="span"
-                                sx={{ fontSize: 12 }}
+                                sx={{ fontSize: 14 }}
                               >
                                 {sanitizeHtml(job?.description, {
                                   allowedTags: [],
@@ -206,19 +298,26 @@ const MainFeaturedJob = ({ jobs, isLoading }) => {
                 alignItems="center"
                 sx={{ backgroundColor: "#f9f9f9" }}
               >
-                <ListItemButton
+                <Button
                   sx={{ display: "flex", alignItems: "center" }}
                   component={Link}
                   to="/jobs/"
                 >
                   View all jobs
-                </ListItemButton>
+                </Button>
               </Stack>
             </StyledContentGrid>
           </Grid>
           <Grid item xs={12} md={7.5} order={{ xs: 1, md: 2 }}>
             <StyledBoxContent>
-              {selectedJob && <FeaturedJobDetails job={selectedJob} />}
+              {selectedJob && (
+                <FeaturedJobDetails
+                  fontSize={fontSize}
+                  featured={featured}
+                  job={selectedJob}
+                  height={height}
+                />
+              )}
             </StyledBoxContent>
           </Grid>
         </Grid>
