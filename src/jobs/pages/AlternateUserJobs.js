@@ -2,10 +2,15 @@ import React from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
-import { Button, Grid, Stack } from "@mui/material";
+import { Box, Button, Grid, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
+import BottomFeatured from "../../home/components/BottomFeatured";
 import MainFeaturedJob from "../../home/components/MainFeaturedJob";
+import Footer, {
+  Content,
+  PageContainer,
+} from "../../shared/components/UIElements/Footer";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
 
 const AlternateUserJobs = () => {
@@ -28,28 +33,38 @@ const AlternateUserJobs = () => {
   const { data: jobs } = useQuery(["alternateJobs"], () => getJobs());
 
   return (
-    <Grid container direction="row" spacing={1}>
-      <Grid item xs={12} sm={9}>
-        <Stack>
-          <Button
-            sx={{ backgroundColor: "rgba(18, 140, 177, 0.04)" }}
-            component={RouterLink}
-            to="/jobs"
-          >
-            Go back to Classic View
-          </Button>
-        </Stack>
-        <MainFeaturedJob
-          fontSize={14}
-          height={500}
-          featured={false}
-          jobs={jobs}
-        />
-      </Grid>
-      <Grid item xs={12} sm={3}>
-        <FeaturedJobsLists sponsors={jobs} />
-      </Grid>
-    </Grid>
+    <PageContainer>
+      <Content>
+        <Grid container direction="row" spacing={1}>
+          <Grid item xs={12} sm={9}>
+            <Stack>
+              <Button
+                sx={{ backgroundColor: "rgba(18, 140, 177, 0.04)" }}
+                component={RouterLink}
+                to="/jobs"
+              >
+                Go back to Classic View
+              </Button>
+            </Stack>
+            {jobs && (
+              <MainFeaturedJob
+                fontSize={14}
+                height={500}
+                featured={false}
+                jobs={jobs}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <FeaturedJobsLists sponsors={jobs} />
+          </Grid>
+        </Grid>
+        <Box sx={{ margin: "3rem auto" }}>
+          <BottomFeatured />
+        </Box>
+      </Content>
+      <Footer />
+    </PageContainer>
   );
 };
 

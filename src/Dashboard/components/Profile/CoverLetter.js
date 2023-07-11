@@ -107,7 +107,7 @@ const CoverLetter = () => {
             direction="column"
             sx={{ padding: "1rem" }}
           >
-            <Grid item sx={12}>
+            <Grid item xs={12}>
               <Stack justifyContent="center" alignItems="center">
                 <Grid>
                   <Typography variant="body1" component="h2">
@@ -116,8 +116,18 @@ const CoverLetter = () => {
                 </Grid>
               </Stack>
               <Divider sx={{ margin: "1rem" }} />
-              <Grid direction="row" spacing={2}>
-                <Stack justifyContent="center" direction="row" spacing={2}>
+              <Grid
+                container
+                justifyContent="center"
+                direction="row"
+                spacing={2}
+              >
+                <Stack
+                  justifyContent="center"
+                  alignItem="center"
+                  direction="row"
+                  spacing={2}
+                >
                   <Typography color="text.secondary" variant="subtitle2">
                     {auth.user?.name}
                   </Typography>

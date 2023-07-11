@@ -448,7 +448,10 @@ const TeacherDashboard = () => {
                   id={jobAd[1]?._id}
                   logo={`${process.env.REACT_APP_IMAGE}${jobAd[1]?.image}`}
                   title={jobAd[1]?.title}
-                  description={jobAd[1]?.description}
+                  description={sanitizeHtml(jobAd[1]?.description, {
+                    allowedTags: [],
+                    allowedAttributes: {},
+                  })}
                 />
               )}
             </Grid>
@@ -511,7 +514,6 @@ const TeacherDashboard = () => {
           )}
         </Grid>
       </Grid>
-
       <BottomMobileNav onMenuItemClick={handleMenuItemClick} />
     </>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { useParams } from "react-router-dom";
 
@@ -6,10 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 
 //import { useQuery } from "@tanstack/react-query";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import { AuthContext } from "../../shared/context/auth-context";
 import { useJob } from "../../shared/hooks/jobs-hook";
 import JobDetails from "../components/JobDetails";
 
 const JobDetailsPage = () => {
+  const auth = useContext(AuthContext);
   const jobId = useParams().jid;
   const { getJobById, error, clearError } = useJob();
   // useEffect(() => {
@@ -31,6 +33,10 @@ const JobDetailsPage = () => {
 
   const { data: jobs, isLoading } = useQuery(["jobDetailsPage", jobId], () =>
     getJobDetails(jobId)
+  );
+
+  const userAppliedAlready = auth.user?.applications?.some(
+    (userApplications) => userApplications?.jobId === jobId
   );
 
   return (

@@ -37,7 +37,10 @@ const StyledBottomNav = styled(BottomNavigation)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     display: "flex",
     alignItems: "center",
+    position: "sticky",
     justifyContent: "center",
+    bottom: 0,
+    zIndex: "1rem",
     marginTop: "1rem",
   },
 }));

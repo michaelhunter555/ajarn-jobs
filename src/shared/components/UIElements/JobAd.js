@@ -44,7 +44,10 @@ const StyledChip = styled(Chip)({
 const JobAd = (props) => {
   const { job } = props;
 
-  const sanitizedJobAd = sanitizeHtml(job?.description);
+  const sanitizedJobAd = sanitizeHtml(job?.description, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
 
   const truncatedJobDescrition =
     sanitizedJobAd.length > 120

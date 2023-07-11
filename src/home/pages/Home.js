@@ -255,7 +255,6 @@ const Home = () => {
             <JobAdSkeleton
               sx={{
                 height: "95px",
-                borderRadius: "6px",
               }}
               num={4}
               variant="rectangular"

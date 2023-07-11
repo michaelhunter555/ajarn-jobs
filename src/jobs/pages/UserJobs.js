@@ -4,7 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import EastIcon from "@mui/icons-material/East";
 import ViewListIcon from "@mui/icons-material/ViewList";
-import { Box, Button, Card, Divider, Stack } from "@mui/material";
+import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
@@ -18,6 +18,16 @@ import { useJob } from "../../shared/hooks/jobs-hook";
 import { dummy_jobs } from "../../shared/util/DummyJobs";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
 import JobFilters from "../components/JobFilters";
+
+const PageContainer = styled("div")({
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
+});
+
+const Content = styled("div")({
+  flex: 1,
+});
 
 const StyledUserJobsDiv = styled("div")(({ theme }) => ({
   maxWidth: "85%",
@@ -162,92 +172,102 @@ const UserJobs = () => {
   const noJobs = (
     <Box>
       <Card sx={{ padding: "0 2rem" }}>
-        <h2>Sorry no jobs were found for your search</h2>
-        <Button component={RouterLink} to="/job/new">
-          Create a job
-        </Button>
+        <Typography variant="h4" color="text.primary">
+          Sorry no jobs were found for your search
+        </Typography>
+        {auth.isLoggedIn && auth.user?.userType === "employer" && (
+          <Button component={RouterLink} to="/job/new">
+            Create a job
+          </Button>
+        )}
+
+        <Typography color="text.secondary" variant="body2">
+          Please check again at a near time in the future.
+        </Typography>
       </Card>
     </Box>
   );
 
   return (
-    <>
-      <ErrorModal error={error} onClear={clearError} />
-      <StyledUserJobsDiv>
-        <StyledAdJobDiv>
-          {!isLoading && (
-            <Stack spacing={2} direction="row">
-              {button}
+    <PageContainer>
+      <Content>
+        <ErrorModal error={error} onClear={clearError} />
+        <StyledUserJobsDiv>
+          <StyledAdJobDiv>
+            {!isLoading && (
+              <Stack spacing={2} direction="row">
+                {button}
 
-              <Divider orientation="vertical" />
-              {actionItem}
-            </Stack>
-          )}
-        </StyledAdJobDiv>
-        <UsersJobFilterDiv>
-          {isLoading && (
-            <JobAdSkeleton
-              sx={{
-                margin: "0 auto",
-                height: 348,
-                width: 360,
-                borderRadius: "6px",
-              }}
-              variant="rectangular"
-              num={1}
-            />
-          )}
-          {!isLoading && <JobFilters onFilterChange={handleFilterChange} />}
-          {!isLoading && (
-            <Stack>
-              <TeflBanner />
-            </Stack>
-          )}
-        </UsersJobFilterDiv>
+                <Divider orientation="vertical" />
+                {actionItem}
+              </Stack>
+            )}
+          </StyledAdJobDiv>
+          <UsersJobFilterDiv>
+            {isLoading && (
+              <JobAdSkeleton
+                sx={{
+                  margin: "0 auto",
+                  height: 348,
+                  width: 360,
+                  borderRadius: "6px",
+                }}
+                variant="rectangular"
+                num={1}
+              />
+            )}
+            {!isLoading && <JobFilters onFilterChange={handleFilterChange} />}
+            {!isLoading && (
+              <Stack>
+                <TeflBanner />
+              </Stack>
+            )}
+          </UsersJobFilterDiv>
 
-        <UserJobListDiv>
-          {isLoading && (
-            <JobAdSkeleton
-              sx={{
-                margin: "0.5rem 0 0.5rem 0",
-                height: "136px",
-                borderRadius: "6px",
-              }}
-              variant="rectangular"
-              num={10}
-            />
-          )}
-          {!isLoading && <JobAdsList job={filteredJobs} />}
-          {!isLoading && filteredJobs?.length === 0 && noJobs}
-        </UserJobListDiv>
-        <FeaturedJobListDiv>
-          {isLoading && (
-            <JobAdSkeleton
-              sx={{
-                margin: "0.5rem 0 0.5rem 0",
-                height: "70px",
-                borderRadius: "6px",
-              }}
-              variant="rectangular"
-              num={4}
-            />
-          )}
-          {!isLoading && (
-            <Stack>
-              <Button
-                component={RouterLink}
-                to={`/modern-view/jobs`}
-                startIcon={<ViewListIcon />}
-              >
-                Switch to Dyanmic list
-              </Button>
-            </Stack>
-          )}
-          {!isLoading && <FeaturedJobsLists sponsors={jobs} />}
-        </FeaturedJobListDiv>
-      </StyledUserJobsDiv>
+          <UserJobListDiv>
+            {isLoading && (
+              <JobAdSkeleton
+                sx={{
+                  margin: "0.5rem 0 0.5rem 0",
+                  height: "136px",
+                  borderRadius: "6px",
+                }}
+                variant="rectangular"
+                num={10}
+              />
+            )}
+            {!isLoading && <JobAdsList job={filteredJobs} />}
+            {!isLoading && filteredJobs?.length === 0 && noJobs}
+          </UserJobListDiv>
+          <FeaturedJobListDiv>
+            {isLoading && (
+              <JobAdSkeleton
+                sx={{
+                  margin: "0.5rem 0 0.5rem 0",
+                  height: "70px",
+                  borderRadius: "6px",
+                }}
+                variant="rectangular"
+                num={4}
+              />
+            )}
+            {!isLoading && (
+              <Stack>
+                <Button
+                  component={RouterLink}
+                  to={`/modern-view/jobs`}
+                  startIcon={<ViewListIcon />}
+                >
+                  Switch to Dyanmic list
+                </Button>
+              </Stack>
+            )}
+            {!isLoading && <FeaturedJobsLists sponsors={jobs} />}
+          </FeaturedJobListDiv>
+        </StyledUserJobsDiv>
+      </Content>
       <Footer />
-    </>
+    </PageContainer>
   );
 };
 

@@ -96,6 +96,7 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
   const [selectedJob, setSelectedJob] = useState(
     jobs?.length > 0 ? jobs[0] : null
   );
+  console.log(selectedJob);
 
   const selectJobHandler = (job) => {
     setSelectedJob(job);
@@ -115,7 +116,7 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
             <Alert severity="info">
               {featured ? "Featured jobs" : "All Jobs"}
             </Alert>
-            <StyledContentGrid item xs={12} md={4.5} sx={{ maxHeight: height }}>
+            <StyledContentGrid xs={12} md={4.5} sx={{ maxHeight: height }}>
               {featured &&
                 jobs
                   ?.filter((job) => job?.jobType === "featured")

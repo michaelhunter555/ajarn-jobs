@@ -12,6 +12,8 @@ import {
 import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
 
 const BlogContent = ({ content }) => {
+  const isEmployer = content?.author?.userType === "employer";
+
   return (
     <>
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -36,7 +38,9 @@ const BlogContent = ({ content }) => {
             variant="outlined"
             size="small"
             component="span"
-            label={`posting as a ${content?.author?.userType}`}
+            label={`posting as ${isEmployer ? "an" : "a"} ${
+              content?.author?.userType
+            }`}
           />
         </Stack>
         <Divider orientation="vertical" flexItem />

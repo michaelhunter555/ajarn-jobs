@@ -14,7 +14,12 @@ const styledComments = {
   boxSizing: "border-box",
 };
 
-const CommentForm = ({ postComment, editorState, editorChange }) => {
+const CommentForm = ({
+  postComment,
+  editorState,
+  editorChange,
+  formStateIsValid,
+}) => {
   const auth = useContext(AuthContext);
 
   return (
@@ -36,6 +41,7 @@ const CommentForm = ({ postComment, editorState, editorChange }) => {
           }}
         >
           <Editor
+            id="postComment"
             editorState={editorState}
             onEditorStateChange={editorChange}
           />
@@ -43,7 +49,7 @@ const CommentForm = ({ postComment, editorState, editorChange }) => {
             <Button
               variant="contained"
               sx={{ borderRadius: "20px", marginBottom: "0.5rem" }}
-              disabled={!auth.isLoggedIn}
+              disabled={!auth.isLoggedIn || !formStateIsValid}
               onClick={postComment}
             >
               {!auth.isLoggedIn ? "Login" : "Comment"}

@@ -30,13 +30,13 @@ const NavLinks = (props) => {
 
   const logoutHandler = () => {
     auth.logout();
-    navigate("/");
+    navigate("/auth");
   };
 
   return (
     <StyledNavLinks>
       <li>
-        <NavLink to="/" exact={true}>
+        <NavLink to="/" exact="true">
           <Typography
             sx={{ fontWeight: location.pathname === "/" ? 700 : "inherit" }}
             variant="button"

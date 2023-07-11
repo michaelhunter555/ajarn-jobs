@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { AuthContext } from "../../shared/context/auth-context";
 import { useComment } from "../../shared/hooks/content-hook";
+import { useForm } from "../../shared/hooks/form-hook";
 import BlogContent from "./BlogContent";
 import BlogPageLoadingSkeleton from "./BlogPageLoadingSkeleton";
 import CommentForm from "./CommentForm";
@@ -28,6 +29,10 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  const [formState, inputHandler] = useForm(
+    { postComment: { value: "", isValid: false } },
+    false
+  );
   const { addComment, getComments, error } = useComment();
 
   const {
@@ -36,7 +41,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
     refetch,
   } = useQuery(["commentsByBlogId", blogId], () => getComments(blogId));
 
-  console.log(usersComments.length);
+  console.log(usersComments?.length);
 
   const handleCommentSubmit = () => {
     const contentState = editorState.getCurrentContent();
@@ -59,6 +64,15 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
 
   const handleEditorChange = (newEditorState) => {
     setEditorState(newEditorState);
+    const contentState = newEditorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+    const commentPostData = rawContent.blocks[0].text;
+
+    inputHandler(
+      "postComment",
+      commentPostData,
+      commentPostData.trim().length >= 7
+    );
   };
 
   return (
@@ -129,6 +143,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
                 editorState={editorState}
                 editorChange={handleEditorChange}
                 postComment={handleCommentSubmit}
+                formStateIsValid={formState.isValid}
               />
 
               {/**END OF WYSIWYG EDITOR*/}

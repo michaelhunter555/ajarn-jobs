@@ -21,6 +21,16 @@ const FooterStyles = styled("footer")(({ theme }) => ({
   padding: "2rem 2rem",
 }));
 
+export const PageContainer = styled("div")({
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
+});
+
+export const Content = styled("div")({
+  flex: 1,
+});
+
 const SocialIcons = styled(Grid)({
   display: "flex",
   alignItems: "center",

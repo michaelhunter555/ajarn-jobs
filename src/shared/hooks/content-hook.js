@@ -251,6 +251,10 @@ export const useComment = () => {
   const [comments, setComments] = useState([]);
   const [commentLikes, setCommentLikes] = useState(0);
   const [commentDislikes, setCommentDislikes] = useState(0);
+  const [isCommentLikeLoading, setIsCommentLikeLoading] = useState(false);
+  const [isCommentDislikesLoading, setIsCommentDislikesLoading] =
+    useState(false);
+
   const { isPostLoading, sendRequest, error, clearError, isLoading } =
     useHttpClient();
 
@@ -294,6 +298,12 @@ export const useComment = () => {
     },
     [sendRequest]
   );
+
+  //GET total likes - Hey Mike!! remember to create backend GET controllers for these two funcs
+  //const getTotalCommentLikes = useCallback( async (blogId) => {}, [])
+
+  //GET total Dislikes
+  //const getTotalCommentDislikes = useCallback( async (blogId) => {}, [])
 
   //PATCH like comment on content post
   const likeComment = useCallback(

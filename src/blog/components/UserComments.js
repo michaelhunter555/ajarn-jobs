@@ -22,6 +22,7 @@ import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
 const UserComments = ({ usersComments, commentsIsLoading }) => {
   const auth = useContext(AuthContext);
+
   return (
     <>
       <Paper
@@ -55,12 +56,12 @@ const UserComments = ({ usersComments, commentsIsLoading }) => {
           usersComments?.length !== 0 &&
           usersComments?.map((comment, i) => (
             <Box
-              key={i}
+              key={comment._id}
               sx={{
                 display: "flex",
                 alignItems: "flex-start",
                 flexDirection: "column",
-                gap: "14px",
+                gap: "5px",
               }}
             >
               <Stack direction="row" alignItems="center" spacing={2}>
@@ -99,8 +100,15 @@ const UserComments = ({ usersComments, commentsIsLoading }) => {
               </Stack>
 
               <Typography
+                variant="subtitle2"
                 dangerouslySetInnerHTML={{ __html: comment?.comment }}
               />
+              {/**comment reactions can go here */}
+              {/** <CommentInteractions
+               * blogId={blogId}
+               * commentId={comment._id}
+               * userComments={usersComments}
+               * */}
 
               <Grid container direction="row" spacing={1} alignItems="center">
                 <Grid item>

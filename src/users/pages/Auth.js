@@ -18,6 +18,7 @@ import Button from "../../shared/components/FormElements/Button";
 import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 import Input from "../../shared/components/FormElements/Input";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Footer from "../../shared/components/UIElements/Footer";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -25,6 +26,16 @@ import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
+
+const PageContainer = styled("div")({
+  minHeight: "90vh",
+  display: "flex",
+  flexDirection: "column",
+});
+
+const Content = styled("div")({
+  flex: 1,
+});
 
 const StyledFormCard = styled(Card)({
   listStyle: "none",
@@ -187,84 +198,87 @@ const Auth = () => {
   // }, [auth.user, formState]);
 
   return (
-    <>
-      <ErrorModal onClear={clearError} error={error} />
-      <StyledFormCard>
-        {isPostLoading && <CircularProgress />}
-        <form onSubmit={authSubmitHandler}>
-          {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} />}
-          {!isLoginMode && (
-            <FormControl component="fieldset">
-              <FormLabel component="legend">User Type</FormLabel>
-              <RadioGroup
-                row
-                value={formState.inputs.userType.value}
-                onChange={userTypeHandler}
-              >
-                <FormControlLabel
-                  id="teacher"
-                  value="teacher"
-                  control={<Radio />}
-                  label="teacher"
-                />
-                <FormControlLabel
-                  id="employer"
-                  value="employer"
-                  control={<Radio />}
-                  label="employer"
-                />
-              </RadioGroup>
-            </FormControl>
-          )}
+    <PageContainer>
+      <Content>
+        <ErrorModal onClear={clearError} error={error} />
+        <StyledFormCard>
+          {isPostLoading && <CircularProgress />}
+          <form onSubmit={authSubmitHandler}>
+            {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} />}
+            {!isLoginMode && (
+              <FormControl component="fieldset">
+                <FormLabel component="legend">User Type</FormLabel>
+                <RadioGroup
+                  row
+                  value={formState.inputs.userType.value}
+                  onChange={userTypeHandler}
+                >
+                  <FormControlLabel
+                    id="teacher"
+                    value="teacher"
+                    control={<Radio />}
+                    label="teacher"
+                  />
+                  <FormControlLabel
+                    id="employer"
+                    value="employer"
+                    control={<Radio />}
+                    label="employer"
+                  />
+                </RadioGroup>
+              </FormControl>
+            )}
 
-          {!isLoginMode && (
+            {!isLoginMode && (
+              <Input
+                element="input"
+                type="text"
+                id="name"
+                label="Your name"
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="please enter a name"
+                onInput={inputHandler}
+              />
+            )}
+
             <Input
               element="input"
-              type="text"
-              id="name"
-              label="Your name"
-              validators={[VALIDATOR_REQUIRE()]}
+              type="email"
+              id="email"
+              helperText="Your email address"
+              fieldLabel="e-mail"
+              label="Your e-mail"
+              validators={[VALIDATOR_EMAIL()]}
               errorText="please enter a name"
               onInput={inputHandler}
             />
-          )}
 
-          <Input
-            element="input"
-            type="email"
-            id="email"
-            helperText="Your email address"
-            fieldLabel="e-mail"
-            label="Your e-mail"
-            validators={[VALIDATOR_EMAIL()]}
-            errorText="please enter a name"
-            onInput={inputHandler}
-          />
-
-          <Input
-            element="input"
-            type="password"
-            id="password"
-            helperText="Enter Password"
-            fieldLabel="Password"
-            label="Password"
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText="please enter your password"
-            onInput={inputHandler}
-          />
+            <Input
+              element="input"
+              type="password"
+              id="password"
+              helperText="Enter Password"
+              fieldLabel="Password"
+              label="Password"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="please enter your password"
+              onInput={inputHandler}
+            />
+            <StyledBoxForButtons>
+              <Button type="submit" disabled={!formState.isValid}>
+                {isLoginMode ? "Login" : "Sign-up"}
+              </Button>
+            </StyledBoxForButtons>
+          </form>
           <StyledBoxForButtons>
-            <Button type="submit" disabled={!formState.isValid}>
-              {isLoginMode ? "Login" : "Sign-up"}
+            <Button inverse onClick={signUpOrLoginHandler}>
+              Switch to {isLoginMode ? "Sign-up" : "Login"}
             </Button>
           </StyledBoxForButtons>
-        </form>
-        <StyledBoxForButtons>
-          <Button inverse onClick={signUpOrLoginHandler}>
-            Switch to {isLoginMode ? "Sign-up" : "Login"}
-          </Button>
-        </StyledBoxForButtons>
-      </StyledFormCard>
-    </>
+        </StyledFormCard>
+      </Content>
+      <Footer />
+    </PageContainer>
   );
 };
 

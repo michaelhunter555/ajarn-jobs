@@ -6,7 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 
 import CustomModal from "../../shared/components/UIElements/CustomModal";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import Footer from "../../shared/components/UIElements/Footer";
+import Footer, {
+  Content,
+  PageContainer,
+} from "../../shared/components/UIElements/Footer";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import TeacherFilter from "../components/TeacherFilter";
@@ -99,7 +102,7 @@ const Teachers = () => {
   console.log("BUFFET IS BLURRED:", blur);
 
   return (
-    <>
+    <PageContainer>
       {!isLoading && blur && (
         <CustomModal
           error="Teacher Buffet is not active."
@@ -110,27 +113,38 @@ const Teachers = () => {
           alternateButtonVariant="outlined"
         />
       )}
-      <ErrorModal onClear={clearError} error={error} />
-      <ThemeProvider theme={customThemeForTeachers}>
-        <Grid container spacing={3} sx={{ width: "90%", margin: "0 0 2rem 0" }}>
-          <Grid item xs={12} xl={3}>
-            {isLoading && (
-              <Skeleton
-                sx={{ height: 356, width: 332 }}
-                variant="rectangular"
-              />
-            )}
-            {!isLoading && <TeacherFilter onDataChange={handleFilterChange} />}
-          </Grid>
-          <Grid item xs={12} xl={9} sx={{ margin: "1rem auto" }}>
-            <Grid container spacing={2}>
-              <TeacherList teachers={filteredTeachers} isLoading={isLoading} />
+      <Content>
+        <ErrorModal onClear={clearError} error={error} />
+        <ThemeProvider theme={customThemeForTeachers}>
+          <Grid
+            container
+            spacing={3}
+            sx={{ width: "90%", margin: "0 0 2rem 0" }}
+          >
+            <Grid item xs={12} xl={3}>
+              {isLoading && (
+                <Skeleton
+                  sx={{ height: 356, width: 332 }}
+                  variant="rectangular"
+                />
+              )}
+              {!isLoading && (
+                <TeacherFilter onDataChange={handleFilterChange} />
+              )}
+            </Grid>
+            <Grid item xs={12} xl={9} sx={{ margin: "1rem auto" }}>
+              <Grid container spacing={2}>
+                <TeacherList
+                  teachers={filteredTeachers}
+                  isLoading={isLoading}
+                />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </ThemeProvider>
+        </ThemeProvider>
+      </Content>
       <Footer />
-    </>
+    </PageContainer>
   );
 };
 
