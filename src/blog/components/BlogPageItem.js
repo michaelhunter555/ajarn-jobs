@@ -152,6 +152,8 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
               <UserComments
                 usersComments={usersComments}
                 commentsIsLoading={commentsIsLoading}
+                blogId={blogId}
+                refetch={refetch}
               />
             </Paper>
             {/**END OF User Comments*/}

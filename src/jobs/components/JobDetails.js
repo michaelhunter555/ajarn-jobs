@@ -10,6 +10,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 
 import BusinessIcon from "@mui/icons-material/Business";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
@@ -50,7 +51,7 @@ const JobDetails = (props) => {
   const auth = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const { applyToJob, error, clearError, isPostLoading } = useUser();
-  const { job, isLoading } = props;
+  const { job, isLoading, userAppliedAlready } = props;
 
   const applyToJobHandler = () => {
     applyToJob(auth.user?._id, job?._id);
@@ -61,7 +62,7 @@ const JobDetails = (props) => {
     setOpen((prev) => !prev);
   };
 
-  const jobSpecifications = [
+  const jobSpecifications = job && [
     { text: "Location", icon: <FaMapMarkerAlt />, data: job?.location },
     {
       text: "Requirements",
@@ -77,7 +78,7 @@ const JobDetails = (props) => {
     { text: "Hours", icon: <FaClock />, data: job?.hours },
   ];
 
-  const jobInformation = [
+  const jobInformation = job && [
     { variant: "h5", component: "h2", text: job?.title },
     {
       variant: "subtitle2",
@@ -119,13 +120,27 @@ const JobDetails = (props) => {
   if (auth.isLoggedIn) {
     outlinedButton = (
       <>
-        <Button
-          sx={{ borderRadius: "17px" }}
-          onClick={applyJobModalHandler}
-          variant="outlined"
-        >
-          Apply Now
-        </Button>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Button
+            sx={{ borderRadius: "17px" }}
+            onClick={applyJobModalHandler}
+            variant="outlined"
+          >
+            Apply Now
+          </Button>
+          {userAppliedAlready && (
+            <>
+              <CheckCircleIcon style={{ color: "green" }} />
+              <Typography
+                sx={{ fontSize: 11 }}
+                variant="subtitle2"
+                color="text.secondary"
+              >
+                Application submitted
+              </Typography>
+            </>
+          )}
+        </Stack>
         <Modal open={open} onClose={applyJobModalHandler}>
           <StyledBoxModal>
             <Grid
@@ -305,7 +320,16 @@ const JobDetails = (props) => {
                 )}
 
                 {!isLoading && !isPostLoading && (
-                  <Grid item>{outlinedButton}</Grid>
+                  <Grid
+                    item
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Stack>{outlinedButton}</Stack>
+                  </Grid>
                 )}
               </Grid>
             )}

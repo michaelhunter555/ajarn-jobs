@@ -245,7 +245,6 @@ export const useContent = () => {
 };
 
 //************UseComment Hook*************
-
 export const useComment = () => {
   const auth = useContext(AuthContext);
   const [comments, setComments] = useState([]);
@@ -299,28 +298,53 @@ export const useComment = () => {
     [sendRequest]
   );
 
-  //GET total likes - Hey Mike!! remember to create backend GET controllers for these two funcs
-  //const getTotalCommentLikes = useCallback( async (blogId) => {}, [])
+  //GET total likes
+  const getTotalCommentLikes = useCallback(
+    async (blogId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_BLOG}/post/comments/likes/${blogId}`
+        );
+        console.log("TOTAL COMMENT LIKES (res()):", response.totalCommentLikes);
+        setCommentLikes(response.totalCommentLikes);
+      } catch (err) {}
+    },
+    [sendRequest]
+  );
 
   //GET total Dislikes
-  //const getTotalCommentDislikes = useCallback( async (blogId) => {}, [])
+  const getTotalCommentDislikes = useCallback(
+    async (blogId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_BLOG}/post/comments/dislikes/${blogId}`
+        );
+
+        setCommentDislikes(response.totalCommentLikes);
+      } catch (err) {}
+    },
+    [sendRequest]
+  );
 
   //PATCH like comment on content post
   const likeComment = useCallback(
-    async (blogId, userId, commentId, commentLiked) => {
+    async (blogId, userId, commentId) => {
+      setIsCommentLikeLoading(true);
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_BLOG}/post/${blogId}/comment/like/${userId}`,
           "PATCH",
-          JSON.stringify({ commentLiked: !commentLiked, commentId: commentId }),
+          JSON.stringify({ commentId: commentId }),
           {
             "Content-Type": "application/json",
             Authorization: "Bearer " + auth.token,
           }
         );
         setCommentLikes(response.commentLikes);
+        setIsCommentLikeLoading(false);
       } catch (err) {
         console.log("likeComment Error:", err);
+        setIsCommentLikeLoading(false);
       }
     },
     [auth.token, sendRequest]
@@ -328,23 +352,23 @@ export const useComment = () => {
 
   //PATCH dislike comment on content post
   const dislikeComment = useCallback(
-    async (blogId, userId, commentId, commentDisliked) => {
+    async (blogId, userId, commentId) => {
+      setIsCommentDislikesLoading(false);
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_BLOG}/post/${blogId}/comment/dislike/${userId}`,
           "PATCH",
-          JSON.stringify({
-            commentDisliked: !commentDisliked,
-            commentId: commentId,
-          }),
+          JSON.stringify({ commentId: commentId }),
           {
             "Content-Type": "application/json",
             Authorization: "Bearer " + auth.token,
           }
         );
         setCommentDislikes(response.commentDislikes);
+        setIsCommentDislikesLoading(false);
       } catch (err) {
         console.log("dislikeComment Error:", err);
+        setIsCommentDislikesLoading(false);
       }
     },
     [auth.token, sendRequest]
@@ -355,6 +379,10 @@ export const useComment = () => {
     getComments,
     likeComment,
     dislikeComment,
+    getTotalCommentLikes,
+    getTotalCommentDislikes,
+    isCommentLikeLoading,
+    isCommentDislikesLoading,
     commentDislikes,
     commentLikes,
     comments,

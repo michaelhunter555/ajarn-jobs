@@ -304,7 +304,7 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                   component={Link}
                   to="/jobs/"
                 >
-                  View all jobs
+                  Back to classic
                 </Button>
               </Stack>
             </StyledContentGrid>

@@ -6,6 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 
 //import { useQuery } from "@tanstack/react-query";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Footer, {
+  Content,
+  PageContainer,
+} from "../../shared/components/UIElements/Footer";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useJob } from "../../shared/hooks/jobs-hook";
 import JobDetails from "../components/JobDetails";
@@ -39,11 +43,20 @@ const JobDetailsPage = () => {
     (userApplications) => userApplications?.jobId === jobId
   );
 
+  console.log("USER HAS APPLIED ALREADY:", userAppliedAlready);
+
   return (
-    <>
-      <ErrorModal error={error} onClear={clearError} />
-      <JobDetails isLoading={isLoading} job={jobs} />
-    </>
+    <PageContainer>
+      <Content>
+        <ErrorModal error={error} onClear={clearError} />
+        <JobDetails
+          userAppliedAlready={userAppliedAlready}
+          isLoading={isLoading}
+          job={jobs}
+        />
+      </Content>
+      <Footer />
+    </PageContainer>
   );
 };
 

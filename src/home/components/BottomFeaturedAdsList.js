@@ -53,27 +53,28 @@ const BottomFeaturedAdsList = (props) => {
             />
           </ListItem>
         ))}
-      {footerJobs?.slice(0, 3)?.map((job, i) => (
-        <Link
-          sx={{ textDecoration: "none" }}
-          component={RouterLink}
-          key={job._id}
-          to={`/jobs/${job._id}`}
-        >
-          <ListItem>
-            <BottomFeaturedAds
-              image={`${process.env.REACT_APP_IMAGE}${job?.image}`}
-              id={job?._id}
-              title={job?.title}
-              salary={job?.salary}
-              hours={job?.hours}
-              school={job?.creator.company}
-              location={job?.location}
-              featured={job?.jobType === "featured"}
-            />
-          </ListItem>
-        </Link>
-      ))}
+      {footerJobs &&
+        footerJobs?.slice(0, 4)?.map((job, i) => (
+          <Link
+            sx={{ textDecoration: "none" }}
+            component={RouterLink}
+            key={job?._id}
+            to={`/jobs/${job?._id}`}
+          >
+            <ListItem>
+              <BottomFeaturedAds
+                image={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                id={job?._id}
+                title={job?.title}
+                salary={job?.salary}
+                hours={job?.hours}
+                school={job?.creator.company}
+                location={job?.location}
+                featured={job?.jobType === "featured"}
+              />
+            </ListItem>
+          </Link>
+        ))}
     </StyledList>
   );
 };

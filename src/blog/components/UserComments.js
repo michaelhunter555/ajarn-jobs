@@ -18,10 +18,22 @@ import {
 } from "@mui/material";
 
 import { AuthContext } from "../../shared/context/auth-context";
+import { useComment } from "../../shared/hooks/content-hook";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
-const UserComments = ({ usersComments, commentsIsLoading }) => {
+const UserComments = ({
+  blogId,
+  usersComments,
+  commentsIsLoading,
+  refetch,
+}) => {
   const auth = useContext(AuthContext);
+  const {
+    likeComment,
+    dislikeComment,
+    setIsCommentDislikesLoading,
+    setIsCommentLikeLoading,
+  } = useComment();
 
   return (
     <>
@@ -37,9 +49,6 @@ const UserComments = ({ usersComments, commentsIsLoading }) => {
           margin: "0 0 2rem 0",
         }}
       >
-        {usersComments?.length === 0 && (
-          <Typography variant="h4">No comments yet. Be the first!</Typography>
-        )}
         {commentsIsLoading && (
           <Box
             sx={{
@@ -52,11 +61,14 @@ const UserComments = ({ usersComments, commentsIsLoading }) => {
             <CircularProgress />
           </Box>
         )}
+        {!commentsIsLoading && usersComments?.length === 0 && (
+          <Typography variant="h4">No comments yet. Be the first!</Typography>
+        )}
         {!commentsIsLoading &&
           usersComments?.length !== 0 &&
           usersComments?.map((comment, i) => (
             <Box
-              key={comment._id}
+              key={comment?._id}
               sx={{
                 display: "flex",
                 alignItems: "flex-start",
@@ -103,19 +115,21 @@ const UserComments = ({ usersComments, commentsIsLoading }) => {
                 variant="subtitle2"
                 dangerouslySetInnerHTML={{ __html: comment?.comment }}
               />
-              {/**comment reactions can go here */}
-              {/** <CommentInteractions
-               * blogId={blogId}
-               * commentId={comment._id}
-               * userComments={usersComments}
-               * */}
-
+              {/**THIS WILL be replaced with <CommentInteractions blogId={blogId} commentId={comment?._id} userComments={comment} */}
               <Grid container direction="row" spacing={1} alignItems="center">
                 <Grid item>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Button
+                      onClick={() =>
+                        likeComment(blogId, auth.user?._id, comment?._id)
+                          .then(() => {
+                            console.log("Refetch Ran:");
+                            refetch();
+                          })
+                          .catch((err) => console.log(err))
+                      }
                       disabled={!auth.isLoggedIn}
-                      endIcon={
+                      startIcon={
                         <ThumbUpIcon color="action" sx={{ fontSize: 20 }} />
                       }
                     >
@@ -124,7 +138,12 @@ const UserComments = ({ usersComments, commentsIsLoading }) => {
                         variant="subtitle2"
                         sx={{ fontSize: 14, fontWeight: 550 }}
                       >
-                        0
+                        {comment?.interactions?.length !== 0
+                          ? comment?.interactions?.filter(
+                              (actions) => actions?.like === true
+                            )?.length
+                          : 0}{" "}
+                        Likes
                       </Typography>
                     </Button>
                   </Stack>
@@ -133,8 +152,15 @@ const UserComments = ({ usersComments, commentsIsLoading }) => {
                 <Grid item>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Button
+                      onClick={() =>
+                        dislikeComment(blogId, auth.user?._id, comment?._id)
+                          .then(() => {
+                            refetch();
+                          })
+                          .catch((err) => console.log(err))
+                      }
                       disabled={!auth.isLoggedIn}
-                      endIcon={
+                      startIcon={
                         <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
                       }
                     >
@@ -143,12 +169,19 @@ const UserComments = ({ usersComments, commentsIsLoading }) => {
                         variant="subtitle2"
                         sx={{ fontSize: 14, fontWeight: 550 }}
                       >
-                        0
+                        {comment?.interactions?.length
+                          ? comment?.interactions?.filter(
+                              (interaction) => interaction?.dislike === true
+                            )?.length
+                          : 0}{" "}
+                        Dislikes
                       </Typography>
                     </Button>
                   </Stack>
                 </Grid>
               </Grid>
+              {/**THIS WILL be replaced with <CommentInteractions blogId={blogId} commentId={comment?._id} userComments={comment} */}
+
               {i - usersComments?.length - 1 && (
                 <Divider light sx={{ width: "100%", margin: "0.5rem 0" }} />
               )}
