@@ -1,7 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import { FaChalkboardTeacher, FaSchool } from "react-icons/fa";
 
+import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
@@ -28,12 +31,34 @@ const UserComments = ({
   refetch,
 }) => {
   const auth = useContext(AuthContext);
+  const [toggleAuthOptions, setToggleAuthOptions] = useState(false);
   const {
     likeComment,
     dislikeComment,
-    setIsCommentDislikesLoading,
-    setIsCommentLikeLoading,
+    isCommentLikeLoading,
+    isCommentDislikeLoading,
   } = useComment();
+
+  const toggleAuthHandler = () => {
+    setToggleAuthOptions((prev) => !prev);
+  };
+
+  //check if user liked post
+  const userLikedAlready = usersComments?.map((item) => {
+    //see if match for userId and like property value of true
+    const findLikeIndex = item?.interactions?.find(
+      (item) => item?.userId === auth?.user?._id && item?.like === true
+    );
+    //if true, we know this user liked this comment :)
+    return findLikeIndex !== undefined;
+  });
+
+  const userDislikedAlready = usersComments?.map((item) => {
+    const findDislikeIndex = item?.interactions?.find(
+      (action) => action?.userId === auth?.user?._id && action?.dislike === true
+    );
+    return findDislikeIndex !== undefined;
+  });
 
   return (
     <>
@@ -130,7 +155,10 @@ const UserComments = ({
                       }
                       disabled={!auth.isLoggedIn}
                       startIcon={
-                        <ThumbUpIcon color="action" sx={{ fontSize: 20 }} />
+                        <ThumbUpIcon
+                          color={userLikedAlready[i] ? "primary" : "action"}
+                          sx={{ fontSize: 20 }}
+                        />
                       }
                     >
                       <Typography
@@ -161,7 +189,14 @@ const UserComments = ({
                       }
                       disabled={!auth.isLoggedIn}
                       startIcon={
-                        <ThumbDownIcon color="action" sx={{ fontSize: 20 }} />
+                        <ThumbDownIcon
+                          color={
+                            auth.isLoggedIn && userDislikedAlready[i]
+                              ? "error"
+                              : "action"
+                          }
+                          sx={{ fontSize: 20 }}
+                        />
                       }
                     >
                       <Typography
@@ -179,8 +214,109 @@ const UserComments = ({
                     </Button>
                   </Stack>
                 </Grid>
+
+                {comment?.userId?._id === auth?.user?._id && (
+                  <Grid item>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Button
+                        onClick={toggleAuthHandler}
+                        sx={{ borderRadius: "50%" }}
+                      >
+                        <MoreHorizIcon style={{ color: "#888", padding: 1 }} />
+                      </Button>
+                    </Stack>
+                  </Grid>
+                )}
+
+                {toggleAuthOptions &&
+                  comment?.userId?._id === auth?.user?._id && (
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: "3px",
+                      }}
+                    >
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <Button
+                          startIcon={
+                            <EditTwoToneIcon style={{ color: "#888" }} />
+                          }
+                        >
+                          <Typography
+                            color="text.secondary"
+                            variant="subtitle2"
+                            sx={{ fontSize: 10, fontWeight: 550 }}
+                          >
+                            Edit
+                          </Typography>
+                        </Button>
+                      </Stack>
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <Button
+                          startIcon={
+                            <DeleteForeverTwoToneIcon
+                              style={{ color: "#b74724" }}
+                            />
+                          }
+                        >
+                          <Typography
+                            color="text.secondary"
+                            variant="subtitle2"
+                            sx={{ fontSize: 10, fontWeight: 550 }}
+                          >
+                            Delete
+                          </Typography>
+                        </Button>
+                      </Stack>
+                    </Grid>
+                  )}
+
+                {/* {comment?.userId?._id === auth?.user?._id && (
+                  <Grid item>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Button
+                        startIcon={
+                          <EditTwoToneIcon style={{ color: "#888" }} />
+                        }
+                      >
+                        <Typography
+                          color="text.secondary"
+                          variant="subtitle2"
+                          sx={{ fontSize: 10, fontWeight: 550 }}
+                        >
+                          Edit
+                        </Typography>
+                      </Button>
+                    </Stack>
+                  </Grid>
+                )}
+                {comment?.userId?._id === auth?.user?._id && (
+                  <Grid item>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Button
+                        startIcon={
+                          <DeleteForeverTwoToneIcon
+                            style={{ color: "#b74724" }}
+                          />
+                        }
+                      >
+                        <Typography
+                          color="text.secondary"
+                          variant="subtitle2"
+                          sx={{ fontSize: 10, fontWeight: 550 }}
+                        >
+                          Delete
+                        </Typography>
+                      </Button>
+                    </Stack>
+                  </Grid>
+                )} */}
               </Grid>
-              {/**THIS WILL be replaced with <CommentInteractions blogId={blogId} commentId={comment?._id} userComments={comment} */}
+              {/**THIS WILL be replaced with <CommentInteractions blogId={blogId} commentId={comment?._id} userComments={comment}  {comment?.userId?._id === auth?.user?._id && (
+                      <Button>Edit</Button>
+                    )}*/}
 
               {i - usersComments?.length - 1 && (
                 <Divider light sx={{ width: "100%", margin: "0.5rem 0" }} />

@@ -164,6 +164,7 @@ const CreatorJobsTable = (props) => {
                       sx={{ backgroundColor: "#2c6399" }}
                       to={`/jobs/${job?._id}/update`}
                       component={RouterLink}
+                      disabled={job?.applicants?.length > 0}
                     >
                       <EditTwoToneIcon />
                     </Button>

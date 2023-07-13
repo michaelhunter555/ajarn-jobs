@@ -1,8 +1,9 @@
 import React, { useCallback, useContext, useState } from "react";
 
 import DOMPurify from "dompurify";
-import { convertToRaw, EditorState } from "draft-js";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
 
 import {
@@ -32,9 +33,20 @@ const CoverLetter = () => {
   const { user, updateUser } = auth;
   const [isEditing, setIsEditing] = useState(user?.coverLetter === "");
   const [isLoading, setIsLoading] = useState(false);
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
+
+  let initialEditorState = EditorState.createEmpty();
+
+  if (user?.coverLetter) {
+    const htmlBlocks = htmlToDraft(user?.coverLetter);
+    const { contentBlocks, entityMap } = htmlBlocks;
+    const contentState = ContentState.createFromBlockArray(
+      contentBlocks,
+      entityMap
+    );
+    initialEditorState = EditorState.createWithContent(contentState);
+  }
+
+  const [editorState, setEditorState] = useState(initialEditorState);
   const [formState, inputHandler] = useForm(
     {
       coverLetter: {

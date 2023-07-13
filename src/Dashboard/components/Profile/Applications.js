@@ -1,7 +1,10 @@
 import React, { useContext } from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import {
   Box,
+  Link,
   Paper,
   Skeleton,
   Table,
@@ -62,8 +65,8 @@ const Applications = () => {
           <TableHead>
             <TableRow>
               <TableCell>Date</TableCell>
-              <TableCell>Company</TableCell>
               <TableCell>Title</TableCell>
+              <TableCell>Company</TableCell>
               <TableCell>Location</TableCell>
               <TableCell>Salary</TableCell>
               <TableCell>Hours</TableCell>
@@ -108,8 +111,12 @@ const Applications = () => {
                         ?.applicationDate.split("T")[0]
                     }
                   </TableCell>
+                  <TableCell>
+                    <Link component={RouterLink} to={`/jobs/${job?._id}`}>
+                      {job?.title}
+                    </Link>
+                  </TableCell>
                   <TableCell>{job?.creator?.company}</TableCell>
-                  <TableCell>{job?.title}</TableCell>
                   <TableCell>{job?.location}</TableCell>
                   <TableCell>{job?.salary}</TableCell>
                   <TableCell>{job?.hours}</TableCell>

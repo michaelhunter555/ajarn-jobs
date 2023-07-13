@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import ViewListIcon from "@mui/icons-material/ViewList";
 import {
   Alert,
   Avatar,
@@ -114,7 +115,19 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
         <Grid container>
           <Grid item xs={12} md={4.5} order={{ xs: 2, md: 1 }}>
             <Alert severity="info">
-              {featured ? "Featured jobs" : "All Jobs"}
+              {featured ? "Featured jobs |" : "All Jobs"}
+
+              {featured && (
+                <Button
+                  startIcon={<ViewListIcon />}
+                  size="small"
+                  component={Link}
+                  to="/modern-view/jobs"
+                  sx={{ fontSize: 10 }}
+                >
+                  All Jobs
+                </Button>
+              )}
             </Alert>
             <StyledContentGrid xs={12} md={4.5} sx={{ maxHeight: height }}>
               {featured &&
@@ -213,7 +226,13 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                   <React.Fragment key={job?._id}>
                     <List>
                       <ListItemButton
-                        sx={{ paddingTop: 0, paddingBottom: 0 }}
+                        sx={{
+                          paddingTop: 0,
+                          paddingBottom: 0,
+                          backgroundColor:
+                            job?.jobType === "featured" &&
+                            "rgba(198, 226, 234, 0.15)",
+                        }}
                         component={Link}
                         key={job?._id}
                         onClick={() => selectJobHandler(job)}
@@ -252,6 +271,19 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                                 >
                                   {getTimeDifference(job?.datePosted)}
                                 </Typography>
+                                {job?.jobType === "featured" && (
+                                  <Typography
+                                    sx={{
+                                      backgroundColor: "#edfdff",
+                                      border: "1px solid #a2d5dd",
+                                      borderRadius: "6px",
+                                      fontSize: 11,
+                                      padding: "0 0.5rem",
+                                    }}
+                                  >
+                                    Featured
+                                  </Typography>
+                                )}
                               </Stack>
                             </>
                           }

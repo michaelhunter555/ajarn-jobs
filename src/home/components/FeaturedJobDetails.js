@@ -4,6 +4,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import ElectricBoltOutlinedIcon from "@mui/icons-material/ElectricBoltOutlined";
 import ForwardOutlinedIcon from "@mui/icons-material/ForwardOutlined";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import {
   Avatar,
@@ -109,7 +110,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
       <>
         <Button
           endIcon={<ElectricBoltOutlinedIcon />}
-          size="small"
+          size={featured ? "small" : ""}
           sx={{ borderRadius: "15px" }}
           onClick={applyJobModalHandler}
           variant="contained"
@@ -427,18 +428,18 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                         variant="circular"
                         src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
                         sx={{
-                          height: 55,
-                          width: 55,
+                          height: 150,
+                          width: 150,
                           border: "1px solid #e5e5e5",
                         }}
                         alt={`${job?._id}--${job?.creator?.company}`}
                       />
                       <Stack direction="column">
-                        <Typography variant="h6" color="text.primary">
+                        <Typography variant="h4" color="text.primary">
                           {job?.title}
                         </Typography>
                         <Typography
-                          sx={{ fontSize: 14 }}
+                          sx={{ fontSize: 17 }}
                           varaint="subtitle1"
                           color="text.secondary"
                         >
@@ -451,7 +452,6 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                           sx={{ flexGrow: 0 }}
                         >
                           <Chip
-                            size="small"
                             variant="outlined"
                             label={job?.salary}
                             icon={
@@ -464,7 +464,11 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                           <Chip
                             variant="outlined"
                             label={`${job?.location}`}
-                            size="small"
+                            icon={
+                              <LocationOnOutlinedIcon
+                                style={{ color: "#47acbb" }}
+                              />
+                            }
                             sx={{ borderRadius: 5 }}
                           />
                           {outlinedButton}
@@ -480,21 +484,21 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                     <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
                       <Typography
                         color="text.secondary"
-                        sx={{ fontSize: 11, fontWeight: 600 }}
+                        sx={{ fontSize: 14, fontWeight: 600 }}
                       >
                         About:
                       </Typography>
                       <Typography
                         color="text.primary"
                         variant="subtitle2"
-                        sx={{ fontSize: 14 }}
+                        sx={{ fontSize: 16 }}
                       >
                         {job?.creator?.about}
                       </Typography>
                       <Typography
                         color="text.secondary"
                         sx={{
-                          fontSize: 11,
+                          fontSize: 14,
                           fontWeight: 600,
                           margin: "0.5rem 0",
                         }}
@@ -505,7 +509,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                       <Stack direction="column" sx={{ margin: "1rem 0" }}>
                         <Typography
                           color="text.secondary"
-                          sx={{ fontSize: 11, fontWeight: 600 }}
+                          sx={{ fontSize: 14, fontWeight: 600 }}
                         >
                           Details:
                         </Typography>

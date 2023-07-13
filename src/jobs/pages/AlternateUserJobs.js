@@ -2,7 +2,14 @@ import React from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
-import { Box, Button, Grid, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  LinearProgress,
+  Stack,
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import BottomFeatured from "../../home/components/BottomFeatured";
@@ -30,7 +37,9 @@ const AlternateUserJobs = () => {
     }
   };
 
-  const { data: jobs } = useQuery(["alternateJobs"], () => getJobs());
+  const { data: jobs, isLoading } = useQuery(["alternateJobs"], () =>
+    getJobs()
+  );
 
   return (
     <PageContainer>
@@ -43,10 +52,13 @@ const AlternateUserJobs = () => {
                 component={RouterLink}
                 to="/jobs"
               >
-                Go back to Classic View
+                Go to Classic View
               </Button>
             </Stack>
-            {jobs && (
+            {isLoading && <LinearProgress />}
+            {isLoading && <CircularProgress />}
+
+            {jobs && !isLoading && (
               <MainFeaturedJob
                 fontSize={14}
                 height={500}

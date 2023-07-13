@@ -54,7 +54,7 @@ const BottomFeaturedAdsList = (props) => {
           </ListItem>
         ))}
       {footerJobs &&
-        footerJobs?.slice(0, 4)?.map((job, i) => (
+        footerJobs?.slice(0, 3)?.map((job, i) => (
           <Link
             sx={{ textDecoration: "none" }}
             component={RouterLink}

@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
+import TeflBanner from "../../shared/components/UIElements/TeflBanner";
 import UserContributionForm from "./UserContributionForm";
 
 const UserContributions = () => {
@@ -79,6 +80,7 @@ const UserContributions = () => {
 
       <Grid item xs={12} sm={6}>
         <Stack sx={{ margin: "2rem 2rem" }}>
+          <TeflBanner />
           {isLoading && <CircularProgress />}
           {!isLoading &&
             userIncomeData &&

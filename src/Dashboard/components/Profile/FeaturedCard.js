@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import {
   Avatar,
   Box,
@@ -139,6 +141,8 @@ const FeaturedCard = (props) => {
             >
               <Grid item>
                 <Chip
+                  icon={<LocationOnOutlinedIcon style={{ color: "#47acbb" }} />}
+                  variant="outlined"
                   clickable={true}
                   size="medium"
                   label={randomJob?.location}
@@ -146,13 +150,20 @@ const FeaturedCard = (props) => {
               </Grid>
               <Grid item>
                 <Chip
+                  icon={<PaymentsTwoToneIcon style={{ color: "#1e8d41" }} />}
+                  variant="outlined"
                   clickable={true}
                   size="medium"
                   label={randomJob?.salary}
                 />
               </Grid>
               <Grid item>
-                <Chip clickable={true} size="medium" label={randomJob?.hours} />
+                <Chip
+                  variant="outlined"
+                  clickable={true}
+                  size="medium"
+                  label={randomJob?.hours}
+                />
               </Grid>
             </Grid>
             <Typography

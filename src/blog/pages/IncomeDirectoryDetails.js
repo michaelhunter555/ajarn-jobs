@@ -89,18 +89,24 @@ const IncomeDirectoryDetails = () => {
   ];
 
   return (
-    <Grid container justifyContent="center" sx={{ maxWidth: "90%" }}>
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      sx={{ maxWidth: "90%" }}
+      spacing={5}
+    >
       <Grid
         item
         xs={12}
         sm={6}
         md={9}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-        }}
+        sx={{ display: "flex", justifyContent: "center" }}
       >
-        <Paper elevation={0} sx={{ padding: 2, borderRadius: 8 }}>
+        <Paper
+          elevation={0}
+          sx={{ padding: 2, borderRadius: 8, maxWidth: "80%" }}
+        >
           <Alert
             sx={{ maxWidth: 250, padding: 0, marginBottom: 1 }}
             severity="info"

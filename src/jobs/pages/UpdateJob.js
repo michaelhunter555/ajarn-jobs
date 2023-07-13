@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import DOMPurify from "dompurify";
-import {
-  ContentState,
-  convertFromHTML,
-  convertToRaw,
-  EditorState,
-} from "draft-js";
+import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
 import { useParams } from "react-router-dom";
 
@@ -66,19 +62,20 @@ const UpdateJob = () => {
     },
     true
   );
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const initializeEditorState = (description) => {
-    const blocksFromHTML = convertFromHTML(description);
-    const contentState = ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
-    );
-
-    return EditorState.createWithContent(contentState);
-  };
-  const [editorState, setEditorState] = useState(() =>
-    initializeEditorState(identifiedJob?.description || "")
-  );
+  useEffect(() => {
+    if (identifiedJob?.description) {
+      const htmlBlocks = htmlToDraft(identifiedJob?.description);
+      const { contentBlocks, entityMap } = htmlBlocks;
+      const contentState = ContentState.createFromBlockArray(
+        contentBlocks,
+        entityMap
+      );
+      const newEditorState = EditorState.createWithContent(contentState);
+      setEditorState(newEditorState);
+    }
+  }, [identifiedJob]);
 
   useEffect(() => {
     getJobsByUserId(user?._id);
@@ -127,9 +124,9 @@ const UpdateJob = () => {
 
   const handleEditorChange = (editorContent) => {
     setEditorState(editorContent);
-    const content = editorState.getCurrentContent();
+    const content = editorContent.getCurrentContent();
     const rawContent = convertToRaw(content);
-    const postData = rawContent.blocks[0].text;
+    const postData = draftToHtml(rawContent);
 
     inputHandler("description", postData, postData.length >= 5);
   };

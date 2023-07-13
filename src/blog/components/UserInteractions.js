@@ -89,68 +89,61 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
     <>
       <Grid item>
         <Stack direction="row" alignItems="center" spacing={1}>
-          {!isPostLikeLoading && (
-            <Button
-              onClick={handlePostLike}
-              disabled={!auth.isLoggedIn}
-              startIcon={
+          <Button
+            onClick={handlePostLike}
+            disabled={!auth.isLoggedIn}
+            startIcon={
+              !isPostLikeLoading ? (
                 <ThumbUpIcon
                   color={
                     auth.isLoggedIn && userAlreadyLiked ? "primary" : "action"
                   }
                   sx={{ fontSize: 20 }}
                 />
-              }
+              ) : (
+                isPostLikeLoading && <CircularProgress size="12px" />
+              )
+            }
+          >
+            <Typography
+              color="text.secondary"
+              variant="subtitle2"
+              sx={{ fontSize: 14, fontWeight: 550 }}
             >
-              <Typography
-                color="text.secondary"
-                variant="subtitle2"
-                sx={{ fontSize: 14, fontWeight: 550 }}
-              >
-                {totalLikes > 1 ? totalLikes + " Likes" : totalLikes + " Like"}
-              </Typography>
-            </Button>
-          )}
-          {isPostLikeLoading && <CircularProgress size="12px" />}
+              {totalLikes > 1 ? totalLikes + " Likes" : totalLikes + " Like"}
+            </Typography>
+          </Button>
         </Stack>
       </Grid>
 
       <Grid item>
         <Stack direction="row" alignItems="center" spacing={1}>
-          {!isPostDislikeLoading && (
-            <Button
-              onClick={handlePostDislike}
-              disabled={!auth.isLoggedIn}
-              startIcon={
+          <Button
+            onClick={handlePostDislike}
+            disabled={!auth.isLoggedIn}
+            startIcon={
+              !isPostDislikeLoading ? (
                 <ThumbDownIcon
                   color={
                     auth.isLoggedIn && userAlreadyDisliked ? "error" : "action"
                   }
                   sx={{ fontSize: 20 }}
                 />
-              }
+              ) : (
+                isPostDislikeLoading && <CircularProgress size="12px" />
+              )
+            }
+          >
+            <Typography
+              color="text.secondary"
+              variant="subtitle2"
+              sx={{ fontSize: 14, fontWeight: 550 }}
             >
-              <Typography
-                color="text.secondary"
-                variant="subtitle2"
-                sx={{ fontSize: 14, fontWeight: 550 }}
-              >
-                {totalDislikes > 1
-                  ? totalDislikes + " Dislikes"
-                  : totalDislikes + " Dislike"}
-              </Typography>
-            </Button>
-          )}
-          {isPostDislikeLoading && (
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              sx={{ margin: "0 auto" }}
-            >
-              <CircularProgress size="12px" />
-            </Stack>
-          )}
+              {totalDislikes > 1
+                ? totalDislikes + " Dislikes"
+                : totalDislikes + " Dislike"}
+            </Typography>
+          </Button>
         </Stack>
       </Grid>
     </>
