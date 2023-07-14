@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { FaChalkboardTeacher, FaSchool } from "react-icons/fa";
 
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
-import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -32,6 +31,13 @@ const UserComments = ({
 }) => {
   const auth = useContext(AuthContext);
   const [toggleAuthOptions, setToggleAuthOptions] = useState(false);
+  const [isLoadingArray, setIsLoadingArray] = useState(
+    new Array(usersComments?.length).fill(false)
+  );
+  const [isDislikeLoadingArray, setIsDislikeLoadingArray] = useState(
+    new Array(usersComments?.length).fill(false)
+  );
+
   const {
     likeComment,
     dislikeComment,
@@ -39,8 +45,16 @@ const UserComments = ({
     isCommentDislikeLoading,
   } = useComment();
 
-  const toggleAuthHandler = () => {
-    setToggleAuthOptions((prev) => !prev);
+  useEffect(() => {
+    setIsLoadingArray(new Array(usersComments?.length).fill(false));
+    setToggleAuthOptions(new Array(usersComments?.length).fill(false));
+    setIsDislikeLoadingArray(new Array(usersComments?.length).fill(false));
+  }, [usersComments?.length]);
+
+  const toggleAuthHandler = (i) => {
+    const isSelectedComment = [...toggleAuthOptions];
+    isSelectedComment[i] = !isSelectedComment[i];
+    setToggleAuthOptions(isSelectedComment);
   };
 
   //check if user liked post
@@ -145,20 +159,44 @@ const UserComments = ({
                 <Grid item>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Button
-                      onClick={() =>
+                      onClick={() => {
+                        //created copy of all loadable comments
+                        const loadingArray = [...isLoadingArray];
+                        //find indice and set to true
+                        loadingArray[i] = true;
+                        //set state
+                        setIsLoadingArray(loadingArray);
+
+                        //call likeComment Patch and pass arguments
                         likeComment(blogId, auth.user?._id, comment?._id)
                           .then(() => {
-                            console.log("Refetch Ran:");
+                            //create a copy of all loadable comments
+                            const loadingArray = [...isLoadingArray];
+                            //set the comment that was loading to false
+                            loadingArray[i] = false;
+                            //update state
+                            setIsLoadingArray(loadingArray);
+                            //refetch data
                             refetch();
                           })
-                          .catch((err) => console.log(err))
-                      }
+                          .catch((err) => {
+                            const loadingArray = [...isLoadingArray];
+                            loadingArray[i] = false;
+                            setIsLoadingArray(loadingArray);
+                            console.log(err);
+                          });
+                      }}
                       disabled={!auth.isLoggedIn}
+                      //if loading display a spinner instead of the icon
                       startIcon={
-                        <ThumbUpIcon
-                          color={userLikedAlready[i] ? "primary" : "action"}
-                          sx={{ fontSize: 20 }}
-                        />
+                        !isLoadingArray[i] ? (
+                          <ThumbUpIcon
+                            color={userLikedAlready[i] ? "primary" : "action"}
+                            sx={{ fontSize: 20 }}
+                          />
+                        ) : (
+                          <CircularProgress size="12px" />
+                        )
                       }
                     >
                       <Typography
@@ -180,23 +218,42 @@ const UserComments = ({
                 <Grid item>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Button
-                      onClick={() =>
+                      onClick={() => {
+                        const dislikeLoadingArray = [...isDislikeLoadingArray];
+                        dislikeLoadingArray[i] = true;
+                        setIsDislikeLoadingArray(dislikeLoadingArray);
                         dislikeComment(blogId, auth.user?._id, comment?._id)
                           .then(() => {
+                            const dislikeLoadingArray = [
+                              ...isDislikeLoadingArray,
+                            ];
+                            dislikeLoadingArray[i] = false;
+                            setIsDislikeLoadingArray(dislikeLoadingArray);
                             refetch();
                           })
-                          .catch((err) => console.log(err))
-                      }
+                          .catch((err) => {
+                            const dislikeLoadingArray = [
+                              ...isDislikeLoadingArray,
+                            ];
+                            dislikeLoadingArray[i] = false;
+                            setIsDislikeLoadingArray(dislikeLoadingArray);
+                            console.log(err);
+                          });
+                      }}
                       disabled={!auth.isLoggedIn}
                       startIcon={
-                        <ThumbDownIcon
-                          color={
-                            auth.isLoggedIn && userDislikedAlready[i]
-                              ? "error"
-                              : "action"
-                          }
-                          sx={{ fontSize: 20 }}
-                        />
+                        !isDislikeLoadingArray[i] ? (
+                          <ThumbDownIcon
+                            color={
+                              auth.isLoggedIn && userDislikedAlready[i]
+                                ? "error"
+                                : "action"
+                            }
+                            sx={{ fontSize: 20 }}
+                          />
+                        ) : (
+                          <CircularProgress size="12px" />
+                        )
                       }
                     >
                       <Typography
@@ -219,7 +276,7 @@ const UserComments = ({
                   <Grid item>
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <Button
-                        onClick={toggleAuthHandler}
+                        onClick={() => toggleAuthHandler(i)}
                         sx={{ borderRadius: "50%" }}
                       >
                         <MoreHorizIcon style={{ color: "#888", padding: 1 }} />
@@ -228,7 +285,7 @@ const UserComments = ({
                   </Grid>
                 )}
 
-                {toggleAuthOptions &&
+                {toggleAuthOptions[i] &&
                   comment?.userId?._id === auth?.user?._id && (
                     <Grid
                       item
@@ -240,21 +297,7 @@ const UserComments = ({
                     >
                       <Stack direction="row" alignItems="center" spacing={1}>
                         <Button
-                          startIcon={
-                            <EditTwoToneIcon style={{ color: "#888" }} />
-                          }
-                        >
-                          <Typography
-                            color="text.secondary"
-                            variant="subtitle2"
-                            sx={{ fontSize: 10, fontWeight: 550 }}
-                          >
-                            Edit
-                          </Typography>
-                        </Button>
-                      </Stack>
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <Button
+                          onClick={() => console.log("are your sure?")}
                           startIcon={
                             <DeleteForeverTwoToneIcon
                               style={{ color: "#b74724" }}
@@ -272,51 +315,7 @@ const UserComments = ({
                       </Stack>
                     </Grid>
                   )}
-
-                {/* {comment?.userId?._id === auth?.user?._id && (
-                  <Grid item>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <Button
-                        startIcon={
-                          <EditTwoToneIcon style={{ color: "#888" }} />
-                        }
-                      >
-                        <Typography
-                          color="text.secondary"
-                          variant="subtitle2"
-                          sx={{ fontSize: 10, fontWeight: 550 }}
-                        >
-                          Edit
-                        </Typography>
-                      </Button>
-                    </Stack>
-                  </Grid>
-                )}
-                {comment?.userId?._id === auth?.user?._id && (
-                  <Grid item>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <Button
-                        startIcon={
-                          <DeleteForeverTwoToneIcon
-                            style={{ color: "#b74724" }}
-                          />
-                        }
-                      >
-                        <Typography
-                          color="text.secondary"
-                          variant="subtitle2"
-                          sx={{ fontSize: 10, fontWeight: 550 }}
-                        >
-                          Delete
-                        </Typography>
-                      </Button>
-                    </Stack>
-                  </Grid>
-                )} */}
               </Grid>
-              {/**THIS WILL be replaced with <CommentInteractions blogId={blogId} commentId={comment?._id} userComments={comment}  {comment?.userId?._id === auth?.user?._id && (
-                      <Button>Edit</Button>
-                    )}*/}
 
               {i - usersComments?.length - 1 && (
                 <Divider light sx={{ width: "100%", margin: "0.5rem 0" }} />
