@@ -29,11 +29,15 @@ import { useForm } from "../../shared/hooks/form-hook";
 import { blogCategories } from "../../shared/util/ThaiData";
 
 const styledComments = {
+  minHeight: 200,
   height: "auto",
   padding: " 0 20px",
   borderRadius: "0 0 8px 8px",
   border: "2px solid #dbdbdb",
   boxSizing: "border-box",
+  ".public-DraftStyleDefault-block": {
+    height: "5rem",
+  },
 };
 
 const BlogPostForm = ({ onBlogPostCreated }) => {
@@ -217,6 +221,7 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
                       id="postContent"
                       editorState={editorState}
                       onEditorStateChange={handleEditorChange}
+                      toolbar={{ options: ["inline", "blockType", "fontSize"] }}
                     />
                   </Box>
                 </FormControl>

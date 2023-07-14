@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
+import LocalPoliceTwoToneIcon from "@mui/icons-material/LocalPoliceTwoTone";
 import PlaceIcon from "@mui/icons-material/Place";
 import PublicIcon from "@mui/icons-material/Public";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
@@ -97,12 +98,18 @@ const TeacherItem = (props) => {
                 margin: "0 auto",
               }}
             />
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography component="h2" variant="h6">
+            <Stack
+              direction="row"
+              spacing={props?.education ? 0 : "3px"}
+              alignItems="center"
+              justifyContent="flex-start"
+            >
+              <Typography component="h3" variant="h6">
                 {props?.name}
               </Typography>
               {props?.education && (
                 <Chip
+                  size="small"
                   sx={{ backgroundColor: "transparent" }}
                   avatar={
                     <Tooltip
@@ -116,6 +123,23 @@ const TeacherItem = (props) => {
                     </Tooltip>
                   }
                 />
+              )}
+              {/**add stuff here */}
+              {props?.workExperience > 5 && (
+                <Tooltip title={`Has over 5 years experience.`} placement="top">
+                  <Box
+                    sx={{
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <LocalPoliceTwoToneIcon
+                      style={{ color: "#128cb1", fontSize: 18 }}
+                    />{" "}
+                    {/*#128cb1 */}
+                  </Box>
+                </Tooltip>
               )}
             </Stack>
             {/*2 x 2 */}

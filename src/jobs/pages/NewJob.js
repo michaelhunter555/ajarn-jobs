@@ -40,6 +40,9 @@ const styledRichJobText = {
   borderRadius: "0 0 8px 8px",
   border: "2px solid #dbdbdb",
   boxSizing: "border-box",
+  ".public-DraftStyleDefault-block": {
+    height: "5rem",
+  },
 };
 
 const StyledForm = styled("form")({
@@ -359,6 +362,7 @@ const NewJob = () => {
                   id="description"
                   editorState={editorState}
                   onEditorStateChange={handleEditorChange}
+                  toolbar={{ options: ["inline", "blockType", "fontSize"] }}
                 />
               </Box>
             </Grid>

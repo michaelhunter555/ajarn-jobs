@@ -10,6 +10,7 @@ import Footer, {
   Content,
   PageContainer,
 } from "../../shared/components/UIElements/Footer";
+import TeflBanner from "../../shared/components/UIElements/TeflBanner";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import TeacherFilter from "../components/TeacherFilter";
@@ -131,6 +132,7 @@ const Teachers = () => {
               {!isLoading && (
                 <TeacherFilter onDataChange={handleFilterChange} />
               )}
+              {!isLoading && <TeflBanner />}
             </Grid>
             <Grid item xs={12} xl={9} sx={{ margin: "1rem auto" }}>
               <Grid container spacing={2}>

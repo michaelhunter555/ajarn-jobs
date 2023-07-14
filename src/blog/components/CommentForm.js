@@ -8,7 +8,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 
 const styledComments = {
   height: "auto",
-  padding: " 0 20px",
+  padding: "0 20px",
   borderRadius: "0 0 8px 8px",
   border: "2px solid #dbdbdb",
   boxSizing: "border-box",
@@ -45,6 +45,7 @@ const CommentForm = ({
             id="postComment"
             editorState={editorState}
             onEditorStateChange={editorChange}
+            toolbar={{ options: ["inline", "blockType", "fontSize"] }}
           />
           <Stack direction="row" justifyContent="flex-end">
             <Button
