@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 
 import { Editor } from "react-draft-wysiwyg";
 
-import { Box, Button, Paper, Stack } from "@mui/material";
+import { Box, Button, CircularProgress, Paper, Stack } from "@mui/material";
 
 import { AuthContext } from "../../shared/context/auth-context";
 
@@ -19,6 +19,7 @@ const CommentForm = ({
   editorState,
   editorChange,
   formStateIsValid,
+  addCommentIsLoading,
 }) => {
   const auth = useContext(AuthContext);
 
@@ -52,7 +53,11 @@ const CommentForm = ({
               disabled={!auth.isLoggedIn || !formStateIsValid}
               onClick={postComment}
             >
-              {!auth.isLoggedIn ? "Login" : "Comment"}
+              {!auth.isLoggedIn && "Login"}
+              {auth.isLoggedIn && !addCommentIsLoading && "Comment"}
+              {auth.isLoggedIn && addCommentIsLoading && (
+                <CircularProgress size="12px" />
+              )}
             </Button>
           </Stack>
         </Box>

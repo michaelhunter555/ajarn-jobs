@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownAltTwoToneIcon from "@mui/icons-material/ThumbDownAltTwoTone";
+import ThumbUpAltTwoToneIcon from "@mui/icons-material/ThumbUpAltTwoTone";
 import {
   Button,
   CircularProgress,
@@ -94,7 +94,7 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
             disabled={!auth.isLoggedIn}
             startIcon={
               !isPostLikeLoading ? (
-                <ThumbUpIcon
+                <ThumbUpAltTwoToneIcon
                   color={
                     auth.isLoggedIn && userAlreadyLiked ? "primary" : "action"
                   }
@@ -123,7 +123,7 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
             disabled={!auth.isLoggedIn}
             startIcon={
               !isPostDislikeLoading ? (
-                <ThumbDownIcon
+                <ThumbDownAltTwoToneIcon
                   color={
                     auth.isLoggedIn && userAlreadyDisliked ? "error" : "action"
                   }

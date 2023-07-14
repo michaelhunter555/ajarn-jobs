@@ -132,6 +132,8 @@ const Auth = () => {
           resume,
           coverLetter,
           incomeDirectory,
+          applications,
+          jobs,
         } = response;
 
         auth.login(
@@ -143,6 +145,8 @@ const Auth = () => {
             resume: resume,
             coverLetter: coverLetter,
             incomeDirectory: incomeDirectory,
+            applications: applications,
+            jobs: jobs,
           },
           token
         );

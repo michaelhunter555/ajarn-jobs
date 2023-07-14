@@ -302,7 +302,7 @@ const JobDetails = (props) => {
 
                 {!isLoading && !isPostLoading && (
                   <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
-                    {jobInformation.map(
+                    {jobInformation?.map(
                       ({ variant, component, icon, text }, i) => (
                         <Typography
                           key={i}

@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { FaChalkboardTeacher, FaSchool } from "react-icons/fa";
 
+import ClearIcon from "@mui/icons-material/Clear";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownAltTwoToneIcon from "@mui/icons-material/ThumbDownAltTwoTone";
+import ThumbUpAltTwoToneIcon from "@mui/icons-material/ThumbUpAltTwoTone";
 import {
   Avatar,
   Box,
@@ -31,6 +32,7 @@ const UserComments = ({
 }) => {
   const auth = useContext(AuthContext);
   const [toggleAuthOptions, setToggleAuthOptions] = useState(false);
+  const [authClickedDelete, setAuthClickedDelete] = useState(false);
   const [isLoadingArray, setIsLoadingArray] = useState(
     new Array(usersComments?.length).fill(false)
   );
@@ -38,23 +40,29 @@ const UserComments = ({
     new Array(usersComments?.length).fill(false)
   );
 
-  const {
-    likeComment,
-    dislikeComment,
-    isCommentLikeLoading,
-    isCommentDislikeLoading,
-  } = useComment();
+  const { likeComment, dislikeComment, deleteCommentById } = useComment();
 
+  //keep track of usersComments array length to make sure editing and loading indices are in sync
   useEffect(() => {
     setIsLoadingArray(new Array(usersComments?.length).fill(false));
     setToggleAuthOptions(new Array(usersComments?.length).fill(false));
     setIsDislikeLoadingArray(new Array(usersComments?.length).fill(false));
   }, [usersComments?.length]);
 
+  /**
+   *
+   * @param {number} i - represents the index where the comment is at
+   * @description function updates comment based on Index. Clones toggleAuthOptions array and modifies values at (i) to its opposite before updating its state.
+   */
   const toggleAuthHandler = (i) => {
     const isSelectedComment = [...toggleAuthOptions];
     isSelectedComment[i] = !isSelectedComment[i];
     setToggleAuthOptions(isSelectedComment);
+    setAuthClickedDelete(false);
+  };
+
+  const toggleDeleteWarningHandler = () => {
+    setAuthClickedDelete((prev) => !prev);
   };
 
   //check if user liked post
@@ -164,10 +172,10 @@ const UserComments = ({
                         const loadingArray = [...isLoadingArray];
                         //find indice and set to true
                         loadingArray[i] = true;
-                        //set state
+                        //set state so we know which specific icon should be loading
                         setIsLoadingArray(loadingArray);
 
-                        //call likeComment Patch and pass arguments
+                        //call likeComment (PATCH) and pass arguments
                         likeComment(blogId, auth.user?._id, comment?._id)
                           .then(() => {
                             //create a copy of all loadable comments
@@ -190,7 +198,7 @@ const UserComments = ({
                       //if loading display a spinner instead of the icon
                       startIcon={
                         !isLoadingArray[i] ? (
-                          <ThumbUpIcon
+                          <ThumbUpAltTwoToneIcon
                             color={userLikedAlready[i] ? "primary" : "action"}
                             sx={{ fontSize: 20 }}
                           />
@@ -209,7 +217,6 @@ const UserComments = ({
                               (actions) => actions?.like === true
                             )?.length
                           : 0}{" "}
-                        Likes
                       </Typography>
                     </Button>
                   </Stack>
@@ -243,7 +250,7 @@ const UserComments = ({
                       disabled={!auth.isLoggedIn}
                       startIcon={
                         !isDislikeLoadingArray[i] ? (
-                          <ThumbDownIcon
+                          <ThumbDownAltTwoToneIcon
                             color={
                               auth.isLoggedIn && userDislikedAlready[i]
                                 ? "error"
@@ -266,25 +273,24 @@ const UserComments = ({
                               (interaction) => interaction?.dislike === true
                             )?.length
                           : 0}{" "}
-                        Dislikes
                       </Typography>
                     </Button>
                   </Stack>
                 </Grid>
-
+                {/* toggle delete option */}
                 {comment?.userId?._id === auth?.user?._id && (
                   <Grid item>
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <Button
                         onClick={() => toggleAuthHandler(i)}
-                        sx={{ borderRadius: "50%" }}
+                        sx={{ borderRadius: "50%", minWidth: 0 }}
                       >
                         <MoreHorizIcon style={{ color: "#888", padding: 1 }} />
                       </Button>
                     </Stack>
                   </Grid>
                 )}
-
+                {/* only toggle the index where user clicked on one of their created comments */}
                 {toggleAuthOptions[i] &&
                   comment?.userId?._id === auth?.user?._id && (
                     <Grid
@@ -296,22 +302,60 @@ const UserComments = ({
                       }}
                     >
                       <Stack direction="row" alignItems="center" spacing={1}>
-                        <Button
-                          onClick={() => console.log("are your sure?")}
-                          startIcon={
-                            <DeleteForeverTwoToneIcon
-                              style={{ color: "#b74724" }}
-                            />
-                          }
-                        >
-                          <Typography
-                            color="text.secondary"
-                            variant="subtitle2"
+                        {/* pre-delete button */}
+                        {!authClickedDelete && (
+                          <Button
+                            onClick={toggleDeleteWarningHandler}
+                            startIcon={
+                              <DeleteForeverTwoToneIcon
+                                style={{ color: "#b74724" }}
+                              />
+                            }
+                          >
+                            <Typography
+                              color="text.secondary"
+                              variant="subtitle2"
+                              sx={{ fontSize: 10, fontWeight: 550 }}
+                            >
+                              Delete
+                            </Typography>
+                          </Button>
+                        )}
+                        {/*Cancel pre-delete button */}
+                        {authClickedDelete && (
+                          <Button
+                            onClick={() => toggleAuthHandler(i)}
+                            startIcon={
+                              <ClearIcon style={{ color: "#434749" }} />
+                            }
+                          >
+                            <Typography
+                              color="text.secondary"
+                              variant="subtitle2"
+                              sx={{ fontSize: 10, fontWeight: 550 }}
+                            >
+                              Clear
+                            </Typography>
+                          </Button>
+                        )}
+                        {/* confirm delete button */}
+                        {authClickedDelete && (
+                          <Button
+                            color="error"
+                            variant="outlined"
+                            onClick={() =>
+                              deleteCommentById(comment?._id, blogId)
+                                .then(() => {
+                                  setAuthClickedDelete(false);
+                                  refetch();
+                                })
+                                .catch((err) => console.log(err))
+                            }
                             sx={{ fontSize: 10, fontWeight: 550 }}
                           >
-                            Delete
-                          </Typography>
-                        </Button>
+                            Confirm Deletion
+                          </Button>
+                        )}
                       </Stack>
                     </Grid>
                   )}

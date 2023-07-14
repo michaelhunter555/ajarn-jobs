@@ -26,10 +26,11 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const blogId = useParams().bid;
+  const [commentIsLoading, setCommentIsLoading] = useState(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const [formState, inputHandler] = useForm(
+  const [formState, inputHandler, setFormState] = useForm(
     { postComment: { value: "", isValid: false } },
     false
   );
@@ -41,8 +42,6 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
     refetch,
   } = useQuery(["commentsByBlogId", blogId], () => getComments(blogId));
 
-  console.log(usersComments?.length);
-
   const handleCommentSubmit = () => {
     const contentState = editorState.getCurrentContent();
     const rawContent = convertToRaw(contentState);
@@ -50,16 +49,28 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
     const sanitizedComment = DOMPurify.sanitize(commentHtml);
     const comment = JSON.stringify({ postComment: sanitizedComment });
 
+    setCommentIsLoading(true);
+
     try {
       addComment(user?._id, blogId, comment)
         .then(() => {
+          setCommentIsLoading(false);
           refetch();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setCommentIsLoading(false);
+          console.log(err);
+        });
     } catch (err) {
       console.log("HandleCommentSubmit Error - POST:", error);
     }
     setEditorState(EditorState.createEmpty());
+    setFormState(
+      {
+        comment: { value: "", isValid: false },
+      },
+      false
+    );
   };
 
   const handleEditorChange = (newEditorState) => {
@@ -144,6 +155,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
                 editorChange={handleEditorChange}
                 postComment={handleCommentSubmit}
                 formStateIsValid={formState.isValid}
+                addCommentIsLoading={commentIsLoading}
               />
 
               {/**END OF WYSIWYG EDITOR*/}

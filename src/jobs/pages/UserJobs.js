@@ -258,7 +258,7 @@ const UserJobs = () => {
                   to={`/modern-view/jobs`}
                   startIcon={<ViewListIcon />}
                 >
-                  Switch to Dyanmic list
+                  Switch to Dynamic list
                 </Button>
               </Stack>
             )}

@@ -7,6 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 
 import FeaturedCard from "../../Dashboard/components/Profile/FeaturedCard";
 import Tefl from "../../home/components/Tefl";
+import Footer, {
+  Content,
+  PageContainer,
+} from "../../shared/components/UIElements/Footer";
 
 const IncomeDirectoryDetails = () => {
   const incomePostId = useParams().id;
@@ -89,59 +93,67 @@ const IncomeDirectoryDetails = () => {
   ];
 
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      sx={{ maxWidth: "90%" }}
-      spacing={5}
-    >
-      <Grid
-        item
-        xs={12}
-        sm={6}
-        md={9}
-        sx={{ display: "flex", justifyContent: "center" }}
-      >
-        <Paper
-          elevation={0}
-          sx={{ padding: 2, borderRadius: 8, maxWidth: "80%" }}
+    <PageContainer>
+      <Content>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          sx={{ maxWidth: "90%" }}
+          spacing={5}
         >
-          <Alert
-            sx={{ maxWidth: 250, padding: 0, marginBottom: 1 }}
-            severity="info"
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={9}
+            sx={{ display: "flex", justifyContent: "center" }}
           >
-            This is a user submitted post
-          </Alert>
-          <Chip
-            label={
-              <Typography variant="subtitle2" color="text.secondary">
-                Posted - {user?.postDate?.split("T")[0]} by{" "}
-                {user?._id?.replace(/[0-9]/gi, "")}
-              </Typography>
-            }
-            variant="filled"
-            size="small"
-          />
-          {userDataObj?.map((val, i) => (
-            <Stack key={i}>
-              <Typography variant={val?.variant} color={val?.color}>
-                {val?.question}
-              </Typography>
-              <Typography variant={val?.answerVariant} color={val?.answerColor}>
-                {val?.answer}
-              </Typography>
+            <Paper
+              elevation={0}
+              sx={{ padding: 2, borderRadius: 8, maxWidth: "80%" }}
+            >
+              <Alert
+                sx={{ maxWidth: 250, padding: 0, marginBottom: 1 }}
+                severity="info"
+              >
+                This is a user submitted post
+              </Alert>
+              <Chip
+                label={
+                  <Typography variant="subtitle2" color="text.secondary">
+                    Posted - {user?.postDate?.split("T")[0]} by{" "}
+                    {user?._id?.replace(/[0-9]/gi, "")}
+                  </Typography>
+                }
+                variant="filled"
+                size="small"
+              />
+              {userDataObj?.map((val, i) => (
+                <Stack key={i}>
+                  <Typography variant={val?.variant} color={val?.color}>
+                    {val?.question}
+                  </Typography>
+                  <Typography
+                    variant={val?.answerVariant}
+                    color={val?.answerColor}
+                  >
+                    {val?.answer}
+                  </Typography>
+                </Stack>
+              ))}
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Stack direction="column" spacing={2} sx={{ marginTop: 1 }}>
+              <Tefl />
+              <FeaturedCard />
             </Stack>
-          ))}
-        </Paper>
-      </Grid>
-      <Grid item xs={12} sm={6} md={3}>
-        <Stack direction="column" spacing={2} sx={{ marginTop: 1 }}>
-          <Tefl />
-          <FeaturedCard />
-        </Stack>
-      </Grid>
-    </Grid>
+          </Grid>
+        </Grid>
+      </Content>
+      <Footer />
+    </PageContainer>
   );
 };
 

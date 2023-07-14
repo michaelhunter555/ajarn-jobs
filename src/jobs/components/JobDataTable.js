@@ -70,7 +70,7 @@ const JobDataTable = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {jobSpecifications.map(({ text, icon, data }, i) => (
+          {jobSpecifications?.map(({ text, icon, data }, i) => (
             <TableRow key={i}>
               <TableCell component="th" scope="row">
                 <Box display="flex" flexDirection="row" alignItems="center">

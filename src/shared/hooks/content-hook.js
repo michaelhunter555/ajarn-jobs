@@ -374,11 +374,28 @@ export const useComment = () => {
     [auth.token, sendRequest]
   );
 
+  //DELETE comment by Id
+  const deleteCommentById = useCallback(
+    async (commentId, blogId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_BLOG}/delete-comment/${commentId}/post/${blogId}`,
+          "DELETE",
+          null,
+          { Authorization: "Bearer " + auth.token }
+        );
+        return response.blogComments;
+      } catch (err) {}
+    },
+    [auth.token, sendRequest]
+  );
+
   return {
     addComment,
     getComments,
     likeComment,
     dislikeComment,
+    deleteCommentById,
     getTotalCommentLikes,
     getTotalCommentDislikes,
     isCommentLikeLoading,
