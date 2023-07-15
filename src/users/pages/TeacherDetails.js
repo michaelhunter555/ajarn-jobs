@@ -5,6 +5,10 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Footer, {
+  Content,
+  PageContainer,
+} from "../../shared/components/UIElements/Footer";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import TeacherDetailsItem from "../components/TeacherDetailsItem";
 
@@ -33,10 +37,13 @@ const TeacherDetails = () => {
   );
 
   return (
-    <>
-      <ErrorModal error={error} onClear={clearError} />
-      <TeacherDetailsItem isLoading={isLoading} teacher={userData} />;
-    </>
+    <PageContainer>
+      <Content>
+        <ErrorModal error={error} onClear={clearError} />
+        <TeacherDetailsItem isLoading={isLoading} teacher={userData} />;
+      </Content>
+      <Footer />
+    </PageContainer>
   );
 };
 

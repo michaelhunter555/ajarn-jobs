@@ -72,6 +72,11 @@ const menuItems = [
     componentName: "resume",
   },
   {
+    text: "My Content",
+    icon: <ArticleIcon />,
+    componentName: "content",
+  },
+  {
     text: "Settings",
     icon: <SettingsIcon />,
     componentName: "settings",
@@ -80,11 +85,6 @@ const menuItems = [
     text: "Creator Profile",
     icon: <AddBusinessIcon />,
     componentName: "creator",
-  },
-  {
-    text: "Log out",
-    icon: <DashboardIcon />,
-    componentName: "logout",
   },
 ];
 

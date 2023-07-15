@@ -144,24 +144,28 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                     </Typography>
                   </Box>
                   <Box>
-                    {teacher?.education && (
-                      <Chip
-                        sx={{ backgroundColor: "transparent" }}
-                        avatar={
-                          <Tooltip
-                            title={`Degree from ${
-                              teacher?.education?.split(".")[0]
-                            }`}
-                            placement="top"
-                          >
-                            <Avatar
-                              alt={`${teacher?.education}--${teacher?.name}`}
-                              src={`https://logo.clearbit.com/${teacher?.education.toLowerCase()}`}
-                            />
-                          </Tooltip>
-                        }
-                      />
-                    )}
+                    {teacher?.education &&
+                      teacher?.education?.split(",")?.map((uni, i) => (
+                        <Chip
+                          key={i}
+                          sx={{ backgroundColor: "transparent" }}
+                          avatar={
+                            <Tooltip
+                              title={`Degree from ${
+                                uni?.trim()?.split(".")[0]
+                              }`}
+                              placement="top"
+                            >
+                              <Avatar
+                                alt={`${uni?.trim()}--${teacher?.name}`}
+                                src={`https://logo.clearbit.com/${uni
+                                  ?.trim()
+                                  ?.toLowerCase()}`}
+                              />
+                            </Tooltip>
+                          }
+                        />
+                      ))}
                   </Box>
                 </Stack>
 

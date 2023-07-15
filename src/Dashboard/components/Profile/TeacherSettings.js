@@ -252,8 +252,8 @@ const TeacherSettings = (props) => {
               <TextField
                 multiline
                 fullWidth
-                helperText="Add university domain(i.e. harvard.edu)"
-                label="University logos"
+                helperText="Enter university domains separted by commas (i.e. Harvard, Yale, etc.)"
+                label="Add University Badges"
                 variant="outlined"
                 id="education"
                 defaultValue={formState.inputs.education.value}
@@ -261,7 +261,7 @@ const TeacherSettings = (props) => {
                   userArrayHandler(
                     "education",
                     event.target.value,
-                    uniRegex.test(event.target.value)
+                    event.target.value !== ""
                   )
                 }
               />

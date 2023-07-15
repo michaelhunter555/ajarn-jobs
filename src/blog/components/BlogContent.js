@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Avatar,
@@ -10,8 +10,17 @@ import {
 } from "@mui/material";
 
 import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
 const BlogContent = ({ content }) => {
+  const [wasEdited, setWasEdited] = useState(false);
+
+  useEffect(() => {
+    if (content?.editedAt) {
+      setWasEdited(true);
+    }
+  }, [content?.editedAt]);
+
   const isEmployer = content?.author?.userType === "employer";
 
   return (
@@ -33,15 +42,23 @@ const BlogContent = ({ content }) => {
           <Typography variant="subtitle2" component="span">
             By {content?.author?.name}
           </Typography>
-          <Chip
-            sx={{ flexShrink: 1 }}
-            variant="outlined"
-            size="small"
-            component="span"
-            label={`posting as ${isEmployer ? "an" : "a"} ${
-              content?.author?.userType
-            }`}
-          />
+          <Stack>
+            <Chip
+              sx={{ flexShrink: 1 }}
+              variant="outlined"
+              size="small"
+              component="span"
+              label={`posting as ${isEmployer ? "an" : "a"} ${
+                content?.author?.userType
+              }`}
+            />
+            {wasEdited && (
+              <Typography variant="subtitle2" color="text.secondary">
+                Edited: {getTimeDifference(content?.editedAt)} at{" "}
+                {content?.editedAt?.split("T")[1].substring(0, 8)}
+              </Typography>
+            )}
+          </Stack>
         </Stack>
         <Divider orientation="vertical" flexItem />
         <Stack

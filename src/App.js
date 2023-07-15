@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import UpdateUsersPostForm from "./Dashboard/components/Profile/UpdateUsersPostForm";
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
 import AlternateUserJobs from "./jobs/pages/AlternateUserJobs";
@@ -120,6 +121,7 @@ function App() {
         <Route path="/" element={<Home />} exact="true" />
         <Route path="/content/" element={<AddNewBlogPost />} />
         <Route path="/content/:bid" element={<BlogPage />} />
+        <Route path="/content/update/:bid" element={<UpdateUsersPostForm />} />
         <Route path="/income-directory" element={<IncomeDirectory />} />
         <Route
           path="/income-details/:id"

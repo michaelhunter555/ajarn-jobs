@@ -5,13 +5,12 @@ import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
-import { useParams } from "react-router-dom";
 
 import {
-  Alert,
   Box,
   CircularProgress,
   Grid,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -24,7 +23,7 @@ import { useJob } from "../../shared/hooks/jobs-hook";
 
 const UpdateJobStylesForm = styled("form")({
   listStyle: "none",
-  margin: "6rem auto",
+  margin: "2rem auto",
   padding: "1rem",
   width: "90%",
   maxWidth: "40rem",
@@ -40,12 +39,15 @@ const styledRichJobUpdateJobText = {
   border: "2px solid #dbdbdb",
   boxSizing: "border-box",
   marginBottom: "1rem",
+  ".public-DraftStyleDefault-block": {
+    height: "5rem",
+  },
 };
 
-const UpdateJob = () => {
+const UpdateJob = ({ jobId, toggleEdit }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const jobId = useParams().jid;
+  //const jobId = useParams().jid;
   const { jobs, getJobsByUserId, updateJobById, isLoading, isPostLoading } =
     useJob();
   const identifiedJob = jobs?.find((j) => j?._id === jobId);
@@ -112,7 +114,11 @@ const UpdateJob = () => {
     };
 
     try {
-      updateJobById(jobId, updatedJob);
+      updateJobById(jobId, updatedJob)
+        .then(() => {
+          toggleEdit();
+        })
+        .catch((err) => console.log(err));
     } catch (err) {
       console.log("error in updateJob component", err);
     }
@@ -142,7 +148,7 @@ const UpdateJob = () => {
           alignItems: "center",
           height: 100,
           flexDirection: "column",
-          gap: "15px",
+          gap: "10px",
         }}
       >
         <Grid>
@@ -163,10 +169,6 @@ const UpdateJob = () => {
             If there were any errors regarding, location, salary or work-Permit.
             You must delete your current job and create a new one.
           </Typography>
-          <Alert severity="info">
-            Please copy and paste your current description before updating to
-            avoid format issues.
-          </Alert>
         </Grid>
       </Box>
       <UpdateJobStylesForm onSubmit={jobUpdateHandler}>
@@ -185,14 +187,19 @@ const UpdateJob = () => {
             id="description"
             editorState={editorState}
             onEditorStateChange={handleEditorChange}
+            toolbar={{
+              options: ["inline", "blockType", "fontSize", "list"],
+            }}
           />
         </Box>
-
-        {!isPostLoading && (
-          <Button type="submit" disabled={!formState.isValid}>
-            Update Job
-          </Button>
-        )}
+        <Stack direction="row" alignItems="center" spacing={1}>
+          {!isPostLoading && (
+            <Button type="submit" disabled={!formState.isValid}>
+              Update Job
+            </Button>
+          )}
+          <Button onClick={toggleEdit}>Cancel</Button>
+        </Stack>
         {isPostLoading && <CircularProgress />}
       </UpdateJobStylesForm>
     </>

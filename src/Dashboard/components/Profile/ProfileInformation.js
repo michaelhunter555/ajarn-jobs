@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import LocationOnTwoToneIcon from "@mui/icons-material/LocationOnTwoTone";
 import {
   Avatar,
   Box,
@@ -57,31 +58,34 @@ const ProfileInformation = ({ user }) => {
     resume,
   } = user;
 
-  console.log("User interest:", interests);
-
   const handleMenuItemClick = (componentName) => {
     setTeacherProfileTab(componentName);
   };
 
+  const userHasAbout = !!about;
+  const userHasSkill = !!skill;
+  const userHasResume = resume.length > 0;
+  const userHasEducation = !!education;
+
   const renderComponent = () => {
     switch (teacherProfileTab) {
       case "bio":
-        return (
+        return userHasAbout ? (
           <Typography paragraph sx={{ margin: "1.5rem" }}>
             {about}
+          </Typography>
+        ) : (
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            sx={{ margin: "1.5rem" }}
+          >
+            Please visit settings to update basic info
           </Typography>
         );
       case "skills":
         return (
-          <Typography
-            paragraph
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "1rem",
-              justifyContent: "center",
-            }}
-          >
+          <Stack direction="row" spacing={1} justifyContent="center">
             {skill?.split(",")?.map((item, i) => (
               <Chip
                 key={i}
@@ -89,7 +93,7 @@ const ProfileInformation = ({ user }) => {
                 sx={{ color: "white", backgroundColor: "green" }}
               />
             ))}
-          </Typography>
+          </Stack>
         );
       case "resume":
         return <CollapsibleTable teacherResume={resume} />;
@@ -118,23 +122,43 @@ const ProfileInformation = ({ user }) => {
             alt={`${id}-${name}`}
           />
           <Typography variant="h5">{name}</Typography>
-          <Typography variant="subtitle1">{location}</Typography>
-          {education && (
-            <Chip
-              sx={{ backgroundColor: "transparent" }}
-              avatar={
-                <Tooltip
-                  title={`Degree from ${education?.split(".")[0]}`}
-                  placement="top"
-                >
-                  <Avatar
-                    alt={`${education}--${name}`}
-                    src={`https://logo.clearbit.com/${education.toLowerCase()}`}
-                  />
-                </Tooltip>
-              }
-            />
-          )}
+          <Stack direction="row" alignItems="center">
+            <Stack>
+              <LocationOnTwoToneIcon style={{ color: "#0f5250de" }} />
+            </Stack>
+            <Stack>
+              <Typography variant="subtitle1">{location}</Typography>
+            </Stack>
+          </Stack>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {education &&
+              education?.split(",").map((uni, i) => (
+                <Chip
+                  key={i}
+                  sx={{ backgroundColor: "transparent" }}
+                  avatar={
+                    <Tooltip
+                      title={`Degree from ${uni?.trim()?.split(".")[0]}`}
+                      placement="top"
+                    >
+                      <Avatar
+                        alt={`${uni}--${name}`}
+                        src={`https://logo.clearbit.com/${uni
+                          ?.trim()
+                          .toLowerCase()}`}
+                      />
+                    </Tooltip>
+                  }
+                />
+              ))}
+          </Box>
           <Typography variant="body1">{WorkExperience}</Typography>
           <Box sx={{ display: "flex", flexDirection: "row" }}>
             {interests?.split(",").map((interest, i) => {

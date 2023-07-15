@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -13,11 +13,12 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import Contribute from "../../assets/contribute.png";
-import ThaiLifeTwo from "../../assets/geoff-greenwood-rH1aA4TqGms-unsplash.jpg";
-import Interviews from "../../assets/interviews.png";
-import Jobs from "../../assets/mario-heller-hXLkFpvKRys-unsplash.jpg";
-import SchoolImage from "../../assets/sangga-rima-roman-selia-bgQgAKagQB4-unsplash.jpg";
+import Content from "../../assets/content.png";
+import Incomes from "../../assets/incomes.png";
+import Jobs from "../../assets/jobs.png";
+import Teachers from "../../assets/teachers.png";
+import UserDash from "../../assets/userdash.png";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -61,16 +62,20 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   },
 }));
 
-//arrange items in array of objects
-const items = [
-  { label: "Jobs", img: Jobs, link: `/jobs` },
-  { label: "Schools", img: SchoolImage, link: `/school` },
-  { label: "Incomes", img: ThaiLifeTwo, link: `/income-directory` },
-  { label: "Teachers", img: Interviews, link: `/teachers` },
-  { label: "Content", img: Contribute, link: `/content` },
-];
-
 const SiteFeatures = ({ isLoading }) => {
+  const auth = useContext(AuthContext);
+  //arrange items in array of objects
+  const items = [
+    { label: "Jobs", img: Jobs, link: `/jobs` },
+    { label: "Content", img: Content, link: `/content` },
+    { label: "Incomes", img: Incomes, link: `/income-directory` },
+    { label: "Teachers", img: Teachers, link: `/teachers` },
+    {
+      label: "Dashboard",
+      img: UserDash,
+      link: auth.isLoggedIn ? `/users/${auth.user?._id}` : "/login",
+    },
+  ];
   return (
     <StyledBoxWrapper>
       {isLoading ? (
@@ -113,7 +118,7 @@ const SiteFeatures = ({ isLoading }) => {
                     component="img"
                     image={img}
                     alt={`${label}-card#-${i}`}
-                    sx={{ height: 100 }}
+                    sx={{ height: 105 }}
                   />
                   <CardContent
                     sx={{

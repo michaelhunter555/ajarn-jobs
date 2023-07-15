@@ -222,8 +222,6 @@ const Creator = ({ creatorItem, jobsCount }) => {
   const twentyFourHours = 24 * 60 * 60 * 1000;
   const getTimeLeft = Math.abs(getDifference - twentyFourHours);
 
-  // getTimeLeft / (60 * 60 * 1000)
-
   //components rendered from tab navigation
   const renderComponent = () => {
     switch (creatorProfileTab) {
@@ -249,7 +247,10 @@ const Creator = ({ creatorItem, jobsCount }) => {
       <ErrorModal error={error} onClear={clearError} />
       {/*isLoading checks if user.creator is not null and renders form depending on this. */}
       {isPostLoading ? (
-        <div> loading...</div>
+        <div>
+          {" "}
+          <CircularProgress />
+        </div>
       ) : isEditing ? (
         <Card sx={{ padding: "1rem 1rem" }}>
           <form onSubmit={handleCreatorUpdate}>

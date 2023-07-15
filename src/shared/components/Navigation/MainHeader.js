@@ -13,7 +13,7 @@ const MainHeaderStyles = styled("header")(({ theme, navIsScrolled }) => ({
   left: "0",
   background: navIsScrolled ? theme.palette.background.glass : "#ffffff",
   boxShadow: navIsScrolled
-    ? "0 4px 30px rgba(0, 0, 0, 0.26)"
+    ? "0 2px 6px rgba(0, 0, 0, 0.26)"
     : "0 2px 6px rgba(0, 0, 0, 0.26)",
   padding: "0 1rem",
   zIndex: 11,

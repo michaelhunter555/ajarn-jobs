@@ -107,23 +107,31 @@ const TeacherItem = (props) => {
               <Typography component="h3" variant="h6">
                 {props?.name}
               </Typography>
-              {props?.education && (
-                <Chip
-                  size="small"
-                  sx={{ backgroundColor: "transparent" }}
-                  avatar={
-                    <Tooltip
-                      title={`Degree from ${props?.education?.split(".")[0]}`}
-                      placement="top"
-                    >
-                      <Avatar
-                        alt={`${props?.education}--${props?.name}`}
-                        src={`https://logo.clearbit.com/${props?.education.toLowerCase()}`}
-                      />
-                    </Tooltip>
-                  }
-                />
-              )}
+              {/*new Result should be mapped over */}
+              {props?.education &&
+                props?.education
+                  ?.split(",")
+                  ?.slice(0, 2)
+                  ?.map((uni, i) => (
+                    <Chip
+                      size="small"
+                      key={i}
+                      sx={{ backgroundColor: "transparent" }}
+                      avatar={
+                        <Tooltip
+                          title={`Degree from ${uni?.trim()?.split(".")[0]}`}
+                          placement="top"
+                        >
+                          <Avatar
+                            alt={`${uni?.trim()}--${props?.name}`}
+                            src={`https://logo.clearbit.com/${uni
+                              ?.trim()
+                              ?.toLowerCase()}`}
+                          />
+                        </Tooltip>
+                      }
+                    />
+                  ))}
               {/**add stuff here */}
               {props?.workExperience > 5 && (
                 <Tooltip title={`Has over 5 years experience.`} placement="top">
@@ -171,6 +179,7 @@ const TeacherItem = (props) => {
                 >
                   <PlaceIcon fontSize="inherit" /> {props?.currentLocation}
                 </Typography>
+
                 <Typography
                   component="h3"
                   color="text.secondary"
@@ -180,6 +189,7 @@ const TeacherItem = (props) => {
                 </Typography>
               </Grid>
             </Grid>
+
             <Divider sx={{ width: "75%" }} variant="left" />
             <Box>
               <Typography

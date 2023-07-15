@@ -362,7 +362,9 @@ const NewJob = () => {
                   id="description"
                   editorState={editorState}
                   onEditorStateChange={handleEditorChange}
-                  toolbar={{ options: ["inline", "blockType", "fontSize"] }}
+                  toolbar={{
+                    options: ["inline", "blockType", "fontSize", "list"],
+                  }}
                 />
               </Box>
             </Grid>

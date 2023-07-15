@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
 import { Button, Grid, Skeleton, Stack } from "@mui/material";
@@ -25,9 +25,11 @@ import FeaturedCard from "../components/Profile/FeaturedCard";
 import ProfileInformation from "../components/Profile/ProfileInformation";
 import TeacherSettings from "../components/Profile/TeacherSettings";
 import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
+import UsersContent from "../components/Profile/UsersContent";
 import Sidebar, { BottomMobileNav } from "../components/Sidebar";
 
 const TEACHER = "teacher";
+const CONTENT = "content";
 const EMPLOYER = "employer";
 const PROFILE = "profile";
 const JOB_LISTINGS = "job-listings";
@@ -36,7 +38,6 @@ const RESUME = "resume";
 const COVER_LETTER = "cover-letter";
 const CREATOR = "creator";
 const SETTINGS = "settings";
-const LOGOUT = "logout";
 
 const JobAdGridContainer = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -51,7 +52,6 @@ const JobAdGridContainer = styled(Grid)(({ theme }) => ({
 const TeacherDashboard = () => {
   const userId = useParams().id;
   const auth = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [selectedCard, setSelectedCard] = useState(null);
@@ -60,7 +60,7 @@ const TeacherDashboard = () => {
     //get and update user profile
     users: userCard,
     getAllUsers,
-    getUserInformation,
+    //getUserInformation,
     updateUserProfile,
     isPostLoading,
     clearError: clearUserProfileError,
@@ -315,6 +315,8 @@ const TeacherDashboard = () => {
               )}
             </>
           );
+        case CONTENT:
+          return <UsersContent />;
         case SETTINGS:
           const isTeacher = auth.user?.userType === TEACHER;
           const isHidden = auth.user?.isHidden;
@@ -341,10 +343,7 @@ const TeacherDashboard = () => {
               )}
             </>
           );
-        case LOGOUT:
-          auth.logout();
-          navigate("/");
-          break;
+
         default:
           return <ProfileInformation user={auth.user} />;
       }
