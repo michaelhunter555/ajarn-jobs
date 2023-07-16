@@ -43,7 +43,7 @@ const Teachers = () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_USERS}`);
       const data = await response.json();
-      console.log(data);
+
       return data.users;
     } catch (err) {
       console.log("there was an error retrieving teachers  - Msg: " + err);

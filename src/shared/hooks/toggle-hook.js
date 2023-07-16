@@ -19,7 +19,7 @@ export const useSettingsToggle = () => {
           JSON.stringify({ userType: isTeacher ? "employer" : "teacher" }),
           { "Content-Type": "application/json" }
         );
-        console.log("ROLECHANGE_RESPONSE:", response);
+
         const updatedUser = {
           ...auth.user,
           userType: response.user?.userType,

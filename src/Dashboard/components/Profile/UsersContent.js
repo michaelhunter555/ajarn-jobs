@@ -7,6 +7,10 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import {
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Paper,
   Stack,
   Table,
@@ -20,23 +24,41 @@ import {
 } from "@mui/material";
 
 import { AuthContext } from "../../../shared/context/auth-context";
+import { useContent } from "../../../shared/hooks/content-hook";
 import UpdateUsersPostForm from "./UpdateUsersPostForm";
 
 const UsersContent = () => {
   const auth = useContext(AuthContext);
+  const [openDeleteWarning, setOpenDeleteWarning] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingPostId, setEditingPostId] = useState(null);
+  const [postToDelete, setPostToDelete] = useState(null);
+  const { deleteContentPost } = useContent();
 
-  const deletePostHandler = () => {
-    console.log(`Deleted post`);
+  const deleteWarningHandler = (postId) => {
+    setPostToDelete(postId);
+    setOpenDeleteWarning(true);
   };
+
+  const confirmDeleteHandler = () => {
+    deleteContentPost(postToDelete);
+    setPostToDelete(null);
+    setOpenDeleteWarning(false);
+  };
+
+  const cancelDeleteHandler = () => {
+    setPostToDelete(null);
+    setOpenDeleteWarning(false);
+  };
+
+  console.log("POST TO DELETE", postToDelete);
 
   const toggleEditingMode = (id) => {
     setIsEditing(true);
     setEditingPostId(id);
   };
 
-  const closeToggleEditMode = (id) => {
+  const closeToggleEditMode = () => {
     setIsEditing(false);
     setEditingPostId(null);
   };
@@ -82,11 +104,31 @@ const UsersContent = () => {
 
                       <Tooltip title="Edit" placement="top">
                         <Button onClick={() => toggleEditingMode(post?._id)}>
-                          <EditTwoToneIcon />
+                          <EditTwoToneIcon sx={{ color: "#b18912" }} />
                         </Button>
                       </Tooltip>
+                      <Dialog
+                        open={openDeleteWarning}
+                        onClose={cancelDeleteHandler}
+                        aria-labelledby="delete-your-post"
+                        aria-describedby="confirm-post-delete"
+                      >
+                        <DialogTitle>Are you sure?</DialogTitle>
+                        <DialogContent>
+                          You are about to delete your post. This can not be
+                          reversed.
+                        </DialogContent>
+                        <DialogActions sx={{}}>
+                          <Button
+                            onClick={() => confirmDeleteHandler(post?._id)}
+                          >
+                            Confirm Delete
+                          </Button>
+                          <Button onClick={cancelDeleteHandler}>Cancel</Button>
+                        </DialogActions>
+                      </Dialog>
                       <Tooltip title="Delete" placement="top">
-                        <Button onClick={() => deletePostHandler(post?._id)}>
+                        <Button onClick={() => deleteWarningHandler(post?._id)}>
                           <DeleteForeverTwoToneIcon color="error" />
                         </Button>
                       </Tooltip>

@@ -47,7 +47,6 @@ const BlogFilter = ({ onDataChange }) => {
       date: formattedDate,
       category,
     });
-    console.log("SELECTED DATE - was compared", formattedDate);
   };
 
   const categoryChangeHandler = (event) => {

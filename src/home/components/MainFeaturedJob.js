@@ -97,11 +97,9 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
   const [selectedJob, setSelectedJob] = useState(
     jobs?.length > 0 ? jobs[0] : null
   );
-  console.log(selectedJob);
 
   const selectJobHandler = (job) => {
     setSelectedJob(job);
-    console.log("SELECTED JOB", job);
   };
 
   return (

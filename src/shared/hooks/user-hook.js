@@ -42,7 +42,7 @@ export const useUser = () => {
           "PATCH",
           update
         );
-        console.log("UPDATE_USER-HOOK", response.user);
+
         updateUser(response.user);
       } catch (err) {}
     },
@@ -79,7 +79,7 @@ export const useUser = () => {
           JSON.stringify({ coverLetter: auth.user?.coverLetter }),
           { "Content-Type": "application/json" }
         );
-        console.log(response);
+
         const updatedUser = {
           ...auth.user,
           applications: response.user.applications,

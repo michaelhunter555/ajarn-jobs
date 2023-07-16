@@ -137,8 +137,6 @@ const UpdateJob = ({ jobId, toggleEdit }) => {
     inputHandler("description", postData, postData.length >= 5);
   };
 
-  console.log("updateJob formState", formState);
-
   return (
     <>
       <Box

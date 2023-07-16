@@ -46,7 +46,6 @@ const LoginFormControl = styled("div")(({ theme }) => ({
 const inputReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE":
-      console.log("state change:", action.val);
       return {
         ...state,
         value: action.val,

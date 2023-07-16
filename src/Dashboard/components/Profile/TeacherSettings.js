@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Button,
@@ -126,10 +126,6 @@ const TeacherSettings = (props) => {
     setIsHidden((prev) => !prev);
     props.onToggleVisibility();
   };
-
-  useEffect(() => {
-    console.log("TEACHER SETTINGS FORMSTATE", formState);
-  }, [formState]);
 
   return (
     <Card>

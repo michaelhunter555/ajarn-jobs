@@ -13,7 +13,7 @@ const BlogList = () => {
         );
       }
       const data = await response.json();
-      console.log(data);
+
       return data.blogList;
     } catch (err) {
       console.log(err);

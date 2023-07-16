@@ -125,7 +125,7 @@ export const useJob = () => {
             Authorization: "Bearer " + auth.token,
           }
         );
-        console.log("USERB-BUFFET RESPONSE:", response.user);
+
         const updatedUser = {
           ...auth.user,
           buffetIsActive: response.user.buffetIsActive, //NEEDS TO BE CHANGED TO response.user.buffetIsActive this is only for testing purposes with existing users who do not have this new property
@@ -154,8 +154,6 @@ export const useJob = () => {
           ...auth.user,
           jobs: response.jobs,
         };
-
-        console.log("Response of Deleted Job:", deletedJob);
 
         updateUser(deletedJob);
         setIsDeleting(false);

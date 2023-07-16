@@ -80,8 +80,6 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
       postContent: sanitizedPostData,
     };
 
-    console.log("blogPostForm Inputs:", contentPostInputs); // check if the inputs are showing
-
     try {
       createContentPost(user?._id, contentPostInputs)
         .then(() => {

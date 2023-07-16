@@ -196,6 +196,13 @@ export const useContent = () => {
   const deleteContentPost = useCallback(
     async (postId) => {
       try {
+        const deletedPost = {
+          ...auth.user,
+          blogPosts: auth.user.blogPosts.filter((post) => post._id !== postId),
+        };
+        updateUser(deletedPost);
+
+        console.log("DELETE INITIATED");
         const response = await sendRequest(
           `${process.env.REACT_APP_BLOG}/post/${postId}`,
           "DELETE",
@@ -204,14 +211,20 @@ export const useContent = () => {
             Authorization: "Bearer " + auth.token,
           }
         );
-        const deletedPost = {
-          ...auth.user,
-          blogPosts: response.user.blogPosts.filter(
-            (post) => post._id !== postId
-          ),
-        };
-        updateUser(deletedPost);
+        if (!response.ok) {
+          updateUser({
+            ...auth.user,
+            blogPosts: auth.user?.blogPosts,
+          });
+        }
+
+        console.log("DELETE COMPLETE");
       } catch (err) {
+        console.log("DELETE FAILED");
+        updateUser({
+          ...auth.user,
+          blogPosts: auth.user?.blogPosts,
+        });
         console.log(
           "There was an issue with the request to delete the blog post." + err
         );
@@ -270,8 +283,6 @@ export const useComment = () => {
             Authorization: "Bearer " + auth.token,
           }
         );
-
-        console.log("addComments - POST - Response: ", response.blogComments);
       } catch (err) {
         console.log("ERROR FROM USE COMMENT HOOK:", err);
       }
@@ -287,7 +298,7 @@ export const useComment = () => {
           `${process.env.REACT_APP_BLOG}/post/comments/${blogId}`
         );
         setComments(response.comments);
-        console.log("getComments response:", response.comments);
+
         return response.comments;
       } catch (err) {
         console.log(
@@ -305,7 +316,7 @@ export const useComment = () => {
         const response = await sendRequest(
           `${process.env.REACT_APP_BLOG}/post/comments/likes/${blogId}`
         );
-        console.log("TOTAL COMMENT LIKES (res()):", response.totalCommentLikes);
+
         setCommentLikes(response.totalCommentLikes);
       } catch (err) {}
     },

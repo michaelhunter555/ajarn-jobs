@@ -26,6 +26,9 @@ const styledRichCoverLetterText = {
   borderRadius: "0 0 8px 8px",
   border: "1px solid #eee",
   boxSizing: "border-box",
+  ".public-DraftStyleDefault-block": {
+    height: "5rem",
+  },
 };
 
 const CoverLetter = () => {
@@ -106,8 +109,6 @@ const CoverLetter = () => {
     inputHandler("coverLetter", postData, postData.length >= 5);
   };
 
-  console.log(formState);
-
   return (
     <>
       {isLoading && <Skeleton sx={{ width: 753, height: 382 }} />}
@@ -136,7 +137,7 @@ const CoverLetter = () => {
               >
                 <Stack
                   justifyContent="center"
-                  alignItem="center"
+                  alignItems="center"
                   direction="row"
                   spacing={2}
                 >
@@ -229,6 +230,9 @@ const CoverLetter = () => {
                   <Editor
                     editorState={editorState}
                     onEditorStateChange={handleEditorChange}
+                    toolbar={{
+                      options: ["inline", "blockType", "fontSize", "list"],
+                    }}
                   />
                 </Box>
               </Grid>

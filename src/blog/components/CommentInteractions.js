@@ -11,16 +11,7 @@ const CommentInteractions = ({ blogId, commentId, userComments }) => {
   const auth = useContext(AuthContext);
   const [commentIsLiked, setCommentIsLiked] = useState(true);
   const [commentIsDisliked, setCommentIsDisliked] = useState(true);
-  const {
-    commentLikes,
-    commentDislikes,
-    likeComment,
-    dislikeComment,
-    isCommentLikeLoading,
-    isCommentDislikeLoading,
-    getTotalCommentLikes,
-    getTotalCommentDislikes,
-  } = useComment();
+  const { likeComment, dislikeComment } = useComment();
 
   const handleCommentLike = () => {
     likeComment(blogId, auth.user?._id, commentId, commentIsLiked);

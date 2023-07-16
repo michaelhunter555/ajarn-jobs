@@ -13,7 +13,7 @@ export const useUniversityLogo = (university) => {
       if (!response.ok) {
         throw new Error("There was an error retrieving Uni logos.");
       }
-      console.log(response.url);
+
       setUniversityLogo(response.url);
     } catch (err) {
       console.log("There was an error getting the logo", err);

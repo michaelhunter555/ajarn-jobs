@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -76,12 +76,12 @@ const Auth = () => {
     false
   );
 
-  const userId = user?._id;
-  useEffect(() => {
-    if (auth.isLoggedIn) {
-      navigate(`/users/${userId}`);
-    }
-  }, [auth.isLoggedIn, userId, navigate]);
+  // const userId = user?._id;
+  // useEffect(() => {
+  //   if (auth.isLoggedIn) {
+  //     navigate(`/users/${userId}`);
+  //   }
+  // }, [auth.isLoggedIn, userId, navigate]);
 
   //switch from login to sign-up
   const signUpOrLoginHandler = () => {
@@ -150,6 +150,7 @@ const Auth = () => {
           },
           token
         );
+        navigate("/");
       } catch (err) {
         //error handling done in custom hook
       }

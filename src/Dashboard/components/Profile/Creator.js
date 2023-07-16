@@ -167,7 +167,6 @@ const Creator = ({ creatorItem, jobsCount }) => {
         true
       );
     }
-    console.log(creatorItem);
   }, [creatorItem, setFormData]);
 
   //PATCH remove Creator Data

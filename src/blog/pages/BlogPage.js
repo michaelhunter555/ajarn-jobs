@@ -33,8 +33,6 @@ const BlogPage = () => {
     isLoading,
   } = useQuery(["blogDetails", blogId], () => getBlogPostById());
 
-  console.log("blogPage Content", content);
-
   return (
     <Grid container direction="row" alignItems="start" spacing={1}>
       <Grid item xs={12} sm={8}>

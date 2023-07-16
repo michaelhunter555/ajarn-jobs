@@ -20,8 +20,6 @@ export const useCreator = () => {
           { "Content-Type": "application/json" }
         );
 
-        console.log("RESPONSE-CREATOR_HOOK:", response.user.creator);
-
         const updatedCreator = {
           ...user,
           creator: response.user.creator,

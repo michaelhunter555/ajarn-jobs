@@ -30,7 +30,7 @@ const AlternateUserJobs = () => {
       }
 
       const data = await response.json();
-      console.log(data);
+
       return data.jobs;
     } catch (err) {
       console.log("There was an error with aleternate jobs", err);

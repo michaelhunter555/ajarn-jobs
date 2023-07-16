@@ -46,8 +46,6 @@ const UserContributions = () => {
     isLoading,
   } = useQuery(["infoDirectory"], () => getUserIncomeData());
 
-  console.log(userIncomeData);
-
   const getFreshData = () => {
     refetch();
   };

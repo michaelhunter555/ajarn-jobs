@@ -23,6 +23,7 @@ import CoverLetter from "../components/Profile/CoverLetter";
 import Creator from "../components/Profile/Creator";
 import FeaturedCard from "../components/Profile/FeaturedCard";
 import ProfileInformation from "../components/Profile/ProfileInformation";
+import ProfileProgress from "../components/Profile/ProfileProgress";
 import TeacherSettings from "../components/Profile/TeacherSettings";
 import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
 import UsersContent from "../components/Profile/UsersContent";
@@ -55,7 +56,7 @@ const TeacherDashboard = () => {
 
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [selectedCard, setSelectedCard] = useState(null);
-  const [jobAd, setJobAd] = useState([]);
+  //const [jobAd, setJobAd] = useState([]);
   const {
     //get and update user profile
     users: userCard,
@@ -95,7 +96,7 @@ const TeacherDashboard = () => {
     clearError: clearGettingJobsError,
   } = useJob();
   const {
-    isLoading: jobAdIsLoading,
+    //isLoading: jobAdIsLoading,
     error: jobAdError,
     sendRequest: sendJobAdRequest,
     clearError: clearJobAdError,
@@ -108,39 +109,62 @@ const TeacherDashboard = () => {
       throw new Error("There was an error with profile informatin retrievl.");
     }
     const data = await response.json();
+    console.log("This Ran Again: getUserProfile Info");
     auth.updateUser(data.user);
     return data.user;
   };
-  const { isLoading: userProfileLoading, error: getUserProfileError } =
-    useQuery(["userInfo", userId], () => getUserProfileInfo(userId));
+  const {
+    //data: user,
+    isLoading: userProfileLoading,
+    error: getUserProfileError,
+  } = useQuery(["userInfo", auth.user?._id], () =>
+    getUserProfileInfo(auth?.user?._id)
+  );
+
+  //get job ads
+  const getJobAds = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_JOBS}`);
+      if (!response.ok) {
+        throw new Error("There was an error with getJobAds");
+      }
+      const data = await response.json();
+      console.log("getJobAds Ran again on dash visit");
+      return data.jobs;
+    } catch (err) {
+      console.log("There was an error getting the job ads - Msg: " + err);
+    }
+  };
+  const { data: jobAd, isLoading: jobAdIsLoading } = useQuery(["JobAds"], () =>
+    getJobAds()
+  );
 
   // useEffect(() => {
   //   getUserInformation(userId)
   // }, [userId, getUserInformation])
 
-  //GET users current jobs for creator dash and
-  useEffect(() => {
-    getJobsByUserId(userId);
-  }, [userId, getJobsByUserId]);
+  // const getJobsByUserId = useCallback(
+  //   async (userId) => {
+  //     try {
+  //       const response = await fetch(
+  //         `${process.env.REACT_APP_JOBS}/user/${userId}`
+  //       );
+  //       setJobs(response.jobs);
+  //       return response.jobs;
+  //     } catch (err) {}
+  //   },
+  //   [sendRequest]
+  // );
 
-  //get job ads
-  useEffect(() => {
-    const getJobAds = async () => {
-      try {
-        const response = await sendJobAdRequest(
-          `${process.env.REACT_APP_JOBS}`
-        );
-        setJobAd(response.jobs);
-      } catch (err) {
-        console.log("There was an error getting the job ads - Msg: " + err);
-      }
-    };
-    getJobAds();
-  }, [sendJobAdRequest]);
+  // //GET users current jobs for creator dash and
+  // useEffect(() => {
+  //   getJobsByUserId(userId);
+  // }, [userId, getJobsByUserId]);
 
   //GET all users
   useEffect(() => {
     if (!userCard || userCard.length === 0) {
+      console.log('"Get all users ran again on dash');
       getAllUsers();
     }
   }, [getAllUsers, userCard]);
@@ -148,6 +172,7 @@ const TeacherDashboard = () => {
   //get random user card
   useEffect(() => {
     if (userCard && userCard.length > 0 && !selectedCard) {
+      console.log("randomize user card ran again on dash");
       const randomUser = userCard[Math.floor(Math.random() * userCard.length)];
       setSelectedCard(randomUser);
     }
@@ -264,7 +289,7 @@ const TeacherDashboard = () => {
           );
         case JOB_LISTINGS:
           /*auth.user.jobs */
-          return <JobAdsList job={jobs} />;
+          return <JobAdsList job={auth.user?.jobs} />;
         case APPLICATIONS:
           return <Applications />;
         case RESUME:
@@ -354,9 +379,7 @@ const TeacherDashboard = () => {
   };
 
   //dashboard loading state
-  const homeDashLoadingState =
-    //userProfileIsLoading, jobsIsLoading, jobAdIsLoading
-    userProfileLoading || jobsIsLoading || jobAdIsLoading;
+  const homeDashLoadingState = userProfileLoading || jobAdIsLoading; //|| jobsIsLoading;
 
   const error =
     getUserProfileError ||
@@ -510,6 +533,9 @@ const TeacherDashboard = () => {
                 width={200}
               />
             )
+          )}
+          {auth.user?.userType === TEACHER && (
+            <ProfileProgress user={auth.user} />
           )}
         </Grid>
       </Grid>

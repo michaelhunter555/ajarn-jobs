@@ -71,7 +71,7 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete, onCancel }) => {
     const newResume = auth.user?.resume?.map((item) =>
       item._id === resumeItem._id ? updatedResumeItem : item
     );
-    console.log(newResume);
+
     onUpdate(newResume);
 
     if (resumeItem.isNew) {

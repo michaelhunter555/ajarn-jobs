@@ -17,6 +17,8 @@ import UpdateUsersPostForm from "./Dashboard/components/Profile/UpdateUsersPostF
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
 import AlternateUserJobs from "./jobs/pages/AlternateUserJobs";
+import JobDetailsPage from "./jobs/pages/JobDetailsPage";
+import UserJobs from "./jobs/pages/UserJobs";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
 import {
@@ -27,6 +29,7 @@ import {
   USE_CREDITS,
 } from "./shared/context/authActions";
 import { authReducer, initialState } from "./shared/context/authReducer";
+import Login from "./users/pages/Auth";
 
 const queryClient = new QueryClient();
 
@@ -39,11 +42,8 @@ function App() {
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
   //Lazily loaded components
-  const Login = lazy(() => import("./users/pages/Auth"));
   const Teachers = lazy(() => import("./users/pages/Teachers"));
   const TeacherDetails = lazy(() => import("./users/pages/TeacherDetails"));
-  const UserJobs = lazy(() => import("./jobs/pages/UserJobs"));
-  const JobDetailsPage = lazy(() => import("./jobs/pages/JobDetailsPage"));
   const NewJob = lazy(() => import("./jobs/pages/NewJob"));
   const UpdateJob = lazy(() => import("./jobs/pages/UpdateJob"));
   const BlogPage = lazy(() => import("./blog/pages/BlogPage"));
@@ -60,30 +60,36 @@ function App() {
     const tokenExpires =
       expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
     setTokenExpirationDate(tokenExpires);
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({
-        userId: userId,
-        token: token,
-        tokenExpires: tokenExpires.toISOString(),
-      })
-    );
+    const userData = {
+      userId: userId,
+      token: token,
+      tokenExpires: tokenExpires.toISOString(),
+    };
+    console.log("1. Logging in user", userData);
+    localStorage.setItem("userData", JSON.stringify(userData));
   }, []);
 
   //log user in if they come back and their login token is still valid
   useEffect(() => {
+    console.log("2. Checking user data in local storage");
     const userData = JSON.parse(localStorage.getItem("userData"));
+    console.log("3. User data from local Storage", userData);
+
     if (
       userData &&
       userData.token &&
       new Date(userData.tokenExpires) > new Date()
     ) {
+      console.log("4. Token is valid. Loggin in user.");
       login(userData.userId, userData.token, new Date(userData.tokenExpires));
+    } else {
+      console.log("5. NO valid token was found.");
     }
   }, [login, state.token]);
 
   //logout user and set to null if they wish to logout
   const logout = useCallback(() => {
+    console.log("6. Logging out user");
     dispatch({ type: LOGOUT });
     setTokenExpirationDate(null);
     localStorage.removeItem("userData");
@@ -94,8 +100,17 @@ function App() {
     if (state.token && tokenExpirationDate) {
       const timeRemaining =
         tokenExpirationDate.getTime() - new Date().getTime();
+      console.log("7. Setting logout Timer", timeRemaining);
       logoutTimer = setTimeout(logout, timeRemaining);
+
+      return () => {
+        console.log("8. Clearing Logout timer");
+        clearTimeout(logoutTimer);
+      };
     } else {
+      console.log(
+        "9. No token or expiration date found, Clearing logout timer"
+      );
       clearTimeout(logoutTimer);
     }
   }, [state.token, logout, tokenExpirationDate]);
@@ -113,6 +128,10 @@ function App() {
   const updatedUser = useCallback((updatedUser) => {
     dispatch({ type: UPDATE_USER, user: updatedUser });
   }, []);
+
+  // const ProtectedRoute = ({ isLoggedIn, ...props }) => {
+  //   return isLoggedIn ? <Route {...props} /> : <Navigate to="/login" />;
+  // };
 
   let routes;
   if (state.token) {
@@ -160,7 +179,7 @@ function App() {
     );
   }
 
-  console.log("APP STATE:", state.user, "APP TOKEN:", state.token);
+  //console.log("APP STATE:", state.user, "APP TOKEN:", state.token);
 
   return (
     <QueryClientProvider client={queryClient}>

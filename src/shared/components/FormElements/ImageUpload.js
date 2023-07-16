@@ -48,7 +48,6 @@ const ImageUpload = (props) => {
   }, [file, authHasImage, auth.user?.image]);
 
   const userChoseImageHandler = (event) => {
-    console.log(event.target);
     let pickedFile;
     let fileIsValid = isValid;
     if (event.target.files && event.target.files.length === 1) {

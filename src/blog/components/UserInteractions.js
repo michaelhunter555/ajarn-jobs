@@ -35,7 +35,6 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
       getTotalLikes(blogId);
     }
   }, [getTotalLikes, blogId, isPostLikeLoading, isPostDislikeLoading]);
-  console.log("TotalLikes:", totalLikes);
 
   useEffect(() => {
     if (!isPostDislikeLoading || !isPostLikeLoading) {

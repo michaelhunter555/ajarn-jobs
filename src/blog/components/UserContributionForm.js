@@ -95,9 +95,6 @@ const UserContributionForm = ({ onSubmit }) => {
       perfectNumber: formState.inputs.perfectNumber.value,
     };
 
-    console.log(incomeDirectoryInputs);
-    //props.onSubmitContribution(incomeDirectory)
-
     try {
       incomeDirectoryPost(auth.user?._id, incomeDirectoryInputs);
       onSubmit();

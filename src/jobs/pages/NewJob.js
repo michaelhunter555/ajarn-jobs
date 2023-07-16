@@ -183,7 +183,6 @@ const NewJob = () => {
       workPermit: formState.inputs.workPermit.value,
     };
     //pass userId & object as argument to POST request
-    console.log(newJob);
 
     if (newJob.jobType === "featured") {
       setJobCost((prev) => prev + 2);
@@ -212,8 +211,6 @@ const NewJob = () => {
     const postData = rawContent.blocks[0].text;
     inputHandler("description", postData, postData.length >= 7);
   };
-
-  console.log(formState);
 
   return (
     <>

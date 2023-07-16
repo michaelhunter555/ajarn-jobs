@@ -43,8 +43,6 @@ const JobDetailsPage = () => {
     (userApplications) => userApplications?.jobId === jobId
   );
 
-  console.log("USER HAS APPLIED ALREADY:", userAppliedAlready);
-
   return (
     <PageContainer>
       <Content>

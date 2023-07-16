@@ -24,7 +24,7 @@ const AddNewBlogPost = () => {
       throw new Error("There was an issue with the response.");
     }
     const data = await response.json();
-    console.log(data);
+
     return data.blogList;
   };
 
@@ -48,7 +48,6 @@ const AddNewBlogPost = () => {
       const postDate = moment(searchContent?.postDate); // Use postDate instead of date
       const searchDate = moment(filter?.date); // Parse the string into a moment object
 
-      console.log("Dates compared to Selected Date:", searchContent?.postDate);
       return (
         (!filter?.category ||
           searchContent?.category
@@ -63,8 +62,6 @@ const AddNewBlogPost = () => {
             .includes(filter.search.toLowerCase()))
       );
     });
-
-  console.log("filter date", moment(filter?.date).format("YYYY-MM-DD"));
 
   return (
     <PageContainer>

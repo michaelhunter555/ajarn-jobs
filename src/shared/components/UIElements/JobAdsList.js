@@ -81,9 +81,9 @@ const JobAdsList = (props) => {
                           component="div"
                         >
                           {school?.creator?.company} -{" "}
-                          {school?.title.length > 25
-                            ? school.title.substring(0, 40) + "..."
-                            : school.title}{" "}
+                          {school?.title?.length > 25
+                            ? school?.title?.substring(0, 40) + "..."
+                            : school?.title}{" "}
                           {school?.jobType === "featured" && (
                             <Chip
                               sx={{
@@ -104,7 +104,7 @@ const JobAdsList = (props) => {
                           color="text.secondary"
                           component="div"
                         >
-                          Listed • {school?.datePosted.split("T")[0]}
+                          Listed • {school?.datePosted?.split("T")[0]}
                         </Typography>
                       </Stack>
                       <StyledChipDiv variant="body2" component="div">
