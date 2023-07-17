@@ -11,6 +11,7 @@ import React, {
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+import { LinearProgress } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import UpdateUsersPostForm from "./Dashboard/components/Profile/UpdateUsersPostForm";
@@ -81,6 +82,7 @@ function App() {
       new Date(userData.tokenExpires) > new Date()
     ) {
       console.log("4. Token is valid. Loggin in user.");
+
       login(userData.userId, userData.token, new Date(userData.tokenExpires));
     } else {
       console.log("5. NO valid token was found.");
@@ -197,7 +199,13 @@ function App() {
       >
         <Router>
           <MainNavigation />
-          <Suspense fallback={<></>}>
+          <Suspense
+            fallback={
+              <>
+                <LinearProgress />
+              </>
+            }
+          >
             <main className="main">{routes}</main>
           </Suspense>
         </Router>

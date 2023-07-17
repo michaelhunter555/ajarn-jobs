@@ -112,6 +112,7 @@ const StyledUrgentJobsWrapper = styled("div")(({ theme }) => ({
 }));
 
 const StyledTeflWrapper = styled("div")(({ theme }) => ({
+  height: "100%",
   display: "flex",
   flex: "1 1 auto",
   flexDirection: "column",
@@ -177,7 +178,7 @@ const Home = () => {
           {isLoading && (
             <JobAdSkeleton
               sx={{
-                height: "130px",
+                height: "126px",
                 borderRadius: "6px",
               }}
               num={1}

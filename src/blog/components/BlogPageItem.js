@@ -9,8 +9,8 @@ import draftToHtml from "draftjs-to-html";
 import { useParams } from "react-router-dom";
 
 import CommentIcon from "@mui/icons-material/Comment";
-import ShareIcon from "@mui/icons-material/Share";
 import { Button, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import { AuthContext } from "../../shared/context/auth-context";
@@ -22,10 +22,22 @@ import CommentForm from "./CommentForm";
 import UserComments from "./UserComments";
 import UserInteractions from "./UserInteractions";
 
+const StyledGridContainer = styled(Grid)(({ theme }) => ({
+  maxWidth: "75%",
+  margin: "2rem auto",
+  gap: theme.spacing(2),
+  [theme.breakpoints.down("md")]: {
+    maxWidth: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    maxWidth: "100%",
+  },
+}));
+
 const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
   const auth = useContext(AuthContext);
-  const { user } = auth;
   const blogId = useParams().bid;
+  const { user } = auth;
   const [commentIsLoading, setCommentIsLoading] = useState(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -87,7 +99,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
   };
 
   return (
-    <Grid container sx={{ maxWidth: "75%", margin: "2rem auto" }} spacing={2}>
+    <StyledGridContainer container>
       <Grid item xs={12}>
         {isLoading ? (
           <BlogPageLoadingSkeleton />
@@ -129,23 +141,6 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
                   refetchLikeState={refetchLikeState}
                 />
                 {/**END OF LIKES & DISLIKES GOES HERE <> */}
-                <Grid item>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Button
-                      endIcon={
-                        <ShareIcon color="action" sx={{ fontSize: 20 }} />
-                      }
-                    >
-                      <Typography
-                        color="text.secondary"
-                        variant="subtitle2"
-                        sx={{ fontSize: 14, fontWeight: 550 }}
-                      >
-                        Share
-                      </Typography>
-                    </Button>
-                  </Stack>
-                </Grid>
               </Grid>
               <Divider variant="inset" />
 
@@ -174,7 +169,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
       </Grid>
 
       {/**sidebar below */}
-    </Grid>
+    </StyledGridContainer>
   );
 };
 

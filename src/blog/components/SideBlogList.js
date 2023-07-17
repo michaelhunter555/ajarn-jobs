@@ -17,6 +17,7 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -30,7 +31,7 @@ import { getTimeDifference } from "../../shared/util/getTimeDifference";
 const StyledGridContainer = styled(Grid)({
   overflowY: "scroll",
   maxHeight: "100vh",
-  borderRadius: "18px 0 0 18px",
+  borderRadius: "0 0 0 18px",
   "&::-webkit-scrollbar": {
     width: "4px",
   },
@@ -85,6 +86,23 @@ const SideBlogList = ({ contentPosts }) => {
     <Grid container direction="row" sx={{ margin: "2rem auto" }}>
       {!isLoading && <TeflBanner />}
       {isLoading && <CircularProgress />}
+      <Stack sx={{ width: "100%", borderBottom: "1px solid #f7f7f7" }}>
+        {!isLoading && (
+          <Paper elevation={0} sx={{ padding: "5px 5px" }}>
+            <Typography
+              variant="h4"
+              color="text.primary"
+              sx={{
+                textAlign: "center",
+                fontWeight: "bold",
+                textDecoration: "underline",
+              }}
+            >
+              Recent Posts
+            </Typography>
+          </Paper>
+        )}
+      </Stack>
       <StyledGridContainer>
         {!isLoading &&
           blogList &&

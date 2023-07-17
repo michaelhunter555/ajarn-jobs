@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
 
-import { Link } from "react-router-dom";
-
 import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
 import LocalPoliceTwoToneIcon from "@mui/icons-material/LocalPoliceTwoTone";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -205,8 +203,6 @@ const TeacherItem = (props) => {
           </CardContent>
           <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
-              component={Link}
-              to={`/teachers/${props?.id}`}
               variant="outlined"
               sx={{
                 color: "#128cb1",

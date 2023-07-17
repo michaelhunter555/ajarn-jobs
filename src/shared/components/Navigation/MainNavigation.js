@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
+import MenuIcon from "@mui/icons-material/Menu";
 import { CardMedia } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -41,7 +42,11 @@ const MainNavigation = (props) => {
   return (
     <React.Fragment>
       {drawerIsOpen && <Backdrop onClick={closeDrawerHandler} />}
-      <SideDrawer show={drawerIsOpen} onClick={closeDrawerHandler}>
+      <SideDrawer
+        onKeyDown={closeDrawerHandler}
+        show={drawerIsOpen}
+        onClick={closeDrawerHandler}
+      >
         <MainNavigationDrawer>
           <NavLinks />
         </MainNavigationDrawer>
@@ -49,9 +54,7 @@ const MainNavigation = (props) => {
 
       <MainHeader navIsScrolled={navIsScrolled}>
         <MainNavigationButtonStyles onClick={openDrawerHandler}>
-          <span />
-          <span />
-          <span />
+          <MenuIcon style={{ fontSize: "2rem" }} />
         </MainNavigationButtonStyles>
         <MainNavTitleStyle>
           <MainNavigationTitleStyle to="/">
@@ -76,7 +79,7 @@ export default MainNavigation;
 const MainNavigationButtonStyles = styled("button")`
   width: 3rem;
   height: 3rem;
-  backgroundcolor: "transparent";
+  background-color: transparent;
   border: none;
   display: flex;
   flex-direction: column;
@@ -88,7 +91,6 @@ const MainNavigationButtonStyles = styled("button")`
     display: block;
     width: 3rem;
     height: 2.5px;
-    background: rgb(99, 99, 99);
   }
 
   @media (min-width: 768px) {

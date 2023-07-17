@@ -3,10 +3,13 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 import { Grid } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import BlogPageItem from "../components/BlogPageItem";
 import SideBlogList from "../components/SideBlogList";
+
+const StyledGridContainer = styled(Grid)(({ theme }) => ({}));
 
 const BlogPage = () => {
   const blogId = useParams().bid;
@@ -35,14 +38,14 @@ const BlogPage = () => {
 
   return (
     <Grid container direction="row" alignItems="start" spacing={1}>
-      <Grid item xs={12} sm={8}>
+      <Grid item xs={12} md={8}>
         <BlogPageItem
           content={content}
           refetchLikeState={refetch}
           isLoading={isLoading}
         />
       </Grid>
-      <Grid item xs={12} sm={4}>
+      <Grid item xs={12} md={4}>
         <SideBlogList />
       </Grid>
     </Grid>

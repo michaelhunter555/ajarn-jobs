@@ -123,7 +123,7 @@ const JobApplicantsTable = () => {
             ) : (
               jobsByUser?.map((job) =>
                 job?.applicants?.map((teacher, i) => (
-                  <TableRow key={teacher?.userId?._id}>
+                  <TableRow key={`${teacher?.userId?._id}${i + 1}`}>
                     <TableCell>{teacher?.userId?.name}</TableCell>
                     <TableCell>{teacher?.userId?.nationality}</TableCell>
                     <TableCell>{teacher?.userId?.location}</TableCell>

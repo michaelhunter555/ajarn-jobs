@@ -8,35 +8,70 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
+
+const StyledStackContainer = styled(Stack)(({ theme }) => ({
+  flexDirection: "row",
+  alignItems: "center",
+  gap: theme.spacing(1),
+  [theme.breakpoints.down("md")]: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+  },
+}));
+
+const StyledStackWrapper = styled(Stack)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  justifyContent: "flex-start",
+  [theme.breakpoints.down("md")]: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  [theme.breakpoints.down("sm")]: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+}));
 
 const BlogContent = ({ content }) => {
   const [wasEdited, setWasEdited] = useState(false);
 
   useEffect(() => {
-    if (content?.editedAt) {
+    if (content?.editedAt && !isNaN(content?.editedAt)) {
       setWasEdited(true);
     }
-  }, [content?.editedAt]);
+  }, [content]);
 
   const isEmployer = content?.author?.userType === "employer";
 
   return (
     <>
-      <Stack direction="row" alignItems="center" spacing={1}>
+      <StyledStackContainer>
         <Avatar
           sx={{ width: 100, height: 100, margin: "0 2rem" }}
           alt={`${content?.title}--${content?._id}`}
           src={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
         />
-        <Stack
-          direction="column"
-          alignItems="flex-start"
-          justifyContent="flex-start"
-        >
-          <Typography variant="h4" component="div">
+        <StyledStackWrapper>
+          <Typography
+            variant="h4"
+            component="span"
+            sx={{ textAlign: "center" }}
+          >
             {content?.title}
           </Typography>
           <Typography variant="subtitle2" component="span">
@@ -59,7 +94,7 @@ const BlogContent = ({ content }) => {
               </Typography>
             )}
           </Stack>
-        </Stack>
+        </StyledStackWrapper>
         <Divider orientation="vertical" flexItem />
         <Stack
           sx={{
@@ -76,7 +111,7 @@ const BlogContent = ({ content }) => {
           </Typography>
           <CategoryChip category={content?.category} />
         </Stack>
-      </Stack>
+      </StyledStackContainer>
       <CardContent>
         <Typography
           variant="body1"

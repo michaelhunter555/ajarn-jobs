@@ -22,12 +22,13 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
 import { blogCategories } from "../../../shared/util/ThaiData";
 
-const styledPost = {
+const StyledPost = styled(Box)({
   minHeight: 200,
   height: "auto",
   marginBottom: "1rem",
@@ -38,7 +39,7 @@ const styledPost = {
   ".public-DraftStyleDefault-block": {
     height: "5rem",
   },
-};
+});
 
 const UpdateUsersPostForm = ({ toggle, postId }) => {
   const auth = useContext(AuthContext);
@@ -206,7 +207,7 @@ const UpdateUsersPostForm = ({ toggle, postId }) => {
               </FormControl>
               <FormControl>
                 <FormLabel>What would like to share or ask?</FormLabel>
-                <Box style={{ ...styledPost, width: "100%" }}>
+                <StyledPost>
                   <Editor
                     id="postContent"
                     editorState={editorState}
@@ -215,7 +216,7 @@ const UpdateUsersPostForm = ({ toggle, postId }) => {
                       options: ["inline", "blockType", "fontSize", "list"],
                     }}
                   />
-                </Box>
+                </StyledPost>
               </FormControl>
 
               <Stack direction="row" alignItems="center" spacing={1}>

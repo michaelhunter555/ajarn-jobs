@@ -90,7 +90,6 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
 
   const applyJobModalHandler = () => {
     setOpen((prev) => !prev);
-    console.log("Was Clicked and read");
   };
 
   let userCantApply = true;
