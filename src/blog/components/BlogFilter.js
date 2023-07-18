@@ -12,9 +12,26 @@ import {
   Paper,
   Select,
   Stack,
+  styled,
 } from "@mui/material";
 
 import { blogCategories } from "../../shared/util/ThaiData";
+
+const StyledStackContainer = styled(Stack)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: theme.spacing(2),
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    width: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    alignItems: "stretch",
+    flexDirection: "column",
+    width: "100%",
+  },
+}));
 
 const currentDate = moment();
 const last7Days = moment().subtract(7, "days");
@@ -56,7 +73,7 @@ const BlogFilter = ({ onDataChange }) => {
 
   return (
     <Paper elevation={0} sx={{ padding: 2 }}>
-      <Stack direction="row" spacing={2} alignItems="center">
+      <StyledStackContainer>
         <FormControl>
           <FormLabel>Search Content</FormLabel>
           <OutlinedInput
@@ -86,7 +103,7 @@ const BlogFilter = ({ onDataChange }) => {
             ))}
           </Select>
         </FormControl>
-      </Stack>
+      </StyledStackContainer>
 
       <Stack spacing={1} direction="row" sx={{ margin: "1rem 0 0 0" }}>
         {searchDates.map(({ id, date }, i) => (

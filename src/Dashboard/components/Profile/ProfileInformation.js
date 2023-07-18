@@ -85,7 +85,12 @@ const ProfileInformation = ({ user }) => {
         );
       case "skills":
         return (
-          <Stack direction="row" spacing={1} justifyContent="center">
+          <Stack
+            direction="row"
+            spacing={1}
+            justifyContent="center"
+            sx={{ margin: "1rem" }}
+          >
             {skill?.split(",")?.map((item, i) => (
               <Chip
                 key={i}

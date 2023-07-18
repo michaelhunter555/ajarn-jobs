@@ -32,6 +32,18 @@ import {
 import { authReducer, initialState } from "./shared/context/authReducer";
 import Login from "./users/pages/Auth";
 
+//Lazily loaded components
+const Teachers = lazy(() => import("./users/pages/Teachers"));
+const TeacherDetails = lazy(() => import("./users/pages/TeacherDetails"));
+const NewJob = lazy(() => import("./jobs/pages/NewJob"));
+const UpdateJob = lazy(() => import("./jobs/pages/UpdateJob"));
+const BlogPage = lazy(() => import("./blog/pages/BlogPage"));
+const AddNewBlogPost = lazy(() => import("./blog/pages/AddNewBlogPost"));
+const IncomeDirectory = lazy(() => import("./blog/pages/IncomeDirectory"));
+const IncomeDirectoryDetails = lazy(() =>
+  import("./blog/pages/IncomeDirectoryDetails")
+);
+
 const queryClient = new QueryClient();
 
 let logoutTimer;
@@ -41,18 +53,6 @@ function App() {
   const [state, dispatch] = useReducer(authReducer, initialState);
   //tokenExpiration Tracking
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
-
-  //Lazily loaded components
-  const Teachers = lazy(() => import("./users/pages/Teachers"));
-  const TeacherDetails = lazy(() => import("./users/pages/TeacherDetails"));
-  const NewJob = lazy(() => import("./jobs/pages/NewJob"));
-  const UpdateJob = lazy(() => import("./jobs/pages/UpdateJob"));
-  const BlogPage = lazy(() => import("./blog/pages/BlogPage"));
-  const AddNewBlogPost = lazy(() => import("./blog/pages/AddNewBlogPost"));
-  const IncomeDirectory = lazy(() => import("./blog/pages/IncomeDirectory"));
-  const IncomeDirectoryDetails = lazy(() =>
-    import("./blog/pages/IncomeDirectoryDetails")
-  );
 
   //AuthReducer & Context management for login
   const login = useCallback((userId, token, expirationDate) => {

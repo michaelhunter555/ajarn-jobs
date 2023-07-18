@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import moment from "moment";
 
-import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Box, Divider, Grid, Stack, styled, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import Footer, {
@@ -13,6 +13,25 @@ import TeflBanner from "../../shared/components/UIElements/TeflBanner";
 import BlogFilter from "../components/BlogFilter";
 import BlogPostForm from "../components/BlogPostForm";
 import ContentPostList from "../components/ContentPostList";
+
+const StyledGridWrapper = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  gap: theme.spacing(0),
+  margin: "2rem auto 5rem",
+  padding: 5,
+}));
+
+const StyledStackContent = styled(Stack)(({ theme }) => ({
+  margin: "0 2rem",
+  [theme.breakpoints.down("md")]: {
+    margin: 0,
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: 0,
+  },
+}));
 
 const AddNewBlogPost = () => {
   const [filter, setFilter] = useState();
@@ -66,13 +85,7 @@ const AddNewBlogPost = () => {
   return (
     <PageContainer>
       <Content>
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          spacing={0}
-          sx={{ margin: "0 auto", padding: 5 }}
-        >
+        <StyledGridWrapper container>
           <Grid item xs={12} sm={6}>
             <Stack direction="column" spacing={1}>
               <Typography variant="h3" color="text.primary">
@@ -89,8 +102,8 @@ const AddNewBlogPost = () => {
             </Stack>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Stack sx={{ margin: "0 2rem" }}>
-              <Box sx={{ width: "50%" }}>
+            <StyledStackContent>
+              <Box>
                 <TeflBanner />
               </Box>
               <BlogFilter onDataChange={handleFilterChange} />
@@ -98,9 +111,9 @@ const AddNewBlogPost = () => {
                 isLoading={isLoading}
                 filteredContent={filteredContent}
               />
-            </Stack>
+            </StyledStackContent>
           </Grid>
-        </Grid>
+        </StyledGridWrapper>
       </Content>
       <Footer />
     </PageContainer>
