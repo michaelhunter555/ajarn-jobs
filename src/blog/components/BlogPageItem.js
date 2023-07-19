@@ -106,7 +106,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
         ) : (
           <>
             <Paper
-              elevation={0}
+              elevation={3}
               sx={{
                 display: "flex",
                 flexDirection: "column",

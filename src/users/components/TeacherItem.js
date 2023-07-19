@@ -22,10 +22,11 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-//import CustomModal from "../../shared/components/UIElements/CustomModal";
 import { AuthContext } from "../../shared/context/auth-context";
 
-//import { useUniversityLogo } from "../../shared/hooks/use-university";
+const StyledNameTypography = styled(Typography)(({ theme }) => ({
+  fontSize: "1rem",
+}));
 
 const StyledGlassCard = styled(Card)(({ theme }) => ({
   margin: "0 auto",
@@ -78,6 +79,19 @@ const TeacherItem = (props) => {
     ? "Please purchase credits to view teacher profiles"
     : "Please login and purchase credits to view teachers.";
 
+  let nameText;
+  if (props?.name?.length > 20) {
+    nameText = (
+      <StyledNameTypography longName={true}>{props?.name}</StyledNameTypography>
+    );
+  } else {
+    nameText = (
+      <Typography component="h3" variant="h6">
+        {props?.name}
+      </Typography>
+    );
+  }
+
   return (
     <>
       <Grid container direction="row" justifyContent="center">
@@ -102,9 +116,7 @@ const TeacherItem = (props) => {
               alignItems="center"
               justifyContent="flex-start"
             >
-              <Typography component="h3" variant="h6">
-                {props?.name}
-              </Typography>
+              {nameText}
               {/*new Result should be mapped over */}
               {props?.education &&
                 props?.education

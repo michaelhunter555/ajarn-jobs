@@ -17,6 +17,7 @@ const StyledStackContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "row",
   alignItems: "center",
   gap: theme.spacing(1),
+  marginBottom: 10,
   [theme.breakpoints.down("md")]: {
     display: "flex",
     flexDirection: "column",
@@ -25,6 +26,16 @@ const StyledStackContainer = styled(Stack)(({ theme }) => ({
     width: "100%",
     display: "flex",
     flexDirection: "column",
+  },
+}));
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  textAlign: "",
+  [theme.breakpoints.down("md")]: {
+    textAlign: "center",
+  },
+  [theme.breakpoints.down("sm")]: {
+    textAlign: "center",
   },
 }));
 
@@ -67,13 +78,9 @@ const BlogContent = ({ content }) => {
           src={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
         />
         <StyledStackWrapper>
-          <Typography
-            variant="h4"
-            component="span"
-            sx={{ textAlign: "center" }}
-          >
+          <StyledTypography variant="h4" component="span">
             {content?.title}
-          </Typography>
+          </StyledTypography>
           <Typography variant="subtitle2" component="span">
             By {content?.author?.name}
           </Typography>
@@ -112,6 +119,7 @@ const BlogContent = ({ content }) => {
           <CategoryChip category={content?.category} />
         </Stack>
       </StyledStackContainer>
+      <Divider />
       <CardContent>
         <Typography
           variant="body1"

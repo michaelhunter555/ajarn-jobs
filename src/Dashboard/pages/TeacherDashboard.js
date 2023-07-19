@@ -161,22 +161,39 @@ const TeacherDashboard = () => {
   //   getJobsByUserId(userId);
   // }, [userId, getJobsByUserId]);
 
-  //GET all users
-  useEffect(() => {
-    if (!userCard || userCard.length === 0) {
-      console.log('"Get all users ran again on dash');
-      getAllUsers();
+  const getUserCard = async () => {
+    const response = await fetch(`${process.env.REACT_APP_USERS}`);
+
+    if (!response.ok) {
+      throw new Error("There was an error with getting all users GET request.");
     }
-  }, [getAllUsers, userCard]);
+    const data = await response.json();
+    return data.users;
+  };
+
+  const {
+    data: userCards,
+    isLoading: cardIsLoading,
+    refetch,
+  } = useQuery(["userCards"], () => getUserCard());
+
+  //GET all users
+  // useEffect(() => {
+  //   if (!userCard || userCard?.length === 0) {
+  //     console.log('"Get all users ran again on dash');
+  //     getAllUsers();
+  //   }
+  // }, [getAllUsers, userCard]);
 
   //get random user card
   useEffect(() => {
-    if (userCard && userCard.length > 0 && !selectedCard) {
+    if (userCards && userCards?.length > 0) {
       console.log("randomize user card ran again on dash");
-      const randomUser = userCard[Math.floor(Math.random() * userCard.length)];
+      const randomUser =
+        userCards[Math.floor(Math.random() * userCards?.length)];
       setSelectedCard(randomUser);
     }
-  }, [selectedCard, userCard]);
+  }, [userCards]);
 
   //PATCH General Profile Info Upate
   const handleProfileUpdate = (update) => {
@@ -291,7 +308,12 @@ const TeacherDashboard = () => {
           /*auth.user.jobs */
           return <JobAdsList job={auth.user?.jobs} />;
         case APPLICATIONS:
-          return <Applications />;
+          return (
+            <Applications
+              isLoading={userProfileLoading}
+              applications={auth?.user?.applications}
+            />
+          );
         case RESUME:
           return (
             <>

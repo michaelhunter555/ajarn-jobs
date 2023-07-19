@@ -72,6 +72,7 @@ const JobApplicantsTable = () => {
   } = useQuery(["jobsByUser", user?._id], () => getjobsAppliedTo());
 
   const hasApplicants = jobsByUser?.some((job) => job?.applicants?.length > 0);
+  console.log("Jobs by userId", jobsByUser);
 
   return (
     <>

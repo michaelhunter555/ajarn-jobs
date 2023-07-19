@@ -17,10 +17,9 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const [isLiked, setIsLiked] = useState(true);
-  const [isDisliked, setIsDisliked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(true);
   const {
     likeContentPost,
-    throttledLike,
     dislikeContentPost,
     totalLikes,
     totalDislikes,
@@ -83,6 +82,8 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
   const userAlreadyDisliked =
     dislikePostIndex !== -1 &&
     content?.interactions[dislikePostIndex]?.dislike === true;
+
+  console.log("blog content", content);
 
   return (
     <>

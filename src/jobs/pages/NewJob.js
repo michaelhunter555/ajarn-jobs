@@ -192,11 +192,12 @@ const NewJob = () => {
       await addJobByUserId(auth.user?._id, newJob, jobCost);
       if (!error) {
         setSuccess(true);
-        setEditorState(Editor.createEmpty());
       }
     } catch (err) {
       console.log(err);
     }
+    setEditorState(EditorState.createEmpty());
+    console.log(editorState);
   };
 
   const clearModalHandler = () => {

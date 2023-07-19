@@ -17,6 +17,21 @@ import {
 
 import { blogCategories } from "../../shared/util/ThaiData";
 
+const StyledStackChipContainer = styled(Stack)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  margin: "1rem 0 0 0",
+  gap: theme.spacing(1),
+  [theme.breakpoints.down("md")]: {
+    margin: "1rem auto 0",
+    justifyContent: "center",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "1rem auto 0",
+    justifyContent: "center",
+  },
+}));
+
 const StyledStackContainer = styled(Stack)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
@@ -105,7 +120,7 @@ const BlogFilter = ({ onDataChange }) => {
         </FormControl>
       </StyledStackContainer>
 
-      <Stack spacing={1} direction="row" sx={{ margin: "1rem 0 0 0" }}>
+      <StyledStackChipContainer>
         {searchDates.map(({ id, date }, i) => (
           <Chip
             variant="outlined"
@@ -118,7 +133,7 @@ const BlogFilter = ({ onDataChange }) => {
             key={i}
           />
         ))}
-      </Stack>
+      </StyledStackChipContainer>
       <Divider variant="inset" sx={{ margin: "1rem 0 0 0" }} />
     </Paper>
   );
