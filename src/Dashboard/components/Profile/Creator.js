@@ -20,7 +20,6 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useQuery } from "@tanstack/react-query";
 
 import NewJob from "../../../jobs/pages/NewJob";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
@@ -54,46 +53,44 @@ const StyledModal = styled(Paper)({
 const date = new Date();
 const today = date.toISOString().split("T")[0];
 
-const Creator = ({ creatorItem, jobsCount }) => {
+const Creator = ({ creatorItem, user, isLoading }) => {
   const auth = useContext(AuthContext);
-  const { user } = auth;
+  //const { user } = auth;
   const [open, setOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(
-    auth.user && auth.user.creator === null
-  );
+  const [isEditing, setIsEditing] = useState(user && user?.creator === null);
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
   const [formState, inputHandler, setFormData] = useForm(
     {
       company: {
-        value: creatorItem.company || "",
+        value: user?.creator?.company || "",
         isValid: true,
       },
       logoUrl: {
-        value: creatorItem.logoUrl || "",
+        value: user?.creator?.logoUrl || "",
         isValid: true,
       },
       companySize: {
-        value: creatorItem.companySize || "",
+        value: user?.creator?.companySize || "",
         isValid: true,
       },
       headquarters: {
-        value: creatorItem.headquarters || "",
+        value: user?.creator?.headquarters || "",
         isValid: true,
       },
       established: {
-        value: creatorItem.established || "",
+        value: user?.creator?.established || "",
         isvalid: true,
       },
       presence: {
-        value: creatorItem.presence || "",
+        value: user?.creator?.presence || "",
         isValid: true,
       },
       about: {
-        value: creatorItem.about || "",
+        value: user?.creator?.about || "",
         isValid: true,
       },
       image: {
-        value: creatorItem.image || null,
+        value: user?.creator?.image || null,
         isValid: true,
       },
     },
@@ -104,70 +101,70 @@ const Creator = ({ creatorItem, jobsCount }) => {
     useCreator();
   const { activateTeacherBuffet, isPostLoading: buffetIsLoading } = useJob();
 
-  const getJobs = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_JOBS}/user/${user?._id}`
-      );
-      const data = await response.json();
-      return data.jobs;
-    } catch (err) {
-      console.log(
-        "There was an error trying to get applicants count - Msg:" + err
-      );
-    }
-  };
+  // const getJobs = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.REACT_APP_JOBS}/user/${user?._id}`
+  //     );
+  //     const data = await response.json();
+  //     return data.jobs;
+  //   } catch (err) {
+  //     console.log(
+  //       "There was an error trying to get applicants count - Msg:" + err
+  //     );
+  //   }
+  // };
 
-  const { data: jobs, isLoading } = useQuery(["JobApplicants", user?._id], () =>
-    getJobs()
-  );
+  // const { data: jobs, isLoading } = useQuery(["JobApplicants", user?._id], () =>
+  //   getJobs()
+  // );
 
   //if is new or creator property is null, render new form.
   useEffect(() => {
-    if (!creatorItem.company) {
+    if (!user?.creator?.company) {
       setFormData(
         {
           company: {
-            value: creatorItem.company || "",
+            value: user?.creator?.company || "",
             isValid: true,
           },
           logoUrl: {
-            value: creatorItem.logoUrl || "",
+            value: user?.creator?.logoUrl || "",
             isValid: true,
           },
           companySize: {
-            value: creatorItem.companySize || "",
+            value: user?.creator?.companySize || "",
             isValid: true,
           },
           headquarters: {
-            value: creatorItem.headquarters || "",
+            value: user?.creator?.headquarters || "",
             isValid: true,
           },
           established: {
-            value: creatorItem.established || "",
+            value: user?.creator?.established || "",
             isvalid: true,
           },
           presence: {
-            value: creatorItem.presence || "",
+            value: user?.creator?.presence || "",
             isValid: true,
           },
           about: {
-            value: creatorItem.about || "",
+            value: user?.creator?.about || "",
             isValid: true,
           },
           image: {
-            value: creatorItem.image || null,
+            value: user?.creator?.image || null,
             isValid: true,
           },
         },
         true
       );
     }
-  }, [creatorItem, setFormData]);
+  }, [user, setFormData]);
 
   //PATCH remove Creator Data
-  const handleCreatorDelete = (creatorItem) => {
-    deleteCreator(user?._id, creatorItem);
+  const handleCreatorDelete = (user) => {
+    deleteCreator(user?._id, user?.creator);
   };
 
   //PATCH update creator information
@@ -212,18 +209,35 @@ const Creator = ({ creatorItem, jobsCount }) => {
     setOpen((prev) => !prev);
   };
 
-  const buffetStartTime = new Date(auth.user?.lastActiveBuffet);
+  const buffetStartTime = new Date(user?.lastActiveBuffet);
   const getDifference = date.getTime() - buffetStartTime.getTime();
   const twentyFourHours = 24 * 60 * 60 * 1000;
   const getTimeLeft = Math.abs(getDifference - twentyFourHours);
+
+  const jobApplicants = user?.jobs?.map((job) => job?.applicants);
+
+  console.log("JOBs", user?.jobs);
 
   //components rendered from tab navigation
   const renderComponent = () => {
     switch (creatorProfileTab) {
       case "applicants":
-        return <JobApplicantsTable />;
+        return (
+          <>
+            {jobApplicants && (
+              <JobApplicantsTable
+                isLoading={isLoading}
+                applicants={jobApplicants}
+              />
+            )}
+          </>
+        );
       case "jobs":
-        return <CreatorJobsTable />;
+        return (
+          user?.jobs && (
+            <CreatorJobsTable isLoading={isLoading} jobs={user?.jobs} />
+          )
+        );
       case "credits":
         return <PurchaseCredits />;
       case "createJob":
@@ -236,6 +250,8 @@ const Creator = ({ creatorItem, jobsCount }) => {
         return "nothing here yet";
     }
   };
+
+  console.log("USER IN CREATOR.JS", user);
 
   return (
     <>
@@ -253,7 +269,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
           inputHandler={inputHandler}
           handleEditing={handleEditing}
           handleCreatorDelete={handleCreatorDelete}
-          user={auth?.user}
+          user={user}
         />
       ) : (
         !isEditing &&
@@ -354,10 +370,10 @@ const Creator = ({ creatorItem, jobsCount }) => {
                       <Typography variant="h4" color="text.secondary">
                         {isLoading && <CircularProgress />}
                         {!isLoading &&
-                          jobs?.reduce(
-                            (acc, job) => acc + job?.applicants.length,
-                            0
-                          )}
+                          user?.jobs &&
+                          user?.jobs
+                            ?.map((job, i) => job?.applicants?.length)
+                            ?.reduce((acc, applicant) => (acc += applicant), 0)}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>
@@ -366,9 +382,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
                       </Typography>
 
                       <Typography variant="h4" color="text.secondary">
-                        {(auth.user.jobs?.length || 0) < 1
-                          ? 0
-                          : auth.user.jobs?.length}
+                        {(user.jobs?.length || 0) < 1 ? 0 : user.jobs?.length}
                       </Typography>
                     </Paper>
                     <Paper elevation={0}>
@@ -413,7 +427,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
                             </Typography>
                           </Alert> */}
 
-                          {!auth.user?.buffetIsActive && (
+                          {!user?.buffetIsActive && (
                             <Button
                               sx={{ fontSize: 9 }}
                               startIcon={<ElectricBoltIcon />}
@@ -470,12 +484,9 @@ const Creator = ({ creatorItem, jobsCount }) => {
                             sx={{ margin: "2rem auto" }}
                             variant="contained"
                             onClick={activateTeacherBuffetHandler}
-                            disabled={
-                              auth.user?.buffetIsActive ||
-                              auth.user?.credits < 2
-                            }
+                            disabled={user?.buffetIsActive || user?.credits < 2}
                           >
-                            {auth.user?.credits >= 2
+                            {user?.credits >= 2
                               ? "Begin Buffet"
                               : "Not enough credits"}
                           </Button>
@@ -522,6 +533,7 @@ const Creator = ({ creatorItem, jobsCount }) => {
               addCredits={creatorProfileTab}
               onTabChange={handleMenuItemClick}
             />
+
             <Box sx={{ height: "auto" }}>{renderComponent()}</Box>
           </Card>
         )

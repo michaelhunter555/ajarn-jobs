@@ -296,9 +296,11 @@ const TeacherDashboard = () => {
           return (
             <>
               {auth.user?.userType === TEACHER && (
-                <ProfileInformation user={auth.user} />
+                <ProfileInformation user={auth?.user} />
               )}
-              {authIsCreator && <Creator creatorItem={auth.user?.creator} />}{" "}
+              {authIsCreator && auth?.user && (
+                <Creator user={auth?.user} isLoading={userProfileLoading} />
+              )}{" "}
               {auth.user?.userType === EMPLOYER && !authIsCreator && (
                 <Button onClick={addCreatorItem}>Creator Account</Button>
               )}
@@ -346,8 +348,8 @@ const TeacherDashboard = () => {
         case CREATOR:
           return (
             <>
-              {!updatingCreator && auth.user?.creator ? (
-                <Creator creatorItem={auth.user?.creator} />
+              {!updatingCreator && auth?.user?.creator ? (
+                <Creator user={auth?.user} isLoading={userProfileLoading} />
               ) : (
                 <Button onClick={addCreatorItem}>Creator Account</Button>
               )}

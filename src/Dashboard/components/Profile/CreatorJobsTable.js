@@ -17,7 +17,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 
 import UpdateJob from "../../../jobs/pages/UpdateJob";
 import { AuthContext } from "../../../shared/context/auth-context";
@@ -62,37 +61,37 @@ const tableRows = [
   },
 ];
 
-const CreatorJobsTable = (props) => {
+const CreatorJobsTable = ({ jobs, isLoading }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const [editJobById, setEditJobById] = useState(null);
   const [editJob, setEditJob] = useState(false);
   const { deleteJobById, isDeleting } = useJob();
 
-  const getCreatorJobs = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_JOBS}/user/${user?._id}`
-      );
-      const data = await response.json();
-      return data.jobs;
-    } catch (err) {
-      console.log(
-        "There was an issue with the request for creatorJobsTable - Msg: " + err
-      );
-    }
-  };
+  // const getCreatorJobs = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.REACT_APP_JOBS}/user/${user?._id}`
+  //     );
+  //     const data = await response.json();
+  //     return data.jobs;
+  //   } catch (err) {
+  //     console.log(
+  //       "There was an issue with the request for creatorJobsTable - Msg: " + err
+  //     );
+  //   }
+  // };
 
-  const {
-    data: creatorJobs,
-    isLoading,
-    refetch,
-  } = useQuery(["creatorJobs", user?._id], () => getCreatorJobs());
+  // const {
+  //   data: creatorJobs,
+  //   isLoading,
+  //   refetch,
+  // } = useQuery(["creatorJobs", user?._id], () => getCreatorJobs());
 
   const deleteJobHandler = async (jobId) => {
     try {
       await deleteJobById(jobId);
-      refetch();
+      //refetch();
     } catch (err) {
       console.log("Error trying to delete a job");
     }
@@ -108,7 +107,7 @@ const CreatorJobsTable = (props) => {
     setEditJob(false);
   };
 
-  const creatorHasJobs = creatorJobs && creatorJobs.length > 0;
+  const creatorHasJobs = jobs && jobs.length > 0;
 
   return (
     <>
@@ -161,9 +160,9 @@ const CreatorJobsTable = (props) => {
                   </TableCell>
                 </TableRow>
               ) : (
-                creatorJobs?.map((job, i) => (
+                jobs?.map((job, i) => (
                   <TableRow key={job?._id}>
-                    <TableCell>{job?.datePosted.split("T")[0]}</TableCell>
+                    <TableCell>{job?.datePosted?.split("T")[0]}</TableCell>
                     <TableCell>
                       <ButtonGroup
                         size="small"

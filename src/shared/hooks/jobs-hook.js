@@ -150,9 +150,10 @@ export const useJob = () => {
             Authorization: "Bearer " + auth.token,
           }
         );
+        //optimistic update - Be Careful!
         const deletedJob = {
           ...auth.user,
-          jobs: response.jobs,
+          jobs: auth.user?.jobs?.filter((job) => job?._id !== jobId),
         };
         /**
          * response.jobs,

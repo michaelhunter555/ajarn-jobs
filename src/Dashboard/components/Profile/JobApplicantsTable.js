@@ -13,11 +13,8 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 
-import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../../shared/context/auth-context";
-import { useJob } from "../../../shared/hooks/jobs-hook";
 
 const tableRows = [
   {
@@ -52,31 +49,31 @@ const tableRows = [
   },
 ];
 
-const JobApplicantsTable = () => {
+const JobApplicantsTable = ({ applicants, isLoading }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
-  const { clearError } = useJob();
+  //const { clearError } = useJob();
 
-  const getjobsAppliedTo = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_JOBS}/user/${user?._id}`
-    );
-    const data = await response.json();
-    return data.jobs;
-  };
+  // const getjobsAppliedTo = async () => {
+  //   const response = await fetch(
+  //     `${process.env.REACT_APP_JOBS}/user/${user?._id}`
+  //   );
+  //   const data = await response.json();
+  //   return data.jobs;
+  // };
 
-  const {
-    data: jobsByUser,
-    isLoading,
-    error,
-  } = useQuery(["jobsByUser", user?._id], () => getjobsAppliedTo());
+  // const {
+  //   data: jobsByUser,
+  //   isLoading,
+  //   error,
+  // } = useQuery(["jobsByUser", user?._id], () => getjobsAppliedTo());
 
-  const hasApplicants = jobsByUser?.some((job) => job?.applicants?.length > 0);
-  console.log("Jobs by userId", jobsByUser);
+  const hasApplicants =
+    applicants && applicants?.some((apps) => apps?.length > 0);
+  console.log("PROPS APPLICANTS", applicants && applicants?.length > 0);
 
   return (
     <>
-      <ErrorModal error={error} onClear={clearError} />
       <TableContainer>
         <Table>
           <TableHead>
@@ -122,17 +119,17 @@ const JobApplicantsTable = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              jobsByUser?.map((job) =>
-                job?.applicants?.map((teacher, i) => (
-                  <TableRow key={`${teacher?.userId?._id}${i + 1}`}>
-                    <TableCell>{teacher?.userId?.name}</TableCell>
-                    <TableCell>{teacher?.userId?.nationality}</TableCell>
-                    <TableCell>{teacher?.userId?.location}</TableCell>
-                    <TableCell>{teacher?.userId?.email}</TableCell>
+              applicants?.map((application) =>
+                application?.map((applicant, i) => (
+                  <TableRow key={`${applicant?._id}${i + 1}`}>
+                    <TableCell>{applicant?.userId?.name}</TableCell>
+                    <TableCell>{applicant?.userId?.nationality}</TableCell>
+                    <TableCell>{applicant?.userId?.location}</TableCell>
+                    <TableCell>{applicant?.userId?.email}</TableCell>
                     <TableCell>
                       <Button
                         component={Link}
-                        to={`/teachers/${teacher?.userId?._id}`}
+                        to={`/teachers/${applicant?.userId?._id}`}
                         variant="contained"
                       >
                         profile
