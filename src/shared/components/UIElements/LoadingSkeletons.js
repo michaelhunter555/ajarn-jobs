@@ -1,17 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import {
-  Skeleton,
-  styled,
-} from '@mui/material';
+import { Skeleton, styled } from "@mui/material";
 
 const JobAdSkeletonStyles = styled(Skeleton)(({ theme }) => ({
+  borderRadius: "15px",
   [theme.breakpoints.down("md")]: {
-    height: "100%",
     width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "100%",
     width: "100%",
   },
 }));

@@ -32,14 +32,14 @@ const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   overflowX: "auto",
   whiteSpace: "nowrap",
   [theme.breakpoints.down("md")]: {
-    minWidth: "unset",
-    paddingLeft: "7.5rem",
-    paddingRight: "1rem",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
   },
   [theme.breakpoints.down("sm")]: {
-    minWidth: "unset",
-    paddingLeft: "15.5rem",
-    paddingRight: "1rem",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
   },
 }));
 
@@ -73,7 +73,7 @@ const SiteFeatures = ({ isLoading }) => {
     {
       label: "Dashboard",
       img: UserDash,
-      link: auth.isLoggedIn ? `/users/${auth.user?._id}` : "/login",
+      link: auth.isLoggedIn ? `/users/${auth.user?._id}` : "/auth",
     },
   ];
   return (

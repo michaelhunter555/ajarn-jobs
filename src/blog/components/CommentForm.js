@@ -57,7 +57,7 @@ const CommentForm = ({
               {!auth.isLoggedIn && "Login"}
               {auth.isLoggedIn && !addCommentIsLoading && "Comment"}
               {auth.isLoggedIn && addCommentIsLoading && (
-                <CircularProgress size="12px" />
+                <CircularProgress size="14px" />
               )}
             </Button>
           </Stack>

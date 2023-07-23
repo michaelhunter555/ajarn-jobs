@@ -29,6 +29,7 @@ const StyledStackChipContainer = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     margin: "1rem auto 0",
     justifyContent: "center",
+    flexWrap: "wrap",
   },
 }));
 
@@ -44,6 +45,7 @@ const StyledStackContainer = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     alignItems: "stretch",
     flexDirection: "column",
+
     width: "100%",
   },
 }));

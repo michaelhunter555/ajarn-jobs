@@ -56,7 +56,7 @@ const TeacherList = ({ teachers, isLoading }) => {
             );
 
             if (auth?.isLoggedIn) {
-              if (auth?.user?.credits > 0) {
+              if (auth?.user?.buffetIsActive) {
                 return (
                   <Link to={`/teachers/${teacher?._id}`}>{teacherItem}</Link>
                 );

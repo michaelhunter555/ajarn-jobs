@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
 
 import {
   Button,
+  Pagination,
   Skeleton,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -13,8 +15,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-
-import { AuthContext } from "../../../shared/context/auth-context";
 
 const tableRows = [
   {
@@ -50,23 +50,21 @@ const tableRows = [
 ];
 
 const JobApplicantsTable = ({ applicants, isLoading }) => {
-  const auth = useContext(AuthContext);
-  const { user } = auth;
-  //const { clearError } = useJob();
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 5;
 
-  // const getjobsAppliedTo = async () => {
-  //   const response = await fetch(
-  //     `${process.env.REACT_APP_JOBS}/user/${user?._id}`
-  //   );
-  //   const data = await response.json();
-  //   return data.jobs;
-  // };
+  const flatApplicants = applicants?.reduce((acc, val) => acc.concat(val), []);
 
-  // const {
-  //   data: jobsByUser,
-  //   isLoading,
-  //   error,
-  // } = useQuery(["jobsByUser", user?._id], () => getjobsAppliedTo());
+  // Calculate number of pages inside the component
+  const noOfPages = Math.ceil(flatApplicants?.length / itemsPerPage);
+
+  // Slice the applicants array based on the current page
+  const indexOfLastPage = page * itemsPerPage;
+  const indexOfFirstPage = indexOfLastPage - itemsPerPage;
+  const currentApplicants = flatApplicants?.slice(
+    indexOfFirstPage,
+    indexOfLastPage
+  );
 
   const hasApplicants =
     applicants && applicants?.some((apps) => apps?.length > 0);
@@ -119,28 +117,38 @@ const JobApplicantsTable = ({ applicants, isLoading }) => {
                 </TableCell>
               </TableRow>
             ) : (
-              applicants?.map((application) =>
-                application?.map((applicant, i) => (
-                  <TableRow key={`${applicant?._id}${i + 1}`}>
-                    <TableCell>{applicant?.userId?.name}</TableCell>
-                    <TableCell>{applicant?.userId?.nationality}</TableCell>
-                    <TableCell>{applicant?.userId?.location}</TableCell>
-                    <TableCell>{applicant?.userId?.email}</TableCell>
-                    <TableCell>
-                      <Button
-                        component={Link}
-                        to={`/teachers/${applicant?.userId?._id}`}
-                        variant="contained"
-                      >
-                        profile
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )
+              currentApplicants &&
+              currentApplicants?.map((application, i) => (
+                <TableRow key={`${application?._id}${i + 1}`}>
+                  <TableCell>{application?.userId?.name}</TableCell>
+                  <TableCell>{application?.userId?.nationality}</TableCell>
+                  <TableCell>{application?.userId?.location}</TableCell>
+                  <TableCell>{application?.userId?.email}</TableCell>
+                  <TableCell>
+                    <Button
+                      component={Link}
+                      to={`/teachers/${application?.userId?._id}`}
+                      variant="contained"
+                    >
+                      profile
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
             )}
           </TableBody>
         </Table>
+        <Stack alignItems="end">
+          <Pagination
+            size="small"
+            count={noOfPages}
+            page={page}
+            onChange={(event, val) => setPage(val)}
+            defaultPage={1}
+            showFirstButton
+            showLastButton
+          />
+        </Stack>
       </TableContainer>
     </>
   );

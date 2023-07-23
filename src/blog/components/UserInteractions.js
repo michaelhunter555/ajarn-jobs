@@ -110,7 +110,9 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
               variant="subtitle2"
               sx={{ fontSize: 14, fontWeight: 550 }}
             >
-              {totalLikes > 1 ? totalLikes + " Likes" : totalLikes + " Like"}
+              {totalLikes === 0 || totalLikes > 1
+                ? totalLikes + " Likes"
+                : totalLikes + " Like"}
             </Typography>
           </Button>
         </Stack>

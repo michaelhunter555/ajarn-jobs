@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import {
+  Button,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -29,16 +30,24 @@ const StyledPaperContainer = styled(Paper)({
 const JobFilters = ({ onFilterChange }) => {
   const [salaryRange, setSalaryRange] = useState("");
   const [location, setLocation] = useState("");
-  const [checked, setChecked] = useState("Full-time");
+  const [checked, setChecked] = useState("");
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
-    onFilterChange({ location: event.target.value, salaryRange });
+    onFilterChange({
+      location: event.target.value,
+      salaryRange,
+      hours: checked,
+    });
   };
 
   const handleSalaryRangeChange = (event) => {
     setSalaryRange(event.target.value);
-    onFilterChange({ location, salaryRange: event.target.value });
+    onFilterChange({
+      location,
+      salaryRange: event.target.value,
+      hours: checked,
+    });
   };
 
   const handleHoursChange = (event) => {
@@ -46,11 +55,25 @@ const JobFilters = ({ onFilterChange }) => {
     onFilterChange({ location, salaryRange, hours: event.target.value });
   };
 
+  const resetFilter = () => {
+    setChecked("");
+    setSalaryRange("");
+    setLocation("");
+    onFilterChange({ location: null, salaryRange: null, hours: null });
+  };
+
   return (
     <StyledPaperContainer>
       <Typography sx={{ fontSize: 30 }} component="h2">
         Filter Jobs
       </Typography>
+      {location || salaryRange || checked ? (
+        <FormControl>
+          <Button onClick={resetFilter}>reset</Button>
+        </FormControl>
+      ) : (
+        ""
+      )}
       <FormControl fullWidth={true}>
         <FormLabel component="legend">hours</FormLabel>
         <RadioGroup

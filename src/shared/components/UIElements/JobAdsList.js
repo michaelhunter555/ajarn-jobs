@@ -47,9 +47,7 @@ const StyledChip = styled(Chip)(({ theme, featured }) => ({
   backgroundColor: featured ? "#f7f1d0" : "",
 }));
 
-const JobAdsList = (props) => {
-  const { job } = props;
-
+const JobAdsList = ({ job }) => {
   return (
     <>
       {job?.map((school, i) => (

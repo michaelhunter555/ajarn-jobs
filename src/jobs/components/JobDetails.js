@@ -47,15 +47,91 @@ const StyledBoxModal = styled(Paper)({
   padding: 14,
 });
 
+const StyledBoxContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "80%",
+  margin: "0rem auto",
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+    marginBottom: "5rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    marginBottom: "5rem",
+  },
+}));
+
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  height: 175,
+  width: 175,
+  border: "1px solid #e5e5e5",
+  [theme.breakpoints.down("md")]: {
+    height: 100,
+    width: 100,
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: 100,
+    width: 100,
+  },
+}));
+
+const StyledGridContainer = styled(Grid)(({ theme }) => ({
+  marginTop: 4,
+  [theme.breakpoints.down("md")]: {
+    justifyContent: "center",
+  },
+  [theme.breakpoints.down("sm")]: {
+    justifyContent: "center",
+  },
+}));
+
+const StyledLoadingSkeleton = styled(Skeleton)(({ theme }) => ({
+  borderRadius: "15px",
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+}));
+
+const StyledApplyButtonContainer = styled(Stack)(({ theme, applied }) => ({
+  flexDirection: "row",
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+    flexDirection: "column",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    flexDirection: "column",
+  },
+}));
+
 const JobDetails = (props) => {
   const auth = useContext(AuthContext);
   const [open, setOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
   const { applyToJob, error, clearError, isPostLoading } = useUser();
   const { job, isLoading, userAppliedAlready } = props;
 
   const applyToJobHandler = () => {
-    applyToJob(auth.user?._id, job?._id);
-    setOpen(false);
+    applyToJob(auth.user?._id, job?._id)
+      .then(() => {
+        setSuccess(true);
+      })
+      .catch((err) => {
+        setSuccess(false);
+        console.log(err);
+      })
+      .finally(() => {
+        setOpen(false);
+      });
+  };
+
+  const closeSuccessHandler = () => {
+    setSuccess(false);
   };
 
   const applyJobModalHandler = () => {
@@ -120,15 +196,20 @@ const JobDetails = (props) => {
   if (auth.isLoggedIn) {
     outlinedButton = (
       <>
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <StyledApplyButtonContainer
+          direction="column"
+          alignItems="center"
+          spacing={1}
+        >
           <Button
+            size="small"
             sx={{ borderRadius: "17px" }}
             onClick={applyJobModalHandler}
             variant="outlined"
           >
             Apply Now
           </Button>
-          {userAppliedAlready && (
+          {userAppliedAlready && userAppliedAlready && (
             <>
               <CheckCircleIcon style={{ color: "green" }} />
               <Typography
@@ -140,8 +221,12 @@ const JobDetails = (props) => {
               </Typography>
             </>
           )}
-        </Stack>
-        <Modal open={open} onClose={applyJobModalHandler}>
+        </StyledApplyButtonContainer>
+        <Modal
+          open={open}
+          onClose={applyJobModalHandler}
+          disableScrollLock={true}
+        >
           <StyledBoxModal>
             <Grid
               container
@@ -218,25 +303,45 @@ const JobDetails = (props) => {
             </Grid>
           </StyledBoxModal>
         </Modal>
+        <Modal open={success} onClose={closeSuccessHandler}>
+          <StyledBoxModal>
+            <Stack
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <Typography>
+                You have successfully Applied to this job!
+              </Typography>
+              <Typography>
+                The employer will contact you if you are shortlisted.
+              </Typography>
+              <Button onClick={closeSuccessHandler}>Close</Button>
+            </Stack>
+          </StyledBoxModal>
+        </Modal>
       </>
     );
   } else {
     outlinedButton = (
-      <Button
-        sx={{ borderRadius: "17px" }}
-        component={RouterLink}
-        to="/auth"
-        variant="outlined"
-      >
-        login/join
-      </Button>
+      <Stack alignItems="flex-start">
+        <Button
+          sx={{ borderRadius: "17px" }}
+          component={RouterLink}
+          to="/auth"
+          variant="outlined"
+        >
+          login/join
+        </Button>
+      </Stack>
     );
   }
 
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
-      <Box
+      <StyledBoxContainer
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -262,7 +367,7 @@ const JobDetails = (props) => {
             spacing={2}
           >
             {isPostLoading && (
-              <Skeleton
+              <StyledLoadingSkeleton
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
@@ -273,7 +378,7 @@ const JobDetails = (props) => {
               />
             )}
             {isLoading && (
-              <Skeleton
+              <StyledLoadingSkeleton
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
@@ -284,57 +389,63 @@ const JobDetails = (props) => {
               />
             )}
             {!isLoading && !isPostLoading && (
-              <Grid container direction="row" spacing={1} sx={{ marginTop: 4 }}>
-                {/**grid item 1 */}
-                <Grid item>
-                  <Avatar
-                    variant="circular"
-                    src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
-                    sx={{
-                      height: 175,
-                      width: 175,
-                      border: "1px solid #e5e5e5",
-                    }}
-                    alt={`${job?.id}--${job?.creator?.company}`}
-                  />
-                </Grid>
-                {/**grid item 2 */}
-
-                {!isLoading && !isPostLoading && (
-                  <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
-                    {jobInformation?.map(
-                      ({ variant, component, icon, text }, i) => (
-                        <Typography
-                          key={i}
-                          color="text.secondary"
-                          variant={variant}
-                          component={component}
-                        >
-                          {icon && <>{icon}</>}
-                          {text}
-                        </Typography>
-                      )
-                    )}
-                    <Divider flexItem sx={{ margin: "0.5rem 0" }} />
+              <Paper
+                elevation={0}
+                sx={{ padding: 1, marginTop: 4, borderRadius: "15px" }}
+              >
+                <StyledGridContainer
+                  container
+                  direction="row"
+                  spacing={1}
+                  sx={{ marginTop: 0 }}
+                >
+                  {/**grid item 1 */}
+                  <Grid item>
+                    <StyledAvatar
+                      variant="circular"
+                      src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                      alt={`${job?.id}--${job?.creator?.company}`}
+                    />
                   </Grid>
-                )}
+                  {/**grid item 2 */}
 
-                {!isLoading && !isPostLoading && (
-                  <Grid
-                    item
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Stack>{outlinedButton}</Stack>
-                  </Grid>
-                )}
-              </Grid>
+                  {!isLoading && !isPostLoading && (
+                    <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
+                      {jobInformation?.map(
+                        ({ variant, component, icon, text }, i) => (
+                          <Typography
+                            key={i}
+                            color="text.secondary"
+                            variant={variant}
+                            component={component}
+                          >
+                            {icon && <>{icon}</>}
+                            {text}
+                          </Typography>
+                        )
+                      )}
+                      <Divider flexItem sx={{ margin: "0.5rem 0" }} />
+                    </Grid>
+                  )}
+
+                  {!isLoading && !isPostLoading && (
+                    <Grid
+                      item
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      {outlinedButton}
+                    </Grid>
+                  )}
+                </StyledGridContainer>
+              </Paper>
             )}
             {isPostLoading && (
-              <Skeleton
+              <StyledLoadingSkeleton
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
@@ -345,7 +456,7 @@ const JobDetails = (props) => {
               />
             )}
             {isLoading && (
-              <Skeleton
+              <StyledLoadingSkeleton
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
@@ -392,7 +503,7 @@ const JobDetails = (props) => {
 
           <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
             {isLoading && (
-              <Skeleton
+              <StyledLoadingSkeleton
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
@@ -403,7 +514,7 @@ const JobDetails = (props) => {
               />
             )}
             {isPostLoading && (
-              <Skeleton
+              <StyledLoadingSkeleton
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
@@ -421,7 +532,7 @@ const JobDetails = (props) => {
             )}
             <Divider sx={{ margin: "1rem auto" }} />
             {isLoading && (
-              <Skeleton
+              <StyledLoadingSkeleton
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
@@ -432,7 +543,7 @@ const JobDetails = (props) => {
               />
             )}
             {isPostLoading && (
-              <Skeleton
+              <StyledLoadingSkeleton
                 variant="rectangular"
                 sx={{
                   borderRadius: "15px",
@@ -476,7 +587,7 @@ const JobDetails = (props) => {
             )}
           </Grid>
         </Grid>
-      </Box>
+      </StyledBoxContainer>
     </>
   );
 };

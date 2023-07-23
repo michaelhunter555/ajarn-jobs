@@ -40,6 +40,27 @@ const StyledBoxModal = styled(Paper)({
   padding: 14,
 });
 
+const StyledGridItemContent = styled(Grid)(({ theme, dynamic }) => ({
+  margin: "0 0 0 0.5rem",
+  [theme.breakpoints.down("sm")]: {
+    width: dynamic ? "80vw" : "80vw",
+  },
+}));
+
+const StyledDynamicAvatar = styled(Avatar)(({ theme }) => ({
+  height: 150,
+  width: 150,
+  border: "1px solid #e5e5e5",
+  [theme.breakpoints.down("md")]: {
+    height: 150,
+    width: 150,
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: 55,
+    width: 55,
+  },
+}));
+
 const StyledBoxContainer = styled(Box)(({ theme, yScroll }) => ({
   padding: "0 3rem 0 0 ",
   overflowY: "auto",
@@ -75,6 +96,14 @@ const StyledBoxContainer = styled(Box)(({ theme, yScroll }) => ({
     maxWidth: "auto",
     display: "flex",
     padding: "0 0.5rem",
+  },
+}));
+
+const StyledChipStack = styled(Stack)(({ theme }) => ({
+  flexGrow: 0,
+  flexWrap: "wrap",
+  [theme.breakpoints.down("sm")]: {
+    gap: 5,
   },
 }));
 
@@ -116,7 +145,11 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
         >
           Apply
         </Button>
-        <Modal open={open} onClose={applyJobModalHandler}>
+        <Modal
+          open={open}
+          onClose={applyJobModalHandler}
+          disableScrollLock={true}
+        >
           <StyledBoxModal>
             <Grid
               container
@@ -290,7 +323,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
 
                   {/**grid item 3 */}
                   {!isPostLoading && (
-                    <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
+                    <StyledGridItemContent item sx={{ margin: "0 0 0 0.5rem" }}>
                       <Typography
                         color="text.secondary"
                         sx={{ fontSize: 11, fontWeight: 600 }}
@@ -334,7 +367,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                           dangerouslySetInnerHTML={{ __html: job?.description }}
                         />
                       </Stack>
-                    </Grid>
+                    </StyledGridItemContent>
                   )}
                 </Grid>
               )}
@@ -423,14 +456,9 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                   {/**grid item 1 */}
                   <Grid item>
                     <Stack direction="row" spacing={1}>
-                      <Avatar
+                      <StyledDynamicAvatar
                         variant="circular"
                         src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
-                        sx={{
-                          height: 150,
-                          width: 150,
-                          border: "1px solid #e5e5e5",
-                        }}
                         alt={`${job?._id}--${job?.creator?.company}`}
                       />
                       <Stack direction="column">
@@ -444,13 +472,13 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                         >
                           {job?.creator?.company}
                         </Typography>
-                        <Stack
+                        <StyledChipStack
                           direction="row"
                           alignItems="center"
                           spacing={1}
-                          sx={{ flexGrow: 0 }}
                         >
                           <Chip
+                            size="small"
                             variant="outlined"
                             label={job?.salary}
                             icon={
@@ -461,6 +489,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                             sx={{ fontSize: 12 }}
                           />
                           <Chip
+                            size="small"
                             variant="outlined"
                             label={`${job?.location}`}
                             icon={
@@ -471,7 +500,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                             sx={{ borderRadius: 5 }}
                           />
                           {outlinedButton}
-                        </Stack>
+                        </StyledChipStack>
                       </Stack>
                     </Stack>
                     <Divider light flexItem sx={{ margin: "0.5rem 0" }} />
@@ -480,7 +509,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
 
                   {/**grid item 3 */}
                   {!isPostLoading && (
-                    <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
+                    <StyledGridItemContent item dynamic="true">
                       <Typography
                         color="text.secondary"
                         sx={{ fontSize: 14, fontWeight: 600 }}
@@ -519,7 +548,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                           dangerouslySetInnerHTML={{ __html: job?.description }}
                         />
                       </Stack>
-                    </Grid>
+                    </StyledGridItemContent>
                   )}
                 </Grid>
               )}

@@ -12,6 +12,7 @@ export const useContent = () => {
   const [contentPostDislikes, setContentPostDislikes] = useState(0);
   const [isPostLikeLoading, setIsPostLikeLoading] = useState(false);
   const [isPostDislikeLoading, setIsPostDislikeLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [content, setContent] = useState([]);
   const { updateUser } = auth;
   const { isLoading, isPostLoading, sendRequest, error, clearError } =
@@ -196,6 +197,7 @@ export const useContent = () => {
   const deleteContentPost = useCallback(
     async (postId) => {
       try {
+        setIsDeleting(true);
         const deletedPost = {
           ...auth.user,
           blogPosts: auth.user.blogPosts.filter((post) => post._id !== postId),
@@ -217,9 +219,10 @@ export const useContent = () => {
             blogPosts: auth.user?.blogPosts,
           });
         }
-
+        setIsDeleting(false);
         console.log("DELETE COMPLETE");
       } catch (err) {
+        setIsDeleting(false);
         console.log("DELETE FAILED");
         updateUser({
           ...auth.user,
@@ -236,6 +239,7 @@ export const useContent = () => {
   return {
     isLoading,
     isPostLoading,
+    isDeleting,
     isPostLikeLoading,
     isPostDislikeLoading,
     error,

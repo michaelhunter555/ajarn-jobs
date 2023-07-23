@@ -40,7 +40,7 @@ const styledComments = {
   },
 };
 
-const BlogPostForm = ({ onBlogPostCreated }) => {
+const BlogPostForm = ({ onBlogPostCreated, hideButton }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const [toggleForm, setToggleForm] = useState(true);
@@ -134,6 +134,7 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
         <Typography>
           Add a Post or Ask a Question! Get the perspectives of others.
         </Typography>
+
         <Button
           disabled={toggleForm || !auth.isLoggedIn}
           variant="contained"
@@ -141,6 +142,7 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
         >
           {!auth.isLoggedIn ? "login to post" : "Add a post"}
         </Button>
+
         {isPostLoading && <CircularProgress />}
 
         {toggleForm && !isPostLoading && (
@@ -239,6 +241,7 @@ const BlogPostForm = ({ onBlogPostCreated }) => {
                 >
                   Submit
                 </Button>
+
                 <Button
                   variant="outlined"
                   color="error"

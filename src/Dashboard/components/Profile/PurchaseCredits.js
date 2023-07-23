@@ -148,6 +148,7 @@ const PurchaseCredits = () => {
                     {tier.buttonText}
                   </Button>
                   <Modal
+                    disableScrollLock={true}
                     open={openModal}
                     onClose={confirmCreditsHandler}
                     aria-labelledby="add-credits-modal"

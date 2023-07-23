@@ -87,6 +87,7 @@ export const useUser = () => {
         response.ok && updateUser(updatedUser);
       } catch (err) {
         console.log(err);
+        throw err;
       }
     },
     [sendRequest, updateUser, auth.user]

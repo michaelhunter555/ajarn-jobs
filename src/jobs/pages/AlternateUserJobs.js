@@ -2,14 +2,7 @@ import React from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Grid,
-  LinearProgress,
-  Stack,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import BottomFeatured from "../../home/components/BottomFeatured";
@@ -55,7 +48,7 @@ const AlternateUserJobs = () => {
                 Go to Classic View
               </Button>
             </Stack>
-            {isLoading && <LinearProgress />}
+            {/*isLoading && <LinearProgress />*/}
             {isLoading && <CircularProgress />}
 
             {jobs && !isLoading && (

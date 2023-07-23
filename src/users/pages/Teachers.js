@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { Grid, Skeleton } from "@mui/material/";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import CustomModal from "../../shared/components/UIElements/CustomModal";
@@ -32,6 +32,21 @@ const customThemeForTeachers = createTheme({
     },
   },
 });
+
+const StyledGridContainer = styled(Grid)(({ theme }) => ({
+  width: "90%",
+  margin: "0 0 2rem 0",
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+}));
+
+const StyledGridItem = styled(Grid)(({ theme }) => ({
+  paddingLeft: "24px",
+  [theme.breakpoints.down("sm")]: {
+    paddingLeft: 0,
+  },
+}));
 
 const Teachers = () => {
   const auth = useContext(AuthContext);
@@ -117,12 +132,8 @@ const Teachers = () => {
       <Content>
         <ErrorModal onClear={clearError} error={error} />
         <ThemeProvider theme={customThemeForTeachers}>
-          <Grid
-            container
-            spacing={3}
-            sx={{ width: "90%", margin: "0 0 2rem 0" }}
-          >
-            <Grid item xs={12} xl={3}>
+          <StyledGridContainer container spacing={3}>
+            <StyledGridItem xs={12} xl={3}>
               {isLoading && (
                 <Skeleton
                   sx={{ height: 356, width: 332 }}
@@ -133,16 +144,16 @@ const Teachers = () => {
                 <TeacherFilter onDataChange={handleFilterChange} />
               )}
               {!isLoading && <TeflBanner />}
-            </Grid>
-            <Grid item xs={12} xl={9} sx={{ margin: "1rem auto" }}>
+            </StyledGridItem>
+            <StyledGridItem xs={12} xl={9} sx={{ margin: "1rem auto" }}>
               <Grid container spacing={2}>
                 <TeacherList
                   teachers={filteredTeachers}
                   isLoading={isLoading}
                 />
               </Grid>
-            </Grid>
-          </Grid>
+            </StyledGridItem>
+          </StyledGridContainer>
         </ThemeProvider>
       </Content>
       <Footer />

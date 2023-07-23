@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 
 import moment from "moment";
+import { Link } from "react-router-dom";
 
-import { Box, Divider, Grid, Stack, styled, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Stack,
+  styled,
+  Typography,
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import Footer, {
@@ -63,7 +72,7 @@ const AddNewBlogPost = () => {
 
   const filteredContent =
     blogPosts &&
-    blogPosts.filter((searchContent) => {
+    blogPosts?.filter((searchContent) => {
       const postDate = moment(searchContent?.postDate); // Use postDate instead of date
       const searchDate = moment(filter?.date); // Parse the string into a moment object
 
@@ -111,6 +120,11 @@ const AddNewBlogPost = () => {
                 isLoading={isLoading}
                 filteredContent={filteredContent}
               />
+              {!isLoading && (
+                <Button variant="outlined" component={Link} to="/jobs">
+                  Need a Job?
+                </Button>
+              )}
             </StyledStackContent>
           </Grid>
         </StyledGridWrapper>

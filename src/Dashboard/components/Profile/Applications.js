@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
 import {
   Box,
+  Button,
   Link,
+  Pagination,
   Paper,
   Skeleton,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -16,24 +19,36 @@ import {
   Typography,
 } from "@mui/material";
 
+// const auth = useContext(AuthContext);
+
+//GET all jobs
+// const userId = auth?.user?._id;
+// const getAppliedUserJobs = async () => {
+//   try {
+//     const response = await fetch(`${process.env.REACT_APP_USERS}/${userId}`);
+//     const data = await response.json();
+//     return data.user;
+//   } catch (err) {
+//     console.log("there was an error in the applications component", err);
+//   }
+// };
+
+// const { data: user, isLoading } = useQuery(["userApplications", userId], () =>
+//   getAppliedUserJobs()
+// );
+
 const Applications = ({ applications, isLoading }) => {
-  // const auth = useContext(AuthContext);
+  const [page, setPage] = useState(1);
 
-  //GET all jobs
-  // const userId = auth?.user?._id;
-  // const getAppliedUserJobs = async () => {
-  //   try {
-  //     const response = await fetch(`${process.env.REACT_APP_USERS}/${userId}`);
-  //     const data = await response.json();
-  //     return data.user;
-  //   } catch (err) {
-  //     console.log("there was an error in the applications component", err);
-  //   }
-  // };
+  const itemsPerPage = 5;
+  const [noOfPages] = useState(Math.ceil(applications?.length / itemsPerPage));
 
-  // const { data: user, isLoading } = useQuery(["userApplications", userId], () =>
-  //   getAppliedUserJobs()
-  // );
+  const indexOfLastApplication = page * itemsPerPage;
+  const indexOfFirstApplication = indexOfLastApplication - itemsPerPage;
+  const currentApplications = applications?.slice(
+    indexOfFirstApplication,
+    indexOfLastApplication
+  );
 
   //from current set of jobs, return jobs where the userId matches
   const userApplied = applications?.length === 0;
@@ -89,15 +104,9 @@ const Applications = ({ applications, isLoading }) => {
                   <Skeleton width="100%" />
                 </TableCell>
               </TableRow>
-            ) : !isLoading && userApplied ? (
-              <TableRow>
-                <TableCell>
-                  <Typography></Typography>
-                </TableCell>
-              </TableRow>
             ) : (
-              applications &&
-              applications?.map((application, i) => (
+              currentApplications &&
+              currentApplications?.map((application, i) => (
                 <TableRow key={application?._id}>
                   <TableCell>
                     {application?.applicationDate?.split("T")[0]}
@@ -119,7 +128,29 @@ const Applications = ({ applications, isLoading }) => {
             )}
           </TableBody>
         </Table>
+        <Stack alignItems="end">
+          <Pagination
+            size="small"
+            count={noOfPages}
+            page={page}
+            onChange={(event, val) => setPage(val)}
+            defaultPage={1}
+            showFirstButton
+            showLastButton
+          />
+        </Stack>
       </TableContainer>
+      {!isLoading && userApplied && (
+        <Stack
+          sx={{ width: "100%" }}
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Typography> You haven't applied to any jobs yet</Typography>
+          <Button variant="contained">view jobs</Button>
+        </Stack>
+      )}
     </>
   );
 };

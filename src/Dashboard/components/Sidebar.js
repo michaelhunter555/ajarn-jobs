@@ -1,19 +1,24 @@
 import React, { useContext, useState } from "react";
 
-import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import ArticleIcon from "@mui/icons-material/Article";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import MoreIcon from "@mui/icons-material/MoreVert";
 import SettingsIcon from "@mui/icons-material/Settings";
 import WorkIcon from "@mui/icons-material/Work";
 import {
   BottomNavigation,
   BottomNavigationAction,
+  Button,
   Divider,
+  Fade,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Paper,
+  Popper,
+  Stack,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -40,7 +45,7 @@ const StyledBottomNav = styled(BottomNavigation)(({ theme }) => ({
     position: "sticky",
     justifyContent: "center",
     bottom: 0,
-    zIndex: "1rem",
+    zIndex: 11,
     marginTop: "1rem",
   },
 }));
@@ -80,11 +85,6 @@ const menuItems = [
     text: "Settings",
     icon: <SettingsIcon />,
     componentName: "settings",
-  },
-  {
-    text: "Creator Profile",
-    icon: <AddBusinessIcon />,
-    componentName: "creator",
   },
 ];
 
@@ -144,6 +144,8 @@ export default Sidebar;
 
 export const BottomMobileNav = ({ onMenuItemClick }) => {
   const { user } = useContext(AuthContext);
+  const [open, setOpen] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const userType = user?.userType;
   const [value, setValue] = useState(0); // Add a state for the selected tab
 
@@ -174,9 +176,18 @@ export const BottomMobileNav = ({ onMenuItemClick }) => {
     return true;
   });
 
+  const toggleMobileMoreHandler = (e) => {
+    setOpen((prev) => !prev);
+    setAnchorEl(e.currentTarget);
+  };
+
+  const visibleSidebarItems = filteredSidebar.slice(0, -2);
+  const moreSidebarItems = filteredSidebar.slice(-2);
+
   const handleSidebarClick = (componentName, index) => {
     setValue(index); // Set the selected tab
     onMenuItemClick(componentName);
+    setOpen(false);
   };
 
   return (
@@ -184,16 +195,57 @@ export const BottomMobileNav = ({ onMenuItemClick }) => {
       value={value}
       onChange={(event, newValue) => setValue(newValue)}
     >
-      {filteredSidebar.map((mobileItem, i) => (
-        <BottomNavigationAction
-          sx={{ opacity: 1 }}
-          label={mobileItem.text}
-          icon={mobileItem.icon}
-          value={i}
-          onClick={() => handleSidebarClick(mobileItem.componentName, i)}
-          key={i}
-        />
-      ))}
+      {userType === "employer" &&
+        filteredSidebar.map((mobileItem, i) => (
+          <BottomNavigationAction
+            sx={{ opacity: 1 }}
+            label={mobileItem.text}
+            icon={mobileItem.icon}
+            value={i}
+            onClick={() => handleSidebarClick(mobileItem.componentName, i)}
+            key={i}
+          />
+        ))}
+      {userType === "teacher" &&
+        visibleSidebarItems.map((mobileItem, i) => (
+          <BottomNavigationAction
+            sx={{ opacity: 1 }}
+            label={mobileItem.text}
+            icon={mobileItem.icon}
+            value={i}
+            onClick={() => handleSidebarClick(mobileItem.componentName, i)}
+            key={i}
+          />
+        ))}
+      {userType === "teacher" && (
+        <Stack>
+          <Button size="small" onClick={toggleMobileMoreHandler}>
+            <MoreIcon />
+          </Button>
+          <Popper open={open} placement="top-start" anchorEl={anchorEl}>
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <Paper style={{ opacity: 1, visibility: "visible" }}>
+                  <Stack direction="column">
+                    {moreSidebarItems.map((mobileItem, i) => (
+                      <ListItemButton
+                        sx={{ zIndex: 11 }}
+                        onClick={() =>
+                          handleSidebarClick(mobileItem.componentName, i)
+                        }
+                        key={i}
+                      >
+                        <ListItemIcon>{mobileItem.icon}</ListItemIcon>
+                        <ListItemText primary={mobileItem.text} />
+                      </ListItemButton>
+                    ))}
+                  </Stack>
+                </Paper>
+              </Fade>
+            )}
+          </Popper>
+        </Stack>
+      )}
     </StyledBottomNav>
   );
 };

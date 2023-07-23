@@ -93,7 +93,7 @@ const CoverLetter = () => {
       };
 
       updateUser(updatedCoverLetter);
-      setEditorState(EditorState.createEmpty());
+      //setEditorState(EditorState.createEmpty());
       setIsLoading(false);
       setIsEditing(false);
     } catch (err) {
@@ -132,15 +132,10 @@ const CoverLetter = () => {
               <Grid
                 container
                 justifyContent="center"
-                direction="row"
+                direction="column"
                 spacing={2}
               >
-                <Stack
-                  justifyContent="center"
-                  alignItems="center"
-                  direction="row"
-                  spacing={2}
-                >
+                <Stack justifyContent="center" direction="row" spacing={2}>
                   <Typography color="text.secondary" variant="subtitle2">
                     {auth.user?.name}
                   </Typography>
@@ -184,7 +179,7 @@ const CoverLetter = () => {
           direction="column"
           sx={{ padding: "1rem" }}
         >
-          <Grid item sx={12}>
+          <Grid item xs={12}>
             <Stack justifyContent="center" alignItems="center">
               <Grid>
                 <Typography variant="body1" component="h2">
@@ -193,7 +188,7 @@ const CoverLetter = () => {
               </Grid>
             </Stack>
             <Divider sx={{ margin: "1rem" }} />
-            <Grid direction="row" spacing={2}>
+            <Grid container direction="column" spacing={2}>
               <Stack justifyContent="center" direction="row" spacing={2}>
                 <Typography color="text.secondary" variant="subtitle2">
                   {auth.user?.name}
@@ -211,21 +206,7 @@ const CoverLetter = () => {
                 <Typography color="text.secondary" variant="h5" component="h2">
                   Cover Letter:
                 </Typography>
-                {/* <TextField
-                  helperText="Write a compelling cover letter for employers to view"
-                  multiline={true}
-                  fullWidth
-                  rows={5}
-                  id="coverLetter"
-                  defaultValue={formState.inputs.coverLetter.value}
-                  onChange={(event) =>
-                    inputHandler(
-                      "coverLetter",
-                      event.target.value,
-                      event.target.value !== ""
-                    )
-                  }
-                /> */}
+
                 <Box sx={{ ...styledRichCoverLetterText, width: "100%" }}>
                   <Editor
                     editorState={editorState}

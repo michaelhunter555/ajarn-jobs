@@ -37,13 +37,47 @@ const StyledBoxModal = styled(Paper)({
   p: 4,
 });
 
+const StyledBoxContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "80%",
+  margin: "0 auto",
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+    marginBottom: "3rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    marginBottom: "3rem",
+  },
+}));
+
+const StyledGridContainer = styled(Grid)(({ theme }) => ({
+  marginTop: 4,
+  [theme.breakpoints.down("md")]: {},
+  [theme.breakpoints.down("sm")]: {
+    justifyContent: "center",
+  },
+}));
+
+const StyledLoadingSkeleton = styled(Skeleton)(({ theme }) => ({
+  borderRadius: "15px",
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+}));
+
 const TeacherDetailsItem = ({ teacher, isLoading }) => {
   const [open, setOpen] = useState(false);
   const openModalHandler = () => setOpen(true);
   const closeModalHandler = () => setOpen(false);
 
   return (
-    <Box
+    <StyledBoxContainer
       sx={{
         display: "flex",
         justifyContent: "center",
@@ -69,7 +103,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
           spacing={2}
         >
           {isLoading && (
-            <Skeleton
+            <StyledLoadingSkeleton
               variant="rectangular"
               sx={{
                 borderRadius: "15px",
@@ -80,151 +114,171 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
             />
           )}
           {!isLoading && (
-            <Grid container direction="row" spacing={1} sx={{ marginTop: 4 }}>
-              {/**grid item 1 */}
-              <Grid item>
-                <Avatar
-                  variant="circular"
-                  src={`${process.env.REACT_APP_IMAGE}${teacher?.image}`}
-                  sx={{ height: 175, width: 175 }}
-                  alt={`${teacher?._id}--${teacher?.name}`}
-                />
-              </Grid>
-              {/**grid item 2 */}
-              <Grid item alignItems="center" sx={{ margin: "0 0 0 0.5rem" }}>
-                <Typography color="text.secondary" variant="h5" component="h2">
-                  {teacher?.name}
-                </Typography>
-
-                <Typography variant="subtitle2" component="div">
-                  <Chip label={teacher?.userType} size="small" />
-                </Typography>
-
-                <Stack direction="row" alignItems="center">
-                  <Box>
-                    <LocationOnIcon size="inherit" sx={{ color: "#646464" }} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      variant="subtitle2"
-                      color="text.secondary"
-                      component="div"
-                    >
-                      lives in {teacher?.location}
-                    </Typography>
-                  </Box>
-                </Stack>
-
-                <Stack direction="row" alignItems="center">
-                  <Box>
-                    <LanguageIcon size="inherit" sx={{ color: "#646464" }} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      color="text.secondary"
-                      variant="subtitle2"
-                      component="div"
-                    >
-                      Nationality: {teacher?.nationality}
-                    </Typography>
-                  </Box>
-                </Stack>
-
-                <Stack direction="row" alignItems="center">
-                  <Box>
-                    <SchoolIcon size="inherit" sx={{ color: "#646464" }} />
-                  </Box>
-                  <Box sx={{ display: "flex", flexDirection: "row" }}>
-                    <Typography
-                      color="text.secondary"
-                      variant="subtitle2"
-                      component="div"
-                    >
-                      Education: {teacher?.highestCertification}
-                    </Typography>
-                  </Box>
-                  <Box>
-                    {teacher?.education &&
-                      teacher?.education?.split(",")?.map((uni, i) => (
-                        <Chip
-                          key={i}
-                          sx={{ backgroundColor: "transparent" }}
-                          avatar={
-                            <Tooltip
-                              title={`Degree from ${
-                                uni?.trim()?.split(".")[0]
-                              }`}
-                              placement="top"
-                            >
-                              <Avatar
-                                alt={`${uni?.trim()}--${teacher?.name}`}
-                                src={`https://logo.clearbit.com/${uni
-                                  ?.trim()
-                                  ?.toLowerCase()}`}
-                              />
-                            </Tooltip>
-                          }
-                        />
-                      ))}
-                  </Box>
-                </Stack>
-
-                <Stack direction="row" alignItems="center">
-                  <Box>
-                    <WorkIcon size="inherit" sx={{ color: "#646464" }} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      color="text.secondary"
-                      variant="subtitle2"
-                      component="div"
-                    >
-                      {teacher?.workExperience}
-                      {teacher?.workExperience > 1 ? " years" : " year"} of
-                      experience
-                    </Typography>
-                  </Box>
-                </Stack>
-
-                <Divider flexItem sx={{ margin: "0.5rem 0" }} />
-                <Typography variant="subtitle2" component="div">
+            <Paper
+              elevation={0}
+              sx={{
+                borderRadius: "15px",
+                marginTop: "3.5rem",
+                padding: "1rem",
+              }}
+            >
+              <StyledGridContainer container direction="row" spacing={1}>
+                {/**grid item 1 */}
+                <Grid item>
+                  <Avatar
+                    variant="circular"
+                    src={`${process.env.REACT_APP_IMAGE}${teacher?.image}`}
+                    sx={{ height: 175, width: 175 }}
+                    alt={`${teacher?._id}--${teacher?.name}`}
+                  />
+                </Grid>
+                {/**grid item 2 */}
+                <Grid item alignItems="center" sx={{ margin: "0 0 0 0.5rem" }}>
                   <Typography
                     color="text.secondary"
-                    variant="subtitle2"
-                    component="div"
+                    variant="h5"
+                    component="h2"
                   >
-                    Skills:
+                    {teacher?.name}
                   </Typography>
-                  <Stack spacing={2} direction="row">
-                    {teacher?.skill?.split(",").map((skills, i) => (
-                      <Chip clickable key={i} label={skills} />
-                    ))}
+
+                  <Typography variant="subtitle2" component="div">
+                    <Chip label={teacher?.userType} size="small" />
+                  </Typography>
+
+                  <Stack direction="row" alignItems="center">
+                    <Box>
+                      <LocationOnIcon
+                        size="inherit"
+                        sx={{ color: "#646464" }}
+                      />
+                    </Box>
+                    <Box>
+                      <Typography
+                        variant="subtitle2"
+                        color="text.secondary"
+                        component="div"
+                      >
+                        lives in {teacher?.location}
+                      </Typography>
+                    </Box>
                   </Stack>
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Button
-                  onClick={openModalHandler}
-                  variant="outlined"
-                  sx={{ borderRadius: "17px" }}
-                >
-                  Message
-                </Button>
-                <Modal open={open} onClose={closeModalHandler}>
-                  <StyledBoxModal>
-                    <MessageTeacher
-                      closeModal={closeModalHandler}
-                      userName={teacher?.name}
-                      userEmail={teacher?.email}
-                    />
-                  </StyledBoxModal>
-                </Modal>
-              </Grid>
-            </Grid>
+
+                  <Stack direction="row" alignItems="center">
+                    <Box>
+                      <LanguageIcon size="inherit" sx={{ color: "#646464" }} />
+                    </Box>
+                    <Box>
+                      <Typography
+                        color="text.secondary"
+                        variant="subtitle2"
+                        component="div"
+                      >
+                        Nationality: {teacher?.nationality}
+                      </Typography>
+                    </Box>
+                  </Stack>
+
+                  <Stack direction="row" alignItems="center">
+                    <Box>
+                      <SchoolIcon size="inherit" sx={{ color: "#646464" }} />
+                    </Box>
+                    <Box sx={{ display: "flex", flexDirection: "row" }}>
+                      <Typography
+                        color="text.secondary"
+                        variant="subtitle2"
+                        component="div"
+                      >
+                        Education: {teacher?.highestCertification}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      {teacher?.education &&
+                        teacher?.education?.split(",")?.map((uni, i) => (
+                          <Chip
+                            key={i}
+                            sx={{ backgroundColor: "transparent" }}
+                            avatar={
+                              <Tooltip
+                                title={`Degree from ${
+                                  uni?.trim()?.split(".")[0]
+                                }`}
+                                placement="top"
+                              >
+                                <Avatar
+                                  alt={`${uni?.trim()}--${teacher?.name}`}
+                                  src={`https://logo.clearbit.com/${uni
+                                    ?.trim()
+                                    ?.toLowerCase()}`}
+                                />
+                              </Tooltip>
+                            }
+                          />
+                        ))}
+                    </Box>
+                  </Stack>
+
+                  <Stack direction="row" alignItems="center">
+                    <Box>
+                      <WorkIcon size="inherit" sx={{ color: "#646464" }} />
+                    </Box>
+                    <Box>
+                      <Typography
+                        color="text.secondary"
+                        variant="subtitle2"
+                        component="div"
+                      >
+                        {teacher?.workExperience}
+                        {teacher?.workExperience > 1 ? " years" : " year"} of
+                        experience
+                      </Typography>
+                    </Box>
+                  </Stack>
+
+                  <Divider flexItem sx={{ margin: "0.5rem 0" }} />
+                  <Typography variant="subtitle2" component="div">
+                    <Typography
+                      color="text.secondary"
+                      variant="subtitle2"
+                      component="div"
+                    >
+                      Skills:
+                    </Typography>
+                    <Stack spacing={2} direction="row">
+                      {teacher?.skill?.split(",").map((skills, i) => (
+                        <Chip clickable key={i} label={skills} />
+                      ))}
+                    </Stack>
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button
+                    onClick={openModalHandler}
+                    variant="outlined"
+                    sx={{ borderRadius: "17px" }}
+                  >
+                    Message
+                  </Button>
+                  <Modal
+                    open={open}
+                    onClose={closeModalHandler}
+                    disableScrollLock={true}
+                  >
+                    <StyledBoxModal>
+                      <MessageTeacher
+                        closeModal={closeModalHandler}
+                        userName={teacher?.name}
+                        userEmail={teacher?.email}
+                      />
+                    </StyledBoxModal>
+                  </Modal>
+                </Grid>
+              </StyledGridContainer>
+            </Paper>
           )}
 
           {isLoading && (
-            <Skeleton
+            <StyledLoadingSkeleton
               variant="rectangular"
               sx={{
                 borderRadius: "15px",
@@ -266,7 +320,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
         <Grid item xs={12} sm={6} md={6} sx={{ marginTop: 4 }}>
           {/*cover letter */}
           {isLoading && (
-            <Skeleton
+            <StyledLoadingSkeleton
               variant="rectangular"
               sx={{
                 borderRadius: "15px",
@@ -311,7 +365,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
             </Paper>
           )}
           {isLoading && (
-            <Skeleton
+            <StyledLoadingSkeleton
               variant="rectangular"
               sx={{
                 borderRadius: "15px",
@@ -324,7 +378,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
           {!isLoading && <CollapsibleTable teacherResume={teacher?.resume} />}
         </Grid>
       </Grid>
-    </Box>
+    </StyledBoxContainer>
   );
 };
 

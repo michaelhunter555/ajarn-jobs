@@ -39,6 +39,15 @@ const StyledCardContent = styled(CardContent)({
   flex: "1 0 auto",
 });
 
+const StyedCardActions = styled(CardActions)(({ theme }) => ({
+  display: "flex",
+  alignItems: "flex-end",
+  [theme.breakpoints.down("sm")]: {
+    display: "none",
+    background: theme.palette.background.paper,
+  },
+}));
+
 const BottomFeaturedAds = (props) => {
   return (
     <StyledCard featured={props?.featured}>
@@ -73,7 +82,7 @@ const BottomFeaturedAds = (props) => {
             {props?.salary} - {props?.hours}
           </Typography>
         </StyledCardContent>
-        <CardActions sx={{ display: "flex", alignItems: "flex-end" }}>
+        <StyedCardActions>
           <Button
             sx={{
               borderRadius: "18px",
@@ -82,7 +91,7 @@ const BottomFeaturedAds = (props) => {
           >
             view
           </Button>
-        </CardActions>
+        </StyedCardActions>
       </StyledBox>
     </StyledCard>
   );

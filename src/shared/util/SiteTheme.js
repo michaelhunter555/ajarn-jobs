@@ -6,4 +6,13 @@ export const theme = createTheme({
       main: "#128cb1",
     },
   },
+  components: {
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#61616129",
+        },
+      },
+    },
+  },
 });

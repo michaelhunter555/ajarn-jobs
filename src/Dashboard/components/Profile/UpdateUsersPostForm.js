@@ -169,6 +169,7 @@ const UpdateUsersPostForm = ({ toggle, postId }) => {
               <FormControl>
                 <FormLabel>Title</FormLabel>
                 <TextField
+                  disabled={true}
                   fullWidth
                   id="title"
                   type="text"

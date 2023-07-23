@@ -9,7 +9,10 @@ import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import Footer from "../../shared/components/UIElements/Footer";
+import Footer, {
+  Content,
+  PageContainer,
+} from "../../shared/components/UIElements/Footer";
 import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
 import TeflBanner from "../../shared/components/UIElements/TeflBanner";
@@ -19,16 +22,6 @@ import { dummy_jobs } from "../../shared/util/DummyJobs";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
 import JobFilters from "../components/JobFilters";
 
-const PageContainer = styled("div")({
-  minHeight: "100vh",
-  display: "flex",
-  flexDirection: "column",
-});
-
-const Content = styled("div")({
-  flex: 1,
-});
-
 const StyledUserJobsDiv = styled("div")(({ theme }) => ({
   maxWidth: "85%",
   margin: "0 auto 3rem",
@@ -36,10 +29,12 @@ const StyledUserJobsDiv = styled("div")(({ theme }) => ({
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "15px",
   [theme.breakpoints.down("md")]: {
+    maxWidth: "100%",
     gridTemplateColumns: "100%",
     gridAutoColumns: "auto",
   },
   [theme.breakpoints.down("sm")]: {
+    maxWidth: "100%",
     gridTemplateColumns: "100%",
     gridAutoColumns: "auto",
   },
@@ -99,6 +94,7 @@ const FeaturedJobListDiv = styled("div")(({ theme }) => ({
 const UserJobs = () => {
   const auth = useContext(AuthContext);
   const [filter, setFilter] = useState(dummy_jobs);
+
   const { clearError } = useJob();
 
   const getAllJobs = async (jobs) => {
@@ -116,11 +112,6 @@ const UserJobs = () => {
     isLoading,
     error,
   } = useQuery(["jobs"], () => getAllJobs());
-
-  // const { data: jobs } = useQuery(["jobs"], async () => {
-  //   const response = await client.query(`${process.env.REACT_APP_JOBS}`);
-  //   return response.jobs;
-  // });
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);

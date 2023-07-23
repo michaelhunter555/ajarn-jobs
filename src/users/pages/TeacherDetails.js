@@ -40,7 +40,7 @@ const TeacherDetails = () => {
     <PageContainer>
       <Content>
         <ErrorModal error={error} onClear={clearError} />
-        <TeacherDetailsItem isLoading={isLoading} teacher={userData} />;
+        <TeacherDetailsItem isLoading={isLoading} teacher={userData} />
       </Content>
       <Footer />
     </PageContainer>

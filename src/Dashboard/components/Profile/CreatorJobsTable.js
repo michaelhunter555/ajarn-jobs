@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -8,18 +8,24 @@ import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import {
   Button,
   ButtonGroup,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Pagination,
   Skeleton,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
 import UpdateJob from "../../../jobs/pages/UpdateJob";
-import { AuthContext } from "../../../shared/context/auth-context";
 import { useJob } from "../../../shared/hooks/jobs-hook";
 
 const tableRows = [
@@ -61,40 +67,40 @@ const tableRows = [
   },
 ];
 
-const CreatorJobsTable = ({ jobs, isLoading }) => {
-  const auth = useContext(AuthContext);
-  const { user } = auth;
+const CreatorJobsTable = ({ jobs, isLoading, refetch }) => {
   const [editJobById, setEditJobById] = useState(null);
   const [editJob, setEditJob] = useState(false);
+  const [openWarning, setOpenWarning] = useState(false);
+  const [jobToDelete, setJobToDelete] = useState(null);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 5;
+  const [noOfPages, setNoOfPages] = useState(
+    Math.ceil(jobs?.length / itemsPerPage)
+  );
   const { deleteJobById, isDeleting } = useJob();
 
-  // const getCreatorJobs = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.REACT_APP_JOBS}/user/${user?._id}`
-  //     );
-  //     const data = await response.json();
-  //     return data.jobs;
-  //   } catch (err) {
-  //     console.log(
-  //       "There was an issue with the request for creatorJobsTable - Msg: " + err
-  //     );
-  //   }
-  // };
+  useEffect(() => {
+    if (!isDeleting) {
+      const newNoOfPages = Math.ceil(jobs?.length / itemsPerPage);
+      setNoOfPages(newNoOfPages);
+      if (page > newNoOfPages) {
+        setPage(newNoOfPages);
+      }
+    }
+  }, [isDeleting, jobs, page]);
 
-  // const {
-  //   data: creatorJobs,
-  //   isLoading,
-  //   refetch,
-  // } = useQuery(["creatorJobs", user?._id], () => getCreatorJobs());
+  const deleteJobWarningHandler = (id) => {
+    setOpenWarning((prev) => !prev);
+    setJobToDelete(id);
+  };
 
   const deleteJobHandler = async (jobId) => {
     try {
-      await deleteJobById(jobId);
-      //refetch();
+      await deleteJobById(jobToDelete);
     } catch (err) {
       console.log("Error trying to delete a job");
     }
+    setOpenWarning(false);
   };
 
   const editJobHandler = (id) => {
@@ -108,6 +114,10 @@ const CreatorJobsTable = ({ jobs, isLoading }) => {
   };
 
   const creatorHasJobs = jobs && jobs.length > 0;
+
+  const indexOfLastPage = page * itemsPerPage;
+  const indexOfFirstPage = indexOfLastPage - itemsPerPage;
+  const currentJobsPage = jobs?.slice(indexOfFirstPage, indexOfLastPage);
 
   return (
     <>
@@ -160,7 +170,7 @@ const CreatorJobsTable = ({ jobs, isLoading }) => {
                   </TableCell>
                 </TableRow>
               ) : (
-                jobs?.map((job, i) => (
+                currentJobsPage?.map((job, i) => (
                   <TableRow key={job?._id}>
                     <TableCell>{job?.datePosted?.split("T")[0]}</TableCell>
                     <TableCell>
@@ -180,13 +190,35 @@ const CreatorJobsTable = ({ jobs, isLoading }) => {
                         >
                           <EditTwoToneIcon />
                         </Button>
-                        <Button
-                          to={`/users/${user?._id}`}
-                          color="error"
-                          onClick={() => deleteJobHandler(job?._id)}
+                        <Tooltip title="Delete" placement="top">
+                          <Button
+                            color="error"
+                            onClick={() => deleteJobWarningHandler(job?._id)}
+                          >
+                            <DeleteForeverTwoToneIcon />
+                          </Button>
+                        </Tooltip>
+                        <Dialog
+                          disableScrollLock={true}
+                          open={openWarning}
+                          onClose={deleteJobWarningHandler}
+                          aria-labelledby="delete-your-job"
+                          aria-describedby="confirm deletion"
                         >
-                          <DeleteForeverTwoToneIcon />
-                        </Button>
+                          <DialogTitle>Delete this job?</DialogTitle>
+                          <DialogContent>
+                            You are about to delete a jobId. This action cannot
+                            be reversed.
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={() => deleteJobHandler(job?._id)}>
+                              Confirm Delete
+                            </Button>
+                            <Button onClick={deleteJobWarningHandler}>
+                              Cancel
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
                       </ButtonGroup>
                     </TableCell>
                     <TableCell>{job?.location}</TableCell>
@@ -198,6 +230,17 @@ const CreatorJobsTable = ({ jobs, isLoading }) => {
               )}
             </TableBody>
           </Table>
+          <Stack alignItems="end">
+            <Pagination
+              size="small"
+              count={noOfPages}
+              page={page}
+              onChange={(event, val) => setPage(val)}
+              defaultPage={1}
+              showFirstButton
+              showLastButton
+            />
+          </Stack>
         </TableContainer>
       )}
       {editJob && (

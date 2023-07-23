@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Pagination,
   Paper,
   Stack,
   Table,
@@ -23,17 +24,30 @@ import {
   Typography,
 } from "@mui/material";
 
-import { AuthContext } from "../../../shared/context/auth-context";
 import { useContent } from "../../../shared/hooks/content-hook";
 import UpdateUsersPostForm from "./UpdateUsersPostForm";
 
-const UsersContent = () => {
-  const auth = useContext(AuthContext);
+const UsersContent = ({ user }) => {
   const [openDeleteWarning, setOpenDeleteWarning] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingPostId, setEditingPostId] = useState(null);
   const [postToDelete, setPostToDelete] = useState(null);
-  const { deleteContentPost } = useContent();
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 5;
+  const [noOfPages, setNoOfPages] = useState(
+    Math.ceil(user?.blogPosts?.length / itemsPerPage)
+  );
+  const { deleteContentPost, isDeleting } = useContent();
+
+  useEffect(() => {
+    if (!isDeleting) {
+      const newNumOfPages = Math.ceil(user?.blogPosts?.length / itemsPerPage);
+      setNoOfPages(newNumOfPages);
+      if (page > newNumOfPages) {
+        setPage(newNumOfPages);
+      }
+    }
+  }, [isDeleting, page, user?.blogPosts]);
 
   const deleteWarningHandler = (postId) => {
     setPostToDelete(postId);
@@ -63,7 +77,14 @@ const UsersContent = () => {
     setEditingPostId(null);
   };
 
-  const userHasContent = auth.user?.blogPosts?.length > 0;
+  const userHasContent = user?.blogPosts?.length > 0;
+
+  const indexOfLastPage = page * itemsPerPage;
+  const indexOfFirstPage = indexOfLastPage - itemsPerPage;
+  const currentPageOfPosts = user?.blogPosts?.slice(
+    indexOfFirstPage,
+    indexOfLastPage
+  );
 
   return (
     <>
@@ -76,68 +97,94 @@ const UsersContent = () => {
                 <TableCell>Title</TableCell>
                 <TableCell>Interactions</TableCell>
                 <TableCell>Comments</TableCell>
+                <TableCell>
+                  <Button
+                    component={RouterLink}
+                    to="/content"
+                    variant="outlined"
+                  >
+                    Add Post
+                  </Button>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {auth.user?.blogPosts?.map((post, i) => (
-                <TableRow key={post?._id}>
-                  <TableCell>
-                    <Typography
-                      variant="subtitle2"
-                      color="text.secondary"
-                      sx={{ fontSize: 11 }}
-                    >
-                      {post?.postDate?.split("T")[0]}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{post?.title}</TableCell>
-                  <TableCell>{post?.interactions?.length}</TableCell>
-                  <TableCell>{post?.comments?.length}</TableCell>
-                  <TableCell>
-                    <Stack direction="row" alignItems="center">
-                      <Button
-                        component={RouterLink}
-                        to={`/content/${post?._id}`}
+              {currentPageOfPosts &&
+                currentPageOfPosts?.map((post, i) => (
+                  <TableRow key={post?._id}>
+                    <TableCell>
+                      <Typography
+                        variant="subtitle2"
+                        color="text.secondary"
+                        sx={{ fontSize: 11 }}
                       >
-                        <VisibilityTwoToneIcon />
-                      </Button>
+                        {post?.postDate?.split("T")[0]}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{post?.title}</TableCell>
+                    <TableCell>{post?.interactions?.length}</TableCell>
+                    <TableCell>{post?.comments?.length}</TableCell>
+                    <TableCell>
+                      <Stack direction="row" alignItems="center">
+                        <Button
+                          component={RouterLink}
+                          to={`/content/${post?._id}`}
+                        >
+                          <VisibilityTwoToneIcon />
+                        </Button>
 
-                      <Tooltip title="Edit" placement="top">
-                        <Button onClick={() => toggleEditingMode(post?._id)}>
-                          <EditTwoToneIcon sx={{ color: "#b18912" }} />
-                        </Button>
-                      </Tooltip>
-                      <Dialog
-                        open={openDeleteWarning}
-                        onClose={cancelDeleteHandler}
-                        aria-labelledby="delete-your-post"
-                        aria-describedby="confirm-post-delete"
-                      >
-                        <DialogTitle>Are you sure?</DialogTitle>
-                        <DialogContent>
-                          You are about to delete your post. This can not be
-                          reversed.
-                        </DialogContent>
-                        <DialogActions sx={{}}>
-                          <Button
-                            onClick={() => confirmDeleteHandler(post?._id)}
-                          >
-                            Confirm Delete
+                        <Tooltip title="Edit" placement="top">
+                          <Button onClick={() => toggleEditingMode(post?._id)}>
+                            <EditTwoToneIcon sx={{ color: "#b18912" }} />
                           </Button>
-                          <Button onClick={cancelDeleteHandler}>Cancel</Button>
-                        </DialogActions>
-                      </Dialog>
-                      <Tooltip title="Delete" placement="top">
-                        <Button onClick={() => deleteWarningHandler(post?._id)}>
-                          <DeleteForeverTwoToneIcon color="error" />
-                        </Button>
-                      </Tooltip>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ))}
+                        </Tooltip>
+                        <Dialog
+                          disableScrollLock={true}
+                          open={openDeleteWarning}
+                          onClose={cancelDeleteHandler}
+                          aria-labelledby="delete-your-post"
+                          aria-describedby="confirm-post-delete"
+                        >
+                          <DialogTitle>Are you sure?</DialogTitle>
+                          <DialogContent>
+                            You are about to delete your post. This can not be
+                            reversed.
+                          </DialogContent>
+                          <DialogActions sx={{}}>
+                            <Button
+                              onClick={() => confirmDeleteHandler(post?._id)}
+                            >
+                              Confirm Delete
+                            </Button>
+                            <Button onClick={cancelDeleteHandler}>
+                              Cancel
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                        <Tooltip title="Delete" placement="top">
+                          <Button
+                            onClick={() => deleteWarningHandler(post?._id)}
+                          >
+                            <DeleteForeverTwoToneIcon color="error" />
+                          </Button>
+                        </Tooltip>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
+          <Stack alignItems="end">
+            <Pagination
+              size="small"
+              count={noOfPages}
+              page={page}
+              onChange={(event, val) => setPage(val)}
+              defaultPage={1}
+              showFirstButton
+              showLastButton
+            />
+          </Stack>
         </TableContainer>
       )}
       {!userHasContent && !isEditing && (

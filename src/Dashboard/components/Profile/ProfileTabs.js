@@ -1,10 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import {
-  Box,
-  Tab,
-  Tabs,
-} from '@mui/material';
+import { Box, Tab, Tabs } from "@mui/material";
 
 const menuItems = [
   {
@@ -37,7 +33,13 @@ const ProfileTabs = ({ onTabChange }) => {
     <Box
       sx={{ width: "100%", bgcolor: "background.paper", margin: "1rem auto" }}
     >
-      <Tabs value={value} onChange={handleTabChange} centered>
+      <Tabs
+        variant="scrollable"
+        scrollButtons
+        allowScrollButtonsMobile
+        value={value}
+        onChange={handleTabChange}
+      >
         {menuItems.map((item, i) => (
           <Tab key={i} label={item.renderData} />
         ))}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import BusinessIcon from "@mui/icons-material/Business";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
@@ -23,7 +23,6 @@ import { styled } from "@mui/material/styles";
 
 import NewJob from "../../../jobs/pages/NewJob";
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
-import { AuthContext } from "../../../shared/context/auth-context";
 import { useCreator } from "../../../shared/hooks/creator-hook";
 import { useForm } from "../../../shared/hooks/form-hook";
 import { useJob } from "../../../shared/hooks/jobs-hook";
@@ -53,9 +52,7 @@ const StyledModal = styled(Paper)({
 const date = new Date();
 const today = date.toISOString().split("T")[0];
 
-const Creator = ({ creatorItem, user, isLoading }) => {
-  const auth = useContext(AuthContext);
-  //const { user } = auth;
+const Creator = ({ creatorItem, user, isLoading, refetch }) => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(user && user?.creator === null);
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
@@ -100,24 +97,6 @@ const Creator = ({ creatorItem, user, isLoading }) => {
   const { deleteCreator, updateCreator, isPostLoading, error, clearError } =
     useCreator();
   const { activateTeacherBuffet, isPostLoading: buffetIsLoading } = useJob();
-
-  // const getJobs = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.REACT_APP_JOBS}/user/${user?._id}`
-  //     );
-  //     const data = await response.json();
-  //     return data.jobs;
-  //   } catch (err) {
-  //     console.log(
-  //       "There was an error trying to get applicants count - Msg:" + err
-  //     );
-  //   }
-  // };
-
-  // const { data: jobs, isLoading } = useQuery(["JobApplicants", user?._id], () =>
-  //   getJobs()
-  // );
 
   //if is new or creator property is null, render new form.
   useEffect(() => {
@@ -209,10 +188,17 @@ const Creator = ({ creatorItem, user, isLoading }) => {
     setOpen((prev) => !prev);
   };
 
-  const buffetStartTime = new Date(user?.lastActiveBuffet);
-  const getDifference = date.getTime() - buffetStartTime.getTime();
-  const twentyFourHours = 24 * 60 * 60 * 1000;
-  const getTimeLeft = Math.abs(getDifference - twentyFourHours);
+  let buffetStartTime = new Date(user?.lastActiveBuffet);
+  let getDifference = date.getTime() - buffetStartTime.getTime();
+  let twentyFourHours = 24 * 60 * 60 * 1000;
+  let getTimeLeft = Math.abs(getDifference - twentyFourHours);
+
+  if (getTimeLeft <= 0) {
+    user.lastActiveBuffet = new Date();
+    buffetStartTime = new Date(user.lastActiveBuffet);
+    getDifference = date.getTime() - buffetStartTime.getTime();
+    getTimeLeft = twentyFourHours;
+  }
 
   const jobApplicants = user?.jobs?.map((job) => job?.applicants);
 
@@ -235,7 +221,11 @@ const Creator = ({ creatorItem, user, isLoading }) => {
       case "jobs":
         return (
           user?.jobs && (
-            <CreatorJobsTable isLoading={isLoading} jobs={user?.jobs} />
+            <CreatorJobsTable
+              isLoading={isLoading}
+              jobs={user?.jobs}
+              refetch={refetch}
+            />
           )
         );
       case "credits":
@@ -360,7 +350,7 @@ const Creator = ({ creatorItem, user, isLoading }) => {
 
                   <Stack
                     direction="row"
-                    sx={{ margin: "0.5rem 0 0 1.5rem" }}
+                    sx={{ margin: "0.5rem 0 0 1.5rem", flexWrap: "wrap" }}
                     spacing={4}
                   >
                     <Paper elevation={0}>
@@ -468,7 +458,11 @@ const Creator = ({ creatorItem, user, isLoading }) => {
                         </>
                       )}
 
-                      <Modal open={open} onClose={modalHandler}>
+                      <Modal
+                        open={open}
+                        onClose={modalHandler}
+                        disableScrollLock={true}
+                      >
                         <StyledModal>
                           <Typography variant="h5" color="text.primary">
                             Confirm Buffet Activation
@@ -543,155 +537,3 @@ const Creator = ({ creatorItem, user, isLoading }) => {
 };
 
 export default Creator;
-
-/**
- * <Card sx={{ padding: "1rem 1rem" }}>
-          <form onSubmit={handleCreatorUpdate}>
-            <TextField
-              sx={{ margin: "0 0 0.5rem 0" }}
-              fullWidth
-              name="company"
-              label="Company Name"
-              defaultValue={formState.inputs.company.value}
-              onChange={(event) =>
-                inputHandler(
-                  "company",
-                  event.target.value,
-                  event.target.value !== ""
-                )
-              }
-            />
-            <Grid
-              container
-              alignItems="center"
-              direction="row"
-              sx={{ margin: "0 0 0.5rem 0" }}
-            >
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  name="logoUrl"
-                  label="Company Logo"
-                  defaultValue={formState.inputs.logoUrl.value}
-                  onChange={(event) =>
-                    inputHandler(
-                      "logoUrl",
-                      event.target.value,
-                      event.target.value !== ""
-                    )
-                  }
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <TextField
-                  name="companySize"
-                  id="companySize"
-                  label="Company Size"
-                  defaultValue={formState.inputs.companySize.value}
-                  onChange={(event) =>
-                    inputHandler(
-                      "companySize",
-                      event.target.value,
-                      event.target.value !== ""
-                    )
-                  }
-                />
-              </Grid>
-            </Grid>
-            <FormControl sx={{ width: 200, margin: "0 0.5rem 0.5rem 0" }}>
-              <InputLabel id="location-select">Location</InputLabel>
-              <Select
-                labelId="headquarters"
-                id="headquarters"
-                defaultValue={formState.inputs.headquarters.value}
-                label="headquarters"
-                onChange={(event) =>
-                  inputHandler(
-                    "headquarters",
-                    event.target.value,
-                    event.target.value !== ""
-                  )
-                }
-              >
-                {thaiCities.map((item, i) => (
-                  <MenuItem key={i} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <TextField
-              sx={{ margin: "0 0.5rem 0 0" }}
-              name="established"
-              helperText="year of launch (i.e. 2004)"
-              label="established"
-              defaultValue={formState.inputs.established.value}
-              onChange={(event) =>
-                inputHandler(
-                  "established",
-                  event.target.value,
-                  event.target.value !== ""
-                )
-              }
-            />
-            <TextField
-              name="presence"
-              label="Presence"
-              helperText="separate each location by comma"
-              defaultValue={formState.inputs.presence.value}
-              onChange={(event) =>
-                inputHandler(
-                  "presence",
-                  event.target.value,
-                  event.target.value !== ""
-                )
-              }
-            />
-            <Grid item xs={12} sx={{ margin: "0 0 0.5rem 0" }}>
-              <TextField
-                multiline
-                rows={4}
-                fullWidth
-                name="about"
-                label={`About`}
-                defaultValue={formState.inputs.about.value}
-                onChange={(event) =>
-                  inputHandler(
-                    "about",
-                    event.target.value,
-                    event.target.value !== ""
-                  )
-                }
-              />
-            </Grid>
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained" type="submit">
-                Save
-              </Button>
-              <Button onClick={handleEditing}>Cancel</Button>
-              <Stack
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  flexDirection: "row",
-                  width: "100%",
-                }}
-              >
-                <Button
-                  onClick={() => handleCreatorDelete(user?.creator)}
-                  variant="outlined"
-                  color="warning"
-                >
-                  Delete
-                </Button>
-              </Stack>
-            </Stack>
-          </form>
-        </Card>
- */
