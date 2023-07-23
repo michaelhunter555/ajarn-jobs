@@ -129,12 +129,22 @@ const TeacherSettings = (props) => {
 
   return (
     <Card>
+      {
+        <Typography>
+          <Switch
+            disabled={true}
+            checked={!isTeacher}
+            onChange={handleRoleToggle}
+          />
+          {isTeacher ? "Teacher looking for a job" : "Employer looking to hire"}
+        </Typography>
+      }
       <Typography>
-        <Switch checked={!isTeacher} onChange={handleRoleToggle} />
-        {isTeacher ? "Teacher looking for a job" : "Employer looking to hire"}
-      </Typography>
-      <Typography>
-        <Switch checked={!isHidden} onChange={handleVisibilityToggle} />
+        <Switch
+          disabled={user?.userType === "employer"}
+          checked={!isHidden}
+          onChange={handleVisibilityToggle}
+        />
         {isHidden
           ? "Profile is hidden from employers"
           : "Your profile is public to schools, agencies & recruiters"}

@@ -42,7 +42,6 @@ const JobDetailsPage = () => {
   const userAppliedAlready = auth.user?.applications?.some(
     (userApplications) => userApplications?.jobId?._id === jobId
   );
-  console.log("Applicants", auth.user?.applications);
 
   return (
     <PageContainer>

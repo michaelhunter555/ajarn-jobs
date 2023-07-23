@@ -202,8 +202,6 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
 
   const jobApplicants = user?.jobs?.map((job) => job?.applicants);
 
-  console.log("JOBs", user?.jobs);
-
   //components rendered from tab navigation
   const renderComponent = () => {
     switch (creatorProfileTab) {
@@ -240,8 +238,6 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
         return "nothing here yet";
     }
   };
-
-  console.log("USER IN CREATOR.JS", user);
 
   return (
     <>

@@ -19,24 +19,6 @@ import {
   Typography,
 } from "@mui/material";
 
-// const auth = useContext(AuthContext);
-
-//GET all jobs
-// const userId = auth?.user?._id;
-// const getAppliedUserJobs = async () => {
-//   try {
-//     const response = await fetch(`${process.env.REACT_APP_USERS}/${userId}`);
-//     const data = await response.json();
-//     return data.user;
-//   } catch (err) {
-//     console.log("there was an error in the applications component", err);
-//   }
-// };
-
-// const { data: user, isLoading } = useQuery(["userApplications", userId], () =>
-//   getAppliedUserJobs()
-// );
-
 const Applications = ({ applications, isLoading }) => {
   const [page, setPage] = useState(1);
 

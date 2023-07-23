@@ -111,7 +111,7 @@ const TeacherDashboard = () => {
       throw new Error("There was an error with profile informatin retrievl.");
     }
     const data = await response.json();
-    console.log("This Ran Again: getUserProfile Info");
+
     auth.updateUser(data.user);
     return data.user;
   };
@@ -132,7 +132,7 @@ const TeacherDashboard = () => {
         throw new Error("There was an error with getJobAds");
       }
       const data = await response.json();
-      console.log("getJobAds Ran again on dash visit");
+
       return data.jobs;
     } catch (err) {
       console.log("There was an error getting the job ads - Msg: " + err);
@@ -159,7 +159,6 @@ const TeacherDashboard = () => {
   //get random user card
   useEffect(() => {
     if (userCards && userCards?.length > 0) {
-      console.log("randomize user card ran again on dash");
       const randomUser =
         userCards[Math.floor(Math.random() * userCards?.length)];
       setSelectedCard(randomUser);

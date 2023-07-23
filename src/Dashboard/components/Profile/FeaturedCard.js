@@ -63,17 +63,6 @@ const FeaturedCard = (props) => {
 
   const { data: jobs, isLoading } = useQuery(["featuredJob"], () => getJobs());
 
-  // //to avoid infinite loop, check if there aren't any jobs already.
-  // useEffect(() => {
-  //   if (!jobs || jobs.length === 0) {
-  //     try {
-  //       getAllJobs();
-  //     } catch (err) {
-  //       console.log("ERROR WITH FEATUREDCARD.js:", err);
-  //     }
-  //   }
-  // }, [jobs, getAllJobs]);
-
   //once we have jobs, we can randomly select one for the user
   useEffect(() => {
     if (jobs && jobs.length > 0) {
