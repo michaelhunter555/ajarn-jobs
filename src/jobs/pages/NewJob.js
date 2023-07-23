@@ -21,7 +21,7 @@ import { styled } from "@mui/material/styles";
 
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
-import CustomModal from "../../shared/components/UIElements/CustomModal";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 //import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
@@ -189,10 +189,14 @@ const NewJob = () => {
     }
 
     try {
-      await addJobByUserId(auth.user?._id, newJob, jobCost);
-      if (!error) {
-        setSuccess(true);
-      }
+      await addJobByUserId(auth.user?._id, newJob, jobCost)
+        .then(() => {
+          setSuccess(true);
+        })
+        .catch((err) => {
+          setSuccess(false);
+          console.log(err);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -219,6 +223,7 @@ const NewJob = () => {
         <Skeleton sx={{ height: 500, width: 788 }} variant="rectangular" />
       )}
       <Modal
+        disableScrollLock={true}
         open={success}
         onClose={clearModalHandler}
         aria-labelledby="job-succes-title"
@@ -238,7 +243,7 @@ const NewJob = () => {
           </Typography>
         </BoxContent>
       </Modal>
-      <CustomModal error={error} handleClose={clearError} />
+      <ErrorModal error={error} onClear={clearError} />
       {!isPostLoading && (
         <StyledForm onSubmit={jobSubmitHandler} sx={{ marginBottom: 1 }}>
           <Grid container direction="row">

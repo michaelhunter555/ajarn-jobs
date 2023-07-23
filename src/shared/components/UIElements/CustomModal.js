@@ -31,6 +31,7 @@ const CustomModal = (props) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const { isLoggedIn, credits, buffetIsActive } = auth;
+
   const handleClose = () => {
     props.handleClose();
   };
@@ -38,6 +39,7 @@ const CustomModal = (props) => {
   return (
     <div>
       <Modal
+        disableScrollLock={true}
         open={props.open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"

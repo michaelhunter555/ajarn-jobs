@@ -550,7 +550,7 @@ const TeacherDashboard = () => {
               </>
             )
           )}
-          {auth.user?.userType === TEACHER && (
+          {!homeDashLoadingState && auth.user?.userType === TEACHER && (
             <>
               <ProfileProgress user={auth.user} />
             </>

@@ -49,7 +49,10 @@ export const useJob = () => {
           credits: auth.user.credits - jobCost,
         };
         updateUser(updatedUser);
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
     },
     [sendRequest, updateUser, auth.user, auth.token]
   );

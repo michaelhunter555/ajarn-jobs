@@ -19,6 +19,7 @@ const BoxContent = styled(Paper)({
 const ErrorModal = (props) => {
   return (
     <Modal
+      disableScrollLock={true}
       onClose={props.onClear}
       header="An Error Occurred!"
       open={!!props.error}
