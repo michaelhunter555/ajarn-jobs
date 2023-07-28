@@ -55,6 +55,13 @@ const StyledGridContainer = styled(Grid)({
   },
 });
 
+const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+}));
+
 const ContentPostList = ({ isLoading, filteredContent }) => {
   let noPostsYet;
   if (filteredContent?.length === 0) {
@@ -90,10 +97,10 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
             key={val?._id}
             sx={{ width: "100%", bgcolor: "background.paper" }}
           >
-            <ListItemButton
+            <StyledListItemButton
+              direction="row"
               component={Link}
               to={`/content/${val?._id}`}
-              alignItems="flex-start"
             >
               <ListItemAvatar>
                 <Avatar
@@ -172,7 +179,7 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
                   </Stack>
                 </Stack>
               </Stack>
-            </ListItemButton>
+            </StyledListItemButton>
 
             {i - filteredContent?.length - 1 && (
               <Divider variant="inset" light />

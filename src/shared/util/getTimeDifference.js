@@ -14,7 +14,7 @@ export const getTimeDifference = (creationDate) => {
 
   if (timeDifference < days) {
     return TODAY;
-  } else if (timeDifference > days && timeDifference < 2 * days) {
+  } else if (timeDifference >= days && timeDifference < 2 * days) {
     return YESTERDAY;
   } else if (timeDifference <= 2 * days) {
     return ONE_DAY_AGO;

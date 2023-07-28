@@ -43,7 +43,7 @@ const StyledBoxModal = styled(Paper)({
 const StyledGridItemContent = styled(Grid)(({ theme, dynamic }) => ({
   margin: "0 0 0 0.5rem",
   [theme.breakpoints.down("sm")]: {
-    width: dynamic ? "80vw" : "80vw",
+    width: "80vw",
   },
 }));
 
@@ -62,7 +62,7 @@ const StyledDynamicAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 const StyledBoxContainer = styled(Box)(({ theme, yScroll }) => ({
-  padding: "0 3rem 0 0 ",
+  padding: "0 0.5rem 0 0 ",
   overflowY: "auto",
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {

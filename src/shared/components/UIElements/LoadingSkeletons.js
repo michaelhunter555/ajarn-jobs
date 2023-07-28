@@ -4,6 +4,7 @@ import { Skeleton, styled } from "@mui/material";
 
 const JobAdSkeletonStyles = styled(Skeleton)(({ theme }) => ({
   borderRadius: "15px",
+  width: "100%",
   [theme.breakpoints.down("md")]: {
     width: "100%",
   },

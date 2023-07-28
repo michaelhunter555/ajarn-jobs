@@ -54,7 +54,7 @@ const MainNavigation = (props) => {
 
       <MainHeader navIsScrolled={navIsScrolled}>
         <MainNavigationButtonStyles onClick={openDrawerHandler}>
-          <MenuIcon style={{ fontSize: "2rem" }} />
+          <MenuIcon style={{ fontSize: "2rem", color: "#128cb1" }} />
         </MainNavigationButtonStyles>
         <MainNavTitleStyle>
           <MainNavigationTitleStyle to="/">

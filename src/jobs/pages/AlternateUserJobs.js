@@ -38,7 +38,7 @@ const AlternateUserJobs = () => {
     <PageContainer>
       <Content>
         <Grid container direction="row" spacing={1}>
-          <Grid item xs={12} sm={9}>
+          <Grid item xs={12} sm={9.5}>
             <Stack>
               <Button
                 sx={{ backgroundColor: "rgba(18, 140, 177, 0.04)" }}
@@ -60,7 +60,7 @@ const AlternateUserJobs = () => {
               />
             )}
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={2.5}>
             <FeaturedJobsLists sponsors={jobs} />
           </Grid>
         </Grid>

@@ -410,17 +410,16 @@ const TeacherDashboard = () => {
         spacing={1}
         justifyContent="center"
         sx={{
-          maxWidth: "90%",
+          maxWidth: "100%",
           margin: "0 auto",
         }}
       >
         <Grid item xs={12} md={2}>
           {homeDashLoadingState && (
             <Skeleton
-              sx={{ margin: "0 auto", borderRadius: "6px" }}
+              sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
               variant="rectangular"
               height={310}
-              width={250}
             />
           )}
           {!homeDashLoadingState && (
@@ -441,10 +440,9 @@ const TeacherDashboard = () => {
             <Grid item xs={12} sm={6}>
               {homeDashLoadingState && (
                 <Skeleton
-                  sx={{ margin: "0 auto", borderRadius: "6px" }}
+                  sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
                   variant="rectangular"
                   height={114}
-                  width={374}
                 />
               )}
               {!homeDashLoadingState && (
@@ -463,7 +461,7 @@ const TeacherDashboard = () => {
             <Grid item xs={12} sm={6}>
               {homeDashLoadingState && (
                 <Skeleton
-                  sx={{ margin: "0 auto", borderRadius: "6px" }}
+                  sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
                   variant="rectangular"
                   height={114}
                   width={374}
@@ -514,10 +512,13 @@ const TeacherDashboard = () => {
           {homeDashLoadingState ? (
             <>
               <Skeleton
-                sx={{ margin: "1rem 0.5rem 1rem 1rem", borderRadius: "6px" }}
+                sx={{
+                  margin: "1rem 0.5rem 1rem 1rem",
+                  borderRadius: "6px",
+                  width: "100%",
+                }}
                 variant="rectangular"
                 height={372}
-                width={343}
               />
             </>
           ) : auth.user?.userType === "teacher" ? (

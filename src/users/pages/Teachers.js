@@ -34,7 +34,7 @@ const customThemeForTeachers = createTheme({
 });
 
 const StyledGridContainer = styled(Grid)(({ theme }) => ({
-  width: "90%",
+  width: "100%",
   margin: "0 0 2rem 0",
   [theme.breakpoints.down("sm")]: {
     width: "100%",
@@ -115,8 +115,6 @@ const Teachers = () => {
       );
     });
 
-  console.log("BUFFET IS BLURRED:", blur);
-
   return (
     <PageContainer>
       {!isLoading && blur && (
@@ -133,7 +131,7 @@ const Teachers = () => {
         <ErrorModal onClear={clearError} error={error} />
         <ThemeProvider theme={customThemeForTeachers}>
           <StyledGridContainer container spacing={3}>
-            <StyledGridItem xs={12} xl={3}>
+            <StyledGridItem xs={12} md={3}>
               {isLoading && (
                 <Skeleton
                   sx={{ height: 356, width: 332 }}
@@ -145,7 +143,7 @@ const Teachers = () => {
               )}
               {!isLoading && <TeflBanner />}
             </StyledGridItem>
-            <StyledGridItem xs={12} xl={9} sx={{ margin: "1rem auto" }}>
+            <StyledGridItem xs={12} md={9} sx={{ margin: "1rem auto" }}>
               <Grid container spacing={2}>
                 <TeacherList
                   teachers={filteredTeachers}

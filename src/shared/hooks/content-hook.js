@@ -204,7 +204,6 @@ export const useContent = () => {
         };
         updateUser(deletedPost);
 
-        console.log("DELETE INITIATED");
         const response = await sendRequest(
           `${process.env.REACT_APP_BLOG}/post/${postId}`,
           "DELETE",
@@ -220,10 +219,9 @@ export const useContent = () => {
           });
         }
         setIsDeleting(false);
-        console.log("DELETE COMPLETE");
       } catch (err) {
         setIsDeleting(false);
-        console.log("DELETE FAILED");
+
         updateUser({
           ...auth.user,
           blogPosts: auth.user?.blogPosts,

@@ -26,7 +26,7 @@ import {
   yearsOfExperience,
 } from "../../../shared/util/ThaiData";
 
-const uniRegex = /^[a-zA-Z]+(\.[a-zA-Z]+)*\.(edu|ac\.uk|co\.uk|edu\.uk)$/;
+//const uniRegex = /^[a-zA-Z]+(\.[a-zA-Z]+)*\.(edu|ac\.uk|co\.uk|edu\.uk)$/;
 
 const TeacherSettings = (props) => {
   const [isTeacher, setIsTeacher] = useState(props.isTeacher);

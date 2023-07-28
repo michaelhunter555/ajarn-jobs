@@ -23,7 +23,7 @@ import FeaturedJobsLists from "../components/FeaturedJobsLists";
 import JobFilters from "../components/JobFilters";
 
 const StyledUserJobsDiv = styled("div")(({ theme }) => ({
-  maxWidth: "85%",
+  maxWidth: "100%",
   margin: "0 auto 3rem",
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",

@@ -25,7 +25,7 @@ const JobDataTable = (props) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 600 }} size="small">
+      <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell

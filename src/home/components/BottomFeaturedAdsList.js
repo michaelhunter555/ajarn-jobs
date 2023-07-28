@@ -30,7 +30,7 @@ const BottomFeaturedAdsList = (props) => {
     <StyledList>
       <RiAdvertisementLine style={{ color: "gray" }} size={20} />
       {isLoading &&
-        Array.from(new Array(3)).map((_, i) => (
+        Array.from(new Array(4)).map((_, i) => (
           <ListItem
             key={i}
             sx={{
@@ -54,7 +54,7 @@ const BottomFeaturedAdsList = (props) => {
           </ListItem>
         ))}
       {footerJobs &&
-        footerJobs?.slice(0, 3)?.map((job, i) => (
+        footerJobs?.slice(0, 4)?.map((job, i) => (
           <Link
             sx={{ textDecoration: "none" }}
             component={RouterLink}

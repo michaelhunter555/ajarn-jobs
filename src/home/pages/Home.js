@@ -23,7 +23,7 @@ const StyledGridContainer = styled("div")(({ theme }) => ({
   display: "grid",
   justifyContent: "center",
   alignItems: "start",
-  gridTemplateColumns: "20% 50% 20%",
+  gridTemplateColumns: "20% 60% 20%",
   gridAutoRows: "auto",
   margin: "0rem 0 2rem 0",
   gap: "15px",
@@ -243,7 +243,7 @@ const Home = () => {
           {isLoading && (
             <JobAdSkeleton
               num={1}
-              sx={{ height: 420, width: 855 }}
+              sx={{ height: 420, width: "100%" }}
               variant="rectangular"
             />
           )}

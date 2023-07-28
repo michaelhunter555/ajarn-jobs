@@ -89,6 +89,7 @@ const StyledGridContainer = styled(Grid)(({ theme }) => ({
 
 const StyledLoadingSkeleton = styled(Skeleton)(({ theme }) => ({
   borderRadius: "15px",
+  width: "100%",
   [theme.breakpoints.down("md")]: {
     width: "100%",
   },
@@ -373,7 +374,6 @@ const JobDetails = (props) => {
                   borderRadius: "15px",
                   marginTop: 10,
                   height: 260,
-                  width: 692,
                 }}
               />
             )}
@@ -384,7 +384,6 @@ const JobDetails = (props) => {
                   borderRadius: "15px",
                   marginTop: 10,
                   height: 260,
-                  width: 692,
                 }}
               />
             )}
@@ -451,7 +450,6 @@ const JobDetails = (props) => {
                   borderRadius: "15px",
                   marginTop: 4,
                   height: 177,
-                  width: 692,
                 }}
               />
             )}
@@ -462,7 +460,6 @@ const JobDetails = (props) => {
                   borderRadius: "15px",
                   marginTop: 4,
                   height: 177,
-                  width: 692,
                 }}
               />
             )}
@@ -509,7 +506,6 @@ const JobDetails = (props) => {
                   borderRadius: "15px",
                   marginTop: 4,
                   height: 260,
-                  width: 692,
                 }}
               />
             )}
@@ -520,7 +516,6 @@ const JobDetails = (props) => {
                   borderRadius: "15px",
                   marginTop: 4,
                   height: 260,
-                  width: 692,
                 }}
               />
             )}
@@ -538,7 +533,6 @@ const JobDetails = (props) => {
                   borderRadius: "15px",
                   marginTop: 1,
                   height: 177,
-                  width: 692,
                 }}
               />
             )}
@@ -549,7 +543,6 @@ const JobDetails = (props) => {
                   borderRadius: "15px",
                   marginTop: 1,
                   height: 177,
-                  width: 692,
                 }}
               />
             )}

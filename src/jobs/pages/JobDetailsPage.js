@@ -17,7 +17,7 @@ import JobDetails from "../components/JobDetails";
 const JobDetailsPage = () => {
   const auth = useContext(AuthContext);
   const jobId = useParams().jid;
-  const { getJobById, error, clearError } = useJob();
+  const { error, clearError } = useJob();
   // useEffect(() => {
   //   getJobById(jobId);
   // });

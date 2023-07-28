@@ -1,14 +1,6 @@
 import React from "react";
 
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme, featured }) => ({
@@ -39,14 +31,14 @@ const StyledCardContent = styled(CardContent)({
   flex: "1 0 auto",
 });
 
-const StyedCardActions = styled(CardActions)(({ theme }) => ({
-  display: "flex",
-  alignItems: "flex-end",
-  [theme.breakpoints.down("sm")]: {
-    display: "none",
-    background: theme.palette.background.paper,
-  },
-}));
+// const StyedCardActions = styled(CardActions)(({ theme }) => ({
+//   display: "flex",
+//   alignItems: "flex-end",
+//   [theme.breakpoints.down("sm")]: {
+//     display: "none",
+//     background: theme.palette.background.paper,
+//   },
+// }));
 
 const BottomFeaturedAds = (props) => {
   return (
@@ -82,16 +74,6 @@ const BottomFeaturedAds = (props) => {
             {props?.salary} - {props?.hours}
           </Typography>
         </StyledCardContent>
-        <StyedCardActions>
-          <Button
-            sx={{
-              borderRadius: "18px",
-            }}
-            variant="outlined"
-          >
-            view
-          </Button>
-        </StyedCardActions>
       </StyledBox>
     </StyledCard>
   );

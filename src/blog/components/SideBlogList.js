@@ -59,6 +59,13 @@ const StyledGridContainer = styled(Grid)({
   },
 });
 
+const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+}));
+
 const StyledLink = styled(Link)(({ theme }) => ({
   color: theme.palette.text.primary,
   textDecoration: "none",
@@ -112,7 +119,7 @@ const SideBlogList = ({ contentPosts }) => {
               sx={{ width: "100%", bgcolor: "background.paper" }}
             >
               <StyledLink component={RouterLink} to={`/content/${val?._id}`}>
-                <ListItemButton alignItems="flex-start">
+                <StyledListItemButton direction="row" alignItems="flex-start">
                   <ListItemAvatar>
                     <Avatar
                       alt={val?.title}
@@ -191,7 +198,7 @@ const SideBlogList = ({ contentPosts }) => {
                       </Stack>
                     </Stack>
                   </Stack>
-                </ListItemButton>
+                </StyledListItemButton>
               </StyledLink>
 
               {i - blogList?.length - 1 && <Divider variant="inset" light />}

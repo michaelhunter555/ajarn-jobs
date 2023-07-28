@@ -65,8 +65,6 @@ const UsersContent = ({ user }) => {
     setOpenDeleteWarning(false);
   };
 
-  console.log("POST TO DELETE", postToDelete);
-
   const toggleEditingMode = (id) => {
     setIsEditing(true);
     setEditingPostId(id);
