@@ -68,7 +68,6 @@ const JobApplicantsTable = ({ applicants, isLoading }) => {
 
   const hasApplicants =
     applicants && applicants?.some((apps) => apps?.length > 0);
-  console.log("PROPS APPLICANTS", applicants && applicants?.length > 0);
 
   return (
     <>

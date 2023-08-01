@@ -51,7 +51,7 @@ const JobAdGridContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const StyledGridContainerForProfile = styled(Grid)(({ theme }) => ({
-  maxWidth: "90%",
+  maxWidth: "100%",
   margin: "0 auto",
   [theme.breakpoints.down("md")]: {},
   [theme.breakpoints.down("sm")]: {
@@ -427,7 +427,7 @@ const TeacherDashboard = () => {
           )}
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={7}>
           <JobAdGridContainer
             item
             sx={{

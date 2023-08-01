@@ -3,6 +3,7 @@ import "animate.css";
 import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 import sanitizeHtml from "sanitize-html";
 
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -22,6 +23,7 @@ import {
   Paper,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -98,6 +100,7 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
   const [selectedJob, setSelectedJob] = useState(
     jobs?.length > 0 ? jobs[0] : null
   );
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const selectJobHandler = (job) => {
     setSelectedJob(job);
@@ -135,8 +138,188 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                   ?.map((job, i) => (
                     <React.Fragment key={job?._id}>
                       <List>
+                        {isMobile && (
+                          <ScrollLink to="jobsTop" duration={500} smooth={true}>
+                            <ListItemButton
+                              sx={{ paddingTop: 0, paddingBottom: 0 }}
+                              component={Link}
+                              key={job?._id}
+                              onClick={() => selectJobHandler(job)}
+                            >
+                              <ListItemAvatar>
+                                <Avatar
+                                  src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                                  alt={`${job?.name}-${job?.title}`}
+                                />
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={
+                                  <>
+                                    <Stack
+                                      direction="row"
+                                      alignItems="flex-end"
+                                      spacing={1}
+                                    >
+                                      <StyledChip
+                                        clickable
+                                        icon={
+                                          <LocationOnOutlinedIcon
+                                            style={{ color: "#47acbb" }}
+                                          />
+                                        }
+                                        sx={{
+                                          fontSize: 11,
+                                        }}
+                                        size="small"
+                                        label={job?.location}
+                                      />
+                                      <Typography
+                                        variant="subtitle2"
+                                        component="span"
+                                        sx={{ fontSize: 12 }}
+                                      >
+                                        {getTimeDifference(job?.datePosted)}
+                                      </Typography>
+                                    </Stack>
+                                  </>
+                                }
+                                secondary={
+                                  <Stack component="span" direction="column">
+                                    <Typography
+                                      variant="body2"
+                                      component="span"
+                                      color="text.primary"
+                                      sx={{ fontSize: 12, fontWeight: 600 }}
+                                    >
+                                      {job?.title}
+                                    </Typography>
+                                    <Typography
+                                      variant="body2"
+                                      component="span"
+                                      color="text.primary"
+                                      sx={{ fontSize: 12 }}
+                                    >
+                                      {job?.hours}
+                                      {" — " + job?.salary}
+                                    </Typography>
+
+                                    <Typography
+                                      variant="subtitle2"
+                                      color="text.secondary"
+                                      component="span"
+                                      sx={{ fontSize: 12 }}
+                                    >
+                                      {sanitizeHtml(job?.description, {
+                                        allowedTags: [],
+                                        allowedAttributes: {},
+                                      })?.substring(0, 40) + "..."}
+                                    </Typography>
+                                  </Stack>
+                                }
+                              />
+                            </ListItemButton>
+                          </ScrollLink>
+                        )}
+                        {!isMobile && (
+                          <ListItemButton
+                            sx={{ paddingTop: 0, paddingBottom: 0 }}
+                            component={Link}
+                            key={job?._id}
+                            onClick={() => selectJobHandler(job)}
+                          >
+                            <ListItemAvatar>
+                              <Avatar
+                                src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                                alt={`${job?.name}-${job?.title}`}
+                              />
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={
+                                <>
+                                  <Stack
+                                    direction="row"
+                                    alignItems="flex-end"
+                                    spacing={1}
+                                  >
+                                    <StyledChip
+                                      clickable
+                                      icon={
+                                        <LocationOnOutlinedIcon
+                                          style={{ color: "#47acbb" }}
+                                        />
+                                      }
+                                      sx={{
+                                        fontSize: 11,
+                                      }}
+                                      size="small"
+                                      label={job?.location}
+                                    />
+                                    <Typography
+                                      variant="subtitle2"
+                                      component="span"
+                                      sx={{ fontSize: 12 }}
+                                    >
+                                      {getTimeDifference(job?.datePosted)}
+                                    </Typography>
+                                  </Stack>
+                                </>
+                              }
+                              secondary={
+                                <Stack component="span" direction="column">
+                                  <Typography
+                                    variant="body2"
+                                    component="span"
+                                    color="text.primary"
+                                    sx={{ fontSize: 12, fontWeight: 600 }}
+                                  >
+                                    {job?.title}
+                                  </Typography>
+                                  <Typography
+                                    variant="body2"
+                                    component="span"
+                                    color="text.primary"
+                                    sx={{ fontSize: 12 }}
+                                  >
+                                    {job?.hours}
+                                    {" — " + job?.salary}
+                                  </Typography>
+
+                                  <Typography
+                                    variant="subtitle2"
+                                    color="text.secondary"
+                                    component="span"
+                                    sx={{ fontSize: 12 }}
+                                  >
+                                    {sanitizeHtml(job?.description, {
+                                      allowedTags: [],
+                                      allowedAttributes: {},
+                                    })?.substring(0, 40) + "..."}
+                                  </Typography>
+                                </Stack>
+                              }
+                            />
+                          </ListItemButton>
+                        )}
+                        {i < jobs?.length - 1 && <Divider light />}
+                      </List>
+                    </React.Fragment>
+                  ))}
+
+              {/**TEMP SPLIT - DO NOT REMOVE */}
+
+              {!featured &&
+                jobs?.map((job, i) => (
+                  <React.Fragment key={job?._id}>
+                    <List>
+                      {!isMobile && (
                         <ListItemButton
-                          sx={{ paddingTop: 0, paddingBottom: 0 }}
+                          sx={{
+                            paddingTop: 0,
+                            paddingBottom: 0,
+                            backgroundColor:
+                              job?.jobType === "featured" &&
+                              "rgba(198, 226, 234, 0.15)",
+                          }}
                           component={Link}
                           key={job?._id}
                           onClick={() => selectJobHandler(job)}
@@ -163,7 +346,7 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                                       />
                                     }
                                     sx={{
-                                      fontSize: 11,
+                                      fontSize: 14,
                                     }}
                                     size="small"
                                     label={job?.location}
@@ -171,10 +354,23 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                                   <Typography
                                     variant="subtitle2"
                                     component="span"
-                                    sx={{ fontSize: 12 }}
+                                    sx={{ fontSize: 14 }}
                                   >
                                     {getTimeDifference(job?.datePosted)}
                                   </Typography>
+                                  {job?.jobType === "featured" && (
+                                    <Typography
+                                      sx={{
+                                        backgroundColor: "#edfdff",
+                                        border: "1px solid #a2d5dd",
+                                        borderRadius: "6px",
+                                        fontSize: 11,
+                                        padding: "0 0.5rem",
+                                      }}
+                                    >
+                                      Featured
+                                    </Typography>
+                                  )}
                                 </Stack>
                               </>
                             }
@@ -184,7 +380,7 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                                   variant="body2"
                                   component="span"
                                   color="text.primary"
-                                  sx={{ fontSize: 12, fontWeight: 600 }}
+                                  sx={{ fontSize: 14, fontWeight: 600 }}
                                 >
                                   {job?.title}
                                 </Typography>
@@ -192,7 +388,7 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                                   variant="body2"
                                   component="span"
                                   color="text.primary"
-                                  sx={{ fontSize: 12 }}
+                                  sx={{ fontSize: 14 }}
                                 >
                                   {job?.hours}
                                   {" — " + job?.salary}
@@ -202,7 +398,7 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                                   variant="subtitle2"
                                   color="text.secondary"
                                   component="span"
-                                  sx={{ fontSize: 12 }}
+                                  sx={{ fontSize: 14 }}
                                 >
                                   {sanitizeHtml(job?.description, {
                                     allowedTags: [],
@@ -213,114 +409,108 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                             }
                           />
                         </ListItemButton>
-                        {i < jobs?.length - 1 && <Divider light />}
-                      </List>
-                    </React.Fragment>
-                  ))}
-
-              {/**TEMP SPLIT - DO NOT REMOVE */}
-
-              {!featured &&
-                jobs?.map((job, i) => (
-                  <React.Fragment key={job?._id}>
-                    <List>
-                      <ListItemButton
-                        sx={{
-                          paddingTop: 0,
-                          paddingBottom: 0,
-                          backgroundColor:
-                            job?.jobType === "featured" &&
-                            "rgba(198, 226, 234, 0.15)",
-                        }}
-                        component={Link}
-                        key={job?._id}
-                        onClick={() => selectJobHandler(job)}
-                      >
-                        <ListItemAvatar>
-                          <Avatar
-                            src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
-                            alt={`${job?.name}-${job?.title}`}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={
-                            <>
-                              <Stack
-                                direction="row"
-                                alignItems="flex-end"
-                                spacing={1}
-                              >
-                                <StyledChip
-                                  clickable
-                                  icon={
-                                    <LocationOnOutlinedIcon
-                                      style={{ color: "#47acbb" }}
-                                    />
-                                  }
-                                  sx={{
-                                    fontSize: 14,
-                                  }}
-                                  size="small"
-                                  label={job?.location}
-                                />
-                                <Typography
-                                  variant="subtitle2"
-                                  component="span"
-                                  sx={{ fontSize: 14 }}
-                                >
-                                  {getTimeDifference(job?.datePosted)}
-                                </Typography>
-                                {job?.jobType === "featured" && (
-                                  <Typography
-                                    sx={{
-                                      backgroundColor: "#edfdff",
-                                      border: "1px solid #a2d5dd",
-                                      borderRadius: "6px",
-                                      fontSize: 11,
-                                      padding: "0 0.5rem",
-                                    }}
+                      )}
+                      {isMobile && (
+                        <ScrollLink to="dynaJobs">
+                          <ListItemButton
+                            sx={{
+                              paddingTop: 0,
+                              paddingBottom: 0,
+                              backgroundColor:
+                                job?.jobType === "featured" &&
+                                "rgba(198, 226, 234, 0.15)",
+                            }}
+                            component={Link}
+                            key={job?._id}
+                            onClick={() => selectJobHandler(job)}
+                          >
+                            <ListItemAvatar>
+                              <Avatar
+                                src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                                alt={`${job?.name}-${job?.title}`}
+                              />
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={
+                                <>
+                                  <Stack
+                                    direction="row"
+                                    alignItems="flex-end"
+                                    spacing={1}
                                   >
-                                    Featured
+                                    <StyledChip
+                                      clickable
+                                      icon={
+                                        <LocationOnOutlinedIcon
+                                          style={{ color: "#47acbb" }}
+                                        />
+                                      }
+                                      sx={{
+                                        fontSize: 14,
+                                      }}
+                                      size="small"
+                                      label={job?.location}
+                                    />
+                                    <Typography
+                                      variant="subtitle2"
+                                      component="span"
+                                      sx={{ fontSize: 14 }}
+                                    >
+                                      {getTimeDifference(job?.datePosted)}
+                                    </Typography>
+                                    {job?.jobType === "featured" && (
+                                      <Typography
+                                        sx={{
+                                          backgroundColor: "#edfdff",
+                                          border: "1px solid #a2d5dd",
+                                          borderRadius: "6px",
+                                          fontSize: 11,
+                                          padding: "0 0.5rem",
+                                        }}
+                                      >
+                                        Featured
+                                      </Typography>
+                                    )}
+                                  </Stack>
+                                </>
+                              }
+                              secondary={
+                                <Stack component="span" direction="column">
+                                  <Typography
+                                    variant="body2"
+                                    component="span"
+                                    color="text.primary"
+                                    sx={{ fontSize: 14, fontWeight: 600 }}
+                                  >
+                                    {job?.title}
                                   </Typography>
-                                )}
-                              </Stack>
-                            </>
-                          }
-                          secondary={
-                            <Stack component="span" direction="column">
-                              <Typography
-                                variant="body2"
-                                component="span"
-                                color="text.primary"
-                                sx={{ fontSize: 14, fontWeight: 600 }}
-                              >
-                                {job?.title}
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                component="span"
-                                color="text.primary"
-                                sx={{ fontSize: 14 }}
-                              >
-                                {job?.hours}
-                                {" — " + job?.salary}
-                              </Typography>
+                                  <Typography
+                                    variant="body2"
+                                    component="span"
+                                    color="text.primary"
+                                    sx={{ fontSize: 14 }}
+                                  >
+                                    {job?.hours}
+                                    {" — " + job?.salary}
+                                  </Typography>
 
-                              <Typography
-                                variant="subtitle2"
-                                color="text.secondary"
-                                component="span"
-                                sx={{ fontSize: 14 }}
-                              >
-                                {sanitizeHtml(job?.description, {
-                                  allowedTags: [],
-                                  allowedAttributes: {},
-                                })?.substring(0, 40) + "..."}
-                              </Typography>
-                            </Stack>
-                          }
-                        />
-                      </ListItemButton>
+                                  <Typography
+                                    variant="subtitle2"
+                                    color="text.secondary"
+                                    component="span"
+                                    sx={{ fontSize: 14 }}
+                                  >
+                                    {sanitizeHtml(job?.description, {
+                                      allowedTags: [],
+                                      allowedAttributes: {},
+                                    })?.substring(0, 40) + "..."}
+                                  </Typography>
+                                </Stack>
+                              }
+                            />
+                          </ListItemButton>
+                        </ScrollLink>
+                      )}
                       {i < jobs?.length - 1 && <Divider light />}
                     </List>
                   </React.Fragment>

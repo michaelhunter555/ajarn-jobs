@@ -28,6 +28,7 @@ import {
   USE_CREDITS,
 } from "./shared/context/authActions";
 import { authReducer, initialState } from "./shared/context/authReducer";
+import ScrollToTop from "./shared/util/ScrollToTop";
 import Login from "./users/pages/Auth";
 
 //Lazily loaded components
@@ -187,6 +188,7 @@ function App() {
         }}
       >
         <Router>
+          <ScrollToTop />
           <MainNavigation />
           <Suspense
             fallback={

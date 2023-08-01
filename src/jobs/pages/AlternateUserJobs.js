@@ -37,7 +37,7 @@ const AlternateUserJobs = () => {
   return (
     <PageContainer>
       <Content>
-        <Grid container direction="row" spacing={1}>
+        <Grid container direction="row" spacing={1} id="dynaJobs">
           <Grid item xs={12} sm={9.5}>
             <Stack>
               <Button

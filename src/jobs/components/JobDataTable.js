@@ -48,23 +48,40 @@ const JobDataTable = (props) => {
               }}
             >
               {auth.isLoggedIn && (
-                <Button
+                // <Button
+                //   sx={{ margin: "0 auto" }}
+                //   onClick={props.modal}
+                //   variant="contained"
+                // >
+                //   Apply Now
+                // </Button>
+                <Chip
+                  color="primary"
+                  clickable={true}
+                  component={Button}
                   sx={{ margin: "0 auto" }}
                   onClick={props.modal}
-                  variant="contained"
-                >
-                  Apply Now
-                </Button>
+                  label="Apply Now"
+                />
               )}
               {!auth.isLoggedIn && (
-                <Button
+                <Chip
+                  color="primary"
+                  clickable={true}
                   component={Link}
                   sx={{ margin: "0 auto" }}
                   to="/auth"
-                  variant="contained"
-                >
-                  Login/Sign-up
-                </Button>
+                  label="Login/Sign-up"
+                  variant="outlined"
+                />
+                // <Button
+                //   component={Link}
+                //   sx={{ margin: "0 auto" }}
+                //   to="/auth"
+                //   variant="contained"
+                // >
+                //   Login/Sign-up
+                // </Button>
               )}
             </TableCell>
           </TableRow>

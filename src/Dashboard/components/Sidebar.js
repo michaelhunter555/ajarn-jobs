@@ -19,6 +19,7 @@ import {
   Paper,
   Popper,
   Stack,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -123,6 +124,14 @@ const Sidebar = ({ onMenuItemClick }) => {
 
   return (
     <VerticalSideBar elevated="true">
+      <Stack alignItems="center">
+        <Typography
+          sx={{ fontWeight: 600, textDecoration: "underline" }}
+          color="text.secondary"
+        >
+          Menu
+        </Typography>
+      </Stack>
       <List>
         {filteredSidebar.map((item, i) => (
           <React.Fragment key={i}>

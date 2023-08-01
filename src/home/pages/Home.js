@@ -1,23 +1,25 @@
-import React from "react";
+import React from 'react';
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Button } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { useQuery } from "@tanstack/react-query";
+import { Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { useQuery } from '@tanstack/react-query';
 
-import Footer from "../../shared/components/UIElements/Footer";
-import JobAd from "../../shared/components/UIElements/JobAd";
-import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeletons";
+import Footer from '../../shared/components/UIElements/Footer';
+import JobAd from '../../shared/components/UIElements/JobAd';
+import {
+  JobAdSkeleton,
+} from '../../shared/components/UIElements/LoadingSkeletons';
 //import { useHttpClient } from "../../shared/hooks/http-hook";
-import BottomFeatured from "../components/BottomFeatured";
-import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
-import FeaturedContentList from "../components/FeaturedContentList";
-import JobContent from "../components/JobContent";
-import RecentJobs from "../components/RecentJobs";
-import SiteFeatures from "../components/SiteFeatures";
-import Tefl from "../components/Tefl";
-import UrgentJobs from "../components/UrgentJobs";
+import BottomFeatured from '../components/BottomFeatured';
+import BottomFeaturedAdsList from '../components/BottomFeaturedAdsList';
+import FeaturedContentList from '../components/FeaturedContentList';
+import JobContent from '../components/JobContent';
+import RecentJobs from '../components/RecentJobs';
+import SiteFeatures from '../components/SiteFeatures';
+import Tefl from '../components/Tefl';
+import UrgentJobs from '../components/UrgentJobs';
 
 const StyledGridContainer = styled("div")(({ theme }) => ({
   display: "grid",
@@ -187,7 +189,7 @@ const Home = () => {
           )}
         </StyledTeflWrapper>
 
-        <StyledHomeFeaturedTop>
+        <StyledHomeFeaturedTop id="jobsTop">
           {isLoading && (
             <JobAdSkeleton
               sx={{
