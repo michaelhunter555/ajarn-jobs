@@ -20,9 +20,17 @@ export const useCreator = () => {
           { "Content-Type": "application/json" }
         );
 
+        if (!response.ok) {
+          updateUser({
+            ...user,
+            creator: user?.creator,
+          });
+        }
+
         const updatedCreator = {
           ...user,
-          creator: response.user.creator,
+          //optimistic update*
+          creator: creatorItem,
         };
         updateUser(updatedCreator);
       } catch (err) {}

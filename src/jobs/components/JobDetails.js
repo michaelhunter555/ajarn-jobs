@@ -412,15 +412,25 @@ const JobDetails = (props) => {
                     <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
                       {jobInformation?.map(
                         ({ variant, component, icon, text }, i) => (
-                          <Typography
-                            key={i}
-                            color="text.secondary"
-                            variant={variant}
-                            component={component}
-                          >
-                            {icon && <>{icon}</>}
-                            {text}
-                          </Typography>
+                          <Stack key={i} direction="row" alignItems="center">
+                            <Box>
+                              <Typography
+                                color="text.secondary"
+                                variant={variant}
+                                component={component}
+                              >
+                                {icon && <>{icon}</>}
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <Typography
+                                color="text.secondary"
+                                variant={variant}
+                              >
+                                {text}
+                              </Typography>
+                            </Box>
+                          </Stack>
                         )
                       )}
                       <Divider flexItem sx={{ margin: "0.5rem 0" }} />

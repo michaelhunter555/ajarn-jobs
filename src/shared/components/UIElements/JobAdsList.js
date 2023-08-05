@@ -47,6 +47,17 @@ const StyledChip = styled(Chip)(({ theme, featured }) => ({
   backgroundColor: featured ? "#f7f1d0" : "",
 }));
 
+const StyledStack = styled(Stack)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: theme.spacing(1),
+  marginBottom: "0.5rem",
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+  },
+}));
+
 const JobAdsList = ({ job, company }) => {
   return (
     <>
@@ -95,17 +106,7 @@ const JobAdsList = ({ job, company }) => {
                             />
                           )}
                         </Typography>
-                        <Typography
-                          gutterBottom
-                          variant="subtitle2"
-                          color="text.secondary"
-                          component="div"
-                          sx={{
-                            display: "flex",
-                            gap: "5px",
-                            alignItems: "center",
-                          }}
-                        >
+                        <StyledStack>
                           {company && (
                             <Chip
                               label={school?.creator?.company}
@@ -117,8 +118,13 @@ const JobAdsList = ({ job, company }) => {
                               }}
                             />
                           )}
-                          Listed • {school?.datePosted?.split("T")[0]}
-                        </Typography>
+                          <Typography
+                            variant="subtitle2"
+                            color="text.secondary"
+                          >
+                            Listed • {school?.datePosted?.split("T")[0]}
+                          </Typography>
+                        </StyledStack>
                       </Stack>
                       <StyledChipDiv variant="body2" component="div">
                         <StyledChip

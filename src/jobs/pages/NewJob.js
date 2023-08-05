@@ -47,12 +47,13 @@ const styledRichJobText = {
 
 const StyledForm = styled("form")({
   listStyle: "none",
-  margin: "1rem auto",
-  padding: "0.5rem",
+  margin: "1.5rem auto",
+  padding: "1rem",
   width: "90%",
   maxWidth: "40rem",
   borderRadius: "6px",
   background: "white",
+  border: "2px solid #bdbdbd",
 });
 
 const BoxContent = styled(Paper)({
@@ -247,8 +248,19 @@ const NewJob = () => {
       {!isPostLoading && (
         <StyledForm onSubmit={jobSubmitHandler} sx={{ marginBottom: 1 }}>
           <Grid container direction="row">
-            Total: {jobCost}
-            <Grid item xs={12}>
+            <Typography variant="subtitle2" color="text.secondary">
+              Total Cost: {jobCost} - Credits
+            </Typography>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "start",
+                gap: "5px",
+              }}
+            >
               <FormLabel>Hours:</FormLabel>
               <input
                 id="hours-fullTime"
@@ -258,7 +270,9 @@ const NewJob = () => {
                 checked={isFullTime}
                 onChange={jobIsFullTimeHandler}
               />{" "}
-              Full-Time
+              <Typography variant="subtitle2" color="text.secondary">
+                Full-Time
+              </Typography>
               <input
                 id="hours-partTime"
                 type="radio"
@@ -267,9 +281,21 @@ const NewJob = () => {
                 checked={!isFullTime}
                 onChange={jobIsPartTimeHandler}
               />{" "}
-              Part-Time
+              <Typography variant="subtitle2" color="text.secondary">
+                Part-Time
+              </Typography>
             </Grid>
-            <Grid item xs={12} sx={{ margin: "0.5rem 0" }}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                margin: "0.5rem 0",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "start",
+                gap: "5px",
+              }}
+            >
               <FormLabel>Job Type:</FormLabel>
               <input
                 id="basic"
@@ -279,7 +305,9 @@ const NewJob = () => {
                 checked={jobIsBasic}
                 onChange={basicJobTypeHandler}
               />{" "}
-              Basic (default)
+              <Typography variant="subtitle2" color="text.secondary">
+                Basic (default)
+              </Typography>
               <input
                 id="featured"
                 type="radio"
@@ -288,9 +316,20 @@ const NewJob = () => {
                 checked={!jobIsBasic}
                 onChange={featuredJobTypeHandler}
               />{" "}
-              Featured (+2 credits)
+              <Typography variant="subtitle2" color="text.secondary">
+                Featured (+2 credits)
+              </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "start",
+                gap: "5px",
+              }}
+            >
               <FormLabel>Work Permit</FormLabel>
               <input
                 id="workPermit"
@@ -300,7 +339,9 @@ const NewJob = () => {
                 checked={workPermitOffered}
                 onChange={workPermitHandler}
               />{" "}
-              Yes
+              <Typography variant="subtitle2" color="text.secondary">
+                Yes
+              </Typography>
               <input
                 id="workPermit"
                 type="radio"
@@ -309,7 +350,9 @@ const NewJob = () => {
                 checked={!workPermitOffered}
                 onChange={workPermitHandler}
               />{" "}
-              No
+              <Typography variant="subtitle2" color="text.secondary">
+                No
+              </Typography>
             </Grid>
             <Grid item xs={12}>
               <Input

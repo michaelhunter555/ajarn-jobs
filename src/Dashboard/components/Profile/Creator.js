@@ -161,7 +161,11 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
       about: formState.inputs.about.value,
     };
     try {
-      updateCreator(user?._id, creatorItem);
+      updateCreator(user?._id, creatorItem)
+        .then(() => {
+          refetch();
+        })
+        .catch((err) => console.log(err));
     } catch (err) {
       console.log(err);
     }
@@ -188,15 +192,17 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
     setOpen((prev) => !prev);
   };
 
-  let twentyFourHours = 24 * 60 * 60 * 1000;
   let buffetStartTime = new Date(user?.lastActiveBuffet);
-  //if it's been 24 hours since the last buffet change
-  let newBuffet = date;
-  if (date.getTime() - buffetStartTime >= twentyFourHours) {
-    newBuffet = new Date();
-  }
-  let getDifference = date.getTime() - newBuffet.getTime();
+  let getDifference = date.getTime() - buffetStartTime.getTime();
+  let twentyFourHours = 24 * 60 * 60 * 1000;
   let getTimeLeft = Math.abs(getDifference - twentyFourHours);
+
+  if (getTimeLeft <= 0) {
+    user.lastActiveBuffet = new Date();
+    buffetStartTime = new Date(user.lastActiveBuffet);
+    getDifference = date.getTime() - buffetStartTime.getTime();
+    getTimeLeft = twentyFourHours;
+  }
 
   const jobApplicants = user?.jobs?.map((job) => job?.applicants);
 

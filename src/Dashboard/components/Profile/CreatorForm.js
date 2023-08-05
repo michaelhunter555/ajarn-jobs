@@ -162,7 +162,7 @@ const CreatorForm = ({
             }}
           >
             <Button
-              onClick={() => handleCreatorDelete(user?.creator)}
+              onClick={() => handleCreatorDelete(user)}
               variant="outlined"
               color="warning"
             >

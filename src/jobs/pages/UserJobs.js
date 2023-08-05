@@ -91,6 +91,13 @@ const FeaturedJobListDiv = styled("div")(({ theme }) => ({
   },
 }));
 
+const StyledButton = styled(Button)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    fontSize: 11,
+    borderRadius: "15px",
+  },
+}));
+
 const UserJobs = () => {
   const auth = useContext(AuthContext);
   const [filter, setFilter] = useState(dummy_jobs);
@@ -133,30 +140,46 @@ const UserJobs = () => {
 
   if (auth.isLoggedIn && auth.user?.userType === "employer") {
     button = (
-      <Button variant="contained" component={RouterLink} to="/job/new">
+      <StyledButton
+        size="small"
+        variant="contained"
+        component={RouterLink}
+        to="/job/new"
+      >
         Add a Job +
-      </Button>
+      </StyledButton>
     );
     actionItem = (
-      <Button variant="text" component={RouterLink} to="/auth">
+      <StyledButton
+        size="small"
+        variant="text"
+        component={RouterLink}
+        to="/auth"
+      >
         Learn More
-      </Button>
+      </StyledButton>
     );
   } else if (!auth.isLoggedIn) {
     button = (
-      <Button
+      <StyledButton
+        size="small"
         variant="contained"
         disabled={!auth.isLoggedIn}
         component={RouterLink}
         to="/auth"
       >
         Sign-up to create jobs! <EastIcon />
-      </Button>
+      </StyledButton>
     );
     actionItem = (
-      <Button variant="outlined" component={RouterLink} to="/auth">
+      <StyledButton
+        size="small"
+        variant="outlined"
+        component={RouterLink}
+        to="/auth"
+      >
         Login/Join
-      </Button>
+      </StyledButton>
     );
   }
 
