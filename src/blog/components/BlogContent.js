@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Avatar,
@@ -7,11 +10,11 @@ import {
   Divider,
   Stack,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
-import { getTimeDifference } from "../../shared/util/getTimeDifference";
+import CategoryChip from '../../shared/components/UIElements/CategoryIconChip';
+import { getTimeDifference } from '../../shared/util/getTimeDifference';
 
 const StyledStackContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "row",

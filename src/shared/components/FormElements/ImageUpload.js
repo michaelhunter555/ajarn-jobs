@@ -1,8 +1,17 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-import { Box, Button, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  styled,
+} from '@mui/material';
 
-import { AuthContext } from "../../context/auth-context";
+import { AuthContext } from '../../context/auth-context';
 
 const StyledImageUpload = styled(Box)({
   width: "13rem",
@@ -33,7 +42,7 @@ const ImageUpload = (props) => {
   const [isValid, setIsValid] = useState(false);
   const filePickerRef = useRef();
 
-  const authHasImage = user?.image !== "" && user?.image.includes("uploads\\");
+  const authHasImage = user?.image !== "" && user?.image.includes("uploads");
 
   useEffect(() => {
     if (!file) {
@@ -100,7 +109,9 @@ const ImageUpload = (props) => {
                 alt="preview"
               />
             )}
-            {!filePreviewUrl && <p>{props.text || "Please add an image"}</p>}
+            {!filePreviewUrl && !authHasImage && (
+              <p>{props.text || "Please add an image"}</p>
+            )}
           </StyledImageUpload>
         </Box>
         <Button variant="outlined" type="button" onClick={chooseImageHandler}>

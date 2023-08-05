@@ -124,6 +124,8 @@ const TeacherDashboard = () => {
     getUserProfileInfo(auth?.user?._id)
   );
 
+  console.log("USER LOGGED IN DASHBOARD:", auth.user);
+
   //get job ads
   const getJobAds = async () => {
     try {
@@ -464,7 +466,6 @@ const TeacherDashboard = () => {
                   sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
                   variant="rectangular"
                   height={114}
-                  width={374}
                 />
               )}
               {!homeDashLoadingState && (

@@ -36,7 +36,7 @@ const styledComments = {
   border: "2px solid #dbdbdb",
   boxSizing: "border-box",
   ".public-DraftStyleDefault-block": {
-    height: "5rem",
+    height: "2rem",
   },
 };
 

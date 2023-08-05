@@ -23,7 +23,7 @@ import { styled } from "@mui/material/styles";
 import { CollapsibleTable } from "../../Dashboard/components/Profile/Resume";
 import MessageTeacher from "./MessageTeacher";
 
-const StyledBoxModal = styled(Paper)({
+const StyledBoxModal = styled(Paper)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -35,7 +35,13 @@ const StyledBoxModal = styled(Paper)({
   borderRadius: "15px",
   boxShadow: 24,
   p: 4,
-});
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+}));
 
 const StyledBoxContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -68,6 +74,14 @@ const StyledLoadingSkeleton = styled(Skeleton)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     width: "100%",
+  },
+}));
+
+const StyledStack = styled(Stack)(({ theme }) => ({
+  flexWrap: "wrap",
+  [theme.breakpoints.down("sm")]: {
+    flexWrap: "wrap",
+    gap: "5px",
   },
 }));
 
@@ -109,7 +123,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 borderRadius: "15px",
                 marginTop: 4,
                 height: 260,
-                width: 692,
+                width: "100%",
               }}
             />
           )}
@@ -244,11 +258,11 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                     >
                       Skills:
                     </Typography>
-                    <Stack spacing={2} direction="row">
+                    <StyledStack spacing={2} direction="row">
                       {teacher?.skill?.split(",").map((skills, i) => (
                         <Chip clickable key={i} label={skills} />
                       ))}
-                    </Stack>
+                    </StyledStack>
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -284,7 +298,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 borderRadius: "15px",
                 marginTop: 2,
                 height: 177,
-                width: 692,
+                width: "100%",
               }}
             />
           )}
@@ -302,7 +316,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   variant="left"
                   sx={{ margin: "0 0 0.5rem 0" }}
                 />
-                <Stack direction="row" alignItems="center" spacing={1}>
+                <StyledStack direction="row" alignItems="center" spacing={1}>
                   {teacher?.interests?.split(",").map((interest, i) => (
                     <Chip
                       clickable
@@ -311,7 +325,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                       variant="outlined"
                     />
                   ))}
-                </Stack>
+                </StyledStack>
               </Paper>
             </Grid>
           )}
@@ -326,7 +340,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 borderRadius: "15px",
                 marginTop: 2,
                 height: 177,
-                width: 692,
+                width: "100%",
               }}
             />
           )}
@@ -371,7 +385,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 borderRadius: "15px",
                 marginTop: 2,
                 height: 177,
-                width: 692,
+                width: "100%",
               }}
             />
           )}

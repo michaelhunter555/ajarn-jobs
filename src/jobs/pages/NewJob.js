@@ -41,7 +41,7 @@ const styledRichJobText = {
   border: "2px solid #dbdbdb",
   boxSizing: "border-box",
   ".public-DraftStyleDefault-block": {
-    height: "5rem",
+    height: "2rem",
   },
 };
 
@@ -220,7 +220,7 @@ const NewJob = () => {
   return (
     <>
       {isPostLoading && (
-        <Skeleton sx={{ height: 500, width: 788 }} variant="rectangular" />
+        <Skeleton sx={{ height: 500, width: "100%" }} variant="rectangular" />
       )}
       <Modal
         disableScrollLock={true}

@@ -27,7 +27,7 @@ const styledRichCoverLetterText = {
   border: "1px solid #eee",
   boxSizing: "border-box",
   ".public-DraftStyleDefault-block": {
-    height: "5rem",
+    height: "2rem",
   },
 };
 
@@ -111,7 +111,7 @@ const CoverLetter = () => {
 
   return (
     <>
-      {isLoading && <Skeleton sx={{ width: 753, height: 382 }} />}
+      {isLoading && <Skeleton sx={{ width: "100%", height: 382 }} />}
       {!isLoading && !isEditing && (
         <>
           <Grid
@@ -157,6 +157,12 @@ const CoverLetter = () => {
                     Cover Letter:
                   </Typography>
                   <Typography
+                    component="div"
+                    sx={{
+                      border: "1px solid #bdbdbd",
+                      padding: "2rem",
+                      borderRadius: "15px",
+                    }}
                     variant="body1"
                     color="text.secondary"
                     dangerouslySetInnerHTML={{ __html: auth.user?.coverLetter }}

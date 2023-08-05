@@ -192,6 +192,7 @@ const Auth = () => {
           },
           token
         );
+        navigate("/");
       } catch (err) {
         //error handling done in custom hook
       }

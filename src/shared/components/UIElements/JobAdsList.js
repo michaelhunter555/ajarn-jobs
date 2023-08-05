@@ -47,7 +47,7 @@ const StyledChip = styled(Chip)(({ theme, featured }) => ({
   backgroundColor: featured ? "#f7f1d0" : "",
 }));
 
-const JobAdsList = ({ job }) => {
+const JobAdsList = ({ job, company }) => {
   return (
     <>
       {job?.map((school, i) => (
@@ -78,9 +78,8 @@ const JobAdsList = ({ job }) => {
                           }}
                           component="div"
                         >
-                          {school?.creator?.company} -{" "}
-                          {school?.title?.length > 25
-                            ? school?.title?.substring(0, 40) + "..."
+                          {school?.title?.length > 70
+                            ? school?.title?.substring(0, 70) + "..."
                             : school?.title}{" "}
                           {school?.jobType === "featured" && (
                             <Chip
@@ -101,7 +100,23 @@ const JobAdsList = ({ job }) => {
                           variant="subtitle2"
                           color="text.secondary"
                           component="div"
+                          sx={{
+                            display: "flex",
+                            gap: "5px",
+                            alignItems: "center",
+                          }}
                         >
+                          {company && (
+                            <Chip
+                              label={school?.creator?.company}
+                              size="small"
+                              sx={{
+                                fontSize: "11px",
+                                padding: 0,
+                                height: "20px",
+                              }}
+                            />
+                          )}
                           Listed • {school?.datePosted?.split("T")[0]}
                         </Typography>
                       </Stack>
@@ -140,10 +155,17 @@ const JobAdsList = ({ job }) => {
                         />
                       </StyledChipDiv>
                       <Typography variant="body2" color="text.secondary">
-                        {sanitizeHtml(school?.description, {
-                          allowedTags: [],
-                          allowedAttributes: {},
-                        }).substring(0, 60) + "..."}
+                        {school?.jobType === "featured" &&
+                          sanitizeHtml(school?.description, {
+                            allowedTags: [],
+                            allowedAttributes: {},
+                          }).substring(0, 120) + "..."}
+
+                        {school?.jobType !== "featured" &&
+                          sanitizeHtml(school?.description, {
+                            allowedTags: [],
+                            allowedAttributes: {},
+                          }).substring(0, 60) + "..."}
                       </Typography>
                     </Grid>
                   </Grid>

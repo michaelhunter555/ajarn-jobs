@@ -41,16 +41,16 @@ const tiers = [
     title: "starter",
     price: "฿750",
     credits: 5,
-    description: "5 Good for one job post up to 30 days",
+    description: "5 Good for one job post.",
     buttonText: "Add Credits",
     buttonVariant: "outlined",
   },
   {
     title: "Agency",
-    price: "฿1,000",
+    price: "฿1,200",
     subheader: "Most Popular",
     credits: 15,
-    description: "15 Credits Worth up to 3 job post",
+    description: "15 Credits worth up to 3 job post.",
     buttonText: "Add Credits",
     buttonVariant: "contained",
   },
@@ -58,7 +58,7 @@ const tiers = [
     title: "Enterprise",
     price: "฿1,800",
     credits: 30,
-    description: "30 Credits All features of Agency",
+    description: "30 Credits All features of agency.",
     buttonText: "Add Credits",
     buttonVariant: "outlined",
   },
@@ -67,7 +67,6 @@ const tiers = [
 const PurchaseCredits = () => {
   const auth = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
-  const [price, setPrice] = useState("");
   const [totalCredits, setTotalCredits] = useState(0);
   const [isClicked, setIsClicked] = useState(false); //acts as basic debouncer for users who might repeat click
   const { addCredits, isPostLoading, error, clearError } = useUser();

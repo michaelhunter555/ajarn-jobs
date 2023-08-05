@@ -28,8 +28,6 @@ import { AuthContext } from "../../shared/context/auth-context";
 const VerticalSideBar = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  height: "100%",
-  maxHeight: 310,
   borderRadius: 10,
   maxWidth: 250,
   background: "white",

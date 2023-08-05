@@ -227,7 +227,7 @@ const UserJobs = () => {
                 num={10}
               />
             )}
-            {!isLoading && <JobAdsList job={filteredJobs} />}
+            {!isLoading && <JobAdsList job={filteredJobs} company={true} />}
             {!isLoading && filteredJobs?.length === 0 && noJobs}
           </UserJobListDiv>
           <FeaturedJobListDiv>
