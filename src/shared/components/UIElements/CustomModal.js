@@ -1,18 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
 
-import { Box, Button, Modal, Stack, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Box,
+  Button,
+  Modal,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import { AuthContext } from "../../context/auth-context";
+import { AuthContext } from '../../context/auth-context';
 
 const StyledBoxContainer = styled(Box)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-
   width: 400,
   background: theme.palette.background.paper,
   border: "1px solid #bbb",

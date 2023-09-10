@@ -61,6 +61,7 @@ const StyledContentGrid = styled(Box)(({ theme }) => ({
   gap: "5px",
   margin: "0rem auto",
   flexDirection: "column",
+  borderRight: "1px solid #dedede",
 
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {

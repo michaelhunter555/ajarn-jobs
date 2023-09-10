@@ -31,6 +31,7 @@ const VerticalSideBar = styled("div")(({ theme }) => ({
   borderRadius: 10,
   maxWidth: 250,
   background: "white",
+  border: "1px solid #bdbdbd",
   [theme.breakpoints.down("md")]: {
     display: "none",
   },
@@ -123,10 +124,7 @@ const Sidebar = ({ onMenuItemClick }) => {
   return (
     <VerticalSideBar elevated="true">
       <Stack alignItems="center">
-        <Typography
-          sx={{ fontWeight: 600, textDecoration: "underline" }}
-          color="text.secondary"
-        >
+        <Typography sx={{ fontWeight: 600 }} color="text.secondary">
           Menu
         </Typography>
       </Stack>

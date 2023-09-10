@@ -22,12 +22,16 @@ import { useForm } from "../../../shared/hooks/form-hook";
 
 const styledRichCoverLetterText = {
   height: "auto",
-  padding: " 0 20px",
+  padding: "0 20px",
   borderRadius: "0 0 8px 8px",
-  border: "1px solid #eee",
+  border: "1px solid #bdbdbd",
   boxSizing: "border-box",
+  wordBreak: "break-word",
   ".public-DraftStyleDefault-block": {
     height: "2rem",
+  },
+  ".rdw-editor-main": {
+    minHeight: 300,
   },
 };
 
@@ -213,7 +217,7 @@ const CoverLetter = () => {
                   Cover Letter:
                 </Typography>
 
-                <Box sx={{ ...styledRichCoverLetterText, width: "100%" }}>
+                <Box sx={{ ...styledRichCoverLetterText, maxWidth: "100%" }}>
                   <Editor
                     editorState={editorState}
                     onEditorStateChange={handleEditorChange}
