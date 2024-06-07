@@ -134,6 +134,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 borderRadius: "15px",
                 marginTop: "3.5rem",
                 padding: "1rem",
+                border: " 1px solid #bdbdbd",
               }}
             >
               <StyledGridContainer container direction="row" spacing={1}>
@@ -304,7 +305,14 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
           )}
           {!isLoading && (
             <Grid item>
-              <Paper sx={{ padding: 2, borderRadius: "15px" }} elevation={0}>
+              <Paper
+                sx={{
+                  padding: 2,
+                  borderRadius: "15px",
+                  border: " 1px solid #bdbdbd",
+                }}
+                elevation={0}
+              >
                 <Typography variant="h6" component="h4">
                   A little about {teacher?.name}:
                 </Typography>
@@ -351,6 +359,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 padding: "2rem",
                 borderRadius: "17px",
                 margin: "1rem auto",
+                border: " 1px solid #bdbdbd",
               }}
             >
               <Box

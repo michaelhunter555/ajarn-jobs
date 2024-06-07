@@ -1,11 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import { Button, Card, CardActions, Grid, Skeleton } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  Grid,
+  Skeleton,
+} from '@mui/material';
 
-import { AuthContext } from "../../shared/context/auth-context";
-import TeacherItem from "./TeacherItem";
+import { AuthContext } from '../../shared/context/auth-context';
+import TeacherItem from './TeacherItem';
 
 const TeacherList = ({ teachers, isLoading }) => {
   const auth = useContext(AuthContext);
@@ -33,7 +39,7 @@ const TeacherList = ({ teachers, isLoading }) => {
               sx={{ margin: "1rem 0.5rem 1rem 1rem", borderRadius: "6px" }}
               variant="rectangular"
               height={335}
-              width={261}
+              width={'100%'}
             />
           </Grid>
         ))}

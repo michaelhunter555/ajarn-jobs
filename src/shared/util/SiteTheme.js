@@ -7,6 +7,19 @@ export const theme = createTheme({
     },
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        body {
+          display: flex;
+          flex-direction: column;
+          padding: 0;
+          max-width: 90%;
+          margin: 6rem auto 0;
+          background-color: #ededed;
+        }
+      `,
+    },
+
     MuiBackdrop: {
       styleOverrides: {
         root: {

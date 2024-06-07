@@ -319,7 +319,12 @@ const MainFeaturedJob = ({ jobs, featured, height, fontSize }) => {
                             paddingBottom: 0,
                             backgroundColor:
                               job?.jobType === "featured" &&
-                              "rgba(198, 226, 234, 0.15)",
+                              "rgba(198, 226, 234, 0.71)",
+                            "&:hover": {
+                              backgroundColor:
+                                job?.jobType === "featured" &&
+                                "rgba(198, 226, 234, 0.71)",
+                            },
                           }}
                           component={Link}
                           key={job?._id}

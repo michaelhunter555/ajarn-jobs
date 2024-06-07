@@ -69,10 +69,17 @@ const JobDetails = (props) => {
     setOpen((prev) => !prev);
   };
 
-  const userCantApply =
+  let userCantApply;
+
+  if (
     auth.user?.resume &&
     auth.user?.coverLetter &&
-    auth.user?.userType !== "employer";
+    auth.user?.userType !== "employer"
+  ) {
+    userCantApply = false;
+  } else {
+    userCantApply = true;
+  }
 
   return (
     <>

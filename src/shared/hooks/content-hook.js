@@ -1,11 +1,15 @@
-import { useCallback, useContext, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
-import _ from "lodash";
+import _ from 'lodash';
 
-import { AuthContext } from "../context/auth-context";
-import { useHttpClient } from "./http-hook";
+import { AuthContext } from '../context/auth-context';
+import { useHttpClient } from './http-hook';
 
-//************UseComntent Hook*************
+//************UseContent Hook*************
 export const useContent = () => {
   const auth = useContext(AuthContext);
   const [contentPostLikes, setContentPostLikes] = useState(0);

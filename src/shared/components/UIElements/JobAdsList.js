@@ -20,7 +20,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 const StyledJobAdCard = styled(Card)(({ theme, featured }) => ({
-  backgroundColor: featured ? "#fffef9" : "",
+  backgroundColor: featured ? "#f5f2e4" : "",
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
 }));
 

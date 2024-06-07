@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import StarIcon from "@mui/icons-material/StarBorder";
 import {
@@ -10,6 +10,7 @@ import {
   CardHeader,
   Container,
   Grid,
+  Link,
   Modal,
   Paper,
   Stack,
@@ -18,9 +19,8 @@ import {
 import { styled } from "@mui/material/styles";
 
 import ErrorModal from "../../../shared/components/UIElements/ErrorModal";
-import LoadingSpinner from "../../../shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "../../../shared/context/auth-context";
-import { useUser } from "../../../shared/hooks/user-hook";
+import { useStripe } from "../../../shared/hooks/stripe-hook";
 
 const StyleCreditsModal = styled(Paper)({
   position: "absolute",
@@ -38,6 +38,7 @@ const StyleCreditsModal = styled(Paper)({
 
 const tiers = [
   {
+    priceId: "price_1PNxKlRpnv4ckgZhXsKjq8Yw",
     title: "starter",
     price: "฿750",
     credits: 5,
@@ -46,6 +47,7 @@ const tiers = [
     buttonVariant: "outlined",
   },
   {
+    priceId: "price_1PNxLvRpnv4ckgZhMFUfhKqZ",
     title: "Agency",
     price: "฿1,200",
     subheader: "Most Popular",
@@ -55,6 +57,7 @@ const tiers = [
     buttonVariant: "contained",
   },
   {
+    priceId: "price_1PNxMiRpnv4ckgZhTjkWZrsD",
     title: "Enterprise",
     price: "฿1,800",
     credits: 30,
@@ -68,31 +71,30 @@ const PurchaseCredits = () => {
   const auth = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
   const [totalCredits, setTotalCredits] = useState(0);
-  const [isClicked, setIsClicked] = useState(false); //acts as basic debouncer for users who might repeat click
-  const { addCredits, isPostLoading, error, clearError } = useUser();
+  //const { addCredits, isPostLoading, error, clearError } = useUser();
+  const {
+    createCheckoutSession,
+    isPostLoading,
+    checkoutUrl,
+    error,
+    clearError,
+  } = useStripe();
 
-  const purchaseCreditsHandler = (amount) => {
-    if (!isClicked) {
-      setIsClicked(true);
-      addCredits(auth.user?._id, amount);
-      setOpenModal(false);
+  const confirmCreditsHandler = async (val, priceId) => {
+    if (auth?.user?._id && priceId) {
+      try {
+        setOpenModal((prev) => !prev);
+        setTotalCredits(val);
+        await createCheckoutSession(auth?.user?._id, priceId, val);
+      } catch (err) {
+        console.log(err);
+      }
     }
-  };
-
-  useEffect(() => {
-    if (!isPostLoading) {
-      setIsClicked(false);
-    }
-  }, [isPostLoading]);
-
-  const confirmCreditsHandler = (val) => {
-    setTotalCredits(val);
-    setOpenModal((prev) => !prev);
   };
 
   return (
     <>
-      {isPostLoading && <LoadingSpinner asOverlay />}
+      {/* {isPostLoading && <LoadingSpinner asOverlay />} */}
       <ErrorModal error={error} onClear={clearError} />
       <Container sx={{ marginBottom: "1rem" }}>
         <Grid container spacing={4} alignItems="flex-end">
@@ -140,7 +142,9 @@ const PurchaseCredits = () => {
                 </CardContent>
                 <CardActions>
                   <Button
-                    onClick={() => confirmCreditsHandler(tier.credits)}
+                    onClick={() =>
+                      confirmCreditsHandler(tier.credits, tier.priceId)
+                    }
                     fullWidth
                     variant={tier.buttonVariant}
                   >
@@ -162,7 +166,8 @@ const PurchaseCredits = () => {
                         }}
                       >
                         <Typography variant="body1" color="text.secondary">
-                          Confirm Credit Amount
+                          Confirm Credit Amount - You will be redirected to
+                          Stripe to complete your purchase
                         </Typography>
                         <Typography variant="subtitle2" color="text.secondary">
                           You are about to purchase{" "}
@@ -174,10 +179,13 @@ const PurchaseCredits = () => {
                           alignItems="center"
                         >
                           <Button
-                            onClick={() => purchaseCreditsHandler(totalCredits)}
-                            variant={tier.buttonVariant}
+                            variant={"contained"}
+                            component={Link}
+                            href={`${checkoutUrl}`}
                           >
-                            Complete Purchase
+                            {isPostLoading
+                              ? "Loading..."
+                              : "Checkout with stripe"}
                           </Button>
                         </Stack>
                       </Box>
