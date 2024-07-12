@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -67,27 +67,20 @@ const tableRows = [
   },
 ];
 
-const CreatorJobsTable = ({ jobs, isLoading, refetch }) => {
+const CreatorJobsTable = ({
+  jobs,
+  isLoading,
+  onCreatorsPageChange,
+  refetchCreatorJobs,
+}) => {
+  const [page, setPage] = useState(jobs?.page);
+  const [totalPages, setTotalPages] = useState(jobs?.totalPages);
   const [editJobById, setEditJobById] = useState(null);
   const [editJob, setEditJob] = useState(false);
   const [openWarning, setOpenWarning] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 5;
-  const [noOfPages, setNoOfPages] = useState(
-    Math.ceil(jobs?.length / itemsPerPage)
-  );
-  const { deleteJobById, isDeleting } = useJob();
 
-  useEffect(() => {
-    if (!isDeleting) {
-      const newNoOfPages = Math.ceil(jobs?.length / itemsPerPage);
-      setNoOfPages(newNoOfPages);
-      if (page > newNoOfPages) {
-        setPage(newNoOfPages);
-      }
-    }
-  }, [isDeleting, jobs, page]);
+  const { deleteJobById, isDeleting } = useJob();
 
   const deleteJobWarningHandler = (id) => {
     setOpenWarning((prev) => !prev);
@@ -96,7 +89,9 @@ const CreatorJobsTable = ({ jobs, isLoading, refetch }) => {
 
   const deleteJobHandler = async (jobId) => {
     try {
-      await deleteJobById(jobToDelete);
+      await deleteJobById(jobToDelete).then(async () => {
+        refetchCreatorJobs();
+      });
     } catch (err) {
       console.log("Error trying to delete a job");
     }
@@ -113,11 +108,7 @@ const CreatorJobsTable = ({ jobs, isLoading, refetch }) => {
     setEditJob(false);
   };
 
-  const creatorHasJobs = jobs && jobs.length > 0;
-
-  const indexOfLastPage = page * itemsPerPage;
-  const indexOfFirstPage = indexOfLastPage - itemsPerPage;
-  const currentJobsPage = jobs?.slice(indexOfFirstPage, indexOfLastPage);
+  const creatorHasJobs = jobs && jobs?.jobs?.length > 0;
 
   return (
     <>
@@ -170,7 +161,7 @@ const CreatorJobsTable = ({ jobs, isLoading, refetch }) => {
                   </TableCell>
                 </TableRow>
               ) : (
-                currentJobsPage?.map((job, i) => (
+                jobs?.jobs?.map((job, i) => (
                   <TableRow key={job?._id}>
                     <TableCell>{job?.datePosted?.split("T")[0]}</TableCell>
                     <TableCell>
@@ -233,9 +224,12 @@ const CreatorJobsTable = ({ jobs, isLoading, refetch }) => {
           <Stack alignItems="end">
             <Pagination
               size="small"
-              count={noOfPages}
+              count={totalPages}
               page={page}
-              onChange={(event, val) => setPage(val)}
+              onChange={(event, val) => {
+                onCreatorsPageChange(val, 5);
+                setPage(val);
+              }}
               defaultPage={1}
               showFirstButton
               showLastButton

@@ -18,12 +18,7 @@ const StyledList = styled(List)(({ theme }) => ({
   bgcolor: theme.palette.background.paper,
 }));
 
-const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
-  "&:hover": {
-    backgroundColor: "rgb(255, 251, 228)",
-  },
-}));
-
+const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({}));
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   border: "1px solid #e5e5e5",
   borderRadius: "6px",

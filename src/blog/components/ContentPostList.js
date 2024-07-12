@@ -103,10 +103,7 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
               to={`/content/${val?._id}`}
             >
               <ListItemAvatar>
-                <Avatar
-                  alt={val?.title}
-                  src={`${process.env.REACT_APP_IMAGE}${val?.author?.image}`}
-                />
+                <Avatar alt={val?.title} src={`${val?.author?.image}`} />
               </ListItemAvatar>
 
               <ListItemText

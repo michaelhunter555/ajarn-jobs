@@ -112,7 +112,7 @@ export const CollapsibleTable = (props) => {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible-table">
-        <TableHead sx={{ backgroundColor: "#e8f0f7" }}>
+        <TableHead>
           <TableRow>
             <TableCell align="left">View Role</TableCell>
             <TableCell align="left">Company</TableCell>

@@ -1,12 +1,23 @@
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "draft-js/dist/Draft.css";
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'draft-js/dist/Draft.css';
 
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import DOMPurify from "dompurify";
-import { convertToRaw, EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import { Editor } from "react-draft-wysiwyg";
+import DOMPurify from 'dompurify';
+import {
+  convertToRaw,
+  EditorState,
+} from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { Editor } from 'react-draft-wysiwyg';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
 import {
   Box,
@@ -16,23 +27,24 @@ import {
   Paper,
   Skeleton,
   Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import Button from "../../shared/components/FormElements/Button";
-import Input from "../../shared/components/FormElements/Input";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Button from '../../shared/components/FormElements/Button';
+import Input from '../../shared/components/FormElements/Input';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 //import { useNavigate } from 'react-router-dom';
-import { AuthContext } from "../../shared/context/auth-context";
-import { useForm } from "../../shared/hooks/form-hook";
-import { useJob } from "../../shared/hooks/jobs-hook";
+import { AuthContext } from '../../shared/context/auth-context';
+import { useForm } from '../../shared/hooks/form-hook';
+import { useInvalidateQuery } from '../../shared/hooks/invalidate-query';
+import { useJob } from '../../shared/hooks/jobs-hook';
 import {
   coreJobRequirements,
   fullTimeSalaries,
   partTimeSalaries,
   thaiCities,
-} from "../../shared/util/ThaiData";
-import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
+} from '../../shared/util/ThaiData';
+import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
 
 const styledRichJobText = {
   height: "auto",
@@ -45,36 +57,39 @@ const styledRichJobText = {
   },
 };
 
-const StyledForm = styled("form")({
+const StyledForm = styled("form")(({ theme }) => ({
   listStyle: "none",
   margin: "1.5rem auto",
   padding: "1rem",
-  width: "90%",
-  maxWidth: "40rem",
-  borderRadius: "6px",
-  background: "white",
-  border: "2px solid #bdbdbd",
-});
+  width: "100%",
 
-const BoxContent = styled(Paper)({
+  borderRadius: "6px",
+}));
+
+const BoxContent = styled(Paper)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: "background.paper",
+  bgcolor: theme.palette.background.paper,
   border: "2px solid #000",
   boxShadow: 24,
   padding: 20,
   textAlign: "center",
-});
+}));
 
 const NewJob = () => {
   const auth = useContext(AuthContext);
+  const { invalidateQuery } = useInvalidateQuery();
   const [isFullTime, setIsFullTime] = useState(true);
   const [jobIsBasic, setJobIsBasic] = useState(true);
   const [jobCost, setJobCost] = useState(5);
   const [success, setSuccess] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isJobsPage = location.pathname.includes("/job/new");
+  console.log("loca", location.pathname, isJobsPage);
 
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -130,6 +145,12 @@ const NewJob = () => {
       inputHandler("salary", partTimeSalaries[0], true);
     }
   }, [isFullTime, inputHandler]);
+
+  useEffect(() => {
+    if (isJobsPage && auth?.user?.userType === "teacher") {
+      navigate(-1);
+    }
+  }, [isJobsPage, auth?.user?.userType, navigate]);
 
   //update hours for fullTime
   const jobIsFullTimeHandler = () => {
@@ -193,6 +214,7 @@ const NewJob = () => {
       await addJobByUserId(auth.user?._id, newJob, jobCost)
         .then(() => {
           setSuccess(true);
+          invalidateQuery("creatorJobs");
         })
         .catch((err) => {
           setSuccess(false);
@@ -246,7 +268,15 @@ const NewJob = () => {
       </Modal>
       <ErrorModal error={error} onClear={clearError} />
       {!isPostLoading && (
-        <StyledForm onSubmit={jobSubmitHandler} sx={{ marginBottom: 1 }}>
+        <StyledForm
+          onSubmit={jobSubmitHandler}
+          sx={{
+            marginBottom: 5,
+            width: isJobsPage ? "80%" : "100%",
+            background: (theme) =>
+              isJobsPage ? theme.palette.background.paper : "transparent",
+          }}
+        >
           <Grid container direction="row">
             <Typography variant="subtitle2" color="text.secondary">
               Total Cost: {jobCost} - Credits

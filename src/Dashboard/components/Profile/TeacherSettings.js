@@ -38,6 +38,10 @@ const TeacherSettings = (props) => {
         value: user.name,
         isValid: true,
       },
+      email: {
+        value: user.email,
+        isValid: true,
+      },
       nationality: {
         value: user.nationality,
         isValid: true,
@@ -126,6 +130,8 @@ const TeacherSettings = (props) => {
     setIsHidden((prev) => !prev);
     props.onToggleVisibility();
   };
+
+  const emailIsValid = (email) => /^\S+@\S+\.\S+$/.test(email);
 
   return (
     <Card>
@@ -277,9 +283,20 @@ const TeacherSettings = (props) => {
           <Grid item xs={12} sm={6} md={5}>
             <FormControl fullWidth>
               <InputLabel htmlFor="my-input">Email address</InputLabel>
-              <Input id="my-input" aria-describedby="e-mail-address" />
+              <Input
+                value={formState?.inputs?.email?.value}
+                onChange={(event) => {
+                  inputHandler(
+                    "email",
+                    event.target.value,
+                    emailIsValid(event.target.value)
+                  );
+                }}
+                id="email"
+                aria-describedby="e-mail-address"
+              />
               <FormHelperText id="e-mail-address">
-                We'll never share your email.
+                Edit your email (*you may need to re-verfiy)
               </FormHelperText>
             </FormControl>
           </Grid>

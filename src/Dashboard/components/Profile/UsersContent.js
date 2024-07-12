@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -7,12 +7,14 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import {
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Pagination,
   Paper,
+  Skeleton,
   Stack,
   Table,
   TableBody,
@@ -27,35 +29,28 @@ import {
 import { useContent } from "../../../shared/hooks/content-hook";
 import UpdateUsersPostForm from "./UpdateUsersPostForm";
 
-const UsersContent = ({ user }) => {
+const UsersContent = ({
+  isLoading,
+  blogPosts,
+  onBlogPageChange,
+  refetchBlogs,
+}) => {
   const [openDeleteWarning, setOpenDeleteWarning] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingPostId, setEditingPostId] = useState(null);
   const [postToDelete, setPostToDelete] = useState(null);
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 5;
-  const [noOfPages, setNoOfPages] = useState(
-    Math.ceil(user?.blogPosts?.length / itemsPerPage)
-  );
-  const { deleteContentPost, isDeleting } = useContent();
+  const [page, setPage] = useState(blogPosts?.page);
+  const [totalPages, setTotalPages] = useState(blogPosts?.totalPages);
 
-  useEffect(() => {
-    if (!isDeleting) {
-      const newNumOfPages = Math.ceil(user?.blogPosts?.length / itemsPerPage);
-      setNoOfPages(newNumOfPages);
-      if (page > newNumOfPages) {
-        setPage(newNumOfPages);
-      }
-    }
-  }, [isDeleting, page, user?.blogPosts]);
+  const { deleteContentPost, isDeleting } = useContent();
 
   const deleteWarningHandler = (postId) => {
     setPostToDelete(postId);
     setOpenDeleteWarning(true);
   };
 
-  const confirmDeleteHandler = () => {
-    deleteContentPost(postToDelete);
+  const confirmDeleteHandler = async () => {
+    await deleteContentPost(postToDelete);
     setPostToDelete(null);
     setOpenDeleteWarning(false);
   };
@@ -75,18 +70,14 @@ const UsersContent = ({ user }) => {
     setEditingPostId(null);
   };
 
-  const userHasContent = user?.blogPosts?.length > 0;
+  const userHasContent = blogPosts?.blogPost?.length > 0;
 
-  const indexOfLastPage = page * itemsPerPage;
-  const indexOfFirstPage = indexOfLastPage - itemsPerPage;
-  const currentPageOfPosts = user?.blogPosts?.slice(
-    indexOfFirstPage,
-    indexOfLastPage
-  );
+  console.log("content is loading", isLoading, isDeleting);
+  console.log("BlogPosts: ", blogPosts?.blogPost);
 
   return (
     <>
-      {userHasContent && !isEditing && (
+      {!isEditing && (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -96,19 +87,20 @@ const UsersContent = ({ user }) => {
                 <TableCell>Interactions</TableCell>
                 <TableCell>Comments</TableCell>
                 <TableCell>
-                  <Button
+                  <Chip
+                    label="Add Post"
                     component={RouterLink}
                     to="/content"
                     variant="outlined"
-                  >
-                    Add Post
-                  </Button>
+                    clickable={true}
+                  />
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {currentPageOfPosts &&
-                currentPageOfPosts?.map((post, i) => (
+              {!isLoading &&
+                blogPosts &&
+                blogPosts?.blogPost?.map((post, i) => (
                   <TableRow key={post?._id}>
                     <TableCell>
                       <Typography
@@ -170,30 +162,56 @@ const UsersContent = ({ user }) => {
                     </TableCell>
                   </TableRow>
                 ))}
+
+              {(isDeleting || isLoading) &&
+                Array.from({ length: 4 }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <Skeleton animation={false} width="100%" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton animation={false} width="100%" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton animation={false} width="100%" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton animation={false} width="100%" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton animation={false} width="100%" />
+                    </TableCell>
+                  </TableRow>
+                ))}
+
+              {!userHasContent && !isEditing && !isLoading && (
+                <Stack
+                  justifyContent="center"
+                  alignItems="center"
+                  sx={{ width: "100%" }}
+                >
+                  <Typography variant="body1" color="text.secondary">
+                    No Content Yet. Maybe add a post?
+                  </Typography>
+                </Stack>
+              )}
             </TableBody>
           </Table>
           <Stack alignItems="end">
             <Pagination
               size="small"
-              count={noOfPages}
+              count={totalPages}
               page={page}
-              onChange={(event, val) => setPage(val)}
+              onChange={(event, val) => {
+                onBlogPageChange(val, 5);
+                setPage(val);
+              }}
               defaultPage={1}
               showFirstButton
               showLastButton
             />
           </Stack>
         </TableContainer>
-      )}
-      {!userHasContent && !isEditing && (
-        <Stack justifyContent="center" alignItems="center">
-          <Typography variant="body1" color="text.secondary">
-            No Content Yet. Maybe add a post?
-          </Typography>
-          <Button variant="contained" component={RouterLink} to={`/content`}>
-            Add Post
-          </Button>
-        </Stack>
       )}
 
       {isEditing && editingPostId && (

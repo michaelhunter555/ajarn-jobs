@@ -1,17 +1,8 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useRef, useState } from "react";
 
-import {
-  Box,
-  Button,
-  styled,
-} from '@mui/material';
+import { Box, Button, styled } from "@mui/material";
 
-import { AuthContext } from '../../context/auth-context';
+import { AuthContext } from "../../context/auth-context";
 
 const StyledImageUpload = styled(Box)({
   width: "13rem",
@@ -42,7 +33,8 @@ const ImageUpload = (props) => {
   const [isValid, setIsValid] = useState(false);
   const filePickerRef = useRef();
 
-  const authHasImage = user?.image !== "" && user?.image.includes("uploads");
+  const authHasImage =
+    user?.image !== "" && user?.image?.includes("cloudinary");
 
   useEffect(() => {
     if (!file) {
@@ -76,6 +68,7 @@ const ImageUpload = (props) => {
     filePickerRef.current.click();
   };
 
+  console.log("auth user: ", auth?.user);
   return (
     <Box sx={props.sx}>
       <input
@@ -104,10 +97,7 @@ const ImageUpload = (props) => {
           <StyledImageUpload>
             {filePreviewUrl && <img src={filePreviewUrl} alt="preview" />}
             {!filePreviewUrl && auth.isLoggedIn && authHasImage && (
-              <img
-                src={`${process.env.REACT_APP_IMAGE}${auth.user?.image}`}
-                alt="preview"
-              />
+              <img src={`${auth.user?.image}`} alt="preview" />
             )}
             {!filePreviewUrl && !authHasImage && (
               <p>{props.text || "Please add an image"}</p>

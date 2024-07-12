@@ -128,7 +128,7 @@ const UserComments = ({
                   <Avatar
                     sx={{ height: 70, width: 70 }}
                     alt={`${comment?.userId?.name}-${comment?.userId?.userType}`}
-                    src={`${process.env.REACT_APP_IMAGE}${comment?.userId?.image}`}
+                    src={`${comment?.userId?.image}`}
                   />
                 </Stack>
                 <Stack alignItems="flex-start">

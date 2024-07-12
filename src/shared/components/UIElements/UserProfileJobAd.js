@@ -15,10 +15,10 @@ import { styled } from "@mui/material/styles";
 const StyledJobAdCard = styled(
   Card,
   "div"
-)({
-  backgroundColor: "#fffef9",
+)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
   border: "1px solid #faea92",
-});
+}));
 
 const StyledMediaCard = styled(CardMedia)({
   width: "75%",
@@ -53,9 +53,10 @@ const UserProfileJobAd = (props) => {
                   color="primary"
                   variant="h5"
                   component="div"
+                  sx={{ fontSize: 16 }}
                 >
-                  {props.title.length > 15
-                    ? props.title.substring(0, 15) + "..."
+                  {props.title.length > 35
+                    ? props.title.substring(0, 35) + "..."
                     : props.title}
                 </Typography>
 

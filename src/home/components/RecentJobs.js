@@ -3,20 +3,21 @@ import React from "react";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-import { Paper } from "@mui/material";
+import { Divider, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import RecentJobItems from "./RecentJobItems";
 
-const StyledTitle = styled("h2")({
-  color: "#002379",
-});
+const StyledTitle = styled("h2")(({ theme }) => ({
+  color: theme.palette.text.secondary,
+}));
 
-const StyledPaper = styled(Paper)({
+const StyledPaper = styled(Paper)(({ theme }) => ({
   maxHeight: 340,
   overflowY: "auto",
   pointerEvents: "auto",
+  backgroundColor: theme.palette.background.paper,
   "&::-webkit-scrollbar": {
     width: "4px",
   },
@@ -43,7 +44,7 @@ const StyledPaper = styled(Paper)({
       background: "#f1f1f1",
     },
   },
-});
+}));
 
 const RecentJobs = (props) => {
   if (props.homeJobs?.length === 0) {
@@ -62,6 +63,7 @@ const RecentJobs = (props) => {
         Recent Jobs
         <MdOutlineFiberNew style={{ color: "green" }} />
       </StyledTitle>
+      <Divider />
       <StyledPaper elevation={0}>
         {props.homeJobs &&
           recentJobsLimit?.map((job) => (
@@ -74,7 +76,7 @@ const RecentJobs = (props) => {
                 location={job?.location}
                 salary={job?.salary}
                 datePosted={job?.datePosted}
-                logo={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                logo={`${job?.image}`}
                 title={job?.title}
                 id={job?.id}
                 creationDate={getTimeDifference(job?.datePosted)}

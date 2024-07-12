@@ -14,8 +14,10 @@ import {
   Divider,
   Grid,
   Link,
+  MenuItem,
   Modal,
   Paper,
+  Select,
   Stack,
   Typography,
 } from "@mui/material";
@@ -52,7 +54,27 @@ const StyledModal = styled(Paper)({
 const date = new Date();
 const today = date.toISOString().split("T")[0];
 
-const Creator = ({ creatorItem, user, isLoading, refetch }) => {
+const buffetTypes = [
+  { key: "24_HOURS", text: "24 hours", cost: 2 },
+  { key: "7_DAYS", text: "7 Days", cost: 12 },
+  { key: "14_DAYS", text: "14 Days", cost: 25 },
+  { key: "1_MONTH", text: "1 month", cost: 50 },
+];
+
+const Creator = ({
+  applicants,
+  creatorItem,
+  creatorJobs,
+  user,
+  isLoading,
+  refetch,
+  applicationsPage,
+  page,
+  applicantsIsLoading,
+  onCreatorsPageChange,
+  creatorJobsIsLoading,
+  refetchCreatorJobs,
+}) => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(user && user?.creator === null);
   const [creatorProfileTab, setCreatorProfileTab] = useState("applicants");
@@ -97,6 +119,9 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
   const { deleteCreator, updateCreator, isPostLoading, error, clearError } =
     useCreator();
   const { activateTeacherBuffet, isPostLoading: buffetIsLoading } = useJob();
+  const [selectedBuffetType, setSelectedBuffetType] = useState(
+    buffetTypes[0].key
+  );
 
   //if is new or creator property is null, render new form.
   useEffect(() => {
@@ -183,7 +208,7 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
 
   const activateTeacherBuffetHandler = () => {
     if (user?.buffetIsActive === false) {
-      activateTeacherBuffet(user?._id);
+      activateTeacherBuffet(user?._id, selectedBuffetType);
     }
     setOpen(false);
   };
@@ -192,17 +217,11 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
     setOpen((prev) => !prev);
   };
 
-  let buffetStartTime = new Date(user?.lastActiveBuffet);
-  let getDifference = date.getTime() - buffetStartTime.getTime();
-  let twentyFourHours = 24 * 60 * 60 * 1000;
-  let getTimeLeft = Math.abs(getDifference - twentyFourHours);
-
-  if (getTimeLeft <= 0) {
-    user.lastActiveBuffet = new Date();
-    buffetStartTime = new Date(user.lastActiveBuffet);
-    getDifference = date.getTime() - buffetStartTime.getTime();
-    getTimeLeft = twentyFourHours;
-  }
+  const buffetcurrentDate = new Date();
+  const buffetEndDate = new Date(Number(user?.buffetEndDate));
+  const timeLeft = buffetEndDate?.getTime() - buffetcurrentDate?.getTime();
+  const timeLeftInHours = Math.ceil(timeLeft / (1000 * 60 * 60));
+  const timeLeftInDays = timeLeftInHours / 24;
 
   const jobApplicants = user?.jobs?.map((job) => job?.applicants);
 
@@ -214,8 +233,11 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
           <>
             {jobApplicants && (
               <JobApplicantsTable
-                isLoading={isLoading}
+                isLoading={applicantsIsLoading}
                 applicants={jobApplicants}
+                jobApplicants={applicants && applicants}
+                applicationsPage={applicationsPage}
+                page={page}
               />
             )}
           </>
@@ -224,9 +246,10 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
         return (
           user?.jobs && (
             <CreatorJobsTable
-              isLoading={isLoading}
-              jobs={user?.jobs}
-              refetch={refetch}
+              isLoading={creatorJobsIsLoading}
+              jobs={creatorJobs}
+              onCreatorsPageChange={onCreatorsPageChange}
+              refetchCreatorJobs={refetchCreatorJobs}
             />
           )
         );
@@ -353,7 +376,7 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
                     sx={{ margin: "0.5rem 0 0 1.5rem", flexWrap: "wrap" }}
                     spacing={4}
                   >
-                    <Paper elevation={0}>
+                    <Stack>
                       <Typography variant="body1" color="text.secondary">
                         Applicants
                       </Typography>
@@ -365,8 +388,8 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
                             ?.map((job, i) => job?.applicants?.length)
                             ?.reduce((acc, applicant) => (acc += applicant), 0)}
                       </Typography>
-                    </Paper>
-                    <Paper elevation={0}>
+                    </Stack>
+                    <Stack>
                       <Typography variant="body1" color="text.secondary">
                         Listings
                       </Typography>
@@ -374,8 +397,8 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
                       <Typography variant="h4" color="text.secondary">
                         {(user.jobs?.length || 0) < 1 ? 0 : user.jobs?.length}
                       </Typography>
-                    </Paper>
-                    <Paper elevation={0}>
+                    </Stack>
+                    <Stack>
                       {buffetIsLoading && (
                         <>
                           <CircularProgress />
@@ -390,32 +413,6 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
                           >
                             Teacher Buffet
                           </Typography>
-                          {/* <Alert
-                            sx={{
-                              marginTop: 1,
-                              paddingTop: 0,
-                              paddingBottom: 0,
-                              padding: "0 0.5rem",
-                              borderRadius: 18,
-                            }}
-                            severity={
-                              user?.buffetIsActive ? "success" : "warning"
-                            }
-                            icon={false}
-                          >
-                            <Typography
-                              variant="subtitle2"
-                              color="text.secondary"
-                              sx={{ margin: 0, padding: 0 }}
-                            >
-                              {user?.buffetIsActive
-                                ? `Active - ${(
-                                    getTimeLeft /
-                                    (60 * 60 * 1000)
-                                  ).toFixed(0)} hours left.`
-                                : "Inactive"}
-                            </Typography>
-                          </Alert> */}
 
                           {!user?.buffetIsActive && (
                             <Button
@@ -425,7 +422,7 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
                               variant="outlined"
                               onClick={modalHandler}
                             >
-                              24hr Buffet!
+                              Teacher Buffet!
                             </Button>
                           )}
                           <Alert
@@ -448,10 +445,13 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
                               sx={{ margin: 0, padding: 0 }}
                             >
                               {user?.buffetIsActive
-                                ? `Active - ${(
-                                    getTimeLeft /
-                                    (60 * 60 * 1000)
-                                  ).toFixed(0)} hours left.`
+                                ? `Active - ${
+                                    timeLeftInHours > 25
+                                      ? timeLeftInDays.toFixed(2)
+                                      : timeLeftInHours
+                                  } ${
+                                    timeLeftInHours > 25 ? "days" : "hours"
+                                  } left.`
                                 : "Not Active"}
                             </Typography>
                           </Alert>
@@ -471,22 +471,49 @@ const Creator = ({ creatorItem, user, isLoading, refetch }) => {
                             variant="subttitle2"
                             color="text.secondary"
                           >
-                            You are about activate a teacher buffet for 2
-                            credits for 24 hours. Please confirm.
+                            You are about activate a teacher buffet. Please
+                            select your preferred time.
                           </Typography>
-                          <Button
-                            sx={{ margin: "2rem auto" }}
-                            variant="contained"
-                            onClick={activateTeacherBuffetHandler}
-                            disabled={user?.buffetIsActive || user?.credits < 2}
+                          <Select
+                            value={selectedBuffetType}
+                            onChange={(event) =>
+                              setSelectedBuffetType(event.target.value)
+                            }
                           >
-                            {user?.credits >= 2
-                              ? "Begin Buffet"
-                              : "Not enough credits"}
-                          </Button>
+                            {buffetTypes?.map((type, i) => (
+                              <MenuItem key={i} value={type.key}>
+                                {type.text} - {type.cost} Credits
+                              </MenuItem>
+                            ))}
+                          </Select>
+                          <Divider flexItem sx={{ margin: "0.5rem" }} />
+                          <Stack
+                            direction="row"
+                            alignItems="center"
+                            justifyContent="flex-end"
+                            spacing={2}
+                          >
+                            <Button
+                              color="error"
+                              onClick={() => setOpen(false)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="contained"
+                              onClick={activateTeacherBuffetHandler}
+                              disabled={
+                                user?.buffetIsActive || user?.credits < 2
+                              }
+                            >
+                              {user?.credits >= 2
+                                ? "Begin Buffet"
+                                : "Not enough credits"}
+                            </Button>
+                          </Stack>
                         </StyledModal>
                       </Modal>
-                    </Paper>
+                    </Stack>
                   </Stack>
                   <Stack
                     direction="row"

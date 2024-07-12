@@ -4,7 +4,7 @@ import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme, featured }) => ({
-  backgroundColor: featured ? "#fffef9" : "#fafafa",
+  backgroundColor: theme.palette.background.color,
   border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
   borderRadius: "18px",
   display: "flex",

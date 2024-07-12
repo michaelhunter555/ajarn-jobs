@@ -13,6 +13,7 @@ const JobAdSkeletonStyles = styled(Skeleton)(({ theme }) => ({
 }));
 
 //job ad skeleton
+//job ad skeleton
 export const JobAdSkeleton = (props) => {
   let skeletons = [];
 
@@ -37,4 +38,8 @@ export const JobAdSkeleton = (props) => {
 //creator
 export const CreatorDataSkeleton = (props) => {
   return <Skeleton sx={props.sx} variant={props.variant} />;
+};
+
+export const DynamicLoadingSkeleton = ({ children, isLoading }) => {
+  return isLoading ? <Skeleton>{children}</Skeleton> : <>{children}</>;
 };

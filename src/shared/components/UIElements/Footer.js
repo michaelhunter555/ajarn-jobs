@@ -9,7 +9,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import { Grid, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const FooterStyles = styled("footer")(({ theme }) => ({
+const FooterStyles = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   backgroundColor: theme.palette.background.paper,
@@ -29,6 +29,8 @@ export const PageContainer = styled("div")(({ theme }) => ({
 
 export const Content = styled("div")(({ theme }) => ({
   flex: 1,
+  display: "flex",
+  flexDirection: "column",
 }));
 
 const SocialIcons = styled(Grid)({

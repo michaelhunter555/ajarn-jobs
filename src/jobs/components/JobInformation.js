@@ -101,7 +101,7 @@ export const JobInformation = (props) => {
         <Grid item>
           <StyledAvatar
             variant="circular"
-            src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+            src={`${job?.image}`}
             alt={`${job?.id}--${job?.creator?.company}`}
             sx={{ border: "1px solid #bdbdbd" }}
           />

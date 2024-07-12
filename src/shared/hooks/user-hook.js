@@ -19,7 +19,50 @@ export const useUser = () => {
     } catch (err) {}
   }, [sendRequest]);
 
-  //GET logged in user information
+  //get user applications for dashboard
+  const getUserApplications = async (userId, page, limit) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_USERS}/get-applications/${userId}?page=${page}&limit=${limit}`
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "There was an error getting users job applications list."
+        );
+      }
+
+      const data = await response.json();
+      return {
+        applications: data.applications,
+        page: data.pageNum,
+        totalPages: data.totalPages,
+        totalApplications: data.totalApplications,
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //GET user cards for dashboard
+  const getUserCard = async (page, limit) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_USERS}?page=${page}&limit=${limit}`
+    );
+
+    if (!response.ok) {
+      throw new Error("There was an error with getting all users GET request.");
+    }
+    const data = await response.json();
+    return {
+      users: data.users,
+      totalPages: data.totalPages,
+      page: data.pageNum,
+      totalUsers: data.totalUsers,
+    };
+  };
+
+  //GET logged in user information - should remove this use getUserProfileInfo
   const getUserInformation = useCallback(
     async (userId) => {
       try {
@@ -32,6 +75,36 @@ export const useUser = () => {
     },
     [updateUser, sendRequest]
   );
+
+  ////GET logged in user information
+  const getUserProfileInfo = async (userId) => {
+    const response = await fetch(`${process.env.REACT_APP_USERS}/${userId}`);
+    if (!response.ok) {
+      throw new Error("There was an error with profile informatin retrievl.");
+    }
+    const data = await response.json();
+
+    auth.updateUser(data.user);
+    return data.user;
+  };
+
+  //GET applicants by creator(if a creator)
+  const getApplicantsByCreator = async (page, limit) => {
+    try {
+      const response = await fetch(
+        ///applicants/
+        `${process.env.REACT_APP_USERS}/applicants/${auth?.user?.creator?._id}?page=${page}&limit=${limit}`
+      );
+
+      const data = await response.json();
+
+      return data;
+    } catch (err) {
+      console.log("Error with the request: " + err);
+    }
+  };
+
+  //
 
   //PATCH update userprofile
   const updateUserProfile = useCallback(
@@ -118,6 +191,10 @@ export const useUser = () => {
   return {
     users,
     getAllUsers,
+    getUserProfileInfo,
+    getUserCard,
+    getUserApplications,
+    getApplicantsByCreator,
     getUserInformation,
     updateUserProfile,
     addCredits,

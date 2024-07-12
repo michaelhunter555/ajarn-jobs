@@ -1,27 +1,30 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import { debounce } from "lodash";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  NavLink,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import { Avatar, Box, Button, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import LightModeIcon from '@mui/icons-material/LightMode';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import ModeNightIcon from '@mui/icons-material/ModeNight';
+import {
+  Avatar,
+  Box,
+  Link,
+  ListItem,
+  ListItemIcon,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import { AuthContext } from "../../context/auth-context";
-
-const DebouncedNav = ({ children, to, exact }) => {
-  const navigate = useNavigate();
-  const debouncedNavLink = debounce(() => {
-    navigate(to);
-  }, 500);
-
-  return (
-    <NavLink to={to} exact={exact} onClick={debouncedNavLink}>
-      {children}
-    </NavLink>
-  );
-};
+import { AuthContext } from '../../context/auth-context';
+import { useThemeToggle } from '../../context/theme-context';
 
 const NavLinks = (props) => {
+  const { isDarkMode, toggleTheme } = useThemeToggle();
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,7 +38,7 @@ const NavLinks = (props) => {
 
   return (
     <StyledNavLinks>
-      <li>
+      <ListItem>
         <NavLink to="/" exact="true">
           <Typography
             sx={{ fontWeight: location.pathname === "/" ? 700 : "inherit" }}
@@ -44,9 +47,9 @@ const NavLinks = (props) => {
             Home
           </Typography>
         </NavLink>
-      </li>
+      </ListItem>
 
-      <li>
+      <ListItem>
         <NavLink to="/jobs">
           <Typography
             sx={{ fontWeight: location.pathname === "/jobs" ? 700 : "inherit" }}
@@ -55,9 +58,9 @@ const NavLinks = (props) => {
             Jobs
           </Typography>
         </NavLink>
-      </li>
+      </ListItem>
 
-      <li>
+      <ListItem>
         <NavLink to="/teachers">
           <Typography
             sx={{
@@ -68,9 +71,9 @@ const NavLinks = (props) => {
             Teachers
           </Typography>
         </NavLink>
-      </li>
+      </ListItem>
 
-      <li>
+      <ListItem>
         <NavLink to="/content">
           <Typography
             sx={{
@@ -81,10 +84,10 @@ const NavLinks = (props) => {
             Content
           </Typography>
         </NavLink>
-      </li>
+      </ListItem>
 
       {auth.isLoggedIn && (
-        <li>
+        <ListItem>
           <NavLink to={`/users/${auth.user?._id}`}>
             <Typography
               sx={{
@@ -98,38 +101,86 @@ const NavLinks = (props) => {
               Dashboard
             </Typography>
           </NavLink>
-        </li>
+        </ListItem>
       )}
 
+      {auth?.isLoggedIn && (
+        <Box sx={{ marginRight: "15px" }}>
+          <Avatar
+            alt={`${auth.user?._id}--${auth.user?.name}`}
+            src={`${auth.user?.image}`}
+          />
+        </Box>
+      )}
+
+      {auth.isLoggedIn && (
+        <>
+          <ListItem>
+            <Tooltip title={`${isDarkMode ? "dark" : "light"} mode`}>
+              <ListItemIcon
+                sx={{ cursor: "pointer" }}
+                onClick={() => {
+                  toggleTheme();
+                }}
+              >
+                {isDarkMode ? (
+                  <ModeNightIcon sx={{ color: "rgb(229 189 35 / 85%)" }} />
+                ) : (
+                  <LightModeIcon sx={{ color: "rgb(229 189 35 / 85%)" }} />
+                )}
+              </ListItemIcon>
+            </Tooltip>
+            <Link
+              onClick={logoutHandler}
+              sx={{
+                textDecoration: "none",
+                color: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              <Typography
+                sx={{ fontSize: "11px" }}
+                variant="subtitle2"
+                fontWeight={700}
+              >
+                Logout
+              </Typography>
+            </Link>
+          </ListItem>
+        </>
+      )}
       {!auth.isLoggedIn && (
-        <li>
+        <ListItem>
+          <Tooltip title={`${isDarkMode ? "dark" : "light"} mode`}>
+            <ListItemIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => {
+                toggleTheme();
+              }}
+            >
+              {isDarkMode ? (
+                <ModeNightIcon sx={{ color: "rgb(229 189 35 / 85%)" }} />
+              ) : (
+                <LightModeIcon sx={{ color: "rgb(229 189 35 / 85%)" }} />
+              )}
+            </ListItemIcon>
+          </Tooltip>
           <NavLink to="/auth">
             <Typography
               sx={{
                 fontWeight: location.pathname === "/auth" ? 700 : "inherit",
+                fontSize: "11px",
               }}
-              variant="button"
+              variant="subtitle2"
             >
               Login
             </Typography>
           </NavLink>
-        </li>
-      )}
 
-      {auth.isLoggedIn && (
-        <li>
-          <Button onClick={logoutHandler}>
-            <Typography variant="button">Logout</Typography>
-          </Button>
-        </li>
-      )}
-      {auth.isLoggedIn && (
-        <Box>
-          <Avatar
-            alt={`${auth.user?._id}--${auth.user?.name}`}
-            src={`${process.env.REACT_APP_IMAGE}${auth.user?.image}`}
-          />
-        </Box>
+          <ListItemIcon>
+            <MeetingRoomIcon />
+          </ListItemIcon>
+        </ListItem>
       )}
     </StyledNavLinks>
   );
@@ -148,32 +199,35 @@ const StyledNavLinks = styled("ul")`
   justify-content: center;
   align-items: center;
 
+  span:hover {
+    cursor: pointer;
+  }
+
   li {
     margin: 1rem;
   }
 
   li a {
-    color: rgb(0, 0, 0);
+    color: ${({ theme }) => theme.palette.text.primary};
   }
 
   a {
     border: 1px solid transparent;
-    color: #000;
     text-decoration: none;
     padding: 0.5rem;
+    color: ${({ theme }) => theme.palette.text.primary};
   }
 
   a:hover,
-  a:active,
   a:active {
-    background: #f5f5f5;
-    color: #292929;
+    background: ${({ theme }) => theme.palette.background.paper};
+    color: ${({ theme }) => theme.palette.text.secondary};
   }
 
   button {
     cursor: pointer;
-    color: #000;
-    background: white;
+    color: ${({ theme }) => theme.palette.text.primary};
+    background: ${({ theme }) => theme.palette.background.default};
     padding: 0.5rem;
     font: inherit;
   }
@@ -184,8 +238,8 @@ const StyledNavLinks = styled("ul")`
 
   button:hover,
   button:active {
-    background: #292929;
-    color: white;
+    background: ${({ theme }) => theme.palette.text.secondary};
+    color: ${({ theme }) => theme.palette.text.primary};
   }
 
   @media (min-width: 768px) {
@@ -193,21 +247,16 @@ const StyledNavLinks = styled("ul")`
   }
 
   li {
-    margin: 1rem 0.5rem;
-  }
-
-  a {
-    color: white;
-    text-decoration: none;
+    margin: 1rem 0.2rem;
   }
 
   button {
-    color: black;
-    background: white;
+    color: ${({ theme }) => theme.palette.text.primary};
+    background: ${({ theme }) => theme.palette.background.default};
   }
   button:hover,
   button:active {
-    background: #f8df00;
-    color: #292929;
+    background: ${({ theme }) => theme.palette.text.secondary};
+    color: ${({ theme }) => theme.palette.text.primary};
   }
 `;

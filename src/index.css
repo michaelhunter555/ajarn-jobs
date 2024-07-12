@@ -1,4 +1,4 @@
-@import "animate.css";
+/* @import "animate.css";
 
 html {
   overflow-y: scroll;
@@ -18,25 +18,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #ededed;
 }
-
-/* Target the scrollbar track */
+/*
+**/
+/* Target the scrollbar track 
 ::-webkit-scrollbar-track {
   background-color: #f5f5f5;
   border-radius: 4px;
 }
 
-/* Target the scrollbar thumb */
+/* Target the scrollbar thumb 
 ::-webkit-scrollbar-thumb {
   background-color: #c1c1c1;
   border-radius: 4px;
 }
 
-/* On hover, change the thumb color */
+/* On hover, change the thumb color 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a1a1a1;
 }
 
-/* Target the scrollbar corner */
+/* Target the scrollbar corner 
 ::-webkit-scrollbar-corner {
   background-color: #f5f5f5;
 }
@@ -44,4 +45,4 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
+} */

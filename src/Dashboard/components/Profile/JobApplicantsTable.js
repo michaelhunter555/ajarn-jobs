@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
+import ClearIcon from "@mui/icons-material/Clear";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import {
   Button,
+  ButtonGroup,
+  Link as RouterLink,
   Pagination,
   Skeleton,
   Stack,
@@ -13,6 +17,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
@@ -49,25 +54,24 @@ const tableRows = [
   },
 ];
 
-const JobApplicantsTable = ({ applicants, isLoading }) => {
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 5;
+const JobApplicantsTable = ({
+  applicants,
+  isLoading,
+  jobApplicants,
+  applicationsPage, //func
+  page,
+}) => {
+  const [pageNum, setPage] = useState(page);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const flatApplicants = applicants?.reduce((acc, val) => acc.concat(val), []);
-
-  // Calculate number of pages inside the component
-  const noOfPages = Math.ceil(flatApplicants?.length / itemsPerPage);
-
-  // Slice the applicants array based on the current page
-  const indexOfLastPage = page * itemsPerPage;
-  const indexOfFirstPage = indexOfLastPage - itemsPerPage;
-  const currentApplicants = flatApplicants?.slice(
-    indexOfFirstPage,
-    indexOfLastPage
-  );
+  useEffect(() => {
+    if (jobApplicants && jobApplicants?.totalPages !== totalPages) {
+      setTotalPages(jobApplicants?.totalPages);
+    }
+  }, [jobApplicants, totalPages]);
 
   const hasApplicants =
-    applicants && applicants?.some((apps) => apps?.length > 0);
+    jobApplicants && jobApplicants?.jobApplications?.length > 0;
 
   return (
     <>
@@ -116,21 +120,34 @@ const JobApplicantsTable = ({ applicants, isLoading }) => {
                 </TableCell>
               </TableRow>
             ) : (
-              currentApplicants &&
-              currentApplicants?.map((application, i) => (
+              jobApplicants &&
+              jobApplicants?.jobApplications?.map((application, i) => (
                 <TableRow key={`${application?._id}${i + 1}`}>
-                  <TableCell>{application?.userId?.name}</TableCell>
-                  <TableCell>{application?.userId?.nationality}</TableCell>
-                  <TableCell>{application?.userId?.location}</TableCell>
-                  <TableCell>{application?.userId?.email}</TableCell>
                   <TableCell>
-                    <Button
+                    <RouterLink
                       component={Link}
                       to={`/teachers/${application?.userId?._id}`}
                       variant="contained"
                     >
-                      profile
-                    </Button>
+                      {application?.userId?.name}
+                    </RouterLink>
+                  </TableCell>
+                  <TableCell>{application?.userId?.nationality}</TableCell>
+                  <TableCell>{application?.userId?.location}</TableCell>
+                  <TableCell>{application?.userId?.email}</TableCell>
+                  <TableCell>
+                    <ButtonGroup>
+                      <Tooltip title="short list applicant">
+                        <Button>
+                          <ThumbUpOffAltIcon />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip title="remove applicant">
+                        <Button color="error">
+                          <ClearIcon />
+                        </Button>
+                      </Tooltip>
+                    </ButtonGroup>
                   </TableCell>
                 </TableRow>
               ))
@@ -140,9 +157,12 @@ const JobApplicantsTable = ({ applicants, isLoading }) => {
         <Stack alignItems="end">
           <Pagination
             size="small"
-            count={noOfPages}
-            page={page}
-            onChange={(event, val) => setPage(val)}
+            count={totalPages}
+            page={pageNum}
+            onChange={(event, val) => {
+              setPage(val);
+              applicationsPage(val, 5);
+            }}
             defaultPage={1}
             showFirstButton
             showLastButton

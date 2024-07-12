@@ -280,7 +280,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                     <Stack direction="row" spacing={1}>
                       <Avatar
                         variant="circular"
-                        src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                        src={`${job?.image}`}
                         sx={{
                           height: 55,
                           width: 55,
@@ -333,7 +333,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                       <Typography
                         color="text.primary"
                         variant="subtitle2"
-                        sx={{ fontSize: 12 }}
+                        sx={{ fontSize: 13 }}
                       >
                         {job?.creator?.about}
                       </Typography>
@@ -458,7 +458,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                     <Stack direction="row" spacing={1}>
                       <StyledDynamicAvatar
                         variant="circular"
-                        src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                        src={`${job?.image}`}
                         alt={`${job?._id}--${job?.creator?.company}`}
                       />
                       <Stack direction="column">
@@ -478,7 +478,6 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                           spacing={1}
                         >
                           <Chip
-                            size="small"
                             variant="outlined"
                             label={job?.salary}
                             icon={
@@ -489,7 +488,6 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                             sx={{ fontSize: 12 }}
                           />
                           <Chip
-                            size="small"
                             variant="outlined"
                             label={`${job?.location}`}
                             icon={

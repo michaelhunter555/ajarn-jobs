@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { Paper } from "@mui/material";
+import { Divider, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import Sponsors from "./Sponsors";
@@ -44,9 +44,9 @@ const StyledLink = styled(Link)({
   textDecoration: "none",
 });
 
-const StyledTitle = styled("h2")({
-  color: "#002379",
-});
+const StyledTitle = styled("h2")(({ theme }) => ({
+  color: theme.palette.text.secondary,
+}));
 
 const FeaturedContentList = (props) => {
   const { posts } = props;
@@ -54,12 +54,13 @@ const FeaturedContentList = (props) => {
   return (
     <>
       <StyledTitle>User Content</StyledTitle>
+      <Divider />
       <StyledPaper elevation={0}>
         {posts &&
           posts?.map((post, i) => (
-            <StyledLink key={post?._id} to={`/content/${post._id}`}>
+            <StyledLink key={post?._id} to={`/content/${post?._id}`}>
               <Sponsors
-                contentImage={`${process.env.REACT_APP_IMAGE}${post?.author?.image}`}
+                contentImage={`${post?.author?.image}`}
                 postContent={post?.postContent}
                 title={post?.title}
                 name={post?.name}

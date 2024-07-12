@@ -4,6 +4,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SettingsIcon from "@mui/icons-material/Settings";
 import WorkIcon from "@mui/icons-material/Work";
 import {
@@ -29,8 +30,8 @@ const VerticalSideBar = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   borderRadius: 10,
-  maxWidth: 250,
-  background: "white",
+  maxWidth: "100%",
+  background: theme.palette.background.paper,
   border: "1px solid #bdbdbd",
   [theme.breakpoints.down("md")]: {
     display: "none",
@@ -57,11 +58,6 @@ const menuItems = [
     componentName: "profile",
   },
   {
-    text: "Job Listings",
-    icon: <WorkIcon />,
-    componentName: "job-listings",
-  },
-  {
     text: "Cover Letter",
     icon: <WorkIcon />,
     componentName: "cover-letter",
@@ -82,6 +78,12 @@ const menuItems = [
     componentName: "content",
   },
   {
+    text: "Billing History",
+    icon: <ReceiptLongIcon />,
+    componentName: "invoices",
+  },
+
+  {
     text: "Settings",
     icon: <SettingsIcon />,
     componentName: "settings",
@@ -89,11 +91,13 @@ const menuItems = [
 ];
 
 const Sidebar = ({ onMenuItemClick }) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const { user } = useContext(AuthContext);
   const userType = user?.userType;
 
-  const handleSidebarClick = (componentName) => {
+  const handleSidebarClick = (componentName, i) => {
     onMenuItemClick(componentName);
+    setSelectedIndex(i);
   };
 
   //filter out what each userType needs and doesn't need
@@ -118,6 +122,9 @@ const Sidebar = ({ onMenuItemClick }) => {
     if (val.componentName === "resume" && userType === "employer") {
       return false;
     }
+    if (val.componentName === "invoices" && userType === "teacher") {
+      return false;
+    }
     return true;
   });
 
@@ -132,7 +139,8 @@ const Sidebar = ({ onMenuItemClick }) => {
         {filteredSidebar.map((item, i) => (
           <React.Fragment key={i}>
             <ListItemButton
-              onClick={() => handleSidebarClick(item.componentName)}
+              selected={i === selectedIndex}
+              onClick={() => handleSidebarClick(item.componentName, i)}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
@@ -176,6 +184,9 @@ export const BottomMobileNav = ({ onMenuItemClick }) => {
     }
 
     if (val.componentName === "logout") {
+      return false;
+    }
+    if (val.componentName === "invoices" && userType === "teacher") {
       return false;
     }
     return true;

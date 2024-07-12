@@ -1,6 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, {
+  useContext,
+  useState,
+} from 'react';
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 import {
   Box,
@@ -11,21 +14,21 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-import Button from "../../shared/components/FormElements/Button";
-import ImageUpload from "../../shared/components/FormElements/ImageUpload";
-import Input from "../../shared/components/FormElements/Input";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import Footer from "../../shared/components/UIElements/Footer";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useForm } from "../../shared/hooks/form-hook";
-import { useHttpClient } from "../../shared/hooks/http-hook";
+import Button from '../../shared/components/FormElements/Button';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import Input from '../../shared/components/FormElements/Input';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import Footer from '../../shared/components/UIElements/Footer';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useForm } from '../../shared/hooks/form-hook';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
-} from "../../shared/util/validators";
+} from '../../shared/util/validators';
 
 const PageContainer = styled("div")({
   minHeight: "90vh",
@@ -37,7 +40,7 @@ const Content = styled("div")({
   flex: 1,
 });
 
-const StyledFormCard = styled(Card)({
+const StyledFormCard = styled(Card)(({ theme }) => ({
   listStyle: "none",
   margin: "6rem auto",
   padding: "1rem",
@@ -45,8 +48,8 @@ const StyledFormCard = styled(Card)({
   maxWidth: "40rem",
   boxShadow: "0 2px 8px rgba(0, 0, 0, 0.26)",
   borderRadius: "6px",
-  background: "white",
-});
+  background: theme.palette.background.paper,
+}));
 
 const StyledBoxForButtons = styled(Box)({
   display: "flex",
@@ -134,6 +137,9 @@ const Auth = () => {
           incomeDirectory,
           applications,
           jobs,
+          buffetStartDate,
+          buffetEndDate,
+          userType,
         } = response;
 
         auth.login(
@@ -147,6 +153,9 @@ const Auth = () => {
             incomeDirectory: incomeDirectory,
             applications: applications,
             jobs: jobs,
+            buffetStartDate: buffetStartDate,
+            buffetEndDate: buffetEndDate,
+            userType: userType,
           },
           token
         );
@@ -178,12 +187,14 @@ const Auth = () => {
           resume,
           coverLetter,
           incomeDirectory,
+          userType,
         } = response;
 
         auth.login(
           {
             _id: userId,
             image: image,
+            userType: userType,
             buffetIsActive: buffetIsActive,
             blogPosts: blogPosts,
             resume: resume,

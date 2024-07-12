@@ -1,21 +1,21 @@
-import "./index.css";
-import "animate.css";
-
 import React from "react";
 
 import ReactDOM from "react-dom/client";
 
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 
 import App from "./App";
-import { theme } from "./shared/util/SiteTheme";
+////import { theme, selectPalette } from "./shared/util/SiteTheme";
+import { ThemeToggleProvider } from "./shared/context/theme-context";
+import { GlobalStyle } from "./shared/util/SiteTheme";
 
 const StyledApp = () => {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeToggleProvider>
       <CssBaseline />
+      <GlobalStyle />
       <App />
-    </ThemeProvider>
+    </ThemeToggleProvider>
   );
 };
 

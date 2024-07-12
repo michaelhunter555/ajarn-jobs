@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -8,6 +8,7 @@ import {
   Button,
   Divider,
   Grid,
+  Pagination,
   Stack,
   styled,
   Typography,
@@ -44,23 +45,43 @@ const StyledStackContent = styled(Stack)(({ theme }) => ({
 
 const AddNewBlogPost = () => {
   const [filter, setFilter] = useState();
+  const [totalPages, setTotalPages] = useState(1);
+  const [blogPage, setBlogPage] = useState({
+    page: 1,
+    limit: 5,
+  });
 
-  const getAllBlogPosts = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BLOG}`);
+  const getAllBlogPosts = async (page, limit) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_BLOG}?page=${page}&limit=${limit}`
+    );
 
     if (!response.ok) {
       throw new Error("There was an issue with the response.");
     }
     const data = await response.json();
 
-    return data.blogList;
+    return {
+      blogList: data.blogList,
+      totalBlogPosts: data.totalBlogPosts,
+      totalPages: data.totalPages,
+      page: data.pageNum,
+    };
   };
 
   const {
     data: blogPosts,
     isLoading,
     refetch,
-  } = useQuery(["AllBlogPosts"], () => getAllBlogPosts());
+  } = useQuery(["AllBlogPosts", blogPage.page, blogPage.limit], () =>
+    getAllBlogPosts(blogPage.page, blogPage.limit)
+  );
+
+  useEffect(() => {
+    if (blogPosts && Number(blogPosts?.totalPages) !== totalPages) {
+      setTotalPages(blogPosts?.totalPages);
+    }
+  }, [blogPosts, totalPages]);
 
   const incomingBlogPostHandler = () => {
     refetch();
@@ -72,7 +93,7 @@ const AddNewBlogPost = () => {
 
   const filteredContent =
     blogPosts &&
-    blogPosts?.filter((searchContent) => {
+    blogPosts?.blogList?.filter((searchContent) => {
       const postDate = moment(searchContent?.postDate); // Use postDate instead of date
       const searchDate = moment(filter?.date); // Parse the string into a moment object
 
@@ -90,6 +111,13 @@ const AddNewBlogPost = () => {
             .includes(filter.search.toLowerCase()))
       );
     });
+
+  const handleBlogPageChange = (page, limit) => {
+    setBlogPage({
+      page: page,
+      limit: limit,
+    });
+  };
 
   return (
     <PageContainer>
@@ -120,6 +148,14 @@ const AddNewBlogPost = () => {
                 isLoading={isLoading}
                 filteredContent={filteredContent}
               />
+              {!isLoading && (
+                <Pagination
+                  sx={{ margin: "0.5rem" }}
+                  count={totalPages}
+                  page={blogPage.page}
+                  onChange={(event, page) => handleBlogPageChange(page, 5)}
+                />
+              )}
               {!isLoading && (
                 <Button variant="outlined" component={Link} to="/jobs">
                   Need a Job?

@@ -1,20 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
-import {
-  Link,
-  useNavigate,
-} from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
-import {
-  Box,
-  Button,
-  Modal,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Chip, Divider, Modal, Stack, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import { AuthContext } from '../../context/auth-context';
+import { AuthContext } from "../../context/auth-context";
+import { CustomModalBlur } from "../../util/CustomerBlurStyle";
 
 const StyledBoxContainer = styled(Box)(({ theme }) => ({
   position: "absolute",
@@ -52,6 +44,7 @@ const CustomModal = (props) => {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        sx={{ ...(!auth?.user?.buffetIsActive ? { ...CustomModalBlur } : {}) }}
       >
         <StyledBoxContainer>
           <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -60,42 +53,47 @@ const CustomModal = (props) => {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             {props.noCredits || props.signIn || props.errorMessage}
           </Typography>
+          <Divider flexItem sx={{ marginBottom: "0.5rem" }} />
           {!isLoggedIn && (
-            <Stack direction="row" spacing={1}>
-              <Button component={Link} variant="contained" to={`/auth`}>
-                {" "}
-                login{" "}
-              </Button>
-              <Button
+            <Stack direction="row" spacing={1} justifyContent="flex-end">
+              <Chip
+                label="login"
+                component={Link}
+                variant="contained"
+                to={`/auth`}
+                clickable={true}
+              />
+              <Chip
+                label="go back"
                 variant={props.alternateButtonVariant}
                 component={Link}
                 onClick={() => navigate(-1)}
-              >
-                go back
-              </Button>
+              />
             </Stack>
           )}
           {isLoggedIn && credits === 0 && (
-            <Button component={Link} to={`/users/${auth.user._id}`}>
-              Get Credits
-            </Button>
+            <Chip
+              label="Get Credits"
+              component={Link}
+              to={`/users/${auth.user._id}`}
+              clickable={true}
+            />
           )}
           {isLoggedIn && !buffetIsActive && (
             <Stack direction="row" spacing={1}>
-              <Button
+              <Chip
+                label="Get Credits"
                 variant={props.buttonVariant}
                 component={Link}
                 to={`/users/${auth.user._id}`}
-              >
-                Get Credits & Activate Buffet
-              </Button>
-              <Button
+              />
+
+              <Chip
+                label="go back"
                 variant={props.alternateButtonVariant}
                 component={Link}
                 onClick={() => navigate(-1)}
-              >
-                go back
-              </Button>
+              />
             </Stack>
           )}
         </StyledBoxContainer>

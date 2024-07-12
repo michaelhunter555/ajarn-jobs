@@ -19,9 +19,10 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useThemeToggle } from "../../context/theme-context";
+
 const StyledJobAdCard = styled(Card)(({ theme, featured }) => ({
   backgroundColor: featured ? "#f5f2e4" : "",
-  border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
 }));
 
 const StyledChipDiv = styled(Typography)(({ theme, featured }) => ({
@@ -59,6 +60,8 @@ const StyledStack = styled(Stack)(({ theme }) => ({
 }));
 
 const JobAdsList = ({ job, company }) => {
+  const { isDarkMode } = useThemeToggle();
+
   return (
     <>
       {job?.map((school, i) => (
@@ -66,7 +69,17 @@ const JobAdsList = ({ job, company }) => {
           <Link to={`/jobs/${school?._id}`} style={{ textDecoration: "none" }}>
             <StyledJobAdCard
               component="div"
-              featured={school?.jobType === "featured"}
+              sx={{
+                backgroundColor:
+                  isDarkMode && school?.jobType === "featured"
+                    ? "#303f42"
+                    : !isDarkMode && school?.jobType === "featured"
+                    ? "#f5f2e4"
+                    : "",
+                ...(isDarkMode && school?.jobType === "featured"
+                  ? { boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)" }
+                  : {}),
+              }}
             >
               <CardActionArea>
                 <CardContent>
@@ -74,7 +87,7 @@ const JobAdsList = ({ job, company }) => {
                     <Grid item xs={4} sm={4} lg={3} xl={2}>
                       <StyledMediaCard
                         component="img"
-                        image={`${process.env.REACT_APP_IMAGE}${school?.image}`}
+                        image={`${school?.image}`}
                         alt={`${school?._id}--${school?.creator?.company}`}
                       />
                     </Grid>
@@ -83,8 +96,8 @@ const JobAdsList = ({ job, company }) => {
                       <Stack spacing={0} alignItems="start">
                         <Typography
                           variant="h6"
+                          color="text.secondary"
                           sx={{
-                            color: "#5e6063",
                             fontSize: "20px",
                           }}
                           component="div"
@@ -95,11 +108,19 @@ const JobAdsList = ({ job, company }) => {
                           {school?.jobType === "featured" && (
                             <Chip
                               sx={{
-                                backgroundColor: "#faea92",
+                                ...(!isDarkMode
+                                  ? {
+                                      backgroundColor: "#faea92",
+                                      color: "black",
+                                    }
+                                  : {
+                                      backgroundColor: "transparent",
+                                      color: "#cdbd64",
+                                    }),
                                 borderRadius: "6px",
                                 fontSize: "11px",
                                 height: "1.2rem",
-                                color: "black",
+
                                 border: "1px solid #cdbd64",
                               }}
                               label="Featured"
@@ -128,6 +149,16 @@ const JobAdsList = ({ job, company }) => {
                       </Stack>
                       <StyledChipDiv variant="body2" component="div">
                         <StyledChip
+                          sx={{
+                            ...(isDarkMode &&
+                              school.jobType === "featured" && {
+                                backgroundColor: "#eeffb7",
+                              }),
+                            ...(isDarkMode &&
+                              school.jobType === "featured" && {
+                                color: "#121212",
+                              }),
+                          }}
                           clickable
                           variant={
                             school?.jobType === "featured" ? "" : "outlined"
@@ -135,9 +166,18 @@ const JobAdsList = ({ job, company }) => {
                           label={school?.location}
                           size={"small"}
                           icon={<PlaceIcon style={{ color: "#47acbb" }} />}
-                          featured={school?.jobType === "featured"}
                         />
                         <StyledChip
+                          sx={{
+                            ...(isDarkMode &&
+                              school.jobType === "featured" && {
+                                backgroundColor: "#eeffb7",
+                              }),
+                            ...(isDarkMode &&
+                              school.jobType === "featured" && {
+                                color: "#121212",
+                              }),
+                          }}
                           clickable
                           variant={
                             school?.jobType === "featured" ? "" : "outlined"
@@ -147,9 +187,18 @@ const JobAdsList = ({ job, company }) => {
                           icon={
                             <PaymentsTwoToneIcon style={{ color: "#1e8d41" }} />
                           }
-                          featured={school?.jobType === "featured"}
                         />
                         <StyledChip
+                          sx={{
+                            ...(isDarkMode &&
+                              school.jobType === "featured" && {
+                                backgroundColor: "#eeffb7",
+                              }),
+                            ...(isDarkMode &&
+                              school.jobType === "featured" && {
+                                color: "#121212",
+                              }),
+                          }}
                           clickable
                           variant={
                             school?.jobType === "featured" ? "" : "outlined"
@@ -157,7 +206,6 @@ const JobAdsList = ({ job, company }) => {
                           label={school?.hours}
                           size={"small"}
                           icon={<PunchClockIcon style={{ color: "#514949" }} />}
-                          featured={school?.jobType === "featured"}
                         />
                       </StyledChipDiv>
                       <Typography variant="body2" color="text.secondary">

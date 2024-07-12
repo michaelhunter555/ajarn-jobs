@@ -26,12 +26,12 @@ const LoginFormControl = styled("div")(({ theme }) => ({
     width: "100%",
     font: "inherit",
 
-    background: "#fff",
+    background: theme.palette.background.default,
     margin: "0 auto",
   },
   "& input:focus, & textarea:focus": {
     outline: "none",
-    background: "#f9f9f9",
+    background: theme.palette.background.default,
     borderColor: "#510077",
   },
   "&.form-control--invalid label, &.form-control--invalid p": {

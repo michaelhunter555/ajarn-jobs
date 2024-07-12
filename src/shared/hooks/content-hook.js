@@ -1,13 +1,9 @@
-import {
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+import { useCallback, useContext, useState } from "react";
 
-import _ from 'lodash';
+import _ from "lodash";
 
-import { AuthContext } from '../context/auth-context';
-import { useHttpClient } from './http-hook';
+import { AuthContext } from "../context/auth-context";
+import { useHttpClient } from "./http-hook";
 
 //************UseContent Hook*************
 export const useContent = () => {
@@ -39,6 +35,32 @@ export const useContent = () => {
         const data = await response.json();
         setContent(data.blogPost);
         return data.blogPost;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [sendRequest]
+  );
+
+  //GET blog by user Id
+  const getBlogPostByUserId = useCallback(
+    async (userId, page, limit) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_BLOG}/posts/${userId}?page=${page}&limit=${limit}`
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            "There was an error retreiving the blog details for this post."
+          );
+        }
+
+        return {
+          blogPost: response.userPosts,
+          page: response.pageNum,
+          totalPages: response.totalPages,
+        };
       } catch (err) {
         console.log(err);
       }
@@ -250,6 +272,7 @@ export const useContent = () => {
     likeContentPost,
     throttledLike,
     getBlogPostById,
+    getBlogPostByUserId,
     getTotalLikes,
     getTotalDislikes,
     totalLikes,

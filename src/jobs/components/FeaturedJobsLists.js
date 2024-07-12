@@ -11,7 +11,6 @@ const StyledFeaturedJobs = styled(Paper)({
   border: "1px solid #ddd",
   padding: "1.5rem",
   borderRadius: "6px",
-  background: "#fff",
 });
 
 const FeaturedJobsLists = (props) => {
@@ -39,7 +38,7 @@ const FeaturedJobsLists = (props) => {
           >
             <FeaturedJobs
               id={school?._id}
-              logo={`${process.env.REACT_APP_IMAGE}${school?.image}`}
+              logo={`${school?.image}`}
               title={school?.title}
               salary={school?.salary}
               hours={school?.hours}

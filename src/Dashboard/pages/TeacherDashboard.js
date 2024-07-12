@@ -3,42 +3,54 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
-import { Button, Grid, Skeleton, Stack } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Grid,
+  Link as RouterLink,
+  Pagination,
+  Skeleton,
+  Stack,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import JobAdsList from "../../shared/components/UIElements/JobAdsList";
 import UserProfileJobAd from "../../shared/components/UIElements/UserProfileJobAd";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useContent } from "../../shared/hooks/content-hook";
 import { useCreator } from "../../shared/hooks/creator-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { useJob } from "../../shared/hooks/jobs-hook";
 import { useResume } from "../../shared/hooks/resume-hook";
 import { useSettingsToggle } from "../../shared/hooks/toggle-hook";
 import { useUser } from "../../shared/hooks/user-hook";
-import TeacherItem from "../../users/components/TeacherItem";
+import ActiveTeachersDashboardList from "../../users/components/TeacherDashboardItem";
 import Applications from "../components/Profile/Applications";
+import UserBilling from "../components/Profile/BillingDataTable";
 import CoverLetter from "../components/Profile/CoverLetter";
 import Creator from "../components/Profile/Creator";
+import {
+  APPLICATIONS,
+  CONTENT,
+  COVER_LETTER,
+  CREATOR,
+  EMPLOYER,
+  INVOICES,
+  PROFILE,
+  RESUME,
+  SETTINGS,
+  TEACHER,
+} from "../components/Profile/dashboardValues";
 import FeaturedCard from "../components/Profile/FeaturedCard";
+import JobAdSidebarList from "../components/Profile/JobAdSidebarList";
 import ProfileInformation from "../components/Profile/ProfileInformation";
 import ProfileProgress from "../components/Profile/ProfileProgress";
+import PromotionSidebar from "../components/Profile/PromotionsSidebar";
 import TeacherSettings from "../components/Profile/TeacherSettings";
 import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
 import UsersContent from "../components/Profile/UsersContent";
 import Sidebar, { BottomMobileNav } from "../components/Sidebar";
-
-const TEACHER = "teacher";
-const CONTENT = "content";
-const EMPLOYER = "employer";
-const PROFILE = "profile";
-const JOB_LISTINGS = "job-listings";
-const APPLICATIONS = "applications";
-const RESUME = "resume";
-const COVER_LETTER = "cover-letter";
-const CREATOR = "creator";
-const SETTINGS = "settings";
 
 const JobAdGridContainer = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -62,13 +74,40 @@ const StyledGridContainerForProfile = styled(Grid)(({ theme }) => ({
 const TeacherDashboard = () => {
   const userId = useParams().id;
   const auth = useContext(AuthContext);
-
   const [currentComponent, setCurrentComponent] = useState("profile");
-  const [selectedCard, setSelectedCard] = useState(null);
+
+  const [userCardPage, setUserCardPage] = useState({
+    page: 1,
+    limit: 5,
+  });
+  const [totalUserCardPages, setTotalUserCardPages] = useState(1);
+
+  const [applicantsPage, setApplicantsPage] = useState({
+    page: 1,
+    limit: 5,
+  });
+  const [jobsPage, setJobsPage] = useState({
+    page: 1,
+    limit: 5,
+  });
+
+  const [blogsPage, setBlogsPage] = useState({
+    page: 1,
+    limit: 5,
+  });
+
+  const [applicationPage, setApplicationPage] = useState({
+    page: 1,
+    limit: 5,
+  });
 
   const {
     //get and update user profile
+    getUserApplications,
+    getUserProfileInfo,
+    getApplicantsByCreator,
     updateUserProfile,
+    getUserCard,
     isPostLoading,
     clearError: clearUserProfileError,
   } = useUser();
@@ -95,6 +134,8 @@ const TeacherDashboard = () => {
   } = useSettingsToggle();
   const {
     // get list of user jobs
+    getJobAds,
+    getJobsByCreatorId,
     error: gettingJobsError,
     clearError: clearGettingJobsError,
   } = useJob();
@@ -104,66 +145,113 @@ const TeacherDashboard = () => {
     clearError: clearJobAdError,
   } = useHttpClient();
 
-  //update auth object to reflect most current database
-  const getUserProfileInfo = async (userId) => {
-    const response = await fetch(`${process.env.REACT_APP_USERS}/${userId}`);
-    if (!response.ok) {
-      throw new Error("There was an error with profile informatin retrievl.");
-    }
-    const data = await response.json();
+  const { getBlogPostByUserId } = useContent();
 
-    auth.updateUser(data.user);
-    return data.user;
-  };
-  //useQuery for caching response
+  //update auth object to reflect most current database
   const {
     isLoading: userProfileLoading,
     error: getUserProfileError,
     refetch: refetchUser,
-  } = useQuery(["userInfo", auth.user?._id], () =>
-    getUserProfileInfo(auth?.user?._id)
-  );
+  } = useQuery({
+    queryKey: ["userInfo", auth.user?._id],
+    queryFn: () => getUserProfileInfo(auth?.user?._id),
+  });
+
+  //get applicants by creator;
+  const { data: applicants, isLoading: applicantsIsLoading } = useQuery({
+    queryKey: ["applicants", applicantsPage.page, applicantsPage.limit],
+    queryFn: () =>
+      getApplicantsByCreator(applicantsPage.page, applicantsPage.limit),
+    enabled: Boolean(
+      auth?.user?.userType === EMPLOYER && auth?.user?.creator?._id
+    ),
+    staleTime: 2 * 60 * 60 * 1000,
+  });
+
+  //get jobs by userId
+  const {
+    data: creatorJobs,
+    isLoading: creatorJobsIsLoading,
+    refetch: refetchCreatorJobs,
+  } = useQuery({
+    queryKey: [
+      "creatorJobs",
+      auth?.user?.creator?._id,
+      jobsPage.page,
+      jobsPage.limit,
+    ],
+    queryFn: () =>
+      getJobsByCreatorId(
+        auth?.user?.creator?._id,
+        jobsPage.page,
+        jobsPage.limit
+      ),
+    enabled: Boolean(
+      auth?.user?.userType === EMPLOYER && auth?.user?.creator?._id
+    ),
+    staleTime: 5 * 60 * 60 * 1000,
+  });
+
+  const {
+    data: blogPosts,
+    isLoading: blogPostIsLoading,
+    refetch: refetchBlogs,
+  } = useQuery({
+    queryKey: [
+      "userBlogPosts",
+      auth?.user?._id,
+      blogsPage.page,
+      blogsPage.limit,
+    ],
+    queryFn: () =>
+      getBlogPostByUserId(auth?.user?._id, blogsPage.page, blogsPage.limit),
+    enabled: Boolean(auth?.user?._id && currentComponent === CONTENT),
+    staleTime: 5 * 60 * 60 * 1000,
+  });
+
+  //get user applications - jobs user has applied to
+  const { data: userApplications, isLoading: userApplicationsIsLoading } =
+    useQuery({
+      queryKey: [
+        "userApplications",
+        applicationPage.page,
+        applicationPage.limit,
+      ],
+      queryFn: () =>
+        getUserApplications(
+          auth?.user?._id,
+          applicationPage.page,
+          applicationPage.limit
+        ),
+      enabled: Boolean(auth?.user?.userType === TEACHER),
+      staleTime: 1 * 60 * 60 * 1000,
+    });
 
   //get job ads
-  const getJobAds = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_JOBS}`);
-      if (!response.ok) {
-        throw new Error("There was an error with getJobAds");
-      }
-      const data = await response.json();
-
-      return data.jobs;
-    } catch (err) {
-      console.log("There was an error getting the job ads - Msg: " + err);
-    }
-  };
   //cache jobads with useQuery
-  const { data: jobAd, isLoading: jobAdIsLoading } = useQuery(["JobAds"], () =>
-    getJobAds()
-  );
+  const { data: jobAd, isLoading: jobAdIsLoading } = useQuery({
+    queryKey: ["JobAds"],
+    queryFn: () => getJobAds(),
+    enabled: Boolean(auth?.user?.userType === TEACHER),
+    staleTime: 5 * 60 * 60 * 1000,
+  });
 
   //GET user cards
-  const getUserCard = async () => {
-    const response = await fetch(`${process.env.REACT_APP_USERS}`);
-
-    if (!response.ok) {
-      throw new Error("There was an error with getting all users GET request.");
-    }
-    const data = await response.json();
-    return data.users;
-  };
   //cache logic for userCards
-  const { data: userCards } = useQuery(["userCards"], () => getUserCard());
+  const { data: userCards, isLoading: userCardsIsLoading } = useQuery({
+    queryKey: ["userCards", userCardPage.page, userCardPage.limit],
+    queryFn: () => getUserCard(userCardPage.page, userCardPage.limit),
+    enabled: Boolean(auth?.user?.userType === EMPLOYER),
+    staleTime: 5 * 60 * 60 * 1000,
+  });
+  //paginate cards for users
 
-  //get random user card
   useEffect(() => {
-    if (userCards && userCards?.length > 0) {
-      const randomUser =
-        userCards[Math.floor(Math.random() * userCards?.length)];
-      setSelectedCard(randomUser);
+    if (userCards && userCards?.users?.length > 0) {
+      setTotalUserCardPages(userCards?.totalPages);
     }
   }, [userCards]);
+  //pass a prop to conditionally render pagination or create a ne
 
   //PATCH General Profile Info Upate
   const handleProfileUpdate = (update) => {
@@ -237,18 +325,6 @@ const TeacherDashboard = () => {
   const authHasResume =
     auth.user?.resume?.length === 0 ? "Add Work History Item" : "Add More Work";
 
-  const {
-    id,
-    name,
-    location,
-    nationality,
-    workExperience,
-    image,
-    highestCertification,
-    about,
-    education,
-  } = selectedCard || {};
-
   //sidebar component rendering
   const handleMenuItemClick = (componentName) => {
     setCurrentComponent(componentName);
@@ -257,6 +333,43 @@ const TeacherDashboard = () => {
   //if auth is an employer and has a creator account, make the creator component default.
   const authIsCreator =
     auth.user?.userType === EMPLOYER && auth.user?.creator !== null;
+
+  const handleApplicantsPage = (page, limit) => {
+    setApplicantsPage((prev) => ({
+      page: page,
+      limit: limit,
+    }));
+  };
+
+  const handleJobPageChange = (page, limit) => {
+    setJobsPage({
+      page: page,
+      limit: limit,
+    });
+  };
+
+  const handleBlogPageChange = (page, limit) => {
+    setBlogsPage({
+      page: page,
+      limit: limit,
+    });
+  };
+
+  const handleApplicationsPage = (page, limit) => {
+    setApplicationPage({
+      page: page,
+      limit: limit,
+    });
+  };
+
+  const handleUserCardPage = (page, limit) => {
+    setUserCardPage({
+      page: page,
+      limit: limit,
+    });
+  };
+
+  console.log("auth: ", auth);
 
   //Sidebar component rendering
   const renderComponent = () => {
@@ -273,6 +386,20 @@ const TeacherDashboard = () => {
                   user={auth?.user}
                   isLoading={userProfileLoading}
                   refetch={refetchUser}
+                  //creatorjobs
+                  onCreatorsPageChange={(page, limit) =>
+                    handleJobPageChange(page, limit)
+                  }
+                  refetchCreatorJobs={refetchCreatorJobs}
+                  creatorJobs={creatorJobs}
+                  creatorJobsIsLoading={creatorJobsIsLoading}
+                  //applicants
+                  applicants={applicants}
+                  page={applicantsPage.page}
+                  applicationsPage={(page, limit) =>
+                    handleApplicantsPage(page, limit)
+                  }
+                  applicantsIsLoading={applicantsIsLoading} //applicantsIsLoading
                 />
               )}{" "}
               {auth.user?.userType === EMPLOYER && !authIsCreator && (
@@ -280,14 +407,15 @@ const TeacherDashboard = () => {
               )}
             </>
           );
-        case JOB_LISTINGS:
-          /*auth.user.jobs */
-          return <JobAdsList job={auth.user?.jobs} />;
+
         case APPLICATIONS:
           return (
             <Applications
-              isLoading={userProfileLoading}
-              applications={auth?.user?.applications}
+              isLoading={userApplicationsIsLoading}
+              applications={userApplications}
+              onApplicationPageChange={(page, limit) =>
+                handleApplicationsPage(page, limit)
+              }
             />
           );
         case RESUME:
@@ -344,8 +472,17 @@ const TeacherDashboard = () => {
           );
         case CONTENT:
           return (
-            <UsersContent isLoading={userProfileLoading} user={auth.user} />
+            <UsersContent
+              isLoading={blogPostIsLoading}
+              blogPosts={blogPosts}
+              onBlogPageChange={(page, limit) =>
+                handleBlogPageChange(page, limit)
+              }
+              refetchBlogs={refetchBlogs}
+            />
           );
+        case INVOICES:
+          return <UserBilling user={auth?.user} />;
         case SETTINGS:
           const isTeacher = auth.user?.userType === TEACHER;
           const isHidden = auth.user?.isHidden;
@@ -383,7 +520,7 @@ const TeacherDashboard = () => {
   };
 
   //dashboard loading state
-  const homeDashLoadingState = userProfileLoading || jobAdIsLoading; //|| jobsIsLoading;
+  const homeDashLoadingState = userProfileLoading || jobAdIsLoading;
 
   const error =
     getUserProfileError ||
@@ -415,70 +552,86 @@ const TeacherDashboard = () => {
         }}
       >
         <Grid item xs={12} md={2}>
-          {homeDashLoadingState && (
+          {userProfileLoading && (
             <Skeleton
               sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
               variant="rectangular"
               height={310}
             />
           )}
-          {!homeDashLoadingState && (
-            <Sidebar onMenuItemClick={handleMenuItemClick} />
+          {!userProfileLoading && (
+            <Stack spacing={2}>
+              <Sidebar onMenuItemClick={handleMenuItemClick} />
+              {!jobAdIsLoading && auth?.user?.userType === TEACHER && jobAd && (
+                <JobAdSidebarList jobAd={jobAd} />
+              )}
+              {auth?.user?.userType === EMPLOYER && <PromotionSidebar />}
+            </Stack>
           )}
         </Grid>
 
         <Grid item xs={12} md={7}>
-          <JobAdGridContainer
-            item
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "1rem",
-              gap: "5px",
-            }}
-          >
-            <Grid item xs={12} sm={6}>
-              {homeDashLoadingState && (
-                <Skeleton
-                  sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
-                  variant="rectangular"
-                  height={114}
-                />
-              )}
-              {!homeDashLoadingState && (
-                <UserProfileJobAd
-                  id={jobAd[0]?._id}
-                  logo={`${process.env.REACT_APP_IMAGE}${jobAd[0]?.image}`}
-                  title={jobAd[0]?.title}
-                  description={sanitizeHtml(jobAd[0]?.description, {
-                    allowedTags: [],
-                    allowedAttributes: {},
-                  })}
-                />
-              )}
-            </Grid>
+          {auth?.user?.userType === TEACHER && (
+            <JobAdGridContainer
+              item
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                marginBottom: "1rem",
+                gap: "5px",
+              }}
+            >
+              <Grid item xs={12} sm={6}>
+                {jobAdIsLoading && (
+                  <Skeleton
+                    sx={{
+                      margin: "0 auto",
+                      borderRadius: "6px",
+                      width: "100%",
+                    }}
+                    variant="rectangular"
+                    height={114}
+                  />
+                )}
+                {!jobAdIsLoading && (
+                  <UserProfileJobAd
+                    id={jobAd[0]?._id}
+                    logo={`${jobAd[0]?.image}`}
+                    title={jobAd[0]?.title}
+                    description={sanitizeHtml(jobAd[0]?.description, {
+                      allowedTags: [],
+                      allowedAttributes: {},
+                    })}
+                  />
+                )}
+              </Grid>
 
-            <Grid item xs={12} sm={6}>
-              {homeDashLoadingState && (
-                <Skeleton
-                  sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
-                  variant="rectangular"
-                  height={114}
-                />
-              )}
-              {!homeDashLoadingState && (
-                <UserProfileJobAd
-                  id={jobAd[1]?._id}
-                  logo={`${process.env.REACT_APP_IMAGE}${jobAd[1]?.image}`}
-                  title={jobAd[1]?.title}
-                  description={sanitizeHtml(jobAd[1]?.description, {
-                    allowedTags: [],
-                    allowedAttributes: {},
-                  })}
-                />
-              )}
-            </Grid>
-          </JobAdGridContainer>
+              <Grid item xs={12} sm={6}>
+                {jobAdIsLoading && (
+                  <Skeleton
+                    sx={{
+                      margin: "0 auto",
+                      borderRadius: "6px",
+                      width: "100%",
+                    }}
+                    variant="rectangular"
+                    height={114}
+                  />
+                )}
+                {!jobAdIsLoading && (
+                  <UserProfileJobAd
+                    id={jobAd[1]?._id}
+                    logo={`${jobAd[1]?.image}`}
+                    title={jobAd[1]?.title}
+                    description={sanitizeHtml(jobAd[1]?.description, {
+                      allowedTags: [],
+                      allowedAttributes: {},
+                    })}
+                  />
+                )}
+              </Grid>
+            </JobAdGridContainer>
+          )}
 
           <Grid
             item
@@ -490,7 +643,7 @@ const TeacherDashboard = () => {
               marginBottom: 5,
             }}
           >
-            {homeDashLoadingState && (
+            {userProfileLoading && (
               <Stack justifyContent="flex-End">
                 <Skeleton height={80} variant="rectangular" />
                 <Skeleton height={180} variant="rectangular" />
@@ -499,16 +652,26 @@ const TeacherDashboard = () => {
                 <Skeleton height={30} />
               </Stack>
             )}
-            {!homeDashLoadingState && renderComponent()}
+            {!userProfileLoading && renderComponent()}
           </Grid>
         </Grid>
+
         <Grid
           item
           xs={12}
           md={3}
-          sx={{ xs: { display: "flex", justifyContent: "center" } }}
+          sx={{
+            xs: { display: "flex", justifyContent: "center" },
+          }}
         >
-          {homeDashLoadingState ? (
+          {auth?.user?.userType === EMPLOYER && (
+            <Alert severity={auth?.user?.buffetIsActive ? "info" : "warning"}>
+              {auth?.user?.buffetIsActive
+                ? "Viewing Latest Teachers"
+                : "Activate Buffet to view & contact an actively growing list of teachers."}
+            </Alert>
+          )}
+          {userProfileLoading ? (
             <>
               <Skeleton
                 sx={{
@@ -520,36 +683,52 @@ const TeacherDashboard = () => {
                 height={372}
               />
             </>
-          ) : auth.user?.userType === "teacher" ? (
+          ) : auth.user?.userType === TEACHER ? (
             <FeaturedCard />
-          ) : (
-            selectedCard && (
-              <>
-                {(() => {
-                  let teacherItem = (
-                    <TeacherItem
-                      id={id}
-                      name={name}
-                      education={education}
-                      currentLocation={location}
-                      nationality={nationality}
-                      workExperience={workExperience}
-                      image={`${process.env.REACT_APP_IMAGE}${image}`}
-                      degree={highestCertification}
-                      about={about}
-                      width={200}
-                    />
-                  );
-
-                  if (auth.user?.buffetIsActive) {
-                    return <Link to={`/teachers/${id}`}>{teacherItem}</Link>;
+          ) : userCards && !userCardsIsLoading ? (
+            <>
+              {userCards?.users?.map((user, i) => (
+                <RouterLink
+                  sx={{ textDecoration: "none", "&:hover": {} }}
+                  component={Link}
+                  key={user?.id}
+                  to={
+                    auth?.user?.buffetIsActive ? `/teachers/${user?.id}` : "#"
                   }
-                  return teacherItem;
-                })()}
-              </>
-            )
+                >
+                  <ActiveTeachersDashboardList
+                    id={user?.id}
+                    name={user?.name}
+                    education={user?.education}
+                    currentLocation={user?.location}
+                    nationality={user?.nationality}
+                    workExperience={user?.workExperience}
+                    image={`${user?.image}`}
+                    degree={user?.highestCertification}
+                    about={user?.about}
+                    width={200}
+                    buffetIsActive={auth?.user?.buffetIsActive}
+                  />
+                </RouterLink>
+              ))}
+            </>
+          ) : (
+            Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} width="100%" />
+            ))
           )}
-          {!homeDashLoadingState && auth.user?.userType === TEACHER && (
+          {auth?.user?.userType === EMPLOYER && (
+            <Stack direction="row" justifyContent="flex-end">
+              <Pagination
+                disabled={!auth?.user?.buffetIsActive}
+                count={totalUserCardPages}
+                page={userCardPage.page}
+                onChange={(event, page) => handleUserCardPage(page, 5)}
+              />
+            </Stack>
+          )}
+
+          {!userProfileLoading && auth.user?.userType === TEACHER && (
             <>
               <ProfileProgress user={auth.user} />
             </>

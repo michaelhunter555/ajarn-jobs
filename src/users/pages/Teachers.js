@@ -1,20 +1,30 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-import { Grid, Skeleton } from "@mui/material/";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import { useQuery } from "@tanstack/react-query";
+import {
+  Grid,
+  Pagination,
+} from '@mui/material/';
+import {
+  createTheme,
+  styled,
+} from '@mui/material/styles';
+import { useQuery } from '@tanstack/react-query';
 
-import CustomModal from "../../shared/components/UIElements/CustomModal";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import CustomModal from '../../shared/components/UIElements/CustomModal';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import Footer, {
   Content,
   PageContainer,
-} from "../../shared/components/UIElements/Footer";
-import TeflBanner from "../../shared/components/UIElements/TeflBanner";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useHttpClient } from "../../shared/hooks/http-hook";
-import TeacherFilter from "../components/TeacherFilter";
-import TeacherList from "../components/TeacherList";
+} from '../../shared/components/UIElements/Footer';
+import TeflBanner from '../../shared/components/UIElements/TeflBanner';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import TeacherFilter from '../components/TeacherFilter';
+import TeacherList from '../components/TeacherList';
 
 const customThemeForTeachers = createTheme({
   breakpoints: {
@@ -50,32 +60,75 @@ const StyledGridItem = styled(Grid)(({ theme }) => ({
 
 const Teachers = () => {
   const auth = useContext(AuthContext);
-  const [filter, setFilter] = useState({});
+  const [filter, setFilter] = useState({
+    location: "",
+    nationality: "",
+    qualifications: "",
+  });
   const [blur, setBlur] = useState(false);
+  const [teachersPage, setTeachersPage] = useState({
+    limit: 12,
+    page: 1,
+  });
+  const [totalPages, setTotalPages] = useState(1);
   const { clearError } = useHttpClient();
 
-  const getTeachers = async () => {
+  const getTeachers = async (
+    page,
+    limit,
+    location,
+    nationality,
+    highestCertification
+  ) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_USERS}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_USERS}?page=${page}&limit=${limit}&location=${location}&nationality=${nationality}&highestCertification=${highestCertification}`
+      );
       const data = await response.json();
 
-      return data.users;
+      //return object with page, totalPages, teachers list
+      return {
+        users: data.users,
+        totalPages: data.totalPages,
+        page: data.pageNum,
+        totalUsers: data.totalUsers,
+      };
     } catch (err) {
       console.log("there was an error retrieving teachers  - Msg: " + err);
     }
   };
 
+  //modify useQuery for pagination and dependency of page
   const {
     data: teachers,
     isLoading,
     error,
-  } = useQuery(["teachers"], () => getTeachers());
+  } = useQuery({
+    queryKey: [
+      "teachers",
+      teachersPage.page,
+      teachersPage.limit,
+      filter.location,
+      filter.nationality,
+      filter.qualifications,
+    ],
+    queryFn: () =>
+      getTeachers(
+        teachersPage.page,
+        teachersPage.limit,
+        filter.location,
+        filter.nationality,
+        filter.qualifications
+      ),
+    staleTime: 10 * 60 * 60 * 1000,
+  });
 
   useEffect(() => {
-    if (!auth.isLoggedIn || !auth.user?.buffetIsActive) {
+    if (!auth.isLoggedIn || !auth?.user?.buffetIsActive) {
       setBlur(true);
       return;
     }
+
     const checkUserBuffetStatus = async () => {
       try {
         const response = await fetch(
@@ -96,24 +149,37 @@ const Teachers = () => {
     checkUserBuffetStatus();
   }, [auth]);
 
+  useEffect(() => {
+    if (teachers?.totalPages && teachers?.totalPages !== totalPages) {
+      setTotalPages(teachers?.totalPages);
+    }
+  }, [teachers?.totalPages, totalPages]);
+
   const handleFilterChange = (teacher) => {
     setFilter(teacher);
   };
 
-  const filteredTeachers =
-    teachers &&
-    teachers?.filter((teacher) => {
-      return (
-        (!filter?.location ||
-          teacher.location
-            .toLowerCase()
-            .includes(filter?.location.toLowerCase())) &&
-        (!filter?.nationality ||
-          teacher.nationality.includes(filter.nationality)) &&
-        (!filter?.qualifications ||
-          teacher.highestCertification.includes(filter.qualifications))
-      );
+  // const filteredTeachers =
+  //   teachers &&
+  //   teachers?.users?.filter((teacher) => {
+  //     return (
+  //       (!filter?.location ||
+  //         teacher.location
+  //           .toLowerCase()
+  //           .includes(filter?.location.toLowerCase())) &&
+  //       (!filter?.nationality ||
+  //         teacher.nationality.includes(filter.nationality)) &&
+  //       (!filter?.qualifications ||
+  //         teacher.highestCertification.includes(filter.qualifications))
+  //     );
+  //   });
+
+  const handleTeacherPageChange = (page, limit) => {
+    setTeachersPage({
+      page: page,
+      limit: limit,
     });
+  };
 
   return (
     <PageContainer>
@@ -129,30 +195,25 @@ const Teachers = () => {
       )}
       <Content>
         <ErrorModal onClear={clearError} error={error} />
-        <ThemeProvider theme={customThemeForTeachers}>
-          <StyledGridContainer container spacing={3}>
-            <StyledGridItem xs={12} md={3}>
-              {isLoading && (
-                <Skeleton
-                  sx={{ height: 356, width: 332 }}
-                  variant="rectangular"
-                />
-              )}
-              {!isLoading && (
-                <TeacherFilter onDataChange={handleFilterChange} />
-              )}
-              {!isLoading && <TeflBanner />}
-            </StyledGridItem>
-            <StyledGridItem xs={12} md={9} sx={{ margin: "1rem auto" }}>
-              <Grid container spacing={2}>
-                <TeacherList
-                  teachers={filteredTeachers}
-                  isLoading={isLoading}
-                />
-              </Grid>
-            </StyledGridItem>
-          </StyledGridContainer>
-        </ThemeProvider>
+
+        <StyledGridContainer container spacing={3}>
+          <StyledGridItem xs={12} md={3}>
+            <TeacherFilter onDataChange={handleFilterChange} />
+            <TeflBanner />
+          </StyledGridItem>
+          <StyledGridItem xs={12} md={9} sx={{ margin: "1rem auto" }}>
+            <Grid container spacing={2}>
+              <TeacherList teachers={teachers?.users} isLoading={isLoading} />
+              {/* add values for pagination */}
+              <Pagination
+                sx={{ marginTop: "0.5rem" }}
+                count={totalPages}
+                page={teachersPage.page}
+                onChange={(event, page) => handleTeacherPageChange(page, 12)}
+              />
+            </Grid>
+          </StyledGridItem>
+        </StyledGridContainer>
       </Content>
       <Footer />
     </PageContainer>

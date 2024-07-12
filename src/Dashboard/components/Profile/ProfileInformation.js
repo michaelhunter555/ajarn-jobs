@@ -32,7 +32,7 @@ const StyledBackgroundBox = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   alignItems: "center",
   width: "100%",
-  backgroundColor: "#f4fcff",
+  backgroundColor: theme.palette.background.paper,
 }));
 
 const StyledProfileAvatar = styled(Avatar)(({ theme }) => ({
@@ -122,10 +122,7 @@ const ProfileInformation = ({ user }) => {
     <>
       <StyledProfileContainer>
         <StyledBackgroundBox>
-          <StyledProfileAvatar
-            src={`${process.env.REACT_APP_IMAGE}${image}`}
-            alt={`${id}-${name}`}
-          />
+          <StyledProfileAvatar src={`${image}`} alt={`${id}-${name}`} />
           <Typography variant="h5">{name}</Typography>
           <Stack direction="row" alignItems="center">
             <Stack>

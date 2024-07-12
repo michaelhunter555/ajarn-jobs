@@ -16,12 +16,12 @@ import {
   thaiCities,
 } from "../../shared/util/ThaiData";
 
-const StyledPaperContainer = styled(Paper)({
+const StyledPaperContainer = styled(Paper)(({ theme }) => ({
   border: "1px solid #ddd",
   padding: "1.5rem",
   borderRadius: "6px",
-  background: "#fff",
-});
+  background: theme.palette.background.paper,
+}));
 
 const TeacherFilter = ({ onDataChange }) => {
   const [location, setLocation] = useState("");

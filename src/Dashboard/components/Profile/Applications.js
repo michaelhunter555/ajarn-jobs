@@ -19,23 +19,16 @@ import {
   Typography,
 } from "@mui/material";
 
-const Applications = ({ applications, isLoading }) => {
-  const [page, setPage] = useState(1);
-
-  const itemsPerPage = 5;
-  const [noOfPages] = useState(Math.ceil(applications?.length / itemsPerPage));
-
-  const indexOfLastApplication = page * itemsPerPage;
-  const indexOfFirstApplication = indexOfLastApplication - itemsPerPage;
-  const currentApplications = applications?.slice(
-    indexOfFirstApplication,
-    indexOfLastApplication
+const Applications = ({ applications, isLoading, onApplicationPageChange }) => {
+  const [page, setPage] = useState(applications?.page);
+  const [totalPages, setTotalPages] = useState(applications?.totalPages);
+  const [totalApplications, setTotalApplications] = useState(
+    applications?.totalApplications
   );
-
   //from current set of jobs, return jobs where the userId matches
-  const userApplied = applications?.length === 0;
+  const userApplied = applications?.applications?.length === 0;
 
-  let apps = applications?.length;
+  let apps = totalApplications;
 
   return (
     <>
@@ -87,8 +80,8 @@ const Applications = ({ applications, isLoading }) => {
                 </TableCell>
               </TableRow>
             ) : (
-              currentApplications &&
-              currentApplications?.map((application, i) => (
+              applications &&
+              applications?.applications?.map((application, i) => (
                 <TableRow key={application?._id}>
                   <TableCell>
                     {application?.applicationDate?.split("T")[0]}
@@ -113,9 +106,12 @@ const Applications = ({ applications, isLoading }) => {
         <Stack alignItems="end">
           <Pagination
             size="small"
-            count={noOfPages}
+            count={totalPages}
             page={page}
-            onChange={(event, val) => setPage(val)}
+            onChange={(event, val) => {
+              onApplicationPageChange(val, 5);
+              setPage(val);
+            }}
             defaultPage={1}
             showFirstButton
             showLastButton

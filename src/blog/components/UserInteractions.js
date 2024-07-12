@@ -83,8 +83,6 @@ const UserInteractions = ({ blogId, content, refetchLikeState }) => {
     dislikePostIndex !== -1 &&
     content?.interactions[dislikePostIndex]?.dislike === true;
 
-  console.log("blog content", content);
-
   return (
     <>
       <Grid item>

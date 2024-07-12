@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
@@ -17,6 +17,7 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
+  Pagination,
   Paper,
   Stack,
   Typography,
@@ -73,27 +74,51 @@ const StyledLink = styled(Link)(({ theme }) => ({
 }));
 
 const SideBlogList = ({ contentPosts }) => {
-  const getBlogList = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BLOG}`);
+  const [blogPage, setBlogPage] = useState({
+    page: 1,
+    limit: 6,
+  });
 
-    if (!response.ok) {
-      throw new Error(
-        "There was an error retreiving the blog details for this post."
+  const getBlogList = async (page, limit) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BLOG}?page=${page}&limit=${limit}`
       );
+
+      if (!response.ok) {
+        throw new Error(
+          "There was an error retreiving the blog details for this post."
+        );
+      }
+      const data = await response.json();
+
+      return {
+        blogList: data.blogList,
+        totalBlogPosts: data.totalBlogPosts,
+        totalPages: data.totalPages,
+        page: data.pageNum,
+      };
+    } catch (err) {
+      console.log(err);
     }
-    const data = await response.json();
-    return data.blogList;
   };
 
-  const { data: blogList, isLoading } = useQuery(["otherContentPosts"], () =>
-    getBlogList()
-  );
+  const { data: blogList, isLoading } = useQuery({
+    queryKey: ["otherContentPosts", blogPage.page, blogPage.limit],
+    queryFn: () => getBlogList(blogPage.page, blogPage.limit),
+    staleTime: 1 * 60 * 60 * 1000,
+    keepPreviousData: true,
+  });
+
+  const handleBlogPageChange = (page, limit) => {
+    setBlogPage({ page: page, limit: limit });
+  };
 
   return (
     <Grid container direction="row" sx={{ margin: "2rem auto" }}>
       {!isLoading && <TeflBanner />}
       {isLoading && <CircularProgress />}
-      <Stack sx={{ width: "100%", borderBottom: "1px solid #f7f7f7" }}>
+      <Stack sx={{ width: "100%" }}>
         {!isLoading && (
           <Paper elevation={0} sx={{ padding: "5px 5px" }}>
             <Typography
@@ -113,7 +138,7 @@ const SideBlogList = ({ contentPosts }) => {
       <StyledGridContainer>
         {!isLoading &&
           blogList &&
-          blogList?.map((val, i) => (
+          blogList?.blogList?.map((val, i) => (
             <List
               key={val?._id}
               sx={{ width: "100%", bgcolor: "background.paper" }}
@@ -121,10 +146,7 @@ const SideBlogList = ({ contentPosts }) => {
               <StyledLink component={RouterLink} to={`/content/${val?._id}`}>
                 <StyledListItemButton direction="row" alignItems="flex-start">
                   <ListItemAvatar>
-                    <Avatar
-                      alt={val?.title}
-                      src={`${process.env.REACT_APP_IMAGE}${val?.author?.image}`}
-                    />
+                    <Avatar alt={val?.title} src={`${val?.author?.image}`} />
                   </ListItemAvatar>
 
                   <ListItemText
@@ -201,10 +223,21 @@ const SideBlogList = ({ contentPosts }) => {
                 </StyledListItemButton>
               </StyledLink>
 
-              {i - blogList?.length - 1 && <Divider variant="inset" light />}
+              {i - blogList?.blogList?.length - 1 && (
+                <Divider variant="inset" light />
+              )}
             </List>
           ))}
       </StyledGridContainer>
+      {!isLoading && (
+        <Pagination
+          page={Number(blogPage?.page)}
+          count={blogList?.totalPages}
+          onChange={(event, page) => {
+            handleBlogPageChange(page, 6);
+          }}
+        />
+      )}
     </Grid>
   );
 };

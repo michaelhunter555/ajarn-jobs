@@ -54,6 +54,7 @@ const JobAd = (props) => {
       ? sanitizedJobAd.substring(0, 120)
       : sanitizedJobAd;
 
+  //https://15e9de843a9e.ngrok.app/jobs/66865ea4a16c1e25dc580906
   return (
     <Link to={`/jobs/${job?._id}`} style={{ textDecoration: "none" }}>
       <Card>
@@ -63,7 +64,7 @@ const JobAd = (props) => {
               <Grid item xs={4} sm={4} lg={3} xl={2}>
                 <StyledMediaCard
                   component="img"
-                  src={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                  src={`${job?.image}`}
                   alt={job?._id}
                 />
               </Grid>
@@ -71,7 +72,7 @@ const JobAd = (props) => {
               <Grid item xs={8} sm={8} md={8} lg={9} xl={10}>
                 <Typography
                   gutterBottom
-                  sx={{ color: "#3b3f43" }}
+                  sx={{ color: "text.secondary" }}
                   variant="h6"
                   component="div"
                 >

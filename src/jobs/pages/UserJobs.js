@@ -1,11 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
 import EastIcon from "@mui/icons-material/East";
 import ViewListIcon from "@mui/icons-material/ViewList";
-import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Box, Card, Divider, Stack, Typography } from "@mui/material";
+import Pagination from "@mui/material/Pagination";
 import { useQuery } from "@tanstack/react-query";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
@@ -21,94 +21,41 @@ import { useJob } from "../../shared/hooks/jobs-hook";
 import { dummy_jobs } from "../../shared/util/DummyJobs";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
 import JobFilters from "../components/JobFilters";
-
-const StyledUserJobsDiv = styled("div")(({ theme }) => ({
-  maxWidth: "100%",
-  margin: "0 auto 3rem",
-  display: "grid",
-  gridTemplateColumns: "repeat(4, 1fr)",
-  gap: "15px",
-  [theme.breakpoints.down("md")]: {
-    maxWidth: "100%",
-    gridTemplateColumns: "100%",
-    gridAutoColumns: "auto",
-  },
-  [theme.breakpoints.down("sm")]: {
-    maxWidth: "100%",
-    gridTemplateColumns: "100%",
-    gridAutoColumns: "auto",
-  },
-}));
-
-const StyledAdJobDiv = styled("div")(({ theme }) => ({
-  display: "grid",
-  gridColumn: "2 /4",
-  textalign: "center",
-  margin: "0 auto",
-  [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 1,
-  },
-  [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 1,
-  },
-}));
-
-const UsersJobFilterDiv = styled("div")(({ theme }) => ({
-  gridColumn: "1 / 2",
-  [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 2,
-  },
-  [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 2,
-  },
-}));
-
-const UserJobListDiv = styled("div")(({ theme }) => ({
-  gridColumn: "2 / 4",
-  [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 4,
-  },
-  [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 4,
-  },
-}));
-
-const FeaturedJobListDiv = styled("div")(({ theme }) => ({
-  gridColumn: "4 / 5",
-  [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 3,
-  },
-  [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 3,
-  },
-}));
-
-const StyledButton = styled(Button)(({ theme }) => ({
-  [theme.breakpoints.down("sm")]: {
-    fontSize: 11,
-    borderRadius: "15px",
-  },
-}));
+import {
+  FeaturedJobListDiv,
+  StyledAdJobDiv,
+  StyledChip,
+  StyledUserJobsDiv,
+  UserJobListDiv,
+  UsersJobFilterDiv,
+} from "../components/UserJobsStyle";
 
 const UserJobs = () => {
   const auth = useContext(AuthContext);
   const [filter, setFilter] = useState(dummy_jobs);
 
+  const [jobPage, setJobPage] = useState({
+    page: 1,
+    limit: 5,
+  });
+  const [totalPages, setTotalPages] = useState(1);
+
   const { clearError } = useJob();
 
-  const getAllJobs = async (jobs) => {
+  const getAllJobs = async (page, limit) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_JOBS}`);
+      const response = await fetch(
+        `${
+          process.env.REACT_APP_JOBS
+        }?page=${page}&limit=${limit}&isHome=${false}`
+      );
       const data = await response.json();
-      return data.jobs;
+      return {
+        jobs: data.jobs,
+        currentPage: data.currentPage,
+        totalPages: data.totalPages,
+        totalJobs: data.totalJobs,
+      };
     } catch (err) {
       console.log("There was an error retrieving jobs data" + err);
     }
@@ -118,13 +65,34 @@ const UserJobs = () => {
     data: jobs,
     isLoading,
     error,
-  } = useQuery(["jobs"], () => getAllJobs());
+  } = useQuery({
+    queryKey: ["jobs", jobPage.page, jobPage.limit],
+    queryFn: () => getAllJobs(jobPage.page, jobPage.limit),
+    staleTime: 2 * 60 * 60 * 1000,
+  });
+
+  useEffect(() => {
+    if (jobs?.totalPages && jobs?.totalPages !== totalPages) {
+      setTotalPages(jobs?.totalPages);
+    }
+  }, [totalPages, jobs?.totalPages]);
+
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, [jobPage.page]);
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
 
-  const filteredJobs = jobs?.filter((job) => {
+  const handlePageChange = (page, limit) => {
+    setJobPage({
+      page: page,
+      limit: limit,
+    });
+  };
+
+  const filteredJobs = jobs?.jobs?.filter((job) => {
     return (
       (!filter.location ||
         job.location.toLowerCase().includes(filter.location.toLowerCase())) &&
@@ -138,48 +106,55 @@ const UserJobs = () => {
   let button;
   let actionItem;
 
-  if (auth.isLoggedIn && auth.user?.userType === "employer") {
+  console.log(
+    "buttons should show",
+    auth?.isLoggedIn && auth?.user?.userType === "employer",
+    auth?.user
+  );
+
+  if (auth?.isLoggedIn && auth?.user?.userType === "employer") {
     button = (
-      <StyledButton
+      <StyledChip
         size="small"
         variant="contained"
         component={RouterLink}
         to="/job/new"
-      >
-        Add a Job +
-      </StyledButton>
+        label="Add a Job +"
+        clickable
+      />
     );
     actionItem = (
-      <StyledButton
+      <StyledChip
         size="small"
         variant="text"
         component={RouterLink}
         to="/auth"
-      >
-        Learn More
-      </StyledButton>
+        label="Learn More"
+        clickable
+      />
     );
-  } else if (!auth.isLoggedIn) {
+  } else if (!auth?.isLoggedIn) {
     button = (
-      <StyledButton
+      <StyledChip
+        icon={<EastIcon />}
         size="small"
         variant="contained"
         disabled={!auth.isLoggedIn}
         component={RouterLink}
         to="/auth"
-      >
-        Sign-up to create jobs! <EastIcon />
-      </StyledButton>
+        label="Sign-up to create jobs!"
+        clickable
+      />
     );
     actionItem = (
-      <StyledButton
+      <StyledChip
+        label="Login/Join"
         size="small"
         variant="outlined"
         component={RouterLink}
         to="/auth"
-      >
-        Login/Join
-      </StyledButton>
+        clickable
+      />
     );
   }
 
@@ -190,9 +165,11 @@ const UserJobs = () => {
           Sorry no jobs were found for your search
         </Typography>
         {auth.isLoggedIn && auth.user?.userType === "employer" && (
-          <Button component={RouterLink} to="/job/new">
-            Create a job
-          </Button>
+          <StyledChip
+            component={RouterLink}
+            to="/job/new"
+            label="Create a job"
+          />
         )}
 
         <Typography color="text.secondary" variant="body2">
@@ -208,34 +185,23 @@ const UserJobs = () => {
         <ErrorModal error={error} onClear={clearError} />
         <StyledUserJobsDiv>
           <StyledAdJobDiv>
-            {!isLoading && (
-              <Stack spacing={2} direction="row">
-                {button}
-
-                <Divider orientation="vertical" />
-                {actionItem}
-              </Stack>
-            )}
+            <Stack>
+              <StyledChip
+                variant="outlined"
+                component={RouterLink}
+                to={`/modern-view/jobs`}
+                icon={<ViewListIcon />}
+                label="Dynamic View"
+                clickable
+              />
+            </Stack>
           </StyledAdJobDiv>
           <UsersJobFilterDiv>
-            {isLoading && (
-              <JobAdSkeleton
-                sx={{
-                  margin: "0 auto",
-                  height: 348,
-                  width: 360,
-                  borderRadius: "6px",
-                }}
-                variant="rectangular"
-                num={1}
-              />
-            )}
-            {!isLoading && <JobFilters onFilterChange={handleFilterChange} />}
-            {!isLoading && (
-              <Stack>
-                <TeflBanner />
-              </Stack>
-            )}
+            <JobFilters onFilterChange={handleFilterChange} />
+
+            <Stack>
+              <TeflBanner />
+            </Stack>
           </UsersJobFilterDiv>
 
           <UserJobListDiv>
@@ -247,36 +213,51 @@ const UserJobs = () => {
                   borderRadius: "6px",
                 }}
                 variant="rectangular"
-                num={10}
+                num={5}
               />
             )}
             {!isLoading && <JobAdsList job={filteredJobs} company={true} />}
+            {!isLoading && (
+              <Pagination
+                count={totalPages}
+                page={jobPage.page}
+                onChange={(event, page) => handlePageChange(page, 5)}
+              />
+            )}
             {!isLoading && filteredJobs?.length === 0 && noJobs}
           </UserJobListDiv>
           <FeaturedJobListDiv>
             {isLoading && (
-              <JobAdSkeleton
-                sx={{
-                  margin: "0.5rem 0 0.5rem 0",
-                  height: "70px",
-                  borderRadius: "6px",
-                }}
-                variant="rectangular"
-                num={4}
-              />
+              <>
+                <JobAdSkeleton
+                  sx={{
+                    margin: "0.5rem 0 0.5rem 0",
+                    height: "70px",
+                    borderRadius: "6px",
+                  }}
+                  variant="rectangular"
+                  num={4}
+                />
+              </>
             )}
             {!isLoading && (
-              <Stack>
-                <Button
-                  component={RouterLink}
-                  to={`/modern-view/jobs`}
-                  startIcon={<ViewListIcon />}
-                >
-                  Switch to Dynamic list
-                </Button>
-              </Stack>
+              <StyledAdJobDiv>
+                {!isLoading && (
+                  <Stack
+                    sx={{ margin: "1rem auto" }}
+                    spacing={2}
+                    direction="row"
+                    justifyContent="center"
+                  >
+                    {button}
+
+                    <Divider orientation="vertical" />
+                    {actionItem}
+                  </Stack>
+                )}
+              </StyledAdJobDiv>
             )}
-            {!isLoading && <FeaturedJobsLists sponsors={jobs} />}
+            {!isLoading && <FeaturedJobsLists sponsors={jobs?.jobs} />}
           </FeaturedJobListDiv>
         </StyledUserJobsDiv>
       </Content>

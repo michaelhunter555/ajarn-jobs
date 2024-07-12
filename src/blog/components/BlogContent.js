@@ -1,7 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
 import {
   Avatar,
@@ -10,11 +7,11 @@ import {
   Divider,
   Stack,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import CategoryChip from '../../shared/components/UIElements/CategoryIconChip';
-import { getTimeDifference } from '../../shared/util/getTimeDifference';
+import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
+import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
 const StyledStackContainer = styled(Stack)(({ theme }) => ({
   flexDirection: "row",
@@ -78,7 +75,7 @@ const BlogContent = ({ content }) => {
         <Avatar
           sx={{ width: 100, height: 100, margin: "0 2rem" }}
           alt={`${content?.title}--${content?._id}`}
-          src={`${process.env.REACT_APP_IMAGE}${content?.author?.image}`}
+          src={`${content?.author?.image}`}
         />
         <StyledStackWrapper>
           <StyledTypography variant="h4" component="span">

@@ -9,13 +9,13 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
   CardActions,
   CardContent,
   CardMedia,
   Chip,
   Divider,
   Grid,
+  Paper,
   Stack,
   Tooltip,
   Typography,
@@ -28,12 +28,12 @@ const StyledNameTypography = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
 }));
 
-const StyledGlassCard = styled(Card)(({ theme }) => ({
+const StyledGlassCard = styled(Paper)(({ theme }) => ({
   margin: "0 auto",
   minWidth: "100%",
   position: "relative",
   overflow: "hidden",
-  background: "white",
+  backgroundColor: theme.palette.background.paper,
   borderRadius: "18px",
   maxWidth: 300,
 
@@ -48,36 +48,13 @@ const StyledGlassCard = styled(Card)(({ theme }) => ({
 const TeacherItem = (props) => {
   const auth = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
-  // const { universityLogo, getUniversityLogo } = useUniversityLogo(
-  //   props?.education
-  // );
-
-  // useEffect(() => {
-  //   if (props.education === "") {
-  //     return;
-  //   }
-  //   getUniversityLogo();
-  // }, [getUniversityLogo, props.education]);
+  /**
+   * TODO: blur details of users if buffetIsNotActive (leave first user STOCK)
+   */
 
   const handleModalOpen = () => {
     setOpenModal(true);
   };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  const errorHeader = !auth.isLoggedIn
-    ? "Please Login"
-    : auth.isLoggedIn && auth.user?.credits === 0
-    ? "Please Purchase Credits"
-    : "Please Login and/or purchase credits.";
-
-  const errorReason = !auth.isLoggedIn
-    ? "Please login & have credits on balance"
-    : auth.isLoggedIn && auth.user?.credits === 0
-    ? "Please purchase credits to view teacher profiles"
-    : "Please login and purchase credits to view teachers.";
 
   let nameText;
   if (props?.name?.length > 20) {
@@ -201,18 +178,8 @@ const TeacherItem = (props) => {
             </Grid>
 
             <Divider sx={{ width: "75%" }} variant="left" />
-            <Box>
-              <Typography
-                sx={{ paddingTop: "3px" }}
-                variant="subtitle2"
-                color="text.secondary"
-              >
-                {props?.about?.length > 50
-                  ? props?.about.substring(0, 50) + "..."
-                  : props?.about}
-              </Typography>
-            </Box>
           </CardContent>
+
           <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
               variant="outlined"

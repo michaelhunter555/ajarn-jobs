@@ -1,0 +1,11 @@
+export const TEACHER = "teacher";
+export const CONTENT = "content";
+export const EMPLOYER = "employer";
+export const PROFILE = "profile";
+export const JOB_LISTINGS = "job-listings";
+export const APPLICATIONS = "applications";
+export const RESUME = "resume";
+export const COVER_LETTER = "cover-letter";
+export const CREATOR = "creator";
+export const SETTINGS = "settings";
+export const INVOICES = "invoices";

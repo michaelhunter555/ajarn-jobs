@@ -30,7 +30,30 @@ export const useStripe = () => {
     [sendRequest, auth.token]
   );
 
+  const getStripeBillingData = useCallback(async (id, page, limit) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_STRIPE}/user-billing/${id}?page=${page}&limit=${limit}`
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      return {
+        user: data.userBilling,
+        totalPages: data.totalPages,
+        page: data.pageNum,
+        totalItems: data.totalBillingItems,
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   return {
+    getStripeBillingData,
     createCheckoutSession,
     isPostLoading,
     errorMessage,

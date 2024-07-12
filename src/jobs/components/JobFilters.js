@@ -21,10 +21,9 @@ import {
 } from "../../shared/util/ThaiData";
 
 const StyledPaperContainer = styled(Paper)({
-  border: "1px solid #ddd",
+  //border: "1px solid #ddd",
   padding: "1.5rem",
   borderRadius: "6px",
-  background: "#fff",
 });
 
 const JobFilters = ({ onFilterChange }) => {

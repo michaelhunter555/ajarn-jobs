@@ -11,13 +11,31 @@ export const useJob = () => {
   const { isLoading, isPostLoading, error, sendRequest, clearError, client } =
     useHttpClient();
 
-  const getAllJobs = useCallback(async () => {
-    try {
-      const response = await sendRequest(`${process.env.REACT_APP_JOBS}`);
-      setJobs(response.jobs);
-      return response.jobs;
-    } catch {}
-  }, [sendRequest]);
+  //GET Jobs for API Cache
+  const getJobsData = async (page, limit) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_JOBS}?isHome=${true}&page=${page}&limit=${limit}`
+    );
+
+    if (!response.ok) {
+      throw new Error("There was an error with retrieving the jobs Data.");
+    }
+    const data = await response.json();
+    return data.jobs;
+  };
+
+  const getAllJobs = useCallback(
+    async (page, limit) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_JOBS}?page=${page}&limit=${limit}`
+        );
+        setJobs(response.jobs);
+        return response.jobs;
+      } catch {}
+    },
+    [sendRequest]
+  );
 
   //POST Create job by userId
   const addJobByUserId = useCallback(
@@ -71,6 +89,57 @@ export const useJob = () => {
     [sendRequest]
   );
 
+  //GET job ads
+  const getJobAds = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_JOBS}`);
+      if (!response.ok) {
+        throw new Error("There was an error with getJobAds");
+      }
+      const data = await response.json();
+
+      return data.jobs;
+    } catch (err) {
+      console.log("There was an error getting the job ads - Msg: " + err);
+    }
+  };
+
+  //get jobs by creatorId
+  const getJobsByCreatorId = useCallback(
+    async (creatorId, page, limit) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_JOBS}/creator/${creatorId}?page=${page}&limit=${limit}`
+        );
+        setJobs(response.jobs);
+        return {
+          jobs: response.jobs,
+          page: response.pageNum,
+          totalPages: response.totalPages,
+        };
+      } catch (err) {}
+    },
+    [sendRequest]
+  );
+
+  //Get JobListings (if any)
+  //get jobs by creatorId
+  const getJobsJobListings = useCallback(
+    async (creatorId, page, limit) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_JOBS}/job-listings/${creatorId}?page=${page}&limit=${limit}`
+        );
+        setJobs(response.jobs);
+        return {
+          jobs: response.jobs,
+          page: response.pageNum,
+          totalPages: response.totalPages,
+        };
+      } catch (err) {}
+    },
+    [sendRequest]
+  );
   //Get jobs by Id ${jid}
   const getJobById = useCallback(
     async (jobId) => {
@@ -117,10 +186,10 @@ export const useJob = () => {
 
   //Patch - activate teacher buffet
   const activateTeacherBuffet = useCallback(
-    async (userId) => {
+    async (userId, buffetType) => {
       try {
         const response = await sendRequest(
-          `${process.env.REACT_APP_JOBS}/activate-buffet/${userId}`,
+          `${process.env.REACT_APP_JOBS}/activate-buffet/${userId}?buffetType=${buffetType}`,
           "PATCH",
           JSON.stringify({ buffetIsActive: true, lastActiveDate: new Date() }),
           {
@@ -133,6 +202,8 @@ export const useJob = () => {
           ...auth.user,
           buffetIsActive: response.user.buffetIsActive, //NEEDS TO BE CHANGED TO response.user.buffetIsActive this is only for testing purposes with existing users who do not have this new property
           credits: response.user.credits,
+          buffetStartDate: response.user.buffetStartDate,
+          buffetEndDate: response.user.buffetEndDate,
         };
         updateUser(updatedUser);
       } catch (err) {}
@@ -145,7 +216,7 @@ export const useJob = () => {
     async (jobId, userId) => {
       setIsDeleting(true);
       try {
-        const response = await sendRequest(
+        await sendRequest(
           `${process.env.REACT_APP_JOBS}/${jobId}`,
           "DELETE",
           null,
@@ -176,8 +247,12 @@ export const useJob = () => {
   return {
     client,
     jobs,
+    getJobsData,
+    getJobsByCreatorId,
     activateTeacherBuffet,
     getAllJobs,
+    getJobAds,
+    getJobsJobListings,
     getJobById,
     addJobByUserId,
     getJobsByUserId,
