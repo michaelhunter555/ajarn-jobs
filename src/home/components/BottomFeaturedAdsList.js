@@ -63,7 +63,7 @@ const BottomFeaturedAdsList = (props) => {
           >
             <ListItem>
               <BottomFeaturedAds
-                image={`${process.env.REACT_APP_IMAGE}${job?.image}`}
+                image={`${job?.image}`}
                 id={job?._id}
                 title={job?.title}
                 salary={job?.salary}

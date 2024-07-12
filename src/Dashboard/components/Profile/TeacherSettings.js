@@ -134,8 +134,8 @@ const TeacherSettings = (props) => {
   const emailIsValid = (email) => /^\S+@\S+\.\S+$/.test(email);
 
   return (
-    <Card>
-      {
+    <Card sx={{}}>
+      {user?.userType === "teacher" && (
         <Typography>
           <Switch
             disabled={true}
@@ -144,21 +144,23 @@ const TeacherSettings = (props) => {
           />
           {isTeacher ? "Teacher looking for a job" : "Employer looking to hire"}
         </Typography>
-      }
-      <Typography>
-        <Switch
-          disabled={user?.userType === "employer"}
-          checked={!isHidden}
-          onChange={handleVisibilityToggle}
-        />
-        {isHidden
-          ? "Profile is hidden from employers"
-          : "Your profile is public to schools, agencies & recruiters"}
-      </Typography>
-      <Typography variant="h4" sx={{ margin: "1rem auto" }}>
-        Update your profile
-      </Typography>
+      )}
+      {user?.userType === "teacher" && (
+        <Typography>
+          <Switch
+            disabled={user?.userType === "employer"}
+            checked={!isHidden}
+            onChange={handleVisibilityToggle}
+          />
+          {isHidden
+            ? "Profile is hidden from employers"
+            : "Your profile is public to schools, agencies & recruiters"}
+        </Typography>
+      )}
       <CardContent>
+        <Typography variant="h4" sx={{ margin: "1rem auto" }}>
+          Update your profile
+        </Typography>
         <Grid container spacing={2} direction="row">
           <Grid item xs={12} sm={6} md={5}>
             <ImageUpload id="image" onInput={inputHandler} />

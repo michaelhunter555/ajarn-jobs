@@ -1,50 +1,44 @@
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import 'draft-js/dist/Draft.css';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "draft-js/dist/Draft.css";
 
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import DOMPurify from 'dompurify';
-import {
-  convertToRaw,
-  EditorState,
-} from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import { Editor } from 'react-draft-wysiwyg';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import DOMPurify from "dompurify";
+import { convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import { Editor } from "react-draft-wysiwyg";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
+  Alert,
   Box,
+  Divider,
   FormLabel,
   Grid,
+  Link,
   Modal,
   Paper,
   Skeleton,
+  Stack,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import Button from '../../shared/components/FormElements/Button';
-import Input from '../../shared/components/FormElements/Input';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import Button from "../../shared/components/FormElements/Button";
+import Input from "../../shared/components/FormElements/Input";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 //import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useForm } from '../../shared/hooks/form-hook';
-import { useInvalidateQuery } from '../../shared/hooks/invalidate-query';
-import { useJob } from '../../shared/hooks/jobs-hook';
+import { AuthContext } from "../../shared/context/auth-context";
+import { useForm } from "../../shared/hooks/form-hook";
+import { useInvalidateQuery } from "../../shared/hooks/invalidate-query";
+import { useJob } from "../../shared/hooks/jobs-hook";
 import {
   coreJobRequirements,
   fullTimeSalaries,
   partTimeSalaries,
   thaiCities,
-} from '../../shared/util/ThaiData';
-import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
+} from "../../shared/util/ThaiData";
+import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
 
 const styledRichJobText = {
   height: "auto",
@@ -89,7 +83,6 @@ const NewJob = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isJobsPage = location.pathname.includes("/job/new");
-  console.log("loca", location.pathname, isJobsPage);
 
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -278,112 +271,151 @@ const NewJob = () => {
           }}
         >
           <Grid container direction="row">
-            <Typography variant="subtitle2" color="text.secondary">
-              Total Cost: {jobCost} - Credits
-            </Typography>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "start",
-                gap: "5px",
-              }}
-            >
-              <FormLabel>Hours:</FormLabel>
-              <input
-                id="hours-fullTime"
-                type="radio"
-                name="hours"
-                value="Full-time"
-                checked={isFullTime}
-                onChange={jobIsFullTimeHandler}
-              />{" "}
-              <Typography variant="subtitle2" color="text.secondary">
-                Full-Time
-              </Typography>
-              <input
-                id="hours-partTime"
-                type="radio"
-                name="hours"
-                value="Part-time"
-                checked={!isFullTime}
-                onChange={jobIsPartTimeHandler}
-              />{" "}
-              <Typography variant="subtitle2" color="text.secondary">
-                Part-Time
-              </Typography>
+            <Grid item xs={12} md={6}>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "start",
+                  gap: "5px",
+                }}
+              >
+                <Alert
+                  severity="info"
+                  sx={{ borderRadius: "15px", marginBottom: "0.5rem" }}
+                >
+                  Please read our{" "}
+                  <Link sx={{ cursor: "pointer" }}>Terms of Service</Link>
+                </Alert>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "start",
+                  gap: "5px",
+                }}
+              >
+                <FormLabel>Hours:</FormLabel>
+                <input
+                  id="hours-fullTime"
+                  type="radio"
+                  name="hours"
+                  value="Full-time"
+                  checked={isFullTime}
+                  onChange={jobIsFullTimeHandler}
+                />{" "}
+                <Typography variant="subtitle2" color="text.secondary">
+                  Full-Time
+                </Typography>
+                <input
+                  id="hours-partTime"
+                  type="radio"
+                  name="hours"
+                  value="Part-time"
+                  checked={!isFullTime}
+                  onChange={jobIsPartTimeHandler}
+                />{" "}
+                <Typography variant="subtitle2" color="text.secondary">
+                  Part-Time
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  margin: "0.5rem 0",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "start",
+                  gap: "5px",
+                }}
+              >
+                <FormLabel>Job Type:</FormLabel>
+                <input
+                  id="basic"
+                  type="radio"
+                  name="jobType"
+                  value="basic"
+                  checked={jobIsBasic}
+                  onChange={basicJobTypeHandler}
+                />{" "}
+                <Typography variant="subtitle2" color="text.secondary">
+                  Basic (default)
+                </Typography>
+                <input
+                  id="featured"
+                  type="radio"
+                  name="jobType"
+                  value="featured"
+                  checked={!jobIsBasic}
+                  onChange={featuredJobTypeHandler}
+                />{" "}
+                <Typography variant="subtitle2" color="text.secondary">
+                  Featured (+2 credits)
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "start",
+                  gap: "5px",
+                }}
+              >
+                <FormLabel>Work Permit</FormLabel>
+                <input
+                  id="workPermit"
+                  type="radio"
+                  name="workPermit"
+                  value={true}
+                  checked={workPermitOffered}
+                  onChange={workPermitHandler}
+                />{" "}
+                <Typography variant="subtitle2" color="text.secondary">
+                  Yes
+                </Typography>
+                <input
+                  id="workPermit"
+                  type="radio"
+                  name="workPermit"
+                  value={false}
+                  checked={!workPermitOffered}
+                  onChange={workPermitHandler}
+                />{" "}
+                <Typography variant="subtitle2" color="text.secondary">
+                  No
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                margin: "0.5rem 0",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "start",
-                gap: "5px",
-              }}
-            >
-              <FormLabel>Job Type:</FormLabel>
-              <input
-                id="basic"
-                type="radio"
-                name="jobType"
-                value="basic"
-                checked={jobIsBasic}
-                onChange={basicJobTypeHandler}
-              />{" "}
-              <Typography variant="subtitle2" color="text.secondary">
-                Basic (default)
-              </Typography>
-              <input
-                id="featured"
-                type="radio"
-                name="jobType"
-                value="featured"
-                checked={!jobIsBasic}
-                onChange={featuredJobTypeHandler}
-              />{" "}
-              <Typography variant="subtitle2" color="text.secondary">
-                Featured (+2 credits)
-              </Typography>
+            <Grid item s={12} md={6}>
+              <Stack
+                sx={{
+                  width: "100%",
+                  background: (theme) => theme.palette.background.paper,
+                  border: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "1px solid #121212"
+                      : "1px solid #fff",
+                  borderRadius: "15px",
+                  padding: "1.5rem",
+                }}
+              >
+                <Typography variant="subtitle1" color="text.secondary">
+                  Item: {formState?.inputs?.jobType?.value} Job Post - 20 days
+                </Typography>
+                <Divider />
+                <Typography variant="h5">{jobCost} - Credits</Typography>
+              </Stack>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "start",
-                gap: "5px",
-              }}
-            >
-              <FormLabel>Work Permit</FormLabel>
-              <input
-                id="workPermit"
-                type="radio"
-                name="workPermit"
-                value={true}
-                checked={workPermitOffered}
-                onChange={workPermitHandler}
-              />{" "}
-              <Typography variant="subtitle2" color="text.secondary">
-                Yes
-              </Typography>
-              <input
-                id="workPermit"
-                type="radio"
-                name="workPermit"
-                value={false}
-                checked={!workPermitOffered}
-                onChange={workPermitHandler}
-              />{" "}
-              <Typography variant="subtitle2" color="text.secondary">
-                No
-              </Typography>
-            </Grid>
+            <Divider flexItem sx={{ width: "100%", margin: "0.75rem auto" }} />
             <Grid item xs={12}>
               <Input
                 id="title"

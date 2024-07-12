@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
-import ClearIcon from "@mui/icons-material/Clear";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import PlaceIcon from "@mui/icons-material/Place";
 import {
-  Button,
-  ButtonGroup,
   Link as RouterLink,
   Pagination,
   Skeleton,
@@ -47,7 +44,7 @@ const tableRows = [
     style: { fontWeight: 700 },
   },
   {
-    text: "Resume",
+    text: "Applied For",
     variant: "button",
     color: "text.secondary",
     style: { fontWeight: 700 },
@@ -127,7 +124,6 @@ const JobApplicantsTable = ({
                     <RouterLink
                       component={Link}
                       to={`/teachers/${application?.userId?._id}`}
-                      variant="contained"
                     >
                       {application?.userId?.name}
                     </RouterLink>
@@ -136,18 +132,22 @@ const JobApplicantsTable = ({
                   <TableCell>{application?.userId?.location}</TableCell>
                   <TableCell>{application?.userId?.email}</TableCell>
                   <TableCell>
-                    <ButtonGroup>
-                      <Tooltip title="short list applicant">
-                        <Button>
-                          <ThumbUpOffAltIcon />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="remove applicant">
-                        <Button color="error">
-                          <ClearIcon />
-                        </Button>
-                      </Tooltip>
-                    </ButtonGroup>
+                    <Tooltip
+                      placement="right-start"
+                      title={
+                        <Stack direction="row" alignItems="center">
+                          <PlaceIcon sx={{ fontSize: 11 }} />{" "}
+                          {application?.jobId?.location}
+                        </Stack>
+                      }
+                    >
+                      <RouterLink
+                        component={Link}
+                        to={`/jobs/${application?.jobId?._id}`}
+                      >
+                        {application?.jobId?.title}
+                      </RouterLink>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))

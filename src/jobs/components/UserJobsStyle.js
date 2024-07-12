@@ -35,6 +35,7 @@ export const StyledAdJobDiv = styled("div")(({ theme }) => ({
 }));
 
 export const UsersJobFilterDiv = styled("div")(({ theme }) => ({
+  paddingTop: "8px",
   gridColumn: "1 / 2",
   [theme.breakpoints.down("md")]: {
     gridColumn: 1,
@@ -59,6 +60,7 @@ export const UserJobListDiv = styled("div")(({ theme }) => ({
 }));
 
 export const FeaturedJobListDiv = styled("div")(({ theme }) => ({
+  paddingTop: "8px",
   gridColumn: "4 / 5",
   [theme.breakpoints.down("md")]: {
     gridColumn: 1,

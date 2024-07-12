@@ -18,7 +18,6 @@ import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeleto
 import TeflBanner from "../../shared/components/UIElements/TeflBanner";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useJob } from "../../shared/hooks/jobs-hook";
-import { dummy_jobs } from "../../shared/util/DummyJobs";
 import FeaturedJobsLists from "../components/FeaturedJobsLists";
 import JobFilters from "../components/JobFilters";
 import {
@@ -32,7 +31,11 @@ import {
 
 const UserJobs = () => {
   const auth = useContext(AuthContext);
-  const [filter, setFilter] = useState(dummy_jobs);
+  const [filter, setFilter] = useState({
+    location: "",
+    salaryRange: "",
+    hours: "",
+  });
 
   const [jobPage, setJobPage] = useState({
     page: 1,
@@ -42,12 +45,12 @@ const UserJobs = () => {
 
   const { clearError } = useJob();
 
-  const getAllJobs = async (page, limit) => {
+  const getAllJobs = async (page, limit, location, salaryRange, hours) => {
     try {
       const response = await fetch(
         `${
           process.env.REACT_APP_JOBS
-        }?page=${page}&limit=${limit}&isHome=${false}`
+        }?page=${page}&limit=${limit}&isHome=${false}&location=${location}&salary=${salaryRange}&hours=${hours}`
       );
       const data = await response.json();
       return {
@@ -66,8 +69,44 @@ const UserJobs = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["jobs", jobPage.page, jobPage.limit],
-    queryFn: () => getAllJobs(jobPage.page, jobPage.limit),
+    queryKey: [
+      "jobs",
+      jobPage.page,
+      jobPage.limit,
+      filter.location,
+      filter.salaryRange,
+      filter.hours,
+    ],
+    queryFn: () =>
+      getAllJobs(
+        jobPage.page,
+        jobPage.limit,
+        filter.location,
+        filter.salaryRange,
+        filter.hours
+      ),
+    staleTime: 2 * 60 * 60 * 1000,
+  });
+
+  const getFeaturedJobs = async (page, limit) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_JOBS}/featured-jobs?isHome=${false}`
+    );
+
+    if (!response.ok) {
+      throw new Error("There was an error with retrieving the jobs Data.");
+    }
+    const data = await response.json();
+    return {
+      jobs: data.jobs,
+      page: data.pageNum,
+      totalPages: data.totalPages,
+    };
+  };
+
+  const { data: featuredJobs, isLoading: featuredJobsIsLoading } = useQuery({
+    queryKey: ["featuredJobsJobsPage"],
+    queryFn: () => getFeaturedJobs(),
     staleTime: 2 * 60 * 60 * 1000,
   });
 
@@ -76,6 +115,15 @@ const UserJobs = () => {
       setTotalPages(jobs?.totalPages);
     }
   }, [totalPages, jobs?.totalPages]);
+
+  useEffect(() => {
+    if (filter?.hours || filter?.salaryRange || filter?.location) {
+      setJobPage({
+        page: 1,
+        limit: 5,
+      });
+    }
+  }, [filter.location, filter.salaryRange, filter.hours]);
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -92,25 +140,8 @@ const UserJobs = () => {
     });
   };
 
-  const filteredJobs = jobs?.jobs?.filter((job) => {
-    return (
-      (!filter.location ||
-        job.location.toLowerCase().includes(filter.location.toLowerCase())) &&
-      (!filter.salaryRange || job.salary.includes(filter.salaryRange)) &&
-      (!filter.hours || job.hours === filter.hours)
-    );
-  });
-
-  //if not filter.location or dummyjobs[lowercase][includes] + (filter[location][lowercase])
-
   let button;
   let actionItem;
-
-  console.log(
-    "buttons should show",
-    auth?.isLoggedIn && auth?.user?.userType === "employer",
-    auth?.user
-  );
 
   if (auth?.isLoggedIn && auth?.user?.userType === "employer") {
     button = (
@@ -169,6 +200,7 @@ const UserJobs = () => {
             component={RouterLink}
             to="/job/new"
             label="Create a job"
+            clickable
           />
         )}
 
@@ -185,7 +217,7 @@ const UserJobs = () => {
         <ErrorModal error={error} onClear={clearError} />
         <StyledUserJobsDiv>
           <StyledAdJobDiv>
-            <Stack>
+            <Stack direction="row" alignItems="center" spacing={2}>
               <StyledChip
                 variant="outlined"
                 component={RouterLink}
@@ -194,6 +226,11 @@ const UserJobs = () => {
                 label="Dynamic View"
                 clickable
               />
+              <Divider orientation="vertical" />
+              {button}
+
+              <Divider orientation="vertical" />
+              {actionItem}
             </Stack>
           </StyledAdJobDiv>
           <UsersJobFilterDiv>
@@ -216,18 +253,18 @@ const UserJobs = () => {
                 num={5}
               />
             )}
-            {!isLoading && <JobAdsList job={filteredJobs} company={true} />}
-            {!isLoading && (
+            {!isLoading && <JobAdsList job={jobs?.jobs} company={true} />}
+            {totalPages > 1 && (
               <Pagination
                 count={totalPages}
                 page={jobPage.page}
                 onChange={(event, page) => handlePageChange(page, 5)}
               />
             )}
-            {!isLoading && filteredJobs?.length === 0 && noJobs}
+            {!isLoading && jobs?.jobs?.length === 0 && noJobs}
           </UserJobListDiv>
           <FeaturedJobListDiv>
-            {isLoading && (
+            {featuredJobsIsLoading && (
               <>
                 <JobAdSkeleton
                   sx={{
@@ -240,24 +277,10 @@ const UserJobs = () => {
                 />
               </>
             )}
-            {!isLoading && (
-              <StyledAdJobDiv>
-                {!isLoading && (
-                  <Stack
-                    sx={{ margin: "1rem auto" }}
-                    spacing={2}
-                    direction="row"
-                    justifyContent="center"
-                  >
-                    {button}
 
-                    <Divider orientation="vertical" />
-                    {actionItem}
-                  </Stack>
-                )}
-              </StyledAdJobDiv>
+            {!featuredJobsIsLoading && (
+              <FeaturedJobsLists sponsors={featuredJobs?.jobs} />
             )}
-            {!isLoading && <FeaturedJobsLists sponsors={jobs?.jobs} />}
           </FeaturedJobListDiv>
         </StyledUserJobsDiv>
       </Content>

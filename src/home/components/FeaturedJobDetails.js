@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
+import debounce from "lodash/debounce";
 import { Link as RouterLink } from "react-router-dom";
 
 import ElectricBoltOutlinedIcon from "@mui/icons-material/ElectricBoltOutlined";
@@ -48,12 +49,12 @@ const StyledGridItemContent = styled(Grid)(({ theme, dynamic }) => ({
 }));
 
 const StyledDynamicAvatar = styled(Avatar)(({ theme }) => ({
-  height: 150,
-  width: 150,
+  height: 100,
+  width: 100,
   border: "1px solid #e5e5e5",
   [theme.breakpoints.down("md")]: {
-    height: 150,
-    width: 150,
+    height: 100,
+    width: 100,
   },
   [theme.breakpoints.down("sm")]: {
     height: 55,
@@ -69,7 +70,7 @@ const StyledBoxContainer = styled(Box)(({ theme, yScroll }) => ({
     width: "4px",
   },
   "&::-webkit-scrollbar-thumb": {
-    background: "transparent",
+    background: "#b5b5b5",
     borderRadius: "4px",
   },
   "&::-webkit-scrollbar-thumb:hover": {
@@ -77,7 +78,7 @@ const StyledBoxContainer = styled(Box)(({ theme, yScroll }) => ({
     background: "#8b8b8d",
   },
   "&::-webkit-scrollbar-track": {
-    background: "transparent",
+    background: "#f1f1f1", //transparent
     borderRadius: "4px",
   },
   "&:hover": {
@@ -111,6 +112,53 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   const auth = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const { applyToJob, error, clearError, isPostLoading } = useUser();
+  const [outOfFocus, setOutOfFocus] = useState(false);
+  const focusRef = useRef(null);
+
+  const BUFFER = 10;
+
+  useEffect(() => {
+    const handleScroll = debounce(() => {
+      const b = document.getElementById("apply-button");
+      const container = focusRef.current;
+      if (container && b) {
+        const buttonRect = b.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        // Check if the button is out of focus
+        const isOutOfFocus = buttonRect.bottom < containerRect.top + BUFFER;
+        //console.log("button bottom:", buttonRect.bottom);
+        //console.log("button top:", buttonRect.top);
+        //console.log("container bottom:", containerRect.bottom);
+        //console.log("container top:", containerRect.top);
+        //console.log("Is out of focus:", isOutOfFocus);
+
+        // Update the state only if it has changed
+        setOutOfFocus((prev) => {
+          if (prev !== isOutOfFocus) {
+            // console.log("Button out of focus:", isOutOfFocus); // Debug log
+            return isOutOfFocus;
+          }
+          return prev;
+        });
+      }
+    }, 100); // Adjust the debounce delay as needed
+
+    const container = focusRef.current;
+    if (container) {
+      // console.log("isContainer");
+      container.addEventListener("scroll", handleScroll);
+      handleScroll(); // Initial check
+    }
+
+    return () => {
+      if (container) {
+        // console.log("cleaned up event");
+        container.removeEventListener("scroll", handleScroll);
+      }
+      handleScroll.cancel();
+    };
+  }, []);
 
   const applyToJobHandler = () => {
     applyToJob(auth.user?._id, job?._id);
@@ -137,6 +185,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
     outlinedButton = (
       <>
         <Button
+          id="apply-button"
           endIcon={<ElectricBoltOutlinedIcon />}
           size={featured ? "small" : ""}
           sx={{ borderRadius: "15px" }}
@@ -233,6 +282,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   } else {
     outlinedButton = (
       <Button
+        id="apply-button"
         size="small"
         sx={{ borderRadius: "17px" }}
         component={RouterLink}
@@ -247,7 +297,59 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
-      <StyledBoxContainer sx={{ maxHeight: height }}>
+      <Stack sx={{ minHeight: 35, backgrounColor: "red" }}>
+        <Stack
+          spacing={2}
+          direction="row"
+          alignItems="center"
+          justifyContent="flex-start"
+          sx={{
+            height: 35,
+            opacity: outOfFocus ? 1 : 0,
+            transition: (theme) =>
+              theme.transitions.create("opacity", {
+                duration: theme.transitions.duration.standard,
+                easing: theme.transitions.easing.easeInOut,
+              }),
+            visibilty: outOfFocus ? "hidden" : "visible",
+          }}
+        >
+          {outOfFocus && (
+            <>
+              <Stack>
+                <Avatar
+                  variant="circular"
+                  src={`${job?.image}`}
+                  sx={{
+                    height: 35,
+                    width: 35,
+                    border: "1px solid #e5e5e5",
+                  }}
+                  alt={`${job?._id}--${job?.creator?.company}`}
+                />
+              </Stack>
+              <Stack>
+                <Typography variant="subtitle2">{job?.title}</Typography>
+              </Stack>
+              <Stack>
+                <Chip
+                  disabled={!auth?.isLoggedIn}
+                  onClick={applyJobModalHandler}
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  sx={{ fontSize: 10 }}
+                  label={auth?.isLoggedIn ? "Apply" : "Login"}
+                  component={Button}
+                  icon={<ElectricBoltOutlinedIcon />}
+                  clickable
+                />
+              </Stack>
+            </>
+          )}
+        </Stack>
+      </Stack>
+      <StyledBoxContainer sx={{ maxHeight: height }} ref={focusRef}>
         <Grid spacing={2} container direction="column">
           {featured && (
             <Grid
@@ -289,9 +391,9 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                         alt={`${job?._id}--${job?.creator?.company}`}
                       />
                       <Stack direction="column">
-                        <Typography>{job?.title}</Typography>
+                        <Typography variant="h5">{job?.title}</Typography>
                         <Typography
-                          sx={{ fontSize: 12 }}
+                          sx={{ fontSize: 14 }}
                           varaint="subtitle1"
                           color="text.secondary"
                         >
@@ -311,61 +413,75 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                                 style={{ color: "#1e8d41" }}
                               />
                             }
-                            sx={{ fontSize: 12 }}
+                            sx={{ fontSize: 14 }}
                           />
                           {outlinedButton}
                         </Stack>
                       </Stack>
                     </Stack>
-                    <Divider light flexItem sx={{ margin: "0.5rem 0" }} />
                   </Grid>
                   {/**grid item 2 */}
-
+                  <Divider
+                    variant="middle"
+                    light
+                    sx={{ margin: "0.5rem 0", width: "90%" }}
+                  />
                   {/**grid item 3 */}
                   {!isPostLoading && (
-                    <StyledGridItemContent item sx={{ margin: "0 0 0 0.5rem" }}>
-                      <Typography
-                        color="text.secondary"
-                        sx={{ fontSize: 11, fontWeight: 600 }}
-                      >
-                        About:
-                      </Typography>
-                      <Typography
-                        color="text.primary"
-                        variant="subtitle2"
-                        sx={{ fontSize: 13 }}
-                      >
-                        {job?.creator?.about}
-                      </Typography>
-                      <Typography
-                        color="text.secondary"
-                        sx={{
-                          fontSize: 11,
-                          fontWeight: 600,
-                          margin: "0.5rem 0",
-                        }}
-                      >
-                        Specifications:
-                      </Typography>
-                      <JobRequirements jobSpecs={job} fontSize={fontSize} />
-                      <Stack direction="column" sx={{ margin: "1rem 0" }}>
-                        <Typography
-                          color="text.secondary"
-                          sx={{ fontSize: 11, fontWeight: 600 }}
-                        >
-                          Details:
-                        </Typography>
+                    <StyledGridItemContent
+                      item
+                      sx={{ margin: "0 0 0 0.5rem", width: "100%" }}
+                    >
+                      <Stack direction="column" sx={{}} spacing={3}>
+                        <Stack>
+                          <Typography
+                            color="text.secondary"
+                            sx={{ fontSize: 11, fontWeight: 600 }}
+                          >
+                            About:
+                          </Typography>
+                          <Typography
+                            color="text.primary"
+                            variant="subtitle2"
+                            sx={{ fontSize: 14 }}
+                          >
+                            {job?.creator?.about}
+                          </Typography>
+                        </Stack>
+                        <Stack>
+                          <Typography
+                            color="text.secondary"
+                            sx={{
+                              fontSize: 11,
+                              fontWeight: 600,
+                              margin: "0.5rem 0",
+                            }}
+                          >
+                            Specifications:
+                          </Typography>
+                          <JobRequirements jobSpecs={job} fontSize={fontSize} />
+                        </Stack>
+                        <Stack>
+                          <Typography
+                            color="text.secondary"
+                            sx={{ fontSize: 11, fontWeight: 600 }}
+                          >
+                            Details:
+                          </Typography>
 
-                        <Chip
-                          label={`Job location: ${job?.location}`}
-                          size="small"
-                          sx={{ borderRadius: 5 }}
-                        />
-                        <Typography
-                          variant="body2"
-                          color="text.primary"
-                          dangerouslySetInnerHTML={{ __html: job?.description }}
-                        />
+                          <Chip
+                            label={`Job location: ${job?.location}`}
+                            size="small"
+                            sx={{ borderRadius: 5 }}
+                          />
+                          <Typography
+                            variant="body2"
+                            color="text.primary"
+                            dangerouslySetInnerHTML={{
+                              __html: job?.description,
+                            }}
+                          />
+                        </Stack>
                       </Stack>
                     </StyledGridItemContent>
                   )}
@@ -385,41 +501,31 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
 
               <Grid item>
                 {!isPostLoading && (
-                  <Paper
-                    sx={{ padding: 0, borderRadius: "15px" }}
-                    elevation={0}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
+                      flexWrap: "wrap",
+                      gap: "6px",
+                      marginBottom: "1rem",
+                    }}
                   >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        width: "100%",
-                        flexWrap: "wrap",
-                        gap: "6px",
-                        marginBottom: "1rem",
-                      }}
+                    {job?.creator?.presence?.map((item, i) => (
+                      <Chip key={i} clickable label={item} variant="outlined" />
+                    ))}
+                    <Button
+                      sx={{ borderRadius: "17px" }}
+                      endIcon={<ForwardOutlinedIcon />}
+                      size="small"
+                      variant="outlined"
+                      component={RouterLink}
+                      to={`/jobs/${job?._id}`}
                     >
-                      {job?.creator?.presence?.map((item, i) => (
-                        <Chip
-                          key={i}
-                          clickable
-                          label={item}
-                          variant="outlined"
-                        />
-                      ))}
-                      <Button
-                        sx={{ borderRadius: "17px" }}
-                        endIcon={<ForwardOutlinedIcon />}
-                        size="small"
-                        variant="outlined"
-                        component={RouterLink}
-                        to={`/jobs/${job?._id}`}
-                      >
-                        View Job{" "}
-                      </Button>
-                    </Box>
-                  </Paper>
+                      View Job{" "}
+                    </Button>
+                  </Box>
                 )}
               </Grid>
             </Grid>
@@ -485,7 +591,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                                 style={{ color: "#1e8d41" }}
                               />
                             }
-                            sx={{ fontSize: 12 }}
+                            sx={{ fontSize: 14 }}
                           />
                           <Chip
                             variant="outlined"
@@ -501,50 +607,67 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                         </StyledChipStack>
                       </Stack>
                     </Stack>
-                    <Divider light flexItem sx={{ margin: "0.5rem 0" }} />
                   </Grid>
                   {/**grid item 2 */}
+                  <Divider
+                    variant="middle"
+                    light
+                    sx={{ margin: "0.5rem 0", width: "90%" }}
+                  />
 
                   {/**grid item 3 */}
                   {!isPostLoading && (
-                    <StyledGridItemContent item dynamic="true">
-                      <Typography
-                        color="text.secondary"
-                        sx={{ fontSize: 14, fontWeight: 600 }}
-                      >
-                        About:
-                      </Typography>
-                      <Typography
-                        color="text.primary"
-                        variant="subtitle2"
-                        sx={{ fontSize: 16 }}
-                      >
-                        {job?.creator?.about}
-                      </Typography>
-                      <Typography
-                        color="text.secondary"
-                        sx={{
-                          fontSize: 14,
-                          fontWeight: 600,
-                          margin: "0.5rem 0",
-                        }}
-                      >
-                        Specifications:
-                      </Typography>
-                      <JobRequirements fontSize={fontSize} jobSpecs={job} />
-                      <Stack direction="column" sx={{ margin: "1rem 0" }}>
-                        <Typography
-                          color="text.secondary"
-                          sx={{ fontSize: 14, fontWeight: 600 }}
-                        >
-                          Details:
-                        </Typography>
+                    <StyledGridItemContent
+                      item
+                      dynamic="true"
+                      sx={{ width: "100%" }}
+                    >
+                      <Stack direction="column" sx={{}} spacing={3}>
+                        <Stack>
+                          <Typography
+                            color="text.secondary"
+                            sx={{ fontSize: 14, fontWeight: 600 }}
+                          >
+                            About:
+                          </Typography>
+                          <Typography
+                            color="text.primary"
+                            variant="subtitle2"
+                            sx={{ fontSize: 16 }}
+                          >
+                            {job?.creator?.about}
+                          </Typography>
+                        </Stack>
+                        <Stack>
+                          <Typography
+                            color="text.secondary"
+                            sx={{
+                              fontSize: 14,
+                              fontWeight: 600,
+                              margin: "0.5rem 0",
+                            }}
+                          >
+                            Specifications:
+                          </Typography>
+                          <JobRequirements fontSize={fontSize} jobSpecs={job} />
+                        </Stack>
+                        <Stack>
+                          <Typography
+                            color="text.secondary"
+                            sx={{ fontSize: 14, fontWeight: 600 }}
+                          >
+                            Details:
+                          </Typography>
 
-                        <Typography
-                          variant="body2"
-                          color="text.primary"
-                          dangerouslySetInnerHTML={{ __html: job?.description }}
-                        />
+                          <Typography
+                            variant="body2"
+                            color="text.primary"
+                            sx={{ fontSize: 16 }}
+                            dangerouslySetInnerHTML={{
+                              __html: job?.description,
+                            }}
+                          />
+                        </Stack>
                       </Stack>
                     </StyledGridItemContent>
                   )}
@@ -564,41 +687,31 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
 
               <Grid item>
                 {!isPostLoading && (
-                  <Paper
-                    sx={{ padding: 0, borderRadius: "15px" }}
-                    elevation={0}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
+                      flexWrap: "wrap",
+                      gap: "6px",
+                      marginBottom: "1rem",
+                    }}
                   >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        width: "100%",
-                        flexWrap: "wrap",
-                        gap: "6px",
-                        marginBottom: "1rem",
-                      }}
+                    {job?.creator?.presence?.map((item, i) => (
+                      <Chip key={i} clickable label={item} variant="outlined" />
+                    ))}
+                    <Button
+                      sx={{ borderRadius: "17px" }}
+                      endIcon={<ForwardOutlinedIcon />}
+                      size="small"
+                      variant="outlined"
+                      component={RouterLink}
+                      to={`/jobs/${job?._id}`}
                     >
-                      {job?.creator?.presence?.map((item, i) => (
-                        <Chip
-                          key={i}
-                          clickable
-                          label={item}
-                          variant="outlined"
-                        />
-                      ))}
-                      <Button
-                        sx={{ borderRadius: "17px" }}
-                        endIcon={<ForwardOutlinedIcon />}
-                        size="small"
-                        variant="outlined"
-                        component={RouterLink}
-                        to={`/jobs/${job?._id}`}
-                      >
-                        View Job{" "}
-                      </Button>
-                    </Box>
-                  </Paper>
+                      View Job{" "}
+                    </Button>
+                  </Box>
                 )}
               </Grid>
             </Grid>

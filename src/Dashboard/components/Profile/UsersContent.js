@@ -72,9 +72,6 @@ const UsersContent = ({
 
   const userHasContent = blogPosts?.blogPost?.length > 0;
 
-  console.log("content is loading", isLoading, isDeleting);
-  console.log("BlogPosts: ", blogPosts?.blogPost);
-
   return (
     <>
       {!isEditing && (

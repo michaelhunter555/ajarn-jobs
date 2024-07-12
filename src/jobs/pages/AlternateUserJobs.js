@@ -66,6 +66,7 @@ const AlternateUserJobs = () => {
         filter.salaryRange,
         filter.hours
       ),
+    staleTime: 2 * 60 * 60 * 1000,
     keepPreviousData: true,
   });
 
@@ -89,14 +90,11 @@ const AlternateUserJobs = () => {
   };
 
   const handleJobPageChange = (page) => {
-    console.log(page, dynamicPage.limit);
     setDynamicPage({
       page: page,
       limit: dynamicPage.limit,
     });
   };
-  console.log("Dynamic page: ", dynamicPage);
-
   return (
     <PageContainer>
       <Content>

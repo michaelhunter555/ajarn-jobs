@@ -5,8 +5,8 @@ import MainFeaturedJob from "./MainFeaturedJob";
 const JobContent = ({ featuredJobs, page, totalPages, onPageChange }) => {
   return (
     <MainFeaturedJob
-      fontSize={12}
-      height={400}
+      fontSize={13}
+      height={500}
       featured={true}
       jobs={featuredJobs}
       page={page}

@@ -14,7 +14,7 @@ const StyledTitle = styled("h2")(({ theme }) => ({
 }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  maxHeight: 340,
+  maxHeight: 440,
   overflowY: "auto",
   pointerEvents: "auto",
   backgroundColor: theme.palette.background.paper,

@@ -70,9 +70,9 @@ const Home = () => {
   }, [featuredJobs?.totalPages, totalFeaturedPages]);
 
   //GET Jobs for API Cache
-  const getJobsData = async (page, limit) => {
+  const getJobsData = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_JOBS}?isHome=${true}&page=${page}&limit=${limit}`
+      `${process.env.REACT_APP_JOBS}?isHome=true&page=5&limit=10`
     );
 
     if (!response.ok) {
@@ -173,7 +173,7 @@ const Home = () => {
                 sx={{
                   height: "95px",
                 }}
-                num={4}
+                num={5}
                 variant="rectangular"
               />
             )}
@@ -189,7 +189,7 @@ const Home = () => {
             {featuredJobsIsLoading && (
               <JobAdSkeleton
                 num={1}
-                sx={{ height: 420, width: "100%" }}
+                sx={{ height: 500, width: "100%" }}
                 variant="rectangular"
               />
             )}
@@ -210,7 +210,7 @@ const Home = () => {
                 sx={{
                   height: "95px",
                 }}
-                num={4}
+                num={5}
                 variant="rectangular"
               />
             )}

@@ -369,8 +369,6 @@ const TeacherDashboard = () => {
     });
   };
 
-  console.log("auth: ", auth);
-
   //Sidebar component rendering
   const renderComponent = () => {
     try {

@@ -58,7 +58,7 @@ const JobFilters = ({ onFilterChange }) => {
     setChecked("");
     setSalaryRange("");
     setLocation("");
-    onFilterChange({ location: null, salaryRange: null, hours: null });
+    onFilterChange({ location: "", salaryRange: "", hours: "" });
   };
 
   return (

@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import Sponsors from "./Sponsors";
 
 const StyledPaper = styled(Paper)({
-  maxHeight: 340,
+  maxHeight: 440,
   overflowY: "auto",
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {

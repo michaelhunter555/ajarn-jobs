@@ -1,30 +1,20 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import {
-  Grid,
-  Pagination,
-} from '@mui/material/';
-import {
-  createTheme,
-  styled,
-} from '@mui/material/styles';
-import { useQuery } from '@tanstack/react-query';
+import { Grid, Pagination } from "@mui/material/";
+import { createTheme, styled } from "@mui/material/styles";
+import { useQuery } from "@tanstack/react-query";
 
-import CustomModal from '../../shared/components/UIElements/CustomModal';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import CustomModal from "../../shared/components/UIElements/CustomModal";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import Footer, {
   Content,
   PageContainer,
-} from '../../shared/components/UIElements/Footer';
-import TeflBanner from '../../shared/components/UIElements/TeflBanner';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import TeacherFilter from '../components/TeacherFilter';
-import TeacherList from '../components/TeacherList';
+} from "../../shared/components/UIElements/Footer";
+import TeflBanner from "../../shared/components/UIElements/TeflBanner";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import TeacherFilter from "../components/TeacherFilter";
+import TeacherList from "../components/TeacherList";
 
 const customThemeForTeachers = createTheme({
   breakpoints: {
@@ -159,21 +149,6 @@ const Teachers = () => {
     setFilter(teacher);
   };
 
-  // const filteredTeachers =
-  //   teachers &&
-  //   teachers?.users?.filter((teacher) => {
-  //     return (
-  //       (!filter?.location ||
-  //         teacher.location
-  //           .toLowerCase()
-  //           .includes(filter?.location.toLowerCase())) &&
-  //       (!filter?.nationality ||
-  //         teacher.nationality.includes(filter.nationality)) &&
-  //       (!filter?.qualifications ||
-  //         teacher.highestCertification.includes(filter.qualifications))
-  //     );
-  //   });
-
   const handleTeacherPageChange = (page, limit) => {
     setTeachersPage({
       page: page,
@@ -197,20 +172,22 @@ const Teachers = () => {
         <ErrorModal onClear={clearError} error={error} />
 
         <StyledGridContainer container spacing={3}>
-          <StyledGridItem xs={12} md={3}>
+          <StyledGridItem item xs={12} md={3}>
             <TeacherFilter onDataChange={handleFilterChange} />
             <TeflBanner />
           </StyledGridItem>
-          <StyledGridItem xs={12} md={9} sx={{ margin: "1rem auto" }}>
+          <StyledGridItem item xs={12} md={9} sx={{ margin: "1rem auto" }}>
             <Grid container spacing={2}>
               <TeacherList teachers={teachers?.users} isLoading={isLoading} />
               {/* add values for pagination */}
-              <Pagination
-                sx={{ marginTop: "0.5rem" }}
-                count={totalPages}
-                page={teachersPage.page}
-                onChange={(event, page) => handleTeacherPageChange(page, 12)}
-              />
+              {totalPages > 1 && (
+                <Pagination
+                  sx={{ marginTop: "0.5rem" }}
+                  count={totalPages}
+                  page={teachersPage.page}
+                  onChange={(event, page) => handleTeacherPageChange(page, 12)}
+                />
+              )}
             </Grid>
           </StyledGridItem>
         </StyledGridContainer>

@@ -17,8 +17,8 @@ export const StyledBoxContent = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "column",
-  margin: "1rem 0 0 0",
-  padding: "1rem 1rem",
+  margin: "0",
+  padding: "0 1rem",
   height: "auto",
   [theme.breakpoints.down("md")]: {
     padding: 0,

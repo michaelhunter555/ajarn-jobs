@@ -68,7 +68,6 @@ const ImageUpload = (props) => {
     filePickerRef.current.click();
   };
 
-  console.log("auth user: ", auth?.user);
   return (
     <Box sx={props.sx}>
       <input
