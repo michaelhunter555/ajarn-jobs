@@ -17,7 +17,10 @@ export const useCreator = () => {
           `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
           JSON.stringify({ creator: creatorItem }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
 
         if (!response.ok) {
@@ -35,7 +38,7 @@ export const useCreator = () => {
         updateUser(updatedCreator);
       } catch (err) {}
     },
-    [sendRequest, updateUser, user]
+    [sendRequest, updateUser, user, auth.token]
   );
 
   //PATCH remove Creator Data
@@ -46,7 +49,10 @@ export const useCreator = () => {
           `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
           JSON.stringify({ deleteCreator: creatorItem._id }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
         const deletedCreator = {
           ...user,
@@ -55,7 +61,7 @@ export const useCreator = () => {
         updateUser(deletedCreator);
       } catch (e) {}
     },
-    [sendRequest, updateUser, user]
+    [sendRequest, updateUser, user, auth.token]
   );
 
   return {

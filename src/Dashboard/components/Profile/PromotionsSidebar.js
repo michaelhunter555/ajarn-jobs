@@ -11,7 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import EmployerDashPromo from "../../../assets/employer-promo_dash.svg";
+const image =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1720807846/employer-promo_dash_ldjhct.svg";
 
 const PromotionSidebar = () => {
   const deadline = new Date();
@@ -25,7 +26,7 @@ const PromotionSidebar = () => {
         <Typography variant="h6" fontWeight={700}>
           Find Teachers Affordably
         </Typography>
-        <CardMedia component="img" src={EmployerDashPromo} alt="promo_offer" />
+        <CardMedia component="img" src={image} alt="promo_offer" />
         <Divider variant="middle" flexItem />
         <CardContent>
           <Typography variant="subtitle1">

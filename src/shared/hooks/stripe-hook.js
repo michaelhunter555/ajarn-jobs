@@ -33,7 +33,8 @@ export const useStripe = () => {
   const getStripeBillingData = useCallback(async (id, page, limit) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_STRIPE}/user-billing/${id}?page=${page}&limit=${limit}`
+        `${process.env.REACT_APP_STRIPE}/user-billing/${id}?page=${page}&limit=${limit}`,
+        { headers: { Authorization: "Bearer " + auth.token } }
       );
 
       const data = await response.json();

@@ -10,12 +10,18 @@ export const StyledGridContainer = styled("div")(({ theme }) => ({
   gap: "15px",
 
   [theme.breakpoints.down("md")]: {
-    gridTemplateColumns: "100%",
-    gridAutoColumns: "auto",
+    // gridTemplateColumns: "1fr",
+    // gridAutoColumns: "auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
   },
   [theme.breakpoints.down("sm")]: {
-    gridTemplateColumns: "100%",
-    gridAutoColumns: "auto",
+    // gridTemplateColumns: "1fr",
+    // gridAutoColumns: "auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
   },
 }));
 
@@ -26,12 +32,14 @@ export const StyledHomeFeaturedTop = styled("div")(({ theme }) => ({
   alignItems: "stretch",
   gap: "5px",
   [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 1,
+    // gridColumn: 1,
+    // gridRow: 1,
+    width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 1,
+    // gridColumn: 1,
+    // gridRow: 1,
+    width: "100%",
   },
 }));
 
@@ -42,12 +50,14 @@ export const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
   borderRadius: "15px",
   overflow: "auto",
   [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 2,
+    // gridColumn: 1,
+    // gridRow: 2,
+    width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridrow: 2,
+    // gridColumn: 1,
+    // gridrow: 2,
+    width: "100%",
   },
 }));
 
@@ -58,12 +68,14 @@ export const StyledHomeFeaturedJobs = styled("div")(({ theme }) => ({
   borderRadius: "5px",
   background: theme.palette.background.paper,
   [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 3,
+    // gridColumn: 1,
+    // gridRow: 3,
+    width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 3,
+    // gridColumn: 1,
+    // gridRow: 3,
+    width: "100%",
   },
 }));
 
@@ -74,23 +86,27 @@ export const StyledHomeFeaturedContentList = styled("div")(({ theme }) => ({
   borderRadius: "5px",
   background: theme.palette.background.paper,
   [theme.breakpoints.down("md")]: {
-    gridcolumn: 1,
-    gridRow: 4,
+    // gridcolumn: 1,
+    // gridRow: 4,
+    width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 4,
+    // gridColumn: 1,
+    // gridRow: 4,
+    width: "100%",
   },
 }));
 
 export const StyledUrgentJobsWrapper = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 5,
+    // gridColumn: 1,
+    // gridRow: 5,
+    width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 5,
+    // gridColumn: 1,
+    // gridRow: 5,
+    width: "100%",
   },
 }));
 
@@ -102,11 +118,13 @@ export const StyledTeflWrapper = styled("div")(({ theme }) => ({
   alignItems: "stretch",
 
   [theme.breakpoints.down("md")]: {
-    gridColumn: 1,
-    gridRow: 6,
+    // gridColumn: 1,
+    // gridRow: 6,
+    width: "100%",
   },
   [theme.breakpoints.down("sm")]: {
-    gridColumn: 1,
-    gridRow: 6,
+    // gridColumn: 1,
+    // gridRow: 6,
+    width: "100%",
   },
 }));

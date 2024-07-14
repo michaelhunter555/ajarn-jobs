@@ -73,10 +73,10 @@ export const partTimeSalaries = [
 
 export const coreJobRequirements = [
   "BA",
+  "Master's",
   "BSc",
   "Certificate",
   "Diploma",
-  "master's degree",
   "PGCE",
   "Phd",
   "bEd",

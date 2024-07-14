@@ -27,7 +27,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 import { useUser } from "../../shared/hooks/user-hook";
 import JobRequirements from "./JobRequirements";
 
-const StyledBoxModal = styled(Paper)({
+const StyledBoxModal = styled(Paper)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -39,7 +39,10 @@ const StyledBoxModal = styled(Paper)({
   borderRadius: "15px",
   boxShadow: 24,
   padding: 14,
-});
+  [theme.breakpoints.down("sm")]: {
+    width: "90%",
+  },
+}));
 
 const StyledGridItemContent = styled(Grid)(({ theme, dynamic }) => ({
   margin: "0 0 0 0.5rem",

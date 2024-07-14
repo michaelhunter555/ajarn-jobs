@@ -40,6 +40,39 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   },
 }));
 
+const createJobInfo = (job) => {
+  return job
+    ? [
+        { variant: "h5", component: "h2", text: job?.title },
+        {
+          variant: "subtitle1",
+          component: "h3",
+          text: (
+            <Chip color="primary" size="small" label={job?.creator?.company} />
+          ),
+        },
+        {
+          variant: "subtitle1",
+          component: "h3",
+          icon: <LocationOnIcon size="inherit" />,
+          text: job?.creator?.headquarters,
+        },
+        {
+          variant: "subtitle1",
+          component: "h3",
+          icon: <BusinessIcon size="inherit" />,
+          text: job?.creator?.companySize + " employees",
+        },
+        {
+          variant: "subtitle1",
+          component: "h3",
+          icon: <VerifiedUserIcon size="inherit" />,
+          text: "Established in " + job?.creator?.established,
+        },
+      ]
+    : [];
+};
+
 export const JobInformation = (props) => {
   const {
     applyJobModalHandler,
@@ -55,32 +88,7 @@ export const JobInformation = (props) => {
     isPostLoading,
   } = props;
 
-  const jobInformation = job && [
-    { variant: "h5", component: "h2", text: job?.title },
-    {
-      variant: "subtitle1",
-      component: "h3",
-      text: <Chip color="primary" size="small" label={job?.creator?.company} />,
-    },
-    {
-      variant: "subtitle1",
-      component: "h3",
-      icon: <LocationOnIcon size="inherit" />,
-      text: job?.creator?.headquarters,
-    },
-    {
-      variant: "subtitle1",
-      component: "h3",
-      icon: <BusinessIcon size="inherit" />,
-      text: job?.creator?.companySize + " employees",
-    },
-    {
-      variant: "subtitle1",
-      component: "h3",
-      icon: <VerifiedUserIcon size="inherit" />,
-      text: "Established in " + job?.creator?.established,
-    },
-  ];
+  const jobInformation = createJobInfo(job);
 
   return (
     <Paper

@@ -1,9 +1,12 @@
 import React, { useContext, useState } from "react";
 
 import ArticleIcon from "@mui/icons-material/Article";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SettingsIcon from "@mui/icons-material/Settings";
 import WorkIcon from "@mui/icons-material/Work";
@@ -48,6 +51,7 @@ const StyledBottomNav = styled(BottomNavigation)(({ theme }) => ({
     bottom: 0,
     zIndex: 11,
     marginTop: "1rem",
+    padding: "0.5rem",
   },
 }));
 
@@ -74,7 +78,7 @@ const menuItems = [
   },
   {
     text: "My Content",
-    icon: <ArticleIcon />,
+    icon: <NewspaperIcon />,
     componentName: "content",
   },
   {
@@ -82,7 +86,16 @@ const menuItems = [
     icon: <ReceiptLongIcon />,
     componentName: "invoices",
   },
-
+  {
+    text: "Recruit Offers",
+    icon: <AutoAwesomeIcon />,
+    componentName: "recruitment-offers",
+  },
+  {
+    text: "Recruits",
+    icon: <PersonSearchIcon />,
+    componentName: "recruitment-sent",
+  },
   {
     text: "Settings",
     icon: <SettingsIcon />,
@@ -104,6 +117,14 @@ const Sidebar = ({ onMenuItemClick }) => {
   //user can always switch userType, but if created creator account, must delete it first to go from employer to teacher.
   const filteredSidebar = menuItems.filter((val) => {
     if (val.componentName === "creator" && userType === "teacher") {
+      return false;
+    }
+
+    if (val.componentName === "recruitment-offers" && userType === "employer") {
+      return false;
+    }
+
+    if (val.componentName === "recruitment-sent" && userType === "teacher") {
       return false;
     }
 
@@ -166,6 +187,13 @@ export const BottomMobileNav = ({ onMenuItemClick }) => {
     if (val.componentName === "creator" && userType === "teacher") {
       return false;
     }
+    if (val.componentName === "recruitment-offers" && userType === "employer") {
+      return false;
+    }
+
+    if (val.componentName === "recruitment-sent" && userType === "teacher") {
+      return false;
+    }
 
     if (val.componentName === "job-listings" && userType === "teacher") {
       return false;
@@ -197,8 +225,8 @@ export const BottomMobileNav = ({ onMenuItemClick }) => {
     setAnchorEl(e.currentTarget);
   };
 
-  const visibleSidebarItems = filteredSidebar.slice(0, -2);
-  const moreSidebarItems = filteredSidebar.slice(-2);
+  const visibleSidebarItems = filteredSidebar.slice(0, -4);
+  const moreSidebarItems = filteredSidebar.slice(-4);
 
   const handleSidebarClick = (componentName, index) => {
     setValue(index); // Set the selected tab
@@ -246,6 +274,7 @@ export const BottomMobileNav = ({ onMenuItemClick }) => {
                     {moreSidebarItems.map((mobileItem, i) => (
                       <ListItemButton
                         sx={{ zIndex: 11 }}
+                        selected={i === value}
                         onClick={() =>
                           handleSidebarClick(mobileItem.componentName, i)
                         }

@@ -17,6 +17,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxHeight: 440,
   overflowY: "auto",
   pointerEvents: "auto",
+  width: "100%",
   backgroundColor: theme.palette.background.paper,
   "&::-webkit-scrollbar": {
     width: "4px",

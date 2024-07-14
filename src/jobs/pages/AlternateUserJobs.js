@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Box, CircularProgress, Grid, Paper, Stack } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import BottomFeatured from "../../home/components/BottomFeatured";
@@ -10,6 +11,27 @@ import Footer, {
   PageContainer,
 } from "../../shared/components/UIElements/Footer";
 import DynamicJobFilter from "../components/dynamicJobFilter";
+
+const StyledGridContainer = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row", //column,
+  gap: theme.spacing(1),
+  justifyContent: "center",
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+  },
+}));
+
+const StyledFilterStack = styled(Stack)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: theme.spacing(2),
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+  },
+}));
 
 const AlternateUserJobs = () => {
   const [dynamicPage, setDynamicPage] = useState({
@@ -98,24 +120,13 @@ const AlternateUserJobs = () => {
   return (
     <PageContainer>
       <Content>
-        <Grid
-          container
-          direction="row"
-          spacing={1}
-          id="dynaJobs"
-          justifyContent="center"
-        >
+        <StyledGridContainer container id="dynaJobs">
           <Grid item xs={12} md={9}>
             <Stack spacing={2}>
               <Paper elevation={2} sx={{ padding: 2, borderRadius: 5 }}>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="center"
-                  spacing={2}
-                >
+                <StyledFilterStack>
                   <DynamicJobFilter onFilterChange={handleFilterChange} />
-                </Stack>
+                </StyledFilterStack>
               </Paper>
               {isLoading && <CircularProgress />}
               {/* {<DynamicJobSkeleton isLoading={isLoading} height={500} />} */}
@@ -135,7 +146,7 @@ const AlternateUserJobs = () => {
             </Stack>
             {/*isLoading && <LinearProgress />*/}
           </Grid>
-        </Grid>
+        </StyledGridContainer>
         <Box sx={{ margin: "3rem auto" }}>
           <BottomFeatured />
         </Box>

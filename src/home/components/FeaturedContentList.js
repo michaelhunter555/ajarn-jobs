@@ -9,6 +9,7 @@ import Sponsors from "./Sponsors";
 
 const StyledPaper = styled(Paper)({
   maxHeight: 440,
+  width: "100%",
   overflowY: "auto",
   pointerEvents: "auto",
   "&::-webkit-scrollbar": {

@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
-import LocalPoliceTwoToneIcon from '@mui/icons-material/LocalPoliceTwoTone';
-import PlaceIcon from '@mui/icons-material/Place';
-import PublicIcon from '@mui/icons-material/Public';
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
+import LocalPoliceTwoToneIcon from "@mui/icons-material/LocalPoliceTwoTone";
+import PlaceIcon from "@mui/icons-material/Place";
+import PublicIcon from "@mui/icons-material/Public";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import {
   Avatar,
   Box,
@@ -16,10 +16,10 @@ import {
   Stack,
   Tooltip,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import { CustomModalBlur } from '../../shared/util/CustomerBlurStyle';
+import { CustomModalBlur } from "../../shared/util/CustomerBlurStyle";
 
 const StyledNameTypography = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
@@ -94,7 +94,10 @@ const ActiveTeachersDashboardList = (props) => {
     );
   } else {
     nameText = (
-      <Typography component="h3" variant="h6">
+      <Typography
+        component="h3"
+        sx={{ fontSize: { xs: 12, md: 14 }, fontWeight: { xs: 700, md: 600 } }}
+      >
         {props?.name}
       </Typography>
     );
@@ -105,7 +108,10 @@ const ActiveTeachersDashboardList = (props) => {
       <StyledPaper
         elevation={0}
         sx={{
-          maxWidth: props?.width,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          minWidth: "100%",
         }}
       >
         <Grid
@@ -114,7 +120,7 @@ const ActiveTeachersDashboardList = (props) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Grid item xs={12} md={3}>
+          <Grid item xs={3} md={3}>
             {/* image and button on top of eachother */}
             <Stack justifyContent="center" alignItems="center" spacing={1}>
               <CardMedia
@@ -131,7 +137,8 @@ const ActiveTeachersDashboardList = (props) => {
               />
             </Stack>
           </Grid>
-          <Grid item xs={12} md={8}>
+
+          <Grid item xs={8} md={8}>
             <CardContent sx={{ lineHeight: 1, padding: "16px 16px 0 16px" }}>
               <Stack
                 direction="row"
@@ -219,28 +226,20 @@ const ActiveTeachersDashboardList = (props) => {
                     <PlaceIcon fontSize="inherit" /> {props?.currentLocation}
                   </Typography>
 
-                  <Typography
+                  {/* <Typography
                     component="h3"
                     color="text.secondary"
                     variant="subtitle2"
                   >
                     <WorkspacePremiumIcon fontSize="inherit" /> {props?.degree}
-                  </Typography>
+                  </Typography> */}
+                  <Chip
+                    size="small"
+                    icon={<WorkspacePremiumIcon fontSize="inherit" />}
+                    label={props?.degree}
+                  />
                 </Grid>
               </Grid>
-
-              {/* <Divider sx={{ width: "75%" }} variant="left" />
-              <Box>
-                <Typography
-                  sx={{ paddingTop: "3px" }}
-                  variant="subtitle2"
-                  color="text.secondary"
-                >
-                  {props?.about?.length > 50
-                    ? props?.about.substring(0, 50) + "..."
-                    : props?.about}
-                </Typography>
-              </Box> */}
             </CardContent>
           </Grid>
         </Grid>

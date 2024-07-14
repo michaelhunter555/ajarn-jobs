@@ -98,9 +98,10 @@ const Home = () => {
     return data.blogList;
   };
 
-  const { data: contentList } = useQuery(["homeContentList"], () =>
-    getAllContent()
-  );
+  const { data: contentList, isLoading: contentListIsLoading } = useQuery({
+    queryKey: ["homeContentList"],
+    queryFn: () => getAllContent(),
+  });
 
   //Randomize the job
   const randomFeaturedJob = featuredJobs?.jobs
@@ -114,14 +115,17 @@ const Home = () => {
     });
   };
 
+  const homepageIsLoading =
+    featuredJobsIsLoading || contentListIsLoading || isLoading;
+
   return (
     <PageContainer>
       <Content>
         <StyledGridContainer>
           {/* top-left column*/}
           <StyledTeflWrapper>
-            {!isLoading && <Tefl />}
-            {isLoading && (
+            {!homepageIsLoading && <Tefl />}
+            {homepageIsLoading && (
               <JobAdSkeleton
                 sx={{
                   height: "126px",
@@ -134,7 +138,7 @@ const Home = () => {
           </StyledTeflWrapper>
 
           <StyledHomeFeaturedTop id="jobsTop">
-            {featuredJobsIsLoading && (
+            {homepageIsLoading && (
               <JobAdSkeleton
                 sx={{
                   height: "126px",
@@ -144,7 +148,7 @@ const Home = () => {
                 variant="rectangular"
               />
             )}
-            {!featuredJobsIsLoading && randomFeaturedJob && (
+            {!homepageIsLoading && randomFeaturedJob && (
               <JobAd key={randomFeaturedJob?._id} job={randomFeaturedJob} />
             )}
 
@@ -153,7 +157,7 @@ const Home = () => {
 
           {/* top-right column*/}
           <StyledUrgentJobsWrapper>
-            {isLoading && (
+            {homepageIsLoading && (
               <JobAdSkeleton
                 sx={{
                   height: "130px",
@@ -163,12 +167,12 @@ const Home = () => {
                 variant="rectangular"
               />
             )}
-            {!isLoading && <UrgentJobs job={homeJobs} />}
+            {!homepageIsLoading && <UrgentJobs job={homeJobs} />}
           </StyledUrgentJobsWrapper>
 
           {/*lower-left column */}
           <StyledHomeFeaturedJobs>
-            {isLoading && (
+            {homepageIsLoading && (
               <JobAdSkeleton
                 sx={{
                   height: "95px",
@@ -177,7 +181,7 @@ const Home = () => {
                 variant="rectangular"
               />
             )}
-            {!isLoading && <RecentJobs homeJobs={homeJobs} />}
+            {!homepageIsLoading && <RecentJobs homeJobs={homeJobs} />}
 
             <Button component={RouterLink} to="/jobs">
               View All Jobs
@@ -186,14 +190,14 @@ const Home = () => {
 
           {/* lower middle-column*/}
           <StyledHomeFeaturedContent>
-            {featuredJobsIsLoading && (
+            {homepageIsLoading && (
               <JobAdSkeleton
                 num={1}
                 sx={{ height: 500, width: "100%" }}
                 variant="rectangular"
               />
             )}
-            {!featuredJobsIsLoading && (
+            {!homepageIsLoading && (
               <JobContent
                 page={featuredPage}
                 totalPages={totalFeaturedPages}
@@ -205,7 +209,7 @@ const Home = () => {
 
           {/* lower-right column*/}
           <StyledHomeFeaturedContentList>
-            {isLoading && (
+            {homepageIsLoading && (
               <JobAdSkeleton
                 sx={{
                   height: "95px",
@@ -214,21 +218,24 @@ const Home = () => {
                 variant="rectangular"
               />
             )}
-            {!isLoading && <FeaturedContentList posts={contentList} />}
+            {!homepageIsLoading && <FeaturedContentList posts={contentList} />}
             <Button component={RouterLink} to="/content">
               Make a post
             </Button>
           </StyledHomeFeaturedContentList>
         </StyledGridContainer>
         <div>
-          <SiteFeatures isLoading={isLoading} />
+          <SiteFeatures isLoading={homepageIsLoading} />
         </div>
         <div>
-          <BottomFeatured isLoading={isLoading} />
+          <BottomFeatured isLoading={homepageIsLoading} />
         </div>
         <div>
           <h2 style={{ textAlign: "center" }}>Jobs You may like:</h2>{" "}
-          <BottomFeaturedAdsList isLoading={isLoading} footerJobs={homeJobs} />
+          <BottomFeaturedAdsList
+            isLoading={homepageIsLoading}
+            footerJobs={homeJobs}
+          />
         </div>
       </Content>
       {/* */}

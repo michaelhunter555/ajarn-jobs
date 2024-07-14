@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -40,9 +40,15 @@ const UsersContent = ({
   const [editingPostId, setEditingPostId] = useState(null);
   const [postToDelete, setPostToDelete] = useState(null);
   const [page, setPage] = useState(blogPosts?.page);
-  const [totalPages, setTotalPages] = useState(blogPosts?.totalPages);
+  const [totalPages, setTotalPages] = useState(1);
 
   const { deleteContentPost, isDeleting } = useContent();
+
+  useEffect(() => {
+    if (totalPages !== blogPosts?.totalPages) {
+      setTotalPages(blogPosts?.totalPages);
+    }
+  }, [blogPosts?.totalPages, totalPages]);
 
   const deleteWarningHandler = (postId) => {
     setPostToDelete(postId);

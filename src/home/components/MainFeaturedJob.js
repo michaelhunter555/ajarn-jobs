@@ -51,7 +51,7 @@ const MainFeaturedJob = ({
         }}
       >
         <Grid container>
-          <Grid item xs={12} md={featured ? 4.5 : 4} order={{ xs: 2, md: 1 }}>
+          <Grid item xs={12} md={4.5} order={{ xs: 2, md: 1 }}>
             <Alert severity="info">
               {featured ? "Featured jobs |" : "All Jobs"}{" "}
               {filterText ? "by " + filterText : ""}
@@ -109,7 +109,12 @@ const MainFeaturedJob = ({
             <FlashAnimation
               flash={flash}
               isDarkMode={isDarkMode}
-              sx={{ padding: "0.5rem", borderRadius: "5px" }}
+              sx={{
+                padding: "0.5rem",
+                borderRadius: "5px",
+                height: "100%",
+                width: "100%",
+              }}
             >
               <StyledBoxContent>
                 {selectedJob && (
@@ -133,11 +138,11 @@ const FlashAnimation = styled("div")(({ flash, isDarkMode }) => ({
   animation: flash
     ? isDarkMode
       ? `flash-animation-dark 1.5s`
-      : `flash-animation-light 0.5s`
+      : `flash-animation-light 1s`
     : "none",
   "@keyframes flash-animation-light": {
     "0%": {
-      backgroundColor: "rgba(0, 0, 0, 0.15)",
+      backgroundColor: "rgba(236, 236, 236, 0.53)",
     },
     "100%": {
       backgroundColor: "transparent",
@@ -145,7 +150,7 @@ const FlashAnimation = styled("div")(({ flash, isDarkMode }) => ({
   },
   "@keyframes flash-animation-dark": {
     "0%": {
-      backgroundColor: "rgba(255, 255, 255, 0.15)",
+      backgroundColor: "rgba(5, 5, 5, 0.53)",
     },
     "100%": {
       backgroundColor: "transparent",

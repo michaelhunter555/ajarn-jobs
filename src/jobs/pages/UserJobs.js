@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
-import EastIcon from "@mui/icons-material/East";
+import AddIcon from "@mui/icons-material/Add";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import { Box, Card, Divider, Stack, Typography } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
@@ -167,13 +167,13 @@ const UserJobs = () => {
   } else if (!auth?.isLoggedIn) {
     button = (
       <StyledChip
-        icon={<EastIcon />}
+        icon={<AddIcon />}
         size="small"
         variant="contained"
         disabled={!auth.isLoggedIn}
         component={RouterLink}
         to="/auth"
-        label="Sign-up to create jobs!"
+        label="Add Job"
         clickable
       />
     );
@@ -226,11 +226,20 @@ const UserJobs = () => {
                 label="Dynamic View"
                 clickable
               />
-              <Divider orientation="vertical" />
-              {button}
 
-              <Divider orientation="vertical" />
-              {actionItem}
+              {auth?.user?.userType === "employer" && (
+                <>
+                  <Divider orientation="vertical" />
+                  {button}
+                </>
+              )}
+
+              {!auth?.isLoggedIn && (
+                <>
+                  <Divider orientation="vertical" />
+                  {actionItem}
+                </>
+              )}
             </Stack>
           </StyledAdJobDiv>
           <UsersJobFilterDiv>

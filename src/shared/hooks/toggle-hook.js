@@ -8,7 +8,7 @@ export const useSettingsToggle = () => {
   const { updateUser } = auth;
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  //PATCH toggle between teacher or employer
+  //PATCH toggle between teacher or employer//DEPRECATED***DONOTUSE
   const updateRoleChange = useCallback(
     async (userId) => {
       const isTeacher = auth.user?.userType === "teacher";
@@ -39,7 +39,10 @@ export const useSettingsToggle = () => {
           `${process.env.REACT_APP_USERS}/update-visibility/${userId}`,
           "PATCH",
           JSON.stringify({ isHidden: !isHidden }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
         const updatedUser = {
           ...auth.user,
@@ -49,7 +52,7 @@ export const useSettingsToggle = () => {
         updateUser(updatedUser);
       } catch (e) {}
     },
-    [sendRequest, updateUser, auth.user]
+    [sendRequest, updateUser, auth.user, auth.token]
   );
 
   return {

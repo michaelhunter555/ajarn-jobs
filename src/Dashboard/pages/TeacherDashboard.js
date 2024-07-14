@@ -38,6 +38,8 @@ import {
   EMPLOYER,
   INVOICES,
   PROFILE,
+  RECRUITMENT_OFFER,
+  RECRUITMENT_SENT,
   RESUME,
   SETTINGS,
   TEACHER,
@@ -49,6 +51,7 @@ import ProfileProgress from "../components/Profile/ProfileProgress";
 import PromotionSidebar from "../components/Profile/PromotionsSidebar";
 import TeacherSettings from "../components/Profile/TeacherSettings";
 import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
+import UserRecruitmentTable from "../components/Profile/UserRecruitmentTable";
 import UsersContent from "../components/Profile/UsersContent";
 import Sidebar, { BottomMobileNav } from "../components/Sidebar";
 
@@ -63,8 +66,6 @@ const JobAdGridContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const StyledGridContainerForProfile = styled(Grid)(({ theme }) => ({
-  maxWidth: "100%",
-  margin: "0 auto",
   [theme.breakpoints.down("md")]: {},
   [theme.breakpoints.down("sm")]: {
     maxWidth: "100%",
@@ -468,6 +469,11 @@ const TeacherDashboard = () => {
               )}
             </>
           );
+        case RECRUITMENT_OFFER:
+          return <UserRecruitmentTable />;
+        case RECRUITMENT_SENT:
+          return <></>;
+
         case CONTENT:
           return (
             <UsersContent
@@ -518,7 +524,18 @@ const TeacherDashboard = () => {
   };
 
   //dashboard loading state
-  const homeDashLoadingState = userProfileLoading || jobAdIsLoading;
+  const handleDashLoading = () => {
+    if (auth?.user?.userType === EMPLOYER) {
+      return userProfileLoading || applicantsIsLoading;
+    }
+
+    if (auth?.user?.userType === TEACHER) {
+      return userProfileLoading || jobAdIsLoading;
+    }
+    return false;
+  };
+
+  const isDashLoading = handleDashLoading();
 
   const error =
     getUserProfileError ||
@@ -550,19 +567,17 @@ const TeacherDashboard = () => {
         }}
       >
         <Grid item xs={12} md={2}>
-          {userProfileLoading && (
+          {isDashLoading && (
             <Skeleton
               sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
               variant="rectangular"
               height={310}
             />
           )}
-          {!userProfileLoading && (
+          {!isDashLoading && (
             <Stack spacing={2}>
               <Sidebar onMenuItemClick={handleMenuItemClick} />
-              {!jobAdIsLoading && auth?.user?.userType === TEACHER && jobAd && (
-                <JobAdSidebarList jobAd={jobAd} />
-              )}
+              {!isDashLoading && jobAd && <JobAdSidebarList jobAd={jobAd} />}
               {auth?.user?.userType === EMPLOYER && <PromotionSidebar />}
             </Stack>
           )}
@@ -580,7 +595,7 @@ const TeacherDashboard = () => {
               }}
             >
               <Grid item xs={12} sm={6}>
-                {jobAdIsLoading && (
+                {isDashLoading && (
                   <Skeleton
                     sx={{
                       margin: "0 auto",
@@ -591,7 +606,7 @@ const TeacherDashboard = () => {
                     height={114}
                   />
                 )}
-                {!jobAdIsLoading && (
+                {!isDashLoading && (
                   <UserProfileJobAd
                     id={jobAd[0]?._id}
                     logo={`${jobAd[0]?.image}`}
@@ -605,7 +620,7 @@ const TeacherDashboard = () => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                {jobAdIsLoading && (
+                {isDashLoading && (
                   <Skeleton
                     sx={{
                       margin: "0 auto",
@@ -616,7 +631,7 @@ const TeacherDashboard = () => {
                     height={114}
                   />
                 )}
-                {!jobAdIsLoading && (
+                {!isDashLoading && (
                   <UserProfileJobAd
                     id={jobAd[1]?._id}
                     logo={`${jobAd[1]?.image}`}
@@ -641,7 +656,7 @@ const TeacherDashboard = () => {
               marginBottom: 5,
             }}
           >
-            {userProfileLoading && (
+            {isDashLoading && (
               <Stack justifyContent="flex-End">
                 <Skeleton height={80} variant="rectangular" />
                 <Skeleton height={180} variant="rectangular" />
@@ -650,18 +665,11 @@ const TeacherDashboard = () => {
                 <Skeleton height={30} />
               </Stack>
             )}
-            {!userProfileLoading && renderComponent()}
+            {!isDashLoading && renderComponent()}
           </Grid>
         </Grid>
 
-        <Grid
-          item
-          xs={12}
-          md={3}
-          sx={{
-            xs: { display: "flex", justifyContent: "center" },
-          }}
-        >
+        <Grid item xs={12} md={3}>
           {auth?.user?.userType === EMPLOYER && (
             <Alert severity={auth?.user?.buffetIsActive ? "info" : "warning"}>
               {auth?.user?.buffetIsActive
@@ -669,7 +677,7 @@ const TeacherDashboard = () => {
                 : "Activate Buffet to view & contact an actively growing list of teachers."}
             </Alert>
           )}
-          {userProfileLoading ? (
+          {jobAdIsLoading && auth?.user?.userType === TEACHER ? (
             <>
               <Skeleton
                 sx={{
@@ -681,13 +689,22 @@ const TeacherDashboard = () => {
                 height={372}
               />
             </>
-          ) : auth.user?.userType === TEACHER ? (
-            <FeaturedCard />
-          ) : userCards && !userCardsIsLoading ? (
-            <>
-              {userCards?.users?.map((user, i) => (
+          ) : (
+            auth.user?.userType === TEACHER && <FeaturedCard />
+          )}
+
+          {userCards && !userCardsIsLoading && auth?.user?.userType === EMPLOYER
+            ? userCards?.users?.map((user, i) => (
                 <RouterLink
-                  sx={{ textDecoration: "none", "&:hover": {} }}
+                  sx={{
+                    textDecoration: "none",
+                    "&:hover": {},
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: {
+                      xs: auth?.user?.buffetIsActive ? "center" : "",
+                    },
+                  }}
                   component={Link}
                   key={user?.id}
                   to={
@@ -704,17 +721,16 @@ const TeacherDashboard = () => {
                     image={`${user?.image}`}
                     degree={user?.highestCertification}
                     about={user?.about}
-                    width={200}
+                    width={500}
                     buffetIsActive={auth?.user?.buffetIsActive}
                   />
                 </RouterLink>
+              ))
+            : auth?.user?.userType === EMPLOYER &&
+              Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} width="100%" />
               ))}
-            </>
-          ) : (
-            Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} width="100%" />
-            ))
-          )}
+
           {auth?.user?.userType === EMPLOYER && (
             <Stack direction="row" justifyContent="flex-end">
               <Pagination
@@ -726,7 +742,7 @@ const TeacherDashboard = () => {
             </Stack>
           )}
 
-          {!userProfileLoading && auth.user?.userType === TEACHER && (
+          {!isDashLoading && auth.user?.userType === TEACHER && (
             <>
               <ProfileProgress user={auth.user} />
             </>

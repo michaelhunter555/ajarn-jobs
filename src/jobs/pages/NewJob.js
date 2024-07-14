@@ -73,6 +73,14 @@ const BoxContent = styled(Paper)(({ theme }) => ({
   textAlign: "center",
 }));
 
+const StyledGridContainer = styled(Grid)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+    gap: "10px",
+  },
+  [theme.breakpoints.down("md")]: {},
+}));
+
 const NewJob = () => {
   const auth = useContext(AuthContext);
   const { invalidateQuery } = useInvalidateQuery();
@@ -265,12 +273,12 @@ const NewJob = () => {
           onSubmit={jobSubmitHandler}
           sx={{
             marginBottom: 5,
-            width: isJobsPage ? "80%" : "100%",
+            width: isJobsPage ? { xs: "100%", md: "80%" } : "100%",
             background: (theme) =>
               isJobsPage ? theme.palette.background.paper : "transparent",
           }}
         >
-          <Grid container direction="row">
+          <StyledGridContainer container direction="row">
             <Grid item xs={12} md={6}>
               <Grid
                 item
@@ -476,7 +484,7 @@ const NewJob = () => {
                 />
               </Box>
             </Grid>
-          </Grid>
+          </StyledGridContainer>
           <Button type="submit" disabled={!formState.isValid}>
             Add Job
           </Button>

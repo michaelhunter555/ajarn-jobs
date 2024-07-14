@@ -19,31 +19,6 @@ export const useUser = () => {
     } catch (err) {}
   }, [sendRequest]);
 
-  //get user applications for dashboard
-  const getUserApplications = async (userId, page, limit) => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_USERS}/get-applications/${userId}?page=${page}&limit=${limit}`
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          "There was an error getting users job applications list."
-        );
-      }
-
-      const data = await response.json();
-      return {
-        applications: data.applications,
-        page: data.pageNum,
-        totalPages: data.totalPages,
-        totalApplications: data.totalApplications,
-      };
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   //GET user cards for dashboard
   const getUserCard = async (page, limit) => {
     const response = await fetch(
@@ -88,12 +63,86 @@ export const useUser = () => {
     return data.user;
   };
 
+  //*~AUTH TOKEN REQUIRED FOR HOOKS BELOW~*//
+
+  //respond to recruitments (if any)
+  //get user recruitments
+  const getUserRecruitments = async (userId) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_USERS}/get-recruitment-offers/${userId}`,
+        { headers: { Authorization: "Bearer " + auth.token } }
+      );
+      const data = await response.json();
+
+      if (!data.ok) {
+        throw new Error(data.message);
+      }
+      return {
+        recruitments: data.recruitmentOffers,
+        page: data.pageNum,
+        totalPages: data.totalPages,
+        totalOffers: data.totalRecruitmentOffers,
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //POST response to user recruitment offers
+  const recruitmentOfferResponse = useCallback(
+    async (userId, recruitmentResponse, jobId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/recruitment-offfer-response/${userId}`,
+          "POST",
+          JSON.stringify({ recruitmentResponse, jobId }),
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        );
+        if (!response.ok) {
+          throw new Error(response.message);
+        }
+      } catch (err) {}
+    },
+    [sendRequest, auth.token]
+  );
+
+  //get user applications for dashboard
+  const getUserApplications = async (userId, page, limit) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_USERS}/get-applications/${userId}?page=${page}&limit=${limit}`,
+        { headers: { Authorization: "Bearer " + auth.token } }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "There was an error getting users job applications list."
+        );
+      }
+
+      const data = await response.json();
+      return {
+        applications: data.applications,
+        page: data.pageNum,
+        totalPages: data.totalPages,
+        totalApplications: data.totalApplications,
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   //GET applicants by creator(if a creator)
   const getApplicantsByCreator = async (page, limit) => {
     try {
       const response = await fetch(
         ///applicants/
-        `${process.env.REACT_APP_USERS}/applicants/${auth?.user?.creator?._id}?page=${page}&limit=${limit}`
+        `${process.env.REACT_APP_USERS}/applicants/${auth?.user?.creator?._id}?page=${page}&limit=${limit}`,
+        { headers: { Authorization: "Bearer " + auth.token } }
       );
 
       const data = await response.json();
@@ -105,7 +154,6 @@ export const useUser = () => {
   };
 
   //
-
   //PATCH update userprofile
   const updateUserProfile = useCallback(
     async (userId, update) => {
@@ -113,16 +161,17 @@ export const useUser = () => {
         const response = await sendRequest(
           `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
-          update
+          update,
+          { Authorization: "Bearer " + auth.token }
         );
 
         updateUser(response.user);
       } catch (err) {}
     },
-    [sendRequest, updateUser]
+    [sendRequest, updateUser, auth.token]
   );
 
-  //PATCH Add credits
+  //PATCH Add credits - *deprecated - STRIPE HANDLES CREDITS NOW
   const addCredits = useCallback(
     async (userId, credits) => {
       try {
@@ -150,7 +199,10 @@ export const useUser = () => {
           `${process.env.REACT_APP_USERS}/${userId}/apply/${jobId}`,
           "POST",
           JSON.stringify({ coverLetter: auth.user?.coverLetter }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
 
         const updatedUser = {
@@ -163,7 +215,7 @@ export const useUser = () => {
         throw err;
       }
     },
-    [sendRequest, updateUser, auth.user]
+    [sendRequest, updateUser, auth.user, auth.token]
   );
 
   //POST
@@ -174,7 +226,10 @@ export const useUser = () => {
           `${process.env.REACT_APP_USERS}/income-directory/${userId}`,
           "POST",
           JSON.stringify({ userIncomeData: incomePost }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
         const updatedUser = {
           ...auth.user,
@@ -185,7 +240,7 @@ export const useUser = () => {
         console.log("Income Directory Post Error:" + err);
       }
     },
-    [auth.user, updateUser, sendRequest]
+    [auth.user, updateUser, sendRequest, auth.token]
   );
 
   return {
@@ -200,6 +255,8 @@ export const useUser = () => {
     addCredits,
     applyToJob,
     incomeDirectoryPost,
+    getUserRecruitments,
+    recruitmentOfferResponse,
     isLoading,
     isPostLoading,
     error,

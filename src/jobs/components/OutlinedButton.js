@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 
 import { AuthContext } from "../../shared/context/auth-context";
 
-const StyledBoxModal = styled(Paper)({
+const StyledBoxModal = styled(Paper)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -20,7 +20,10 @@ const StyledBoxModal = styled(Paper)({
   borderRadius: "15px",
   boxShadow: 24,
   padding: 14,
-});
+  [theme.breakpoints.down("sm")]: {
+    width: "90%",
+  },
+}));
 
 const StyledApplyButtonContainer = styled(Stack)(({ theme, applied }) => ({
   flexDirection: "row",

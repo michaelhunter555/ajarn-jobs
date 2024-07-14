@@ -211,6 +211,30 @@ export const useJob = () => {
     [auth.user, sendRequest, updateUser, auth.token]
   );
 
+  //POST Recruit Teacher
+  const sendRecruitmentOffer = useCallback(
+    async (recruitment) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_JOBS}/recruit-teacher`,
+          "POST",
+          JSON.stringify({ recruitment }),
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        );
+        if (!response.ok) {
+          throw new Error(response.message);
+        }
+        return response;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [sendRequest, auth.token]
+  );
+
   //DELETE job by userId
   const deleteJobById = useCallback(
     async (jobId, userId) => {
@@ -258,6 +282,7 @@ export const useJob = () => {
     getJobsByUserId,
     updateJobById,
     deleteJobById,
+    sendRecruitmentOffer,
     isLoading,
     isPostLoading,
     isDeleting,

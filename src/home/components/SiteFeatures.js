@@ -62,10 +62,8 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   },
 }));
 
-const SiteFeatures = ({ isLoading }) => {
-  const auth = useContext(AuthContext);
-  //arrange items in array of objects
-  const items = [
+const createItems = (auth) => {
+  return [
     { label: "Jobs", img: Jobs, link: `/jobs` },
     { label: "Content", img: Content, link: `/content` },
     { label: "Incomes", img: Incomes, link: `/income-directory` },
@@ -73,9 +71,16 @@ const SiteFeatures = ({ isLoading }) => {
     {
       label: "Dashboard",
       img: UserDash,
-      link: auth.isLoggedIn ? `/users/${auth.user?._id}` : "/auth",
+      link: auth?.isLoggedIn ? `/users/${auth.user?._id}` : "/auth",
     },
   ];
+};
+
+const SiteFeatures = ({ isLoading }) => {
+  const auth = useContext(AuthContext);
+  //arrange items in array of objects
+  const items = createItems(auth);
+
   return (
     <StyledBoxWrapper>
       {isLoading ? (

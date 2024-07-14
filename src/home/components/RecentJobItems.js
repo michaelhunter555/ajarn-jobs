@@ -14,7 +14,7 @@ import { styled } from "@mui/material/styles";
 
 const StyledList = styled(List)(({ theme }) => ({
   width: "100%",
-  maxWidth: 360,
+
   backgroundColor: theme.palette.background.paper,
   borderBottom: "1px solid #e0e0e0",
   [theme.breakpoints.down("md")]: {

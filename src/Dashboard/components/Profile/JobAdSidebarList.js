@@ -50,9 +50,8 @@ const JobAdSidebarList = ({ jobAd }) => {
         jobAd
           ?.filter((job) => job?.jobType === "featured")
           ?.map((job, i) => (
-            <>
+            <React.Fragment key={job?._id}>
               <RouterLink
-                key={job?._id}
                 component={Link}
                 to={`/jobs/${job?._id}`}
                 sx={{
@@ -64,7 +63,7 @@ const JobAdSidebarList = ({ jobAd }) => {
                 <Typography variant="subtitle2">• {job?.title}</Typography>
               </RouterLink>
               {i !== jobAd.length - 1 && <Divider flexItem />}
-            </>
+            </React.Fragment>
           ))}
     </StyledPaper>
   );
