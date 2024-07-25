@@ -241,7 +241,7 @@ export const useJob = () => {
       setIsDeleting(true);
       try {
         await sendRequest(
-          `${process.env.REACT_APP_JOBS}/${jobId}`,
+          `${process.env.REACT_APP_JOBS}/delete-job/${jobId}`,
           "DELETE",
           null,
           {
@@ -268,6 +268,34 @@ export const useJob = () => {
     [sendRequest, updateUser, auth.user, auth.token]
   );
 
+  const deleteManyJobsById = useCallback(
+    async (jobIdArray) => {
+      setIsDeleting(true);
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_JOBS}/bulk-job-delete`,
+          "DELETE",
+          JSON.stringify({ jobIds: jobIdArray }),
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(response.message);
+        }
+
+        setIsDeleting(false);
+        return response.message;
+      } catch (err) {
+        setIsDeleting(false);
+        console.log(err);
+      }
+    },
+    [sendRequest, auth.token]
+  );
+
   return {
     client,
     jobs,
@@ -282,6 +310,7 @@ export const useJob = () => {
     getJobsByUserId,
     updateJobById,
     deleteJobById,
+    deleteManyJobsById,
     sendRecruitmentOffer,
     isLoading,
     isPostLoading,

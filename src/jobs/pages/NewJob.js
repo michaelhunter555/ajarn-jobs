@@ -12,10 +12,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   Alert,
   Box,
+  Chip,
   Divider,
   FormLabel,
   Grid,
-  Link,
   Modal,
   Paper,
   Skeleton,
@@ -39,6 +39,7 @@ import {
   thaiCities,
 } from "../../shared/util/ThaiData";
 import { VALIDATOR_REQUIRE } from "../../shared/util/validators";
+import JobPostingGuidelinesModal from "../../termsOfService/jobPostingGuidelines";
 
 const styledRichJobText = {
   height: "auto",
@@ -47,7 +48,8 @@ const styledRichJobText = {
   border: "2px solid #dbdbdb",
   boxSizing: "border-box",
   ".public-DraftStyleDefault-block": {
-    height: "2rem",
+    height: "auto",
+    marginBottom: "1rem",
   },
 };
 
@@ -88,9 +90,11 @@ const NewJob = () => {
   const [jobIsBasic, setJobIsBasic] = useState(true);
   const [jobCost, setJobCost] = useState(5);
   const [success, setSuccess] = useState(false);
+  const [TermsConfirmed, setTermsConfirmed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const isJobsPage = location.pathname.includes("/job/new");
+  const [viewTerms, setViewTerms] = useState(false);
 
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -175,7 +179,7 @@ const NewJob = () => {
 
   const featuredJobTypeHandler = () => {
     setJobIsBasic(false);
-    setJobCost((prev) => prev + 2);
+    setJobCost((prev) => prev + 5);
     inputHandler("jobType", "featured", true);
   };
 
@@ -207,20 +211,20 @@ const NewJob = () => {
     };
     //pass userId & object as argument to POST request
 
-    if (newJob.jobType === "featured") {
-      setJobCost((prev) => prev + 2);
-    }
+    // if (newJob.jobType === "featured") {
+    //   setJobCost((prev) => prev + 2);
+    // }
 
     try {
       await addJobByUserId(auth.user?._id, newJob, jobCost)
         .then(() => {
           setSuccess(true);
-          invalidateQuery("creatorJobs");
         })
         .catch((err) => {
           setSuccess(false);
           console.log(err);
         });
+      invalidateQuery("creatorJobs");
     } catch (err) {
       console.log(err);
     }
@@ -241,11 +245,95 @@ const NewJob = () => {
     inputHandler("description", postData, postData.length >= 7);
   };
 
+  const handleTermsModal = () => {
+    setViewTerms((prev) => !prev);
+  };
+
   return (
     <>
       {isPostLoading && (
-        <Skeleton sx={{ height: 500, width: "100%" }} variant="rectangular" />
+        <StyledForm
+          sx={{
+            marginBottom: 5,
+            width: isJobsPage ? { xs: "100%", md: "80%" } : "100%",
+          }}
+        >
+          <StyledGridContainer container direction="row" spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Skeleton
+                variant="rectangular"
+                height={50}
+                sx={{ borderRadius: "15px", marginBottom: "0.5rem" }}
+              />
+              <Skeleton
+                variant="rectangular"
+                height={50}
+                sx={{ borderRadius: "15px", marginBottom: "0.5rem" }}
+              />
+              <Skeleton
+                variant="rectangular"
+                height={50}
+                sx={{ borderRadius: "15px", marginBottom: "0.5rem" }}
+              />
+              <Skeleton
+                variant="rectangular"
+                height={50}
+                sx={{ borderRadius: "15px", marginBottom: "0.5rem" }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Skeleton
+                variant="rectangular"
+                height={100}
+                sx={{ borderRadius: "15px", marginBottom: "1rem" }}
+              />
+            </Grid>
+            <Divider flexItem sx={{ width: "100%", margin: "0.75rem auto" }} />
+            <Grid item xs={12}>
+              <Skeleton
+                variant="rectangular"
+                height={50}
+                sx={{ borderRadius: "15px", marginBottom: "1rem" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={5}>
+              <Skeleton
+                variant="rectangular"
+                height={50}
+                sx={{ borderRadius: "15px", marginBottom: "1rem" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={7}>
+              <Skeleton
+                variant="rectangular"
+                height={50}
+                sx={{ borderRadius: "15px", marginBottom: "1rem" }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Skeleton
+                variant="rectangular"
+                height={50}
+                sx={{ borderRadius: "15px", marginBottom: "1rem" }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ margin: "0 0 1rem 0 " }}>
+              <Skeleton
+                variant="rectangular"
+                height={200}
+                sx={{ borderRadius: "15px" }}
+              />
+            </Grid>
+          </StyledGridContainer>
+          <Skeleton
+            variant="rectangular"
+            height={50}
+            width={100}
+            sx={{ borderRadius: "15px", margin: "0 auto" }}
+          />
+        </StyledForm>
       )}
+      <JobPostingGuidelinesModal open={viewTerms} onClose={handleTermsModal} />
       <Modal
         disableScrollLock={true}
         open={success}
@@ -293,9 +381,17 @@ const NewJob = () => {
                 <Alert
                   severity="info"
                   sx={{ borderRadius: "15px", marginBottom: "0.5rem" }}
+                  action={
+                    <Chip
+                      color="info"
+                      variant="outlined"
+                      label="Terms Of Service"
+                      clickable
+                      onClick={handleTermsModal}
+                    />
+                  }
                 >
                   Please read our{" "}
-                  <Link sx={{ cursor: "pointer" }}>Terms of Service</Link>
                 </Alert>
               </Grid>
               <Grid
@@ -364,7 +460,7 @@ const NewJob = () => {
                   onChange={featuredJobTypeHandler}
                 />{" "}
                 <Typography variant="subtitle2" color="text.secondary">
-                  Featured (+2 credits)
+                  Featured (+5 credits)
                 </Typography>
               </Grid>
 

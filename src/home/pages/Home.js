@@ -5,6 +5,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
+import AjarnHowToHelper from "../../introduction/HowToLead";
 import Footer, {
   Content,
   PageContainer,
@@ -137,7 +138,7 @@ const Home = () => {
             )}
           </StyledTeflWrapper>
 
-          <StyledHomeFeaturedTop id="jobsTop">
+          <StyledHomeFeaturedTop>
             {homepageIsLoading && (
               <JobAdSkeleton
                 sx={{
@@ -189,7 +190,7 @@ const Home = () => {
           </StyledHomeFeaturedJobs>
 
           {/* lower middle-column*/}
-          <StyledHomeFeaturedContent>
+          <StyledHomeFeaturedContent id="jobsTop">
             {homepageIsLoading && (
               <JobAdSkeleton
                 num={1}
@@ -226,6 +227,9 @@ const Home = () => {
         </StyledGridContainer>
         <div>
           <SiteFeatures isLoading={homepageIsLoading} />
+        </div>
+        <div style={{ margin: "1rem auto" }}>
+          <AjarnHowToHelper />
         </div>
         <div>
           <BottomFeatured isLoading={homepageIsLoading} />

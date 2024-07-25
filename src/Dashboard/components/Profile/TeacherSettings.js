@@ -106,6 +106,7 @@ const TeacherSettings = (props) => {
     formData.append("skill", formState.inputs.skill.value);
     formData.append("interests", formState.inputs.interests.value);
     formData.append("education", formState.inputs.education.value);
+    formData.append("email", formState.inputs.email.value);
     formData.append(
       "highestCertification",
       formState.inputs.highestCertification.value
@@ -266,7 +267,7 @@ const TeacherSettings = (props) => {
               <TextField
                 multiline
                 fullWidth
-                helperText="Enter university domains separted by commas (i.e. Harvard, Yale, etc.)"
+                helperText="Enter university domain only separated by commas (i.e. Harvard.edu, Liverpool.ac.uk, etc.)"
                 label="Add University Badges"
                 variant="outlined"
                 id="education"

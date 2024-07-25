@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
 import CommentIcon from "@mui/icons-material/Comment";
+import PushPinIcon from "@mui/icons-material/PushPin";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
@@ -25,8 +26,9 @@ import { styled } from "@mui/material/styles";
 import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
-const StyledGridContainer = styled(Grid)({
+const StyledGridContainer = styled(Grid)(({ theme }) => ({
   overflowY: "scroll",
+  borderRadius: "0px 0px 5px 5px",
   maxHeight: 500,
   "&::-webkit-scrollbar": {
     width: "4px",
@@ -38,7 +40,7 @@ const StyledGridContainer = styled(Grid)({
     background: "#8b8b8d",
   },
   "&::-webkit-scrollbar-track": {
-    background: "#f1f1f1",
+    background: theme.palette.background.paper,
     borderRadius: "0px",
   },
   "&:hover": {
@@ -50,10 +52,10 @@ const StyledGridContainer = styled(Grid)({
       background: "#8b8b8d",
     },
     "&::-webkit-scrollbar-track": {
-      background: "#f1f1f1",
+      background: theme.palette.background.paper,
     },
   },
-});
+}));
 
 const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
@@ -86,8 +88,86 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
     );
   }
 
+  const pinned = filteredContent?.find(
+    (content) => content?._id === "66a1c7e9ed38feed3a3172c6"
+  );
+
   return (
     <StyledGridContainer container>
+      <StyledListItemButton
+        direction="row"
+        component={Link}
+        to={`/content/${pinned?._id}`}
+        sx={{ backgroundColor: "#fffeea" }}
+      >
+        <ListItemText
+          component="div"
+          primary={
+            <>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography>{pinned?.title}</Typography>
+                <CategoryChip category="General" />
+                <PushPinIcon />
+              </Stack>
+            </>
+          }
+          secondary={
+            <>
+              <Typography
+                sx={{ display: "inline" }}
+                component="span"
+                variant="subtitle2"
+                color="text.primary"
+              >
+                Posted By Admin
+              </Typography>
+              {" - "}
+              {sanitizeHtml(pinned?.postContent, {
+                allowedTags: [],
+                allowedAttributes: {},
+              })?.substring(0, 40) + "..."}
+            </>
+          }
+        />
+
+        <Stack justifyContent="flex-end">
+          <Stack
+            direction="row"
+            justifyContent="space-evenly"
+            alignItems="center"
+            spacing={2}
+            sx={{ marginBottom: "2px" }}
+          >
+            <Stack>
+              <Typography color="text.secondary" variant="subtitle2">
+                {pinned?.comments?.length}
+              </Typography>
+              <CommentIcon color="action" fontSize="small" />
+            </Stack>
+            <Stack>
+              <Typography color="text.secondary" variant="subtitle2">
+                {
+                  pinned?.interactions?.filter(
+                    (action) => action?.like === true
+                  )?.length
+                }
+              </Typography>
+              <ThumbUpIcon color="action" fontSize="small" />
+            </Stack>
+            <Stack>
+              <Typography color="text.secondary" variant="subtitle2">
+                {
+                  pinned?.interactions?.filter(
+                    (action) => action?.dislike === true
+                  )?.length
+                }
+              </Typography>
+              <ThumbDownIcon color="action" fontSize="small" />
+            </Stack>
+          </Stack>
+        </Stack>
+      </StyledListItemButton>
+
       {isLoading && <CircularProgress />}
       {noPostsYet}
       {!isLoading &&

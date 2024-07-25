@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
 import {
@@ -9,8 +9,10 @@ import {
   Grid,
   Link as RouterLink,
   Pagination,
+  Paper,
   Skeleton,
   Stack,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
@@ -44,6 +46,7 @@ import {
   SETTINGS,
   TEACHER,
 } from "../components/Profile/dashboardValues";
+import EmployerRecruitmentTable from "../components/Profile/EmployerRecruitmentTables";
 import FeaturedCard from "../components/Profile/FeaturedCard";
 import JobAdSidebarList from "../components/Profile/JobAdSidebarList";
 import ProfileInformation from "../components/Profile/ProfileInformation";
@@ -75,7 +78,10 @@ const StyledGridContainerForProfile = styled(Grid)(({ theme }) => ({
 const TeacherDashboard = () => {
   const userId = useParams().id;
   const auth = useContext(AuthContext);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
   const [currentComponent, setCurrentComponent] = useState("profile");
+  const [recruitmentOffers, setRecruitmentOffers] = useState(0);
 
   const [userCardPage, setUserCardPage] = useState({
     page: 1,
@@ -402,7 +408,19 @@ const TeacherDashboard = () => {
                 />
               )}{" "}
               {auth.user?.userType === EMPLOYER && !authIsCreator && (
-                <Button onClick={addCreatorItem}>Creator Account</Button>
+                <Paper
+                  elevation={1}
+                  sx={{ padding: "2rem", borderRadius: "10px" }}
+                >
+                  <Typography variant="subtitle1" color="text.secondary">
+                    Only the photo you used at sign-up is associated with your
+                    job posts. You need to create an employer profile about your
+                    company to be used for every job post you make.
+                  </Typography>
+                  <Button variant="contained" onClick={addCreatorItem}>
+                    Create employer Profile
+                  </Button>
+                </Paper>
               )}
             </>
           );
@@ -456,7 +474,9 @@ const TeacherDashboard = () => {
                   refetch={refetchUser}
                 />
               ) : (
-                <Button onClick={addCreatorItem}>Creator Account</Button>
+                <Button variant="contained" onClick={addCreatorItem}>
+                  Creator Account
+                </Button>
               )}
               {updatingCreator && (
                 <Stack justifyContent="flex-End">
@@ -472,7 +492,7 @@ const TeacherDashboard = () => {
         case RECRUITMENT_OFFER:
           return <UserRecruitmentTable />;
         case RECRUITMENT_SENT:
-          return <></>;
+          return <EmployerRecruitmentTable />;
 
         case CONTENT:
           return (
@@ -567,17 +587,22 @@ const TeacherDashboard = () => {
         }}
       >
         <Grid item xs={12} md={2}>
-          {isDashLoading && (
+          {userProfileLoading && (
             <Skeleton
               sx={{ margin: "0 auto", borderRadius: "6px", width: "100%" }}
               variant="rectangular"
               height={310}
             />
           )}
-          {!isDashLoading && (
+          {!userProfileLoading && (
             <Stack spacing={2}>
-              <Sidebar onMenuItemClick={handleMenuItemClick} />
-              {!isDashLoading && jobAd && <JobAdSidebarList jobAd={jobAd} />}
+              <Sidebar
+                onMenuItemClick={handleMenuItemClick}
+                notifications={auth?.user?.recruitmentReceived?.length}
+              />
+              {!jobAdIsLoading && jobAd && auth?.user?.userType === TEACHER && (
+                <JobAdSidebarList jobAd={jobAd} />
+              )}
               {auth?.user?.userType === EMPLOYER && <PromotionSidebar />}
             </Stack>
           )}
@@ -595,7 +620,7 @@ const TeacherDashboard = () => {
               }}
             >
               <Grid item xs={12} sm={6}>
-                {isDashLoading && (
+                {jobAdIsLoading && (
                   <Skeleton
                     sx={{
                       margin: "0 auto",
@@ -606,7 +631,7 @@ const TeacherDashboard = () => {
                     height={114}
                   />
                 )}
-                {!isDashLoading && (
+                {!jobAdIsLoading && (
                   <UserProfileJobAd
                     id={jobAd[0]?._id}
                     logo={`${jobAd[0]?.image}`}
@@ -620,7 +645,7 @@ const TeacherDashboard = () => {
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                {isDashLoading && (
+                {jobAdIsLoading && (
                   <Skeleton
                     sx={{
                       margin: "0 auto",
@@ -631,7 +656,7 @@ const TeacherDashboard = () => {
                     height={114}
                   />
                 )}
-                {!isDashLoading && (
+                {!jobAdIsLoading && (
                   <UserProfileJobAd
                     id={jobAd[1]?._id}
                     logo={`${jobAd[1]?.image}`}
@@ -656,7 +681,7 @@ const TeacherDashboard = () => {
               marginBottom: 5,
             }}
           >
-            {isDashLoading && (
+            {userProfileLoading && (
               <Stack justifyContent="flex-End">
                 <Skeleton height={80} variant="rectangular" />
                 <Skeleton height={180} variant="rectangular" />
@@ -665,7 +690,7 @@ const TeacherDashboard = () => {
                 <Skeleton height={30} />
               </Stack>
             )}
-            {!isDashLoading && renderComponent()}
+            {!userProfileLoading && renderComponent()}
           </Grid>
         </Grid>
 
@@ -693,7 +718,10 @@ const TeacherDashboard = () => {
             auth.user?.userType === TEACHER && <FeaturedCard />
           )}
 
-          {userCards && !userCardsIsLoading && auth?.user?.userType === EMPLOYER
+          {!userProfileLoading &&
+          userCards &&
+          !userCardsIsLoading &&
+          auth?.user?.userType === EMPLOYER
             ? userCards?.users?.map((user, i) => (
                 <RouterLink
                   sx={{

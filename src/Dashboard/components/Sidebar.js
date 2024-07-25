@@ -16,6 +16,7 @@ import {
   Button,
   Divider,
   Fade,
+  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -28,6 +29,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { AuthContext } from "../../shared/context/auth-context";
+import { useThemeToggle } from "../../shared/context/theme-context";
 
 const VerticalSideBar = styled("div")(({ theme }) => ({
   display: "flex",
@@ -103,7 +105,8 @@ const menuItems = [
   },
 ];
 
-const Sidebar = ({ onMenuItemClick }) => {
+const Sidebar = ({ onMenuItemClick, notifications }) => {
+  const { isDarkMode } = useThemeToggle();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { user } = useContext(AuthContext);
   const userType = user?.userType;
@@ -164,7 +167,26 @@ const Sidebar = ({ onMenuItemClick }) => {
               onClick={() => handleSidebarClick(item.componentName, i)}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemText
+                primary={
+                  item.text === "Recruit Offers" ? (
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Typography>{item.text}</Typography>
+                      <IconButton
+                        sx={{
+                          fontSize: 12,
+                          backgroundColor: isDarkMode ? "#b93c3c" : "#ffa2a2",
+                        }}
+                        size="small"
+                      >
+                        {notifications}
+                      </IconButton>
+                    </Stack>
+                  ) : (
+                    item.text
+                  )
+                }
+              />
             </ListItemButton>
             {i - filteredSidebar.length - 1 && <Divider light />}
           </React.Fragment>
@@ -178,7 +200,7 @@ export default Sidebar;
 
 export const BottomMobileNav = ({ onMenuItemClick }) => {
   const { user } = useContext(AuthContext);
-  const [open, setOpen] = useState(null);
+  const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const userType = user?.userType;
   const [value, setValue] = useState(0); // Add a state for the selected tab

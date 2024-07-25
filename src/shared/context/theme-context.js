@@ -11,7 +11,10 @@ export const useThemeToggle = () => useContext(ThemeToggleContext);
 export const ThemeToggleProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  const toggleTheme = () => {
+  const toggleTheme = async () => {
+    // if (auth?.user?._id) {
+    //   await updateUserTheme(auth?.user?._id, isDarkMode ? "light" : "dark");
+    // }
     setIsDarkMode((prevMode) => !prevMode);
   };
 

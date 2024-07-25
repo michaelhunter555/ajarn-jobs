@@ -3,9 +3,10 @@ import React, { useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Button, Grid, Modal, Paper, Stack, Typography } from "@mui/material";
+import { Button, Modal, Paper, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import ApplyToFeaturedJobModal from "../../home/components/ApplyToFeaturedJobModal";
 import { AuthContext } from "../../shared/context/auth-context";
 
 const StyledBoxModal = styled(Paper)(({ theme }) => ({
@@ -27,6 +28,7 @@ const StyledBoxModal = styled(Paper)(({ theme }) => ({
 
 const StyledApplyButtonContainer = styled(Stack)(({ theme, applied }) => ({
   flexDirection: "row",
+  width: "100%",
   [theme.breakpoints.down("md")]: {
     width: "100%",
     flexDirection: "column",
@@ -53,23 +55,28 @@ export const OutlinedButton = (props) => {
 
   let outlinedButton;
 
+  const incompleteTeacher = cantApply && auth?.user?.userType === "teacher";
+  const employerClickedApply = cantApply && auth?.user?.userType === "employer";
+
   if (auth.isLoggedIn) {
     outlinedButton = (
       <>
         <StyledApplyButtonContainer
           direction="column"
           alignItems="center"
+          justifyContent="center"
           spacing={1}
         >
           <Button
-            size="small"
+            size="large"
+            disabled={appliedAlready}
             sx={{ borderRadius: "17px" }}
             onClick={applyJobModalHandler}
             variant="outlined"
           >
-            Apply Now
+            {appliedAlready ? "Applied" : "Apply Now"}
           </Button>
-          {appliedAlready && appliedAlready && (
+          {appliedAlready && (
             <>
               <CheckCircleIcon style={{ color: "green" }} />
               <Typography
@@ -82,87 +89,15 @@ export const OutlinedButton = (props) => {
             </>
           )}
         </StyledApplyButtonContainer>
-        <Modal
+        <ApplyToFeaturedJobModal
           open={open}
           onClose={applyJobModalHandler}
-          disableScrollLock={true}
-        >
-          <StyledBoxModal>
-            <Grid
-              container
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid item xs={12} sm={9} md={6} sx={{ marginBottom: 5 }}>
-                <Typography>
-                  You're about to apply to {job?.creator?.company}'s job for{" "}
-                  {job?.title}.
-                </Typography>
+          job={job}
+          incompleteTeacher={incompleteTeacher}
+          employerClickedApply={employerClickedApply}
+          onApplyToJob={applyToJobHandler}
+        />
 
-                <Typography color="text.secondary" variant="subtitle2">
-                  You currently{" "}
-                  {auth.user?.resume?.length > 0
-                    ? "have a resume"
-                    : "don't have a resume "}{" "}
-                  on file.{" "}
-                  {auth.user?.resume?.length > 0 ? "✅" : "Please add one.⛔"}
-                </Typography>
-                <Typography color="text.secondary" variant="subtitle2">
-                  You currently{" "}
-                  {auth.user?.coverLetter
-                    ? "have a cover letter"
-                    : "don't have a cover letter "}{" "}
-                  on file. {auth.user?.coverLetter ? "✅" : "Please add one.⛔"}
-                </Typography>
-
-                {auth.user?.userType === "employer" && (
-                  <Typography color="text.secondary" variant="subtitle2">
-                    You're registered as an {auth.user?.userType}.You can not
-                    apply to jobs. ⛔
-                  </Typography>
-                )}
-
-                {auth.user?.coverLetter && auth.user?.resume && (
-                  <Typography
-                    sx={{ marginTop: "1rem" }}
-                    color="text.secondary"
-                    variant="subtitle2"
-                  >
-                    You may apply to this job!
-                  </Typography>
-                )}
-              </Grid>
-
-              <Grid
-                item
-                xs={12}
-                sm={9}
-                md={6}
-                sx={{ display: "flex", flexDirection: "row" }}
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Stack spacing={2} direction="row">
-                  <Button
-                    onClick={applyToJobHandler}
-                    variant="contained"
-                    disabled={cantApply}
-                  >
-                    Apply
-                  </Button>
-                  <Button
-                    onClick={() => closeJob(false)}
-                    color="error"
-                    variant="outlined"
-                  >
-                    close
-                  </Button>
-                </Stack>
-              </Grid>
-            </Grid>
-          </StyledBoxModal>
-        </Modal>
         <Modal open={onSuccess} onClose={closeSuccess}>
           <StyledBoxModal>
             <Stack

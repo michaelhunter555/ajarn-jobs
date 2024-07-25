@@ -5,7 +5,6 @@ import { styled } from "@mui/material/styles";
 
 const StyledCard = styled(Card)(({ theme, featured }) => ({
   backgroundColor: theme.palette.background.color,
-  border: featured ? "1px solid #faea92" : "1px solid #e5e5e5",
   borderRadius: "18px",
   display: "flex",
   minWidth: "auto",
@@ -42,7 +41,11 @@ const StyledCardContent = styled(CardContent)({
 
 const BottomFeaturedAds = (props) => {
   return (
-    <StyledCard featured={props?.featured}>
+    <StyledCard
+      sx={{
+        border: props.featured ? "1px solid #faea92" : "1px solid #e5e5e5",
+      }}
+    >
       <StyledMediaImage
         component="img"
         image={props?.image}

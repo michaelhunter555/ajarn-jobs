@@ -29,6 +29,15 @@ import { authReducer, initialState } from "./shared/context/authReducer";
 import ScrollToTop from "./shared/util/ScrollToTop";
 import Login from "./users/pages/Auth";
 
+const About = lazy(() => import("./introduction/About"));
+const PrivacyPolicy = lazy(() => import("./termsOfService/privacyPolicy"));
+
+const TermsAndConditions = lazy(() =>
+  import("./termsOfService/termsAndConditions")
+);
+const AjarnJobsExperience = lazy(() =>
+  import("./introduction/HowToUseOurSite")
+);
 //Lazily loaded components
 const AlternateUserJobs = lazy(() => import("./jobs/pages/AlternateUserJobs"));
 const Teachers = lazy(() => import("./users/pages/Teachers"));
@@ -57,7 +66,7 @@ function App() {
     dispatch({ type: LOGIN, user: userId, token: token });
 
     const tokenExpires =
-      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 10);
     setTokenExpirationDate(tokenExpires);
     const userData = {
       userId: userId,
@@ -140,18 +149,25 @@ function App() {
         <Route path="/modern-view/jobs" element={<AlternateUserJobs />} />
         <Route path="/jobs" element={<UserJobs />} />
         <Route path="/job/new" element={<NewJob />} />
-        <Route path="/jobs/:jid" element={<JobDetailsPage />} />
+        <Route path="/jobs/:jid/:jobName" element={<JobDetailsPage />} />
         <Route path="/jobs/:jid/update" element={<UpdateJob />} exact="true" />
         <Route path="/teachers/" element={<Teachers />} />
         <Route path="/teachers/:uid" element={<TeacherDetails />} />
         <Route path="/auth" element={<Login />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route
+          path="/how-to-use-ajarn-jobs"
+          element={<AjarnJobsExperience />}
+        />
+        <Route path="/about-us" element={<About />} />
       </Routes>
     );
   } else {
     routes = (
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
-
+        <Route path="/about-us" element={<About />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/content/" element={<AddNewBlogPost />} />
         <Route path="/content/:bid" element={<BlogPage />} />
@@ -162,9 +178,15 @@ function App() {
         />
         <Route path="/modern-view/jobs" element={<AlternateUserJobs />} />
         <Route path="/jobs" element={<UserJobs />} />
-        <Route path="/jobs/:jid" element={<JobDetailsPage />} />
+        <Route path="/jobs/:jid/:jobName" element={<JobDetailsPage />} />
         <Route path="/teachers" element={<Teachers />} />
         <Route path="/auth" element={<Login />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route
+          path="/how-to-use-ajarn-jobs"
+          element={<AjarnJobsExperience />}
+        />
       </Routes>
     );
   }

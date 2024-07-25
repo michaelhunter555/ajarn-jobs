@@ -71,7 +71,9 @@ const RecentJobs = (props) => {
             <Link
               style={{ color: "rgb(92, 92, 92)", textDecoration: "none" }}
               key={job?._id}
-              to={`/jobs/${job?._id}`}
+              to={`/jobs/${job?._id}/${job?.title
+                ?.replace(/\s+/g, "-")
+                .toLowerCase()}`}
             >
               <RecentJobItems
                 location={job?.location}

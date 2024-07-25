@@ -1,5 +1,6 @@
 const Recruitment = require("../../models/recruitment");
 
+//GET recruitment offers for Teachers to response to
 const getUserRecruitments = async (req, res, next) => {
   const { page, limit } = req.query;
   const pageNum = parseInt(page, 10) || 1;

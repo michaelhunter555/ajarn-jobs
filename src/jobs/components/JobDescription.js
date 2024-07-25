@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Box, Divider, Paper, Typography } from "@mui/material";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import { Box, Button, Divider, Paper, Typography } from "@mui/material";
+
+import { FadeContentBox } from "../../users/components/TeacherDetailsItem";
 
 export const JobDescription = (props) => {
+  const [readMore, setReadMore] = useState(false);
   const { job } = props;
 
   return (
@@ -31,10 +35,28 @@ export const JobDescription = (props) => {
       </Box>
 
       <Divider />
-      <Typography
-        variant="body1"
-        dangerouslySetInnerHTML={{ __html: job?.description }}
-      />
+
+      {job?.description?.length > 500 && !readMore ? (
+        <FadeContentBox>
+          <Typography
+            variant="body1"
+            dangerouslySetInnerHTML={{ __html: job?.description }}
+          />
+        </FadeContentBox>
+      ) : (
+        <Typography
+          variant="body1"
+          dangerouslySetInnerHTML={{ __html: job?.description }}
+        />
+      )}
+      {job?.description?.length > 500 && (
+        <Button
+          endIcon={<PostAddIcon />}
+          onClick={() => setReadMore((prev) => !prev)}
+        >
+          {!readMore ? "Read more" : "Read less"}
+        </Button>
+      )}
     </Paper>
   );
 };

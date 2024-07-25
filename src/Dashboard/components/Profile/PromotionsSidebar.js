@@ -29,8 +29,8 @@ const PromotionSidebar = () => {
         <CardMedia component="img" src={image} alt="promo_offer" />
         <Divider variant="middle" flexItem />
         <CardContent>
-          <Typography variant="subtitle1">
-            Save 500THB when you activate an Agency Promo.
+          <Typography variant="subtitle2">
+            Save 500THB whenever you purchase Agency or Enterprise packages.
           </Typography>
         </CardContent>
         <CardActions>

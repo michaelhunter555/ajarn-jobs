@@ -66,7 +66,12 @@ const JobAdsList = ({ job, company }) => {
     <>
       {job?.map((school, i) => (
         <List key={school?._id}>
-          <Link to={`/jobs/${school?._id}`} style={{ textDecoration: "none" }}>
+          <Link
+            to={`/jobs/${school?._id}/${school.title
+              ?.replace(/\s+/g, "-")
+              ?.toLowerCase()}`}
+            style={{ textDecoration: "none" }}
+          >
             <StyledJobAdCard
               component="div"
               sx={{

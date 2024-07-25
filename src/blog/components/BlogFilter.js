@@ -89,7 +89,7 @@ const BlogFilter = ({ onDataChange }) => {
   };
 
   return (
-    <Paper elevation={0} sx={{ padding: 2 }}>
+    <Paper elevation={0} sx={{ padding: 2, borderRadius: "5px 5px 0 0" }}>
       <StyledStackContainer>
         <FormControl>
           <FormLabel>Search Content</FormLabel>

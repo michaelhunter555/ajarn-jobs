@@ -33,7 +33,9 @@ const UrgentJobs = (props) => {
             <Link
               key={jobs?._id}
               component={RouterLink}
-              to={`/jobs/${jobs?._id}`}
+              to={`/jobs/${jobs?._id}/${jobs?.title
+                ?.replace(/\s+/g, "-")
+                .toLowerCase()}`}
             >
               <ListItem key={jobs?._id}>
                 <StyledJobText color="text.secondary">

@@ -59,7 +59,9 @@ const BottomFeaturedAdsList = (props) => {
             sx={{ textDecoration: "none" }}
             component={RouterLink}
             key={job?._id}
-            to={`/jobs/${job?._id}`}
+            to={`/jobs/${job?._id}/${job?.title
+              ?.replace(/\s+/g, "-")
+              ?.toLowerCase()}`}
           >
             <ListItem>
               <BottomFeaturedAds

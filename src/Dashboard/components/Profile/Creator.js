@@ -10,6 +10,7 @@ import {
   Box,
   Button,
   Card,
+  Chip,
   CircularProgress,
   Divider,
   Grid,
@@ -310,9 +311,14 @@ const Creator = ({
                   >
                     {user?.creator?.company}
                   </Typography>
-                  <Button sx={{ fontSize: 10 }} onClick={handleEditing}>
-                    Edit Info
-                  </Button>
+                  <Chip
+                    variant="outlined"
+                    color="primary"
+                    component={Button}
+                    sx={{ fontSize: 10 }}
+                    onClick={handleEditing}
+                    label="Edit"
+                  />
                 </Stack>
 
                 <Stack

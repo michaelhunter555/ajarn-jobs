@@ -7,18 +7,15 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Divider,
   Link,
   Skeleton,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import Content from "../../assets/content.png";
-import Incomes from "../../assets/incomes.png";
-import Jobs from "../../assets/jobs.png";
-import Teachers from "../../assets/teachers.png";
-import UserDash from "../../assets/userdash.png";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useThemeToggle } from "../../shared/context/theme-context";
 
 const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -46,14 +43,12 @@ const StyledBoxWrapper = styled(Box)(({ theme }) => ({
 const StyledCardBackground = styled(Card)(({ theme }) => ({
   margin: "0.2rem",
   display: "flex",
-  gap: "1rem",
+
   flexDirection: "column",
   justifyContent: "flex-start",
   minWidth: 170,
   borderRadius: "6px",
-  "&:hover": {
-    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-  },
+
   [theme.breakpoints.down("md")]: {
     minWidth: 120,
   },
@@ -62,15 +57,26 @@ const StyledCardBackground = styled(Card)(({ theme }) => ({
   },
 }));
 
+const jobsImg =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613144/7_sbslrl.svg";
+const contentImg =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613144/8_rlkoly.svg";
+const incomeImg =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613145/9_qy3wbj.svg";
+const teachersImg =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613143/5_aceftu.svg";
+const userDashImg =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613144/6_mulphe.svg";
+
 const createItems = (auth) => {
   return [
-    { label: "Jobs", img: Jobs, link: `/jobs` },
-    { label: "Content", img: Content, link: `/content` },
-    { label: "Incomes", img: Incomes, link: `/income-directory` },
-    { label: "Teachers", img: Teachers, link: `/teachers` },
+    { label: "Jobs", img: jobsImg, link: `/jobs` },
+    { label: "Content", img: contentImg, link: `/content` },
+    { label: "Incomes", img: incomeImg, link: `/income-directory` },
+    { label: "Teachers", img: teachersImg, link: `/teachers` },
     {
       label: "Dashboard",
-      img: UserDash,
+      img: userDashImg,
       link: auth?.isLoggedIn ? `/users/${auth.user?._id}` : "/auth",
     },
   ];
@@ -78,6 +84,7 @@ const createItems = (auth) => {
 
 const SiteFeatures = ({ isLoading }) => {
   const auth = useContext(AuthContext);
+  const { isDarkMode } = useThemeToggle();
   //arrange items in array of objects
   const items = createItems(auth);
 
@@ -113,18 +120,31 @@ const SiteFeatures = ({ isLoading }) => {
             display: "flex",
             flexDirection: "row",
             gap: "1rem",
+            width: { xs: "100%", md: "60%" },
           }}
         >
           {items.map(({ label, img, link }, i) => {
             return (
               <Link component={RouterLink} key={i} to={link}>
-                <StyledCardBackground raised={false}>
+                <StyledCardBackground
+                  raised={false}
+                  sx={{
+                    "&:hover": {
+                      boxShadow: isDarkMode
+                        ? "0 4px 30px rgb(36 211 223 / 20%)"
+                        : "0 4px 30px rgba(0, 0, 0, 0.1)",
+                    },
+                  }}
+                >
                   <CardMedia
                     component="img"
                     image={img}
                     alt={`${label}-card#-${i}`}
-                    sx={{ height: 105 }}
+                    sx={{
+                      backgroundColor: isDarkMode ? "#404040" : "transparent",
+                    }}
                   />
+                  <Divider />
                   <CardContent
                     sx={{
                       display: "flex",

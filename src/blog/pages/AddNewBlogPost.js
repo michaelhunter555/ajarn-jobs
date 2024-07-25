@@ -132,7 +132,7 @@ const AddNewBlogPost = () => {
                 Here you will find user submitted posts and questions
               </Typography>
               <Typography variant="subtitle2" color="text.secondary">
-                As always due your due dillegence as an online netizen
+                As always do your due dillegence as an online netizen
               </Typography>
               <Divider />
               <BlogPostForm onBlogPostCreated={incomingBlogPostHandler} />
@@ -143,19 +143,21 @@ const AddNewBlogPost = () => {
               <Box>
                 <TeflBanner />
               </Box>
-              <BlogFilter onDataChange={handleFilterChange} />
-              <ContentPostList
-                isLoading={isLoading}
-                filteredContent={filteredContent}
-              />
-              {!isLoading && (
-                <Pagination
-                  sx={{ margin: "0.5rem" }}
-                  count={totalPages}
-                  page={blogPage.page}
-                  onChange={(event, page) => handleBlogPageChange(page, 5)}
+              <Box sx={{ width: "100%" }}>
+                <BlogFilter onDataChange={handleFilterChange} />
+                <ContentPostList
+                  isLoading={isLoading}
+                  filteredContent={filteredContent}
                 />
-              )}
+                {!isLoading && (
+                  <Pagination
+                    sx={{ margin: "0.5rem" }}
+                    count={totalPages}
+                    page={blogPage.page}
+                    onChange={(event, page) => handleBlogPageChange(page, 5)}
+                  />
+                )}
+              </Box>
               {!isLoading && (
                 <Button variant="outlined" component={Link} to="/jobs">
                   Need a Job?

@@ -32,6 +32,7 @@ export const JobData = (props) => {
   return (
     <>
       <JobDataTable
+        appliedAlready={props?.appliedAlready}
         modal={applyJobModalHandler}
         jobSpecifications={jobSpecifications}
       />

@@ -68,7 +68,7 @@ const MainFeaturedJob = ({
               )}
             </Alert>
 
-            <StyledContentGrid xs={12} md={4.5} sx={{ maxHeight: height }}>
+            <StyledContentGrid xs={12} md={4.5} sx={{ height: height }}>
               {featured && (
                 <DynamicHomeList
                   jobs={jobs}
@@ -137,7 +137,7 @@ const MainFeaturedJob = ({
 const FlashAnimation = styled("div")(({ flash, isDarkMode }) => ({
   animation: flash
     ? isDarkMode
-      ? `flash-animation-dark 1.5s`
+      ? `flash-animation-dark 1s`
       : `flash-animation-light 1s`
     : "none",
   "@keyframes flash-animation-light": {

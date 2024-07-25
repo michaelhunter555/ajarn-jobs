@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
+import { Link } from "react-router-dom";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   Avatar,
   CardContent,
@@ -11,6 +14,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import CategoryChip from "../../shared/components/UIElements/CategoryIconChip";
+import { AuthContext } from "../../shared/context/auth-context";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 
 const StyledStackContainer = styled(Stack)(({ theme }) => ({
@@ -59,6 +63,7 @@ const StyledStackWrapper = styled(Stack)(({ theme }) => ({
 }));
 
 const BlogContent = ({ content }) => {
+  const auth = useContext(AuthContext);
   const [wasEdited, setWasEdited] = useState(false);
 
   useEffect(() => {
@@ -84,7 +89,7 @@ const BlogContent = ({ content }) => {
           <Typography variant="subtitle2" component="span">
             By {content?.author?.name}
           </Typography>
-          <Stack>
+          <Stack direction="row" alignItems="center" spacing={2}>
             <Chip
               sx={{ flexShrink: 1 }}
               variant="outlined"
@@ -94,6 +99,19 @@ const BlogContent = ({ content }) => {
                 content?.author?.userType
               }`}
             />
+            {auth?.user?.buffetIsActive &&
+              content?.author?.userType === "teacher" && (
+                <Chip
+                  icon={<VisibilityIcon />}
+                  size="small"
+                  color="primary"
+                  label="View Profile"
+                  component={Link}
+                  to={`/teachers/${content?.author?._id}`}
+                  clickable
+                />
+              )}
+
             {wasEdited && (
               <Typography variant="subtitle2" color="text.secondary">
                 Edited: {getTimeDifference(content?.editedAt)} at{" "}

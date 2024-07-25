@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 import { AuthContext } from "../../context/auth-context";
 import { CustomModalBlur } from "../../util/CustomerBlurStyle";
 
-const StyledBoxContainer = styled(Box)(({ theme }) => ({
+export const StyledBoxContainer = styled(Box)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",

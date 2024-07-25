@@ -94,24 +94,28 @@ const IncomeDirectoryDetails = () => {
 
   return (
     <PageContainer>
-      <Content>
+      <Content sx={{ alignItems: "center" }}>
         <Grid
           container
-          direction="row"
-          justifyContent="center"
-          sx={{ maxWidth: "90%" }}
+          sx={{
+            maxWidth: { xs: "100%" },
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: { xs: "center", md: "center" },
+            alignItems: { xs: "center", md: "center" },
+            mb: "2rem",
+          }}
           spacing={5}
         >
           <Grid
             item
             xs={12}
             sm={6}
-            md={9}
+            md={8}
             sx={{ display: "flex", justifyContent: "center" }}
           >
             <Paper
               elevation={0}
-              sx={{ padding: 2, borderRadius: 8, maxWidth: "80%" }}
+              sx={{ padding: 2, borderRadius: 8, maxWidth: "100%" }}
             >
               <Alert
                 sx={{ maxWidth: 250, padding: 0, marginBottom: 1 }}
@@ -144,7 +148,7 @@ const IncomeDirectoryDetails = () => {
               ))}
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={4}>
             <Stack direction="column" spacing={2} sx={{ marginTop: 1 }}>
               <Tefl />
               <FeaturedCard />

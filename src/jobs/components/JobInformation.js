@@ -107,50 +107,74 @@ export const JobInformation = (props) => {
       >
         {/**grid item 1 */}
         <Grid item>
-          <StyledAvatar
-            variant="circular"
-            src={`${job?.image}`}
-            alt={`${job?.id}--${job?.creator?.company}`}
-            sx={{ border: "1px solid #bdbdbd" }}
-          />
+          <Stack>
+            <Typography variant="h5" component="h5" color="text.secondary">
+              {jobInformation[0]?.text}
+            </Typography>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <StyledAvatar
+                variant="circular"
+                src={`${job?.image}`}
+                alt={`${job?.id}--${job?.creator?.company}`}
+                sx={{ border: "1px solid #bdbdbd" }}
+              />
+              <Stack>
+                {jobInformation
+                  ?.slice(1)
+                  ?.map(({ variant, component, icon, text }, i) => (
+                    <Stack key={i} direction="row" alignItems="start">
+                      <Box>
+                        <Typography
+                          color="text.secondary"
+                          variant={variant}
+                          component={component}
+                        >
+                          {icon && <>{icon}</>}
+                        </Typography>
+                      </Box>
+
+                      <Box>
+                        <Typography color="text.secondary" variant={variant}>
+                          {text}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  ))}
+              </Stack>
+            </Stack>
+          </Stack>
         </Grid>
         {/**grid item 2 */}
 
-        {!isLoading && !isPostLoading && (
-          <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
-            {jobInformation?.map(({ variant, component, icon, text }, i) => (
-              <Stack key={i} direction="row" alignItems="start">
-                <Box>
-                  <Typography
-                    color="text.secondary"
-                    variant={variant}
-                    component={component}
-                  >
-                    {icon && <>{icon}</>}
-                  </Typography>
-                </Box>
+        {/* {!isLoading && !isPostLoading && (
+            <Grid item sx={{ margin: "0 0 0 0.5rem" }}>
+              {jobInformation
+                ?.slice(1)
+                ?.map(({ variant, component, icon, text }, i) => (
+                  <Stack key={i} direction="row" alignItems="start">
+                    <Box>
+                      <Typography
+                        color="text.secondary"
+                        variant={variant}
+                        component={component}
+                      >
+                        {icon && <>{icon}</>}
+                      </Typography>
+                    </Box>
 
-                <Box>
-                  <Typography color="text.secondary" variant={variant}>
-                    {text}
-                  </Typography>
-                </Box>
-              </Stack>
-            ))}
-            <Divider flexItem sx={{ margin: "0.5rem 0" }} />
-          </Grid>
-        )}
+                    <Box>
+                      <Typography color="text.secondary" variant={variant}>
+                        {text}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                ))}
+            </Grid>
+          )} */}
+        <Divider flexItem sx={{ margin: "0.5rem 0", width: "100%" }} />
 
-        {!isLoading && !isPostLoading && (
-          <Grid
-            item
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "flex-start",
-            }}
-          >
+        <Stack alignItems="center" sx={{ width: "100%" }}>
+          {!isLoading && !isPostLoading && (
             <OutlinedButton
               applyJobModalHandler={applyJobModalHandler}
               open={open}
@@ -162,8 +186,8 @@ export const JobInformation = (props) => {
               appliedAlready={appliedAlready}
               cantApply={cantApply}
             />
-          </Grid>
-        )}
+          )}
+        </Stack>
       </StyledGridContainer>
     </Paper>
   );

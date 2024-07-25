@@ -39,8 +39,8 @@ const JobDetailsPage = () => {
     getJobDetails(jobId)
   );
 
-  const userAppliedAlready = auth.user?.applications?.some(
-    (userApplications) => userApplications?.jobId?._id === jobId
+  const userAppliedAlready = jobs?.applicants?.some(
+    (applicant) => applicant?.userId?._id === auth?.user?._id
   );
 
   return (

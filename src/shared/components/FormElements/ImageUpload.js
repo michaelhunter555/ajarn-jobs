@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import { Box, Button, styled } from "@mui/material";
+import { Box, Button, FormHelperText, styled } from "@mui/material";
 
 import { AuthContext } from "../../context/auth-context";
 
@@ -31,6 +31,7 @@ const ImageUpload = (props) => {
   const [file, setFile] = useState();
   const [filePreviewUrl, setFilePreviewUrl] = useState();
   const [isValid, setIsValid] = useState(false);
+  const [error, setError] = useState("");
   const filePickerRef = useRef();
 
   const authHasImage =
@@ -51,8 +52,14 @@ const ImageUpload = (props) => {
   const userChoseImageHandler = (event) => {
     let pickedFile;
     let fileIsValid = isValid;
+    setError("");
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];
+      if (pickedFile.size > 500000) {
+        setError("Image must not be larger than 500kb.");
+        setIsValid(false);
+        return;
+      }
       setFile(pickedFile);
       setIsValid(true);
       fileIsValid = true;
@@ -106,6 +113,14 @@ const ImageUpload = (props) => {
         <Button variant="outlined" type="button" onClick={chooseImageHandler}>
           Pick Image
         </Button>
+        {!error && (
+          <FormHelperText>Please add an image under 500kb.</FormHelperText>
+        )}
+        {error && (
+          <FormHelperText sx={{ color: "red", fontWeight: 700 }}>
+            *{error}
+          </FormHelperText>
+        )}
       </Box>
       {!isValid && props.errorText}
     </Box>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -6,7 +6,6 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import {
   Avatar,
-  Button,
   Chip,
   CircularProgress,
   Divider,
@@ -15,6 +14,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Pagination,
   Stack,
   Typography,
 } from "@mui/material";
@@ -24,17 +24,28 @@ import TeflBanner from "../../shared/components/UIElements/TeflBanner";
 import UserContributionForm from "./UserContributionForm";
 
 const UserContributions = () => {
-  const getUserIncomeData = async () => {
+  const [incomePage, setIncomePage] = useState({
+    page: 1,
+    limit: 5,
+  });
+  const [totalPages, setTotalPages] = useState(1);
+
+  const getUserIncomeData = async (page, limit) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_USERS}/income-posts`
+        `${process.env.REACT_APP_USERS}/income-posts?page=${page}&limit=${limit}`
       );
       if (!response.ok) {
         throw new Error("There was an error retrievin the income post data.");
       }
 
       const data = await response.json();
-      return data.incomeDirectoryData;
+      return {
+        incomes: data.incomeDirectoryData,
+        page: data.pageNum,
+        totalPages: data.totalPages,
+        totalIncomes: data.totalIncomes,
+      };
     } catch (err) {
       console.log("GET: ERROR for USER INCOME DATA:" + err);
     }
@@ -44,10 +55,27 @@ const UserContributions = () => {
     data: userIncomeData,
     refetch,
     isLoading,
-  } = useQuery(["infoDirectory"], () => getUserIncomeData());
+  } = useQuery({
+    queryKey: ["infoDirectory", incomePage.page, incomePage.limit],
+    queryFn: () => getUserIncomeData(incomePage.page, incomePage.limit),
+    staleTime: 5 * 60 * 60 * 1000,
+  });
+
+  useEffect(() => {
+    if (totalPages !== userIncomeData?.totalPages) {
+      setTotalPages(userIncomeData?.totalPages);
+    }
+  }, [totalPages, userIncomeData?.totalPages]);
 
   const getFreshData = () => {
     refetch();
+  };
+
+  const handleIncomePageChange = (event, page) => {
+    setIncomePage({
+      page: page,
+      limit: incomePage.limit,
+    });
   };
 
   return (
@@ -56,10 +84,10 @@ const UserContributions = () => {
       direction="row"
       justifyContent="center"
       spacing={2}
-      sx={{ maxWidth: "90%" }}
+      sx={{ maxWidth: { xs: "100%", md: "90%" }, mb: "2rem" }}
     >
       <Grid item xs={12} sm={6}>
-        <Stack direction="column" spacing={2} sx={{ margin: "2rem 2rem" }}>
+        <Stack direction="column" spacing={2}>
           <Typography variant="h4" color="text.primary">
             {" "}
             Welcome To The Income Directory
@@ -77,12 +105,12 @@ const UserContributions = () => {
       </Grid>
 
       <Grid item xs={12} sm={6}>
-        <Stack sx={{ margin: "2rem 2rem" }}>
+        <Stack>
           <TeflBanner />
           {isLoading && <CircularProgress />}
           {!isLoading &&
             userIncomeData &&
-            userIncomeData?.map((val, i) => (
+            userIncomeData?.incomes?.map((val, i) => (
               <List
                 key={val._id}
                 sx={{ width: "100%", bgcolor: "background.paper" }}
@@ -150,22 +178,27 @@ const UserContributions = () => {
                     }
                   />
                   <Stack justifyContent="flex-end">
-                    <Button
-                      variant="contained"
+                    <Chip
+                      label="Read Post"
                       component={Link}
+                      clickable
+                      color="primary"
                       to={`/income-details/${val?._id}`}
-                    >
-                      Read Post
-                    </Button>
+                    />
                   </Stack>
                 </ListItem>
 
-                {i - userIncomeData?.length - 1 && (
+                {i - userIncomeData?.incomes?.length - 1 && (
                   <Divider variant="inset" light />
                 )}
               </List>
             ))}
         </Stack>
+        <Pagination
+          page={incomePage.page}
+          count={totalPages}
+          onChange={handleIncomePageChange}
+        />
       </Grid>
     </Grid>
   );

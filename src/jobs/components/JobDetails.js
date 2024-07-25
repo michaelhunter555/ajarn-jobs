@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useInvalidateQuery } from "../../shared/hooks/invalidate-query";
 import { useUser } from "../../shared/hooks/user-hook";
 import { JobAbout } from "./JobAbout";
 import { JobData } from "./JobData";
@@ -44,6 +45,7 @@ const JobDetails = (props) => {
   const auth = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
+  const { invalidateQuery } = useInvalidateQuery();
   const { applyToJob, error, clearError, isPostLoading } = useUser();
   const { job, isLoading, userAppliedAlready } = props;
 
@@ -59,6 +61,7 @@ const JobDetails = (props) => {
       .finally(() => {
         setOpen(false);
       });
+    invalidateQuery("userApplications");
   };
 
   const closeSuccessHandler = () => {
@@ -116,7 +119,11 @@ const JobDetails = (props) => {
             {isLoading && <StyledLoadingSkeleton variant="rectangular" />}
             {isPostLoading && <StyledLoadingSkeleton variant="rectangular" />}
             {!isLoading && !isPostLoading && (
-              <JobData applyJobModalHandler={applyJobModalHandler} job={job} />
+              <JobData
+                appliedAlready={userAppliedAlready}
+                applyJobModalHandler={applyJobModalHandler}
+                job={job}
+              />
             )}
             <Divider variant="inset" sx={{ margin: "1rem auto" }} />
             {isLoading && <StyledLoadingSkeleton variant="rectangular" />}

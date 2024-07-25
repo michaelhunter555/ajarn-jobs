@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { FaChalkboardTeacher, FaSchool } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import PlaceIcon from "@mui/icons-material/Place";
+import PublicIcon from "@mui/icons-material/Public";
+import SchoolIcon from "@mui/icons-material/School";
 import ThumbDownAltTwoToneIcon from "@mui/icons-material/ThumbDownAltTwoTone";
 import ThumbUpAltTwoToneIcon from "@mui/icons-material/ThumbUpAltTwoTone";
 import {
@@ -15,14 +19,30 @@ import {
   CircularProgress,
   Divider,
   Grid,
+  Link as RouterLink,
   Paper,
   Stack,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 import { AuthContext } from "../../shared/context/auth-context";
+import { useThemeToggle } from "../../shared/context/theme-context";
 import { useComment } from "../../shared/hooks/content-hook";
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
+
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.background.paper,
+
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    border: "1px solid ",
+  },
+}));
 
 const UserComments = ({
   blogId,
@@ -31,6 +51,7 @@ const UserComments = ({
   refetch,
 }) => {
   const auth = useContext(AuthContext);
+  const { isDarkMode } = useThemeToggle();
   const [toggleAuthOptions, setToggleAuthOptions] = useState(false);
   const [authClickedDelete, setAuthClickedDelete] = useState(false);
   const [isLoadingArray, setIsLoadingArray] = useState(
@@ -133,9 +154,86 @@ const UserComments = ({
                 </Stack>
                 <Stack alignItems="flex-start">
                   <Stack direction="row" alignItems="center">
-                    <Typography varaint="body1" color="text.primary">
-                      {comment?.userId?.name} ·{" "}
-                    </Typography>
+                    {auth?.user?.buffetIsActive &&
+                    comment?.userId?.userType === "teacher" ? (
+                      <LightTooltip
+                        placement="top"
+                        title={
+                          <Stack>
+                            <Stack
+                              direction="row"
+                              alignItems="center"
+                              spacing={1}
+                            >
+                              <Typography
+                                variant="subtitle1"
+                                color="text.secondary"
+                                fontWeight={700}
+                              >
+                                {comment?.userId?.name}
+                              </Typography>
+                              <Chip
+                                color="primary"
+                                label="View"
+                                size="small"
+                                title="view profile"
+                                clickable
+                                component={Link}
+                                variant="outlined"
+                                to={`/teachers/${comment?.userId?._id}`}
+                              />
+                            </Stack>
+                            <Divider />
+                            <Stack
+                              direction="row"
+                              alignItems="center"
+                              spacing={2}
+                            >
+                              <Stack alignItems="center">
+                                <PlaceIcon color="primary" />
+                                <Typography
+                                  variant="subtitle2"
+                                  color="text.secondary"
+                                >
+                                  {comment?.userId?.location}
+                                </Typography>
+                              </Stack>
+                              <Stack alignItems="center">
+                                <SchoolIcon color="primary" />
+                                <Typography
+                                  variant="subtitle2"
+                                  color="text.secondary"
+                                >
+                                  {comment?.userId?.highestCertification}
+                                </Typography>
+                              </Stack>
+                              <Stack alignItems="center">
+                                <PublicIcon color="primary" />
+                                <Typography
+                                  variant="subtitle2"
+                                  color="text.secondary"
+                                >
+                                  {comment?.userId?.nationality}
+                                </Typography>
+                              </Stack>
+                            </Stack>
+                          </Stack>
+                        }
+                      >
+                        <RouterLink
+                          component={Link}
+                          to={`/teachers/${comment?.userId?._id}`}
+                        >
+                          <Typography varaint="body1" color="text.primary">
+                            {comment?.userId?.name} ·{" "}
+                          </Typography>
+                        </RouterLink>
+                      </LightTooltip>
+                    ) : (
+                      <Typography varaint="body1" color="text.primary">
+                        {comment?.userId?.name} ·{" "}
+                      </Typography>
+                    )}
                     <Typography variant="subtitle2" color="text.secondary">
                       {getTimeDifference(comment?.commentDate)}
                     </Typography>

@@ -1,17 +1,24 @@
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 import FacebookIcon from "@mui/icons-material/Facebook";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import { Grid, Typography } from "@mui/material";
+import {
+  Divider,
+  Grid,
+  Link as RouterLink,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const FooterStyles = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   backgroundColor: theme.palette.background.paper,
-  flexDirection: "row",
+  flexDirection: { xs: "column", md: "row" },
   borderRadius: "6px 6px 0px 0px",
   bottom: 0,
   left: 0,
@@ -63,7 +70,33 @@ const Footer = () => {
   return (
     <FooterStyles>
       <Grid container direction="column" justifyContent="flex-start">
-        <Copyright />
+        <Stack
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "center" },
+            gap: { xs: "5px", md: "10px" },
+          }}
+        >
+          <Copyright />
+          <Divider orientation="vertical" flexItem />
+          <RouterLink component={Link} sx={{ fontSize: 14 }} to="/about-us">
+            About Us
+          </RouterLink>
+          <RouterLink
+            sx={{ fontSize: 14 }}
+            component={Link}
+            to="/terms-and-conditions"
+          >
+            Terms & Conditions
+          </RouterLink>
+          <RouterLink
+            sx={{ fontSize: 14 }}
+            component={Link}
+            to="/privacy-policy"
+          >
+            Privacy Policy
+          </RouterLink>
+        </Stack>
       </Grid>
       <SocialIcons item>
         <SocialIcon facebook>
@@ -72,9 +105,7 @@ const Footer = () => {
         <SocialIcon linkedIn>
           <LinkedInIcon />
         </SocialIcon>
-        <SocialIcon twitter>
-          <TwitterIcon />
-        </SocialIcon>
+
         <SocialIcon help>
           <HelpOutlineIcon />
         </SocialIcon>

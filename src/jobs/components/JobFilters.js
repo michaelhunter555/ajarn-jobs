@@ -102,6 +102,7 @@ const JobFilters = ({ onFilterChange }) => {
           id="location"
           value={location}
           onChange={handleLocationChange}
+          MenuProps={{ disableScrollLock: true }}
         >
           <MenuItem value="">any</MenuItem>
           {thaiCities.map((item, i) => (
@@ -120,6 +121,7 @@ const JobFilters = ({ onFilterChange }) => {
           id="salary"
           value={salaryRange}
           onChange={handleSalaryRangeChange}
+          MenuProps={{ disableScrollLock: true }}
         >
           <MenuItem value="">any</MenuItem>
           {checked === "Full-time" &&

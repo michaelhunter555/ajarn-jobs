@@ -7,6 +7,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
+  Box,
   Button,
   ButtonGroup,
   Chip,
@@ -30,6 +31,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 import { AuthContext } from "../../../shared/context/auth-context";
+import { useInvalidateQuery } from "../../../shared/hooks/invalidate-query";
 import { useUser } from "../../../shared/hooks/user-hook";
 
 const BoxContent = styled(Paper)(({ theme }) => ({
@@ -45,8 +47,9 @@ const BoxContent = styled(Paper)(({ theme }) => ({
   textAlign: "center",
 }));
 
-const UserRecruitmentTable = ({ component }) => {
+const UserRecruitmentTable = () => {
   const auth = useContext(AuthContext);
+  const { invalidateQuery } = useInvalidateQuery();
   const { getUserRecruitments, recruitmentOfferResponse, isPostLoading } =
     useUser();
   const [openModal, setOpenModal] = useState(false);
@@ -66,7 +69,7 @@ const UserRecruitmentTable = ({ component }) => {
       recruitmentsPage.limit,
     ],
     queryFn: () => getUserRecruitments(auth?.user?._id),
-    enabled: Boolean(auth?.user?._id),
+    enabled: Boolean(auth?.user?._id && auth?.user?.userType === "teacher"),
     staleTime: 5 * 60 * 60 * 1000,
   });
 
@@ -83,18 +86,21 @@ const UserRecruitmentTable = ({ component }) => {
     });
   };
 
-  const handleRecruitmentResponse = async (response, jobId) => {
-    await recruitmentOfferResponse(auth?.user?._id, response, jobId);
+  const handleRecruitmentResponse = async (response, recruitmentId) => {
+    await recruitmentOfferResponse(auth?.user?._id, response, recruitmentId);
+    await invalidateQuery("RecruitmentData");
   };
   const handleMessageModal = () => {
     setOpenModal((prev) => !prev);
   };
 
-  const loading = recruitDataLoading || isPostLoading;
-
   return (
     <>
-      <Modal open={openModal} onClose={handleMessageModal}>
+      <Modal
+        disableScrollLock={true}
+        open={openModal}
+        onClose={handleMessageModal}
+      >
         <BoxContent elevation={0}>
           <Stack>
             <Typography>
@@ -110,7 +116,7 @@ const UserRecruitmentTable = ({ component }) => {
           </Stack>
         </BoxContent>
       </Modal>
-      <TableContainer>
+      <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
@@ -131,14 +137,16 @@ const UserRecruitmentTable = ({ component }) => {
           </TableHead>
           <TableBody>
             {jobs &&
-              !loading &&
+              !recruitDataLoading &&
               jobs?.recruitments?.map((recruitment, i) => (
                 <TableRow key={recruitment?._id}>
                   <TableCell>{recruitment?.company}</TableCell>
                   <TableCell>
                     <RouterLink
                       component={Link}
-                      to={`/jobs/${recruitment?.jobId}`}
+                      to={`/jobs/${recruitment?.jobId}/${recruitment?.jobTitle
+                        ?.replace(/\s+/g, "-")
+                        .toLowerCase()}`}
                     >
                       {recruitment?.jobTitle}
                     </RouterLink>
@@ -146,33 +154,41 @@ const UserRecruitmentTable = ({ component }) => {
                   <TableCell>{recruitment?.location}</TableCell>
                   <TableCell>{recruitment?.salary}</TableCell>
                   <TableCell>
-                    <ButtonGroup size="small">
-                      <Tooltip title="interested">
-                        <Button
-                          onClick={() =>
-                            handleRecruitmentResponse(
-                              "interested",
-                              recruitment?.jobId
-                            )
-                          }
-                        >
-                          <ThumbUpIcon />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="not interested">
-                        <Button
-                          color="error"
-                          onClick={() =>
-                            handleRecruitmentResponse(
-                              "not interested",
-                              recruitment?.jobId
-                            )
-                          }
-                        >
-                          <ThumbDownIcon />
-                        </Button>
-                      </Tooltip>
-                    </ButtonGroup>
+                    {!isPostLoading && recruitment?.response === "pending" ? (
+                      <ButtonGroup size="small">
+                        <Tooltip title="interested">
+                          <Button
+                            onClick={() =>
+                              handleRecruitmentResponse(
+                                "interested",
+                                recruitment?._id
+                              )
+                            }
+                          >
+                            <ThumbUpIcon />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title="not interested">
+                          <Button
+                            color="error"
+                            onClick={() =>
+                              handleRecruitmentResponse(
+                                "not interested",
+                                recruitment?._id
+                              )
+                            }
+                          >
+                            <ThumbDownIcon />
+                          </Button>
+                        </Tooltip>
+                      </ButtonGroup>
+                    ) : (
+                      !isPostLoading &&
+                      recruitment?.response !== "pending" && (
+                        <code>{recruitment?.response}</code>
+                      )
+                    )}
+                    {isPostLoading && <Skeleton width="100%" />}
                   </TableCell>
                   <TableCell>
                     <Chip
@@ -190,7 +206,7 @@ const UserRecruitmentTable = ({ component }) => {
                 </TableRow>
               ))}
 
-            {loading &&
+            {recruitDataLoading &&
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
                   <TableCell>
@@ -208,15 +224,28 @@ const UserRecruitmentTable = ({ component }) => {
                   <TableCell>
                     <Skeleton width="100%" />
                   </TableCell>
+                  <TableCell>
+                    <Skeleton width="100%" />
+                  </TableCell>
                 </TableRow>
               ))}
+
+            {!recruitDataLoading && jobs?.recruitments?.length === 0 && (
+              <Box sx={{ padding: "1rem" }}>
+                <Typography variant="h5" color="text.secondary">
+                  No recruit offers yet. Please check back later.
+                </Typography>
+              </Box>
+            )}
           </TableBody>
         </Table>
-        <Pagination
-          count={totalPages}
-          page={recruitmentsPage.page}
-          onChange={handleRecruitmentPageChange}
-        />
+        {totalPages > 1 && (
+          <Pagination
+            count={totalPages}
+            page={recruitmentsPage.page}
+            onChange={handleRecruitmentPageChange}
+          />
+        )}
       </TableContainer>
     </>
   );

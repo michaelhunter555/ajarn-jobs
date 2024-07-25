@@ -18,7 +18,10 @@ export const useResume = () => {
           "PATCH",
           //property to be updated "resume" on user object
           JSON.stringify({ resume: update }),
-          { "Content-type": "application/json" }
+          {
+            "Content-type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
         //create object with copy of existing user data and updated response.
         //if _id matches then we update, otherwise new resumeItem
@@ -32,7 +35,7 @@ export const useResume = () => {
         updateUser(updatedResume);
       } catch (err) {}
     },
-    [sendRequest, updateUser, auth.user]
+    [sendRequest, updateUser, auth.user, auth.token]
   );
 
   const deleteUserResume = useCallback(
@@ -45,17 +48,20 @@ export const useResume = () => {
           //we send deleteResume key in the req.body (req.body.deleteResume)
           //see => /backend/controllers/users/update-user-profile.js
           JSON.stringify({ deleteResume: resumeItem }),
-          { "Content-Type": "application/json" }
+          {
+            "Content-type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
         );
         //update the currentUser client side
         const deleteResume = {
           ...auth.user,
-          resume: auth.user.resume.filter((r) => r._id !== resumeItem._id),
+          resume: auth.user?.resume?.filter((r) => r?._id !== resumeItem?._id),
         };
         updateUser(deleteResume);
       } catch (err) {}
     },
-    [sendRequest, updateUser, auth.user]
+    [sendRequest, updateUser, auth.user, auth.token]
   );
 
   return {

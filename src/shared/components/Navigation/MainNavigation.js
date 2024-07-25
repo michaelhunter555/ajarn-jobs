@@ -6,18 +6,21 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { CardMedia } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import MainLogoDark from "../../../assets/Aharnaroi-dark.svg";
-import MainLogo from "../../../assets/Aharnaroi.svg";
 import { useThemeToggle } from "../../context/theme-context";
 import Backdrop from "../UIElements/Backdrop";
 import MainHeader from "./MainHeader";
 import NavLinks from "./NavLinks";
 import SideDrawer from "./SideDrawer";
 
+const ajarnJobsDark =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613414/Aharnaroi-dark_ca4sso.svg";
+const ajarnJobsLight =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613414/Aharnaroi_hrx5qw.svg";
+
 const MainNavigation = (props) => {
   const [navIsScrolled, setNavIsScrolled] = useState(false);
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-  const { isDarkMode, toggleTheme } = useThemeToggle();
+  const { isDarkMode } = useThemeToggle();
 
   const navScrollHandler = () => {
     if (window.scrollY >= 100) {
@@ -64,7 +67,7 @@ const MainNavigation = (props) => {
             <CardMedia
               sx={{ height: 45, width: 200, margin: "0 5rem" }}
               component="img"
-              image={isDarkMode ? MainLogoDark : MainLogo}
+              image={isDarkMode ? ajarnJobsDark : ajarnJobsLight}
               alt="Ajarn-jobs"
             />
           </MainNavigationTitleStyle>

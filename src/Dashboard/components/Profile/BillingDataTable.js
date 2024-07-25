@@ -11,6 +11,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
@@ -95,6 +96,9 @@ const UserBilling = ({ user }) => {
                 </TableCell>
               </TableRow>
             ))}
+          {billing?.user?.length === 0 && (
+            <Typography color="text.secondary">No Billing data yet.</Typography>
+          )}
         </TableBody>
       </Table>
       <Stack alignItems="end">

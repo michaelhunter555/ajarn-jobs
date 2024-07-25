@@ -14,8 +14,12 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import ThaiBanner from "../../assets/ThaiGuide.png";
-import ThailandIncome from "../../assets/ThailandIncome.png";
+import { useThemeToggle } from "../../shared/context/theme-context";
+
+const userContentImg =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613274/user-conts_1_lktbt3.svg";
+const userIncomeImg =
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613273/user-incom_afqbxr.svg";
 
 const StyledBoxContainer = styled(Box)(({ theme }) => ({
   display: "grid",
@@ -40,6 +44,7 @@ const StyledText = styled(Typography)(({ theme }) => ({
 }));
 
 const BottomFeatured = ({ isLoading }) => {
+  const { isDarkMode } = useThemeToggle();
   return (
     <StyledBoxContainer>
       {isLoading &&
@@ -73,11 +78,19 @@ const BottomFeatured = ({ isLoading }) => {
       {!isLoading && (
         <Card sx={{ borderRadius: "18px" }}>
           <CardContent>
-            <CardMedia component="img" alt="thai-guide" src={ThaiBanner} />
+            <CardMedia
+              sx={{
+                backgroundColor: isDarkMode ? "#404040" : "#0b5e6712",
+                borderRadius: "10px",
+              }}
+              component="img"
+              alt="thai-guide"
+              src={userContentImg}
+            />
           </CardContent>
           <StyledText>
-            First Teaching Job? Learn about your rights as an employee in
-            Kingdom and what you should look out for from employers.
+            A discussion for anyone who wants to ask a question, share advice or
+            give their professional take on a topic.
           </StyledText>
           <CardActions>
             <Button
@@ -86,7 +99,7 @@ const BottomFeatured = ({ isLoading }) => {
               component={RouterLink}
               to="/content"
             >
-              Read More
+              View Posts
             </Button>
           </CardActions>
         </Card>
@@ -95,7 +108,15 @@ const BottomFeatured = ({ isLoading }) => {
       {!isLoading && (
         <Card sx={{ borderRadius: "18px" }}>
           <CardContent>
-            <CardMedia component="img" alt="thai-guide" src={ThailandIncome} />
+            <CardMedia
+              sx={{
+                backgroundColor: isDarkMode ? "#404040" : "#0b5e6712",
+                borderRadius: "10px",
+              }}
+              component="img"
+              alt="thai-guide"
+              src={userIncomeImg}
+            />
           </CardContent>
           <StyledText>
             See what other teachers are making, where they are living and what
@@ -108,7 +129,7 @@ const BottomFeatured = ({ isLoading }) => {
               component={RouterLink}
               to="/income-directory"
             >
-              Read More
+              Read Incomes
             </Button>
           </CardActions>
         </Card>

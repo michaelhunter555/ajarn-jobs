@@ -53,7 +53,9 @@ const JobAdSidebarList = ({ jobAd }) => {
             <React.Fragment key={job?._id}>
               <RouterLink
                 component={Link}
-                to={`/jobs/${job?._id}`}
+                to={`/jobs/${job?._id}/${job?.title
+                  ?.replace(/\s+/g, "-")
+                  ?.toLowerCase()}`}
                 sx={{
                   textDecoration: "none",
                   color: "inherit",

@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 import SchoolIcon from "@mui/icons-material/School";
 import SendIcon from "@mui/icons-material/Send";
 import WorkIcon from "@mui/icons-material/Work";
@@ -26,6 +27,21 @@ import { styled } from "@mui/material/styles";
 import { CollapsibleTable } from "../../Dashboard/components/Profile/Resume";
 import { AuthContext } from "../../shared/context/auth-context";
 import MessageTeacher from "./MessageTeacher";
+
+export const FadeContentBox = styled(Box)(({ theme }) => ({
+  position: "relative",
+  maxHeight: 190,
+  overflow: "hidden",
+  "&:after": {
+    content: '""',
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: "3em",
+    background: `linear-gradient(to top, ${theme.palette.background.paper}, transparent)`,
+  },
+}));
 
 const StyledBoxModal = styled(Paper)(({ theme }) => ({
   position: "absolute",
@@ -52,7 +68,7 @@ const StyledBoxContainer = styled(Box)(({ theme }) => ({
   justifyContent: "center",
   alignItems: "center",
   width: "80%",
-  margin: "0 auto",
+  margin: "0 auto 3rem",
   [theme.breakpoints.down("md")]: {
     width: "100%",
     marginBottom: "3rem",
@@ -96,8 +112,10 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
   const [open, setOpen] = useState(false);
   const openModalHandler = () => setOpen(true);
   const closeModalHandler = () => setOpen(false);
-
-  console.log("TEACHER:", teacher);
+  const [readMore, setReadMore] = useState({
+    open: false,
+    length: 500,
+  });
 
   const recruitmentSentAlready =
     teacher &&
@@ -105,7 +123,12 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
       (j) => j?.creatorId === auth?.user?._id && j?.response === "pending"
     );
 
-  console.log(teacher?.recruitmentReceived?.creatorId, auth?.user?._id);
+  const handleReadMoreCoverLetter = () => {
+    setReadMore((prev) => ({
+      open: !prev.open,
+      length: prev.length === 500 ? teacher?.coverLetter?.length : 500,
+    }));
+  };
 
   return (
     <StyledBoxContainer>
@@ -251,23 +274,31 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                         </Typography>
                       </Box>
                     </Stack>
-
-                    <Divider flexItem sx={{ margin: "0.5rem 0" }} />
-                    <Typography variant="subtitle2" component="div">
-                      <Typography
-                        color="text.secondary"
-                        variant="subtitle2"
-                        component="div"
-                      >
-                        Skills:
-                      </Typography>
-                      <StyledStack spacing={2} direction="row">
-                        {teacher?.skill?.split(",").map((skills, i) => (
-                          <Chip clickable key={i} label={skills} />
-                        ))}
-                      </StyledStack>
-                    </Typography>
                   </Grid>
+                  <Divider flexItem sx={{ margin: "0.5rem 0" }} />
+                  <Stack sx={{ marginLeft: "1rem" }}>
+                    <Typography
+                      color="text.secondary"
+                      variant="subtitle2"
+                      component="div"
+                    >
+                      Skills:
+                    </Typography>
+                    <StyledStack
+                      spacing={2}
+                      direction="row"
+                      alignItems="center"
+                    >
+                      {teacher?.skill?.split(",").map((skills, i) => (
+                        <Chip
+                          sx={{ margin: "0.3rem 0" }}
+                          clickable
+                          key={i}
+                          label={skills}
+                        />
+                      ))}
+                    </StyledStack>
+                  </Stack>
                 </StyledGridContainer>
                 <Divider flexItem sx={{ margin: "0.5rem 0" }} />
                 <Stack
@@ -422,12 +453,45 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   </Box>
 
                   <Divider />
-                  <Typography
-                    color="text.secondary"
-                    variant="subtitle2"
-                    paragraph
-                    dangerouslySetInnerHTML={{ __html: teacher?.coverLetter }}
-                  />
+                  {teacher?.coverLetter?.length > 500 && !readMore.open ? (
+                    <FadeContentBox>
+                      <Typography
+                        color="text.secondary"
+                        variant="subtitle2"
+                        paragraph
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            teacher?.coverLetter?.substring(
+                              0,
+                              readMore.length
+                            ) +
+                            `${
+                              readMore.length !== teacher?.coverLetter?.length
+                                ? "..."
+                                : ""
+                            }`,
+                        }}
+                      />
+                    </FadeContentBox>
+                  ) : (
+                    <Typography
+                      color="text.secondary"
+                      variant="subtitle2"
+                      paragraph
+                      dangerouslySetInnerHTML={{
+                        __html: teacher?.coverLetter,
+                      }}
+                    />
+                  )}
+                  {teacher?.coverLetter?.length > 500 && (
+                    <Button
+                      endIcon={<PostAddIcon />}
+                      size="small"
+                      onClick={handleReadMoreCoverLetter}
+                    >
+                      {!readMore.open ? "Read More" : "Read Less"}
+                    </Button>
+                  )}
                 </Paper>
               )}
             </Grid>

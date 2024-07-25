@@ -13,10 +13,10 @@ export const StyledPaper = styled(Paper)({
 });
 
 export const StyledBoxContent = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  flexDirection: "column",
+  // display: "flex",
+  // justifyContent: "center",
+  // alignItems: "center",
+  // flexDirection: "column",
   margin: "0",
   padding: "0 1rem",
   height: "auto",

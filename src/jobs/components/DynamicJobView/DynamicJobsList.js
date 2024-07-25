@@ -164,8 +164,17 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                       paddingTop: 0,
                       paddingBottom: 0,
                       backgroundColor:
-                        job?.jobType === "featured" &&
-                        "rgba(198, 226, 234, 0.15)",
+                        isDarkMode && job?.jobType === "featured"
+                          ? "#303f42"
+                          : !isDarkMode && job?.jobType === "featured"
+                          ? "#f5f2e4"
+                          : "",
+                      ...(isDarkMode && job?.jobType === "featured"
+                        ? { boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)" }
+                        : {}),
+                      ...(!isDarkMode && job?.jobType === "featured"
+                        ? { boxShadow: "0 0 20px rgb(255 245 202)" }
+                        : {}),
                     }}
                     component={Link}
                     key={job?._id}
@@ -208,14 +217,19 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                             {job?.jobType === "featured" && (
                               <Typography
                                 sx={{
-                                  backgroundColor: "#edfdff",
                                   border: "1px solid #a2d5dd",
                                   borderRadius: "6px",
                                   fontSize: 11,
                                   padding: "0 0.5rem",
                                 }}
                               >
-                                Featured
+                                Featured{" "}
+                                <StarIcon
+                                  sx={{
+                                    fontSize: 11,
+                                    color: isDarkMode ? "yellow" : "#3a97a7",
+                                  }}
+                                />
                               </Typography>
                             )}
                           </Stack>

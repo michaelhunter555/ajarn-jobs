@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { Grid, Pagination } from "@mui/material/";
-import { createTheme, styled } from "@mui/material/styles";
+import { Grid, Pagination, Stack } from "@mui/material/";
+import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import CustomModal from "../../shared/components/UIElements/CustomModal";
@@ -10,28 +10,11 @@ import Footer, {
   Content,
   PageContainer,
 } from "../../shared/components/UIElements/Footer";
-import TeflBanner from "../../shared/components/UIElements/TeflBanner";
+import TeacherPageOffer from "../../shared/components/UIElements/TeachersPagePromo";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import TeacherFilter from "../components/TeacherFilter";
 import TeacherList from "../components/TeacherList";
-
-const customThemeForTeachers = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1807,
-    },
-    palette: {
-      primary: {
-        main: "#128cb1",
-      },
-    },
-  },
-});
 
 const StyledGridContainer = styled(Grid)(({ theme }) => ({
   width: "100%",
@@ -173,8 +156,10 @@ const Teachers = () => {
 
         <StyledGridContainer container spacing={3}>
           <StyledGridItem item xs={12} md={3}>
-            <TeacherFilter onDataChange={handleFilterChange} />
-            <TeflBanner />
+            <Stack spacing={2}>
+              <TeacherFilter onDataChange={handleFilterChange} />
+              <TeacherPageOffer />
+            </Stack>
           </StyledGridItem>
           <StyledGridItem item xs={12} md={9} sx={{ margin: "1rem auto" }}>
             <Grid container spacing={2}>

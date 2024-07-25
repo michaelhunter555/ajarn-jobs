@@ -21,7 +21,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 
 const JobDataTable = (props) => {
   const auth = useContext(AuthContext);
-  const { jobSpecifications } = props;
+  const { jobSpecifications, appliedAlready } = props;
 
   return (
     <TableContainer component={Paper}>
@@ -56,6 +56,7 @@ const JobDataTable = (props) => {
                 //   Apply Now
                 // </Button>
                 <Chip
+                  disabled={appliedAlready}
                   color="primary"
                   clickable={true}
                   component={Button}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -8,6 +8,7 @@ import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
 import {
   Button,
   ButtonGroup,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -26,6 +27,10 @@ import {
 } from "@mui/material";
 
 import UpdateJob from "../../../jobs/pages/UpdateJob";
+import CheckboxButtonActions, {
+  useCheckboxSelection,
+} from "../../../shared/hooks/checkbox-hook";
+import { useInvalidateQuery } from "../../../shared/hooks/invalidate-query";
 import { useJob } from "../../../shared/hooks/jobs-hook";
 
 const tableRows = [
@@ -74,13 +79,27 @@ const CreatorJobsTable = ({
   refetchCreatorJobs,
 }) => {
   const [page, setPage] = useState(jobs?.page);
-  const [totalPages, setTotalPages] = useState(jobs?.totalPages);
+  const [totalPages, setTotalPages] = useState(1);
   const [editJobById, setEditJobById] = useState(null);
   const [editJob, setEditJob] = useState(false);
   const [openWarning, setOpenWarning] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
+  const {
+    rowSelection,
+    allRowsSelected,
+    someRowsSelected,
+    handleSelectedRow,
+    handleParentCheckboxSelection,
+  } = useCheckboxSelection(jobs?.jobs);
+  const { invalidateQuery } = useInvalidateQuery();
 
-  const { deleteJobById, isDeleting } = useJob();
+  const { deleteJobById, isDeleting, deleteManyJobsById } = useJob();
+
+  useEffect(() => {
+    if (totalPages !== jobs?.totalPages) {
+      setTotalPages(jobs?.totalPages);
+    }
+  }, [totalPages, jobs?.totalPages]);
 
   const deleteJobWarningHandler = (id) => {
     setOpenWarning((prev) => !prev);
@@ -109,14 +128,40 @@ const CreatorJobsTable = ({
   };
 
   const creatorHasJobs = jobs && jobs?.jobs?.length > 0;
+  const jobIds = Object.keys(rowSelection);
+  const noIds =
+    Object.keys(rowSelection).length === 0 ||
+    Object.values(rowSelection)?.every((val) => !val);
+
+  const handleDeleteBulkIds = async () => {
+    if (jobIds.length > 0) {
+      await deleteManyJobsById(jobIds);
+      onCreatorsPageChange(1, 5);
+      setPage(1);
+      invalidateQuery("creatorJobs");
+    }
+  };
 
   return (
     <>
+      <CheckboxButtonActions
+        selectedKeys={jobIds}
+        noKeys={noIds}
+        handleRemoveIds={handleDeleteBulkIds}
+      />
       {!editJob && (
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>
+                  <Checkbox
+                    size="small"
+                    checked={allRowsSelected}
+                    indeterminate={!allRowsSelected && someRowsSelected}
+                    onChange={handleParentCheckboxSelection}
+                  />
+                </TableCell>
                 {tableRows.map((item, i) => (
                   <TableCell key={i}>
                     <Typography
@@ -151,6 +196,9 @@ const CreatorJobsTable = ({
                   <TableCell>
                     <Skeleton width="100%" />
                   </TableCell>
+                  <TableCell>
+                    <Skeleton width="100%" />
+                  </TableCell>
                 </TableRow>
               ) : !isLoading && !creatorHasJobs ? (
                 <TableRow>
@@ -163,6 +211,14 @@ const CreatorJobsTable = ({
               ) : (
                 jobs?.jobs?.map((job, i) => (
                   <TableRow key={job?._id}>
+                    <TableCell>
+                      <Checkbox
+                        size="small"
+                        checked={!!rowSelection[job?._id]}
+                        onChange={() => handleSelectedRow(job?._id)}
+                        value={rowSelection[job?._id]}
+                      />
+                    </TableCell>
                     <TableCell>{job?.datePosted?.split("T")[0]}</TableCell>
                     <TableCell>
                       <ButtonGroup
@@ -170,7 +226,12 @@ const CreatorJobsTable = ({
                         variant="contained"
                         disableElevation
                       >
-                        <Button to={`/jobs/${job?._id}`} component={RouterLink}>
+                        <Button
+                          to={`/jobs/${job?._id}/${job?.title
+                            ?.replace(/\s+/g, "-")
+                            ?.toLowerCase()}`}
+                          component={RouterLink}
+                        >
                           <VisibilityTwoToneIcon />
                         </Button>
                         {/*auth.user._id === job._id to={`/jobs/${job?._id}/update`}*/}
@@ -202,11 +263,14 @@ const CreatorJobsTable = ({
                             be reversed.
                           </DialogContent>
                           <DialogActions>
-                            <Button onClick={() => deleteJobHandler(job?._id)}>
-                              Confirm Delete
-                            </Button>
                             <Button onClick={deleteJobWarningHandler}>
                               Cancel
+                            </Button>
+                            <Button
+                              color="error"
+                              onClick={() => deleteJobHandler(job?._id)}
+                            >
+                              Confirm Delete
                             </Button>
                           </DialogActions>
                         </Dialog>

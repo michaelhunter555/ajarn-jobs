@@ -55,6 +55,7 @@ const TeacherFilter = ({ onDataChange }) => {
           id="location"
           value={location}
           onChange={handleLocationChange}
+          MenuProps={{ disableScrollLock: true }}
         >
           <MenuItem value="">any</MenuItem>
           {thaiCities.map((item, i) => (
@@ -71,6 +72,7 @@ const TeacherFilter = ({ onDataChange }) => {
           id="salary"
           value={nationality}
           onChange={handleNationalityChange}
+          MenuProps={{ disableScrollLock: true }}
         >
           <MenuItem value="">any</MenuItem>
           {nationalities.map((nationality, i) => (
@@ -88,6 +90,7 @@ const TeacherFilter = ({ onDataChange }) => {
           id="salary"
           value={qualifications}
           onChange={handleQualificationsChange}
+          MenuProps={{ disableScrollLock: true }}
         >
           <MenuItem value="">any</MenuItem>
           {coreJobRequirements.map((qualification, i) => (

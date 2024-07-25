@@ -54,9 +54,13 @@ const JobAd = (props) => {
       ? sanitizedJobAd.substring(0, 120)
       : sanitizedJobAd;
 
-  //https://15e9de843a9e.ngrok.app/jobs/66865ea4a16c1e25dc580906
   return (
-    <Link to={`/jobs/${job?._id}`} style={{ textDecoration: "none" }}>
+    <Link
+      to={`/jobs/${job?._id}/${job?.title
+        ?.replace(/\s+/g, "-")
+        ?.toLowerCase()}`}
+      style={{ textDecoration: "none" }}
+    >
       <Card>
         <CardActionArea>
           <CardContent>

@@ -28,7 +28,8 @@ const styledRichCoverLetterText = {
   boxSizing: "border-box",
   wordBreak: "break-word",
   ".public-DraftStyleDefault-block": {
-    height: "2rem",
+    height: "auto",
+    marginBottom: "1rem",
   },
   ".rdw-editor-main": {
     minHeight: 300,
@@ -81,6 +82,7 @@ const CoverLetter = () => {
           }),
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
           },
         }
       );
@@ -103,7 +105,7 @@ const CoverLetter = () => {
     } catch (err) {
       console.log("an error has occured in coverLetter update:" + err);
     }
-  }, [user, updateUser, editorState]);
+  }, [user, updateUser, editorState, auth.token]);
 
   const handleEditorChange = (content) => {
     setEditorState(content);
@@ -212,12 +214,12 @@ const CoverLetter = () => {
                   {auth.user?.email}
                 </Typography>
               </Stack>
-              <Grid item sx={{ margin: "1rem auto" }}>
+              <Grid item>
                 <Typography color="text.secondary" variant="h5" component="h2">
                   Cover Letter:
                 </Typography>
 
-                <Box sx={{ ...styledRichCoverLetterText, maxWidth: "100%" }}>
+                <Box sx={{ ...styledRichCoverLetterText, width: "100%" }}>
                   <Editor
                     editorState={editorState}
                     onEditorStateChange={handleEditorChange}
@@ -229,14 +231,22 @@ const CoverLetter = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Stack direction="row">
+          <Stack
+            direction="row"
+            justifyContent={"flex-end"}
+            spacing={2}
+            sx={{ margin: "0.5rem" }}
+          >
+            <Button color="error" onClick={() => setIsEditing(false)}>
+              Cancel
+            </Button>
             <Button
+              variant="outlined"
               disabled={!formState.isValid}
               onClick={updateCoverLetterHandler}
             >
               {auth.user?.coverLetter ? "Update" : "Save"}
             </Button>
-            <Button onClick={() => setIsEditing(false)}>Cancel</Button>
           </Stack>
         </Grid>
       )}

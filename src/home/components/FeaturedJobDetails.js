@@ -14,7 +14,6 @@ import {
   Chip,
   Divider,
   Grid,
-  Modal,
   Paper,
   Skeleton,
   Stack,
@@ -23,16 +22,31 @@ import {
 import { styled } from "@mui/material/styles";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import SuccessModal from "../../shared/components/UIElements/SuccessModal";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useInvalidateQuery } from "../../shared/hooks/invalidate-query";
 import { useUser } from "../../shared/hooks/user-hook";
+import ApplyToFeaturedJobModal from "./ApplyToFeaturedJobModal";
 import JobRequirements from "./JobRequirements";
+
+const mergeRefs = (...refs) => {
+  return (node) => {
+    for (const ref of refs) {
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    }
+  };
+};
 
 const StyledBoxModal = styled(Paper)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "auto",
+  width: 450,
   height: "auto",
   bgcolor: "background.paper",
   border: "2px solid #fff",
@@ -116,7 +130,16 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   const [open, setOpen] = useState(false);
   const { applyToJob, error, clearError, isPostLoading } = useUser();
   const [outOfFocus, setOutOfFocus] = useState(false);
+  const boxRef = useRef(null);
   const focusRef = useRef(null);
+  const [success, setSuccess] = useState(false);
+  const { invalidateQuery } = useInvalidateQuery();
+
+  useEffect(() => {
+    if (boxRef.current) {
+      boxRef.current.scrollTop = 0;
+    }
+  }, [job?._id]);
 
   const BUFFER = 10;
 
@@ -163,9 +186,16 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
     };
   }, []);
 
-  const applyToJobHandler = () => {
-    applyToJob(auth.user?._id, job?._id);
-    setOpen(false);
+  const applyToJobHandler = async () => {
+    try {
+      await applyToJob(auth.user?._id, job?._id);
+      setOpen(false);
+      setSuccess(true);
+      await invalidateQuery("userApplications");
+    } catch (err) {
+      setOpen(false);
+      console.log(err);
+    }
   };
 
   const applyJobModalHandler = () => {
@@ -173,14 +203,21 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   };
 
   let userCantApply = true;
+  const userAppliedAlready = job?.applicants?.some(
+    (applicant) => applicant?.userId === auth?.user?._id
+  );
 
   if (
-    auth.user?.resume &&
-    auth.user?.coverLetter &&
+    auth.user?.resume?.length > 0 &&
+    auth.user?.coverLetter?.length > 10 &&
     auth.user?.userType !== "employer"
   ) {
     userCantApply = false;
   }
+
+  const incompleteTeacher = userCantApply && auth?.user?.userType === "teacher";
+  const employerClickedApply =
+    userCantApply && auth?.user?.userType === "employer";
 
   let outlinedButton;
 
@@ -189,97 +226,23 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
       <>
         <Button
           id="apply-button"
+          disabled={userAppliedAlready}
           endIcon={<ElectricBoltOutlinedIcon />}
           size={featured ? "small" : ""}
           sx={{ borderRadius: "15px" }}
           onClick={applyJobModalHandler}
           variant="contained"
         >
-          Apply
+          {userAppliedAlready ? "Applied!" : "Apply"}
         </Button>
-        <Modal
+        <ApplyToFeaturedJobModal
+          job={job}
           open={open}
           onClose={applyJobModalHandler}
-          disableScrollLock={true}
-        >
-          <StyledBoxModal>
-            <Grid
-              container
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid item xs={12} sm={9} md={6} sx={{ marginBottom: 5 }}>
-                <Typography>
-                  You're about to apply to {job?.creator?.company}'s job for{" "}
-                  {job?.title}.
-                </Typography>
-
-                <Typography color="text.secondary" variant="subtitle2">
-                  You currently{" "}
-                  {auth.user?.resume?.length > 0
-                    ? "have a resume"
-                    : "don't have a resume "}{" "}
-                  on file.{" "}
-                  {auth.user?.resume?.length > 0 ? "✅" : "Please add one.⛔"}
-                </Typography>
-                <Typography color="text.secondary" variant="subtitle2">
-                  You currently{" "}
-                  {auth.user?.coverLetter
-                    ? "have a cover letter"
-                    : "don't have a cover letter "}{" "}
-                  on file. {auth.user?.coverLetter ? "✅" : "Please add one.⛔"}
-                </Typography>
-
-                {auth.user?.userType === "employer" && (
-                  <Typography color="text.secondary" variant="subtitle2">
-                    You're registered as an {auth.user?.userType}.You can not
-                    apply to jobs. ⛔
-                  </Typography>
-                )}
-
-                {auth.user?.coverLetter && auth.user?.resume && (
-                  <Typography
-                    sx={{ marginTop: "1rem" }}
-                    color="text.secondary"
-                    variant="subtitle2"
-                  >
-                    You may apply to this job!
-                  </Typography>
-                )}
-              </Grid>
-
-              <Grid
-                item
-                xs={12}
-                sm={9}
-                md={6}
-                sx={{ display: "flex", flexDirection: "row" }}
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Stack spacing={2} direction="row">
-                  <Button
-                    size="small"
-                    onClick={applyToJobHandler}
-                    variant="contained"
-                    disabled={userCantApply}
-                  >
-                    Apply
-                  </Button>
-                  <Button
-                    size="small"
-                    onClick={() => setOpen(false)}
-                    color="error"
-                    variant="outlined"
-                  >
-                    close
-                  </Button>
-                </Stack>
-              </Grid>
-            </Grid>
-          </StyledBoxModal>
-        </Modal>
+          incompleteTeacher={incompleteTeacher}
+          employerClickedApply={employerClickedApply}
+          onApplyToJob={applyToJobHandler}
+        />
       </>
     );
   } else {
@@ -296,11 +259,14 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
       </Button>
     );
   }
-
   return (
     <>
+      <SuccessModal
+        success={success}
+        clearModalHandler={() => setSuccess(false)}
+      />
       <ErrorModal error={error} onClear={clearError} />
-      <Stack sx={{ minHeight: 35, backgrounColor: "red" }}>
+      <Stack sx={{ minHeight: 35 }}>
         <Stack
           spacing={2}
           direction="row"
@@ -336,7 +302,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
               </Stack>
               <Stack>
                 <Chip
-                  disabled={!auth?.isLoggedIn}
+                  disabled={!auth?.isLoggedIn || userAppliedAlready}
                   onClick={applyJobModalHandler}
                   variant="contained"
                   size="small"
@@ -352,8 +318,11 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
           )}
         </Stack>
       </Stack>
-      <StyledBoxContainer sx={{ maxHeight: height }} ref={focusRef}>
-        <Grid spacing={2} container direction="column">
+      <StyledBoxContainer
+        sx={{ maxHeight: height }}
+        ref={mergeRefs(focusRef, boxRef)}
+      >
+        <Grid spacing={2} container direction="column" sx={{ width: "100%" }}>
           {featured && (
             <Grid
               xs={12}
@@ -361,15 +330,82 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
               sx={{ display: "flex", flexDirection: "column" }}
             >
               {isPostLoading && (
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    borderRadius: "15px",
-                    marginTop: 10,
-                    height: 260,
-                    width: 692,
-                  }}
-                />
+                <Grid
+                  container
+                  direction="row"
+                  spacing={0}
+                  alignItems="center"
+                  sx={{ marginTop: 1, width: "100%" }}
+                >
+                  <Grid item>
+                    <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
+                      <Skeleton
+                        variant="circular"
+                        width={55}
+                        height={55}
+                        sx={{ border: "1px solid #e5e5e5" }}
+                      />
+                      <Stack
+                        direction="column"
+                        spacing={1}
+                        sx={{ flexGrow: 1 }}
+                      >
+                        <Skeleton variant="text" width="60%" height={28} />
+                        <Skeleton variant="text" width="40%" height={20} />
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          spacing={1}
+                          sx={{ flexGrow: 1 }}
+                        >
+                          <Skeleton
+                            variant="rectangular"
+                            width={60}
+                            height={20}
+                          />
+                          <Skeleton
+                            variant="rectangular"
+                            width={60}
+                            height={20}
+                          />
+                        </Stack>
+                      </Stack>
+                    </Stack>
+                  </Grid>
+                  <Divider
+                    variant="middle"
+                    light
+                    sx={{ margin: "0.5rem 0", width: "100%" }}
+                  />
+                  <Grid item sx={{ margin: "0 0 0 0.5rem", width: "100%" }}>
+                    <Stack
+                      direction="column"
+                      spacing={3}
+                      sx={{ width: "100%" }}
+                    >
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" width="30%" height={20} />
+                        <Skeleton variant="text" width="100%" height={20} />
+                      </Stack>
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" width="30%" height={20} />
+                        <Skeleton
+                          variant="rectangular"
+                          width="100%"
+                          height={50}
+                        />
+                      </Stack>
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" width="30%" height={20} />
+                        <Skeleton
+                          variant="rectangular"
+                          width="100%"
+                          height={50}
+                        />
+                      </Stack>
+                    </Stack>
+                  </Grid>
+                </Grid>
               )}
 
               {!isPostLoading && (
@@ -490,17 +526,6 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                   )}
                 </Grid>
               )}
-              {isPostLoading && (
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    borderRadius: "15px",
-                    marginTop: 4,
-                    height: 177,
-                    width: 692,
-                  }}
-                />
-              )}
 
               <Grid item>
                 {!isPostLoading && (
@@ -524,7 +549,9 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                       size="small"
                       variant="outlined"
                       component={RouterLink}
-                      to={`/jobs/${job?._id}`}
+                      to={`/jobs/${job?._id}/${job?.title
+                        ?.replace(/\s+/g, "-")
+                        ?.toLowerCase()}`}
                     >
                       View Job{" "}
                     </Button>
@@ -543,15 +570,82 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
               sx={{ display: "flex", flexDirection: "column" }}
             >
               {isPostLoading && (
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    borderRadius: "15px",
-                    marginTop: 10,
-                    height: 260,
-                    width: 692,
-                  }}
-                />
+                <Grid
+                  container
+                  direction="row"
+                  spacing={0}
+                  alignItems="center"
+                  sx={{ marginTop: 1, width: "100%" }}
+                >
+                  <Grid item>
+                    <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
+                      <Skeleton
+                        variant="circular"
+                        width={55}
+                        height={55}
+                        sx={{ border: "1px solid #e5e5e5" }}
+                      />
+                      <Stack
+                        direction="column"
+                        spacing={1}
+                        sx={{ flexGrow: 1 }}
+                      >
+                        <Skeleton variant="text" width="60%" height={28} />
+                        <Skeleton variant="text" width="40%" height={20} />
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          spacing={1}
+                          sx={{ flexGrow: 1 }}
+                        >
+                          <Skeleton
+                            variant="rectangular"
+                            width={60}
+                            height={20}
+                          />
+                          <Skeleton
+                            variant="rectangular"
+                            width={60}
+                            height={20}
+                          />
+                        </Stack>
+                      </Stack>
+                    </Stack>
+                  </Grid>
+                  <Divider
+                    variant="middle"
+                    light
+                    sx={{ margin: "0.5rem 0", width: "100%" }}
+                  />
+                  <Grid item sx={{ margin: "0 0 0 0.5rem", width: "100%" }}>
+                    <Stack
+                      direction="column"
+                      spacing={3}
+                      sx={{ width: "100%" }}
+                    >
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" width="30%" height={20} />
+                        <Skeleton variant="text" width="100%" height={20} />
+                      </Stack>
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" width="30%" height={20} />
+                        <Skeleton
+                          variant="rectangular"
+                          width="100%"
+                          height={50}
+                        />
+                      </Stack>
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" width="30%" height={20} />
+                        <Skeleton
+                          variant="rectangular"
+                          width="100%"
+                          height={50}
+                        />
+                      </Stack>
+                    </Stack>
+                  </Grid>
+                </Grid>
               )}
 
               {!isPostLoading && (
@@ -676,17 +770,6 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                   )}
                 </Grid>
               )}
-              {isPostLoading && (
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    borderRadius: "15px",
-                    marginTop: 4,
-                    height: 177,
-                    width: 692,
-                  }}
-                />
-              )}
 
               <Grid item>
                 {!isPostLoading && (
@@ -710,7 +793,9 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                       size="small"
                       variant="outlined"
                       component={RouterLink}
-                      to={`/jobs/${job?._id}`}
+                      to={`/jobs/${job?._id}/${job?.title
+                        ?.replace(/\s+/g, "-")
+                        ?.toLowerCase()}`}
                     >
                       View Job{" "}
                     </Button>

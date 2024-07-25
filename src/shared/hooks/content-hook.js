@@ -303,7 +303,7 @@ export const useComment = () => {
   const addComment = useCallback(
     async (userId, blogId, comment) => {
       try {
-        const response = await sendRequest(
+        await sendRequest(
           `${process.env.REACT_APP_BLOG}/add-comment/${userId}/post/${blogId}`,
           "POST",
           comment,

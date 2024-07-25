@@ -19,7 +19,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
-import KidsInClassImg from "../../../assets/mario-heller-hXLkFpvKRys-unsplash.jpg";
+import KidsInClassImg from "../../../assets/featured-card.svg";
 
 //import { useJob } from "../../../shared/hooks/jobs-hook";
 
@@ -185,7 +185,9 @@ const FeaturedCard = (props) => {
               <Button
                 variant="contained"
                 component={Link}
-                to={`/jobs/${randomJob?._id}`}
+                to={`/jobs/${randomJob?._id}/${randomJob?.title
+                  ?.replace(/\s+/g, "-")
+                  ?.toLowerCase()}`}
               >
                 View Job
               </Button>

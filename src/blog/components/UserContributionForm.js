@@ -12,10 +12,12 @@ import {
 
 import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
+import { useInvalidateQuery } from "../../shared/hooks/invalidate-query";
 import { useUser } from "../../shared/hooks/user-hook";
 
 const UserContributionForm = ({ onSubmit }) => {
   const auth = useContext(AuthContext);
+  const { invalidateQuery } = useInvalidateQuery();
   const [toggleForm, setToggleForm] = useState(false);
   const { incomeDirectoryPost, isPostLoading } = useUser();
   const [formState, inputHandler, setFormData] = useForm(
@@ -80,7 +82,16 @@ const UserContributionForm = ({ onSubmit }) => {
         true
       );
     }
-  }, [setFormData, formState]);
+  }, [
+    setFormData,
+    formState.inputs.jobTitle.value,
+    formState.inputs.monthlySalary.value,
+    formState.inputs.educationLevel.value,
+    formState.inputs.lifestyle.value,
+    formState.inputs.monthlySavings.value,
+    formState.inputs.perfectNumber.value,
+    formState.isValid,
+  ]);
 
   const submitIncomeDirectoryInfoHandler = async (event) => {
     event.preventDefault();
@@ -97,6 +108,7 @@ const UserContributionForm = ({ onSubmit }) => {
 
     try {
       incomeDirectoryPost(auth.user?._id, incomeDirectoryInputs);
+      invalidateQuery("infoDirectory");
       onSubmit();
     } catch (err) {
       console.log(err);
@@ -115,7 +127,7 @@ const UserContributionForm = ({ onSubmit }) => {
         color={toggleForm ? "error" : "info"}
         sx={{ marginBottom: 2 }}
         onClick={toggleFormHandler}
-        disabled={!auth.isLoggedIn || !!auth.user.incomeDirectory}
+        disabled={!auth.isLoggedIn}
       >
         {!toggleForm && auth.isLoggedIn
           ? "Make Contribution"
@@ -168,7 +180,7 @@ const UserContributionForm = ({ onSubmit }) => {
 
             <FormControl fullWidth>
               <FormLabel>
-                How much can save per month (with minimum effort)?
+                How much can you save per month (with minimum effort)?
               </FormLabel>
               <TextField
                 fullWidth

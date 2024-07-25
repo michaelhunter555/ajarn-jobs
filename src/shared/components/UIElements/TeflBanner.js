@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card, CardMedia, Chip, Grid, Typography } from "@mui/material";
+import { Card, CardMedia, Chip, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import RemoteLifestyleImg from "../../../assets/contribute.png";
@@ -80,21 +80,23 @@ const TeflBanner = () => {
           />
         </Grid>
         <Grid item xs={12} sm={8} sx={{ margin: "0 0.5rem", padding: 1 }}>
-          <Typography
-            component="div"
-            variant="body1"
-            sx={{ fontWeight: 550, color: "#464646" }}
-          >
-            Barvard TEFL - 120 Hour Course{" "}
+          <Stack direction="row" alignItems="start">
+            <Typography
+              component="div"
+              variant="body1"
+              sx={{ fontWeight: 550, color: "#464646" }}
+            >
+              Barvard TEFL - 120 Hour Course{" "}
+            </Typography>
             <Chip
               sx={{ fontSize: 10, borderRadius: "6px" }}
               label="Ad"
               size="small"
             />
-          </Typography>
+          </Stack>
 
           <Typography variant="subtitle2" color="text.secondary">
-            Get Qaulified, find work, earn more.
+            Get Qualified, find work, earn more.
           </Typography>
         </Grid>
       </StyledGlassTeflAd>

@@ -9,8 +9,15 @@ const RecruitJobSelectionList = ({ jobs, onSelectedJob }) => {
     setJobTitle(event.target.value);
   };
 
+  const noJobs = jobs?.length < 0;
+
   return (
     <Select value={jobTitle} onChange={handleJobSelection}>
+      {noJobs && (
+        <Typography sx={{ fontSize: 14 }}>
+          You have no jobs to offer.
+        </Typography>
+      )}
       {jobs?.map((job, i) => (
         <MenuItem
           onClick={() => onSelectedJob(job)}
@@ -18,7 +25,7 @@ const RecruitJobSelectionList = ({ jobs, onSelectedJob }) => {
           value={job?.title}
         >
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>
+            <Typography sx={{ fontSize: { xs: 12, md: 14 } }}>
               {job?.title} - {job?.location}
             </Typography>
             <Chip label={job?.salary} />

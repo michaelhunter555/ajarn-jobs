@@ -65,6 +65,77 @@ export const useUser = () => {
 
   //*~AUTH TOKEN REQUIRED FOR HOOKS BELOW~*//
 
+  //Remove RecruitsById
+  const removeRecruitsById = useCallback(
+    async (recruitIds) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/remove-recruits-by-id`,
+          "DELETE",
+          JSON.stringify({ recruitIds }),
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        );
+        if (!response.ok) {
+          throw new Error(response.message);
+        }
+
+        return response.message;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [sendRequest, auth.token]
+  );
+
+  //DELETE - remove application from job
+  const removeApplicationFromJob = useCallback(
+    async (applications, userId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/remove-application-from-job/${userId}`,
+          "DELETE",
+          JSON.stringify({ applications }),
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(response.message);
+        }
+        return response.message;
+      } catch (err) {}
+    },
+    [sendRequest, auth.token]
+  );
+
+  //DELETE - remove applicants
+  const removeApplicantsById = useCallback(
+    async (idsArray) => {
+      try {
+        const response = sendRequest(
+          `${process.env.REACT_APP_USERS}/remove-applicants/`,
+          "DELETE",
+          JSON.stringify({ userApplicants: idsArray }),
+          {
+            "Content-type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(response.message);
+        }
+        return response.message;
+      } catch (err) {}
+    },
+    [sendRequest, auth.token]
+  );
+
   //respond to recruitments (if any)
   //get user recruitments
   const getUserRecruitments = async (userId) => {
@@ -89,14 +160,36 @@ export const useUser = () => {
     }
   };
 
+  const getEmployerRecruits = async (creatorId, page, limit) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_USERS}/get-employer-recruits/${creatorId}?page=${page}&limit=${limit}`,
+        { headers: { Authorization: "Bearer " + auth.token } }
+      );
+      const data = await response.json();
+
+      if (!data.ok) {
+        throw new Error(data.message);
+      }
+      return {
+        recruitments: data.recruitmentOffers,
+        page: data.pageNum,
+        totalPages: data.totalPages,
+        totalOffers: data.totalRecruitmentOffers,
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   //POST response to user recruitment offers
   const recruitmentOfferResponse = useCallback(
-    async (userId, recruitmentResponse, jobId) => {
+    async (userId, recruitmentResponse, recruitmentId) => {
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_USERS}/recruitment-offfer-response/${userId}`,
           "POST",
-          JSON.stringify({ recruitmentResponse, jobId }),
+          JSON.stringify({ recruitmentResponse, recruitmentId }),
           {
             "Content-Type": "application/json",
             Authorization: "Bearer " + auth.token,
@@ -257,6 +350,10 @@ export const useUser = () => {
     incomeDirectoryPost,
     getUserRecruitments,
     recruitmentOfferResponse,
+    getEmployerRecruits,
+    removeApplicantsById,
+    removeRecruitsById,
+    removeApplicationFromJob,
     isLoading,
     isPostLoading,
     error,

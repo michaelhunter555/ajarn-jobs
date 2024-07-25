@@ -13,6 +13,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 import { AuthContext } from "../../shared/context/auth-context";
+import { useInvalidateQuery } from "../../shared/hooks/invalidate-query";
 import { useJob } from "../../shared/hooks/jobs-hook";
 import RecruitJobSelectionList from "./RecruitJobSelectionList";
 
@@ -21,6 +22,7 @@ const MessageTeacher = (props) => {
   const [message, setMessage] = useState(
     `Dear ${props.userName}, we saw your profile and feel you might be a fit for...`
   );
+  const { invalidateQuery } = useInvalidateQuery();
   const auth = useContext(AuthContext);
   const { getJobsByUserId, sendRecruitmentOffer, isPostLoading } = useJob();
 
@@ -54,8 +56,9 @@ const MessageTeacher = (props) => {
       company: selectedJob?.creator?.company,
       message: message,
     };
-    console.log("recruitment info", recruitmentInfo);
+    //console.log("recruitment info", recruitmentInfo);
     await sendRecruitmentOffer(recruitmentInfo);
+    invalidateQuery("teacherDetails");
     props.closeModal();
   };
 
@@ -106,23 +109,28 @@ const MessageTeacher = (props) => {
               </Typography>
             )}
           </div>
-          <Chip
-            label={"Cancel"}
-            color="error"
-            variant="outlined"
-            component={Button}
-            onClick={props.closeModal}
-            sx={{ marginTop: 1 }}
-          />
-          <Chip
-            label={isPostLoading ? "loading..." : "Send"}
-            component={Button}
-            clickable
-            disabled={messageIsTooLong || !selectedJob?._id || !canRecruit}
-            variant="contained"
-            sx={{ marginTop: 1 }}
-            onClick={handleRecruitmentAction}
-          />
+          {!jobsIsLoading && !isPostLoading && (
+            <>
+              {" "}
+              <Chip
+                label={"Cancel"}
+                color="error"
+                variant="outlined"
+                component={Button}
+                onClick={props.closeModal}
+                sx={{ marginTop: 1 }}
+              />
+              <Chip
+                label={isPostLoading ? "loading..." : "Send"}
+                component={Button}
+                clickable
+                disabled={messageIsTooLong || !selectedJob?._id || !canRecruit}
+                variant="contained"
+                sx={{ marginTop: 1 }}
+                onClick={handleRecruitmentAction}
+              />{" "}
+            </>
+          )}
         </Stack>
       </Box>
     </Box>

@@ -31,7 +31,7 @@ const FeaturedJobsLists = (props) => {
           <Typography
             component={Link}
             key={school?._id}
-            to={`/jobs/${school._id}`}
+            to={`/jobs/${school?._id}/${school?.title}`}
             color="text.secondary"
             variant="body2"
             sx={{ textDecoration: "none" }}

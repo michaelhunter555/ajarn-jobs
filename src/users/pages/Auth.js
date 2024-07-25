@@ -1,9 +1,6 @@
-import React, {
-  useContext,
-  useState,
-} from 'react';
+import React, { useContext, useState } from "react";
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -14,21 +11,21 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import Button from '../../shared/components/FormElements/Button';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
-import Input from '../../shared/components/FormElements/Input';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import Footer from '../../shared/components/UIElements/Footer';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useForm } from '../../shared/hooks/form-hook';
-import { useHttpClient } from '../../shared/hooks/http-hook';
+import Button from "../../shared/components/FormElements/Button";
+import ImageUpload from "../../shared/components/FormElements/ImageUpload";
+import Input from "../../shared/components/FormElements/Input";
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import Footer from "../../shared/components/UIElements/Footer";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useForm } from "../../shared/hooks/form-hook";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
-} from '../../shared/util/validators';
+} from "../../shared/util/validators";
 
 const PageContainer = styled("div")({
   minHeight: "90vh",
@@ -79,31 +76,33 @@ const Auth = () => {
     false
   );
 
-  // const userId = user?._id;
-  // useEffect(() => {
-  //   if (auth.isLoggedIn) {
-  //     navigate(`/users/${userId}`);
-  //   }
-  // }, [auth.isLoggedIn, userId, navigate]);
-
   //switch from login to sign-up
   const signUpOrLoginHandler = () => {
     if (!isLoginMode) {
+      // Switching from sign-up to login mode
       setFormData(
-        { ...formState.inputs, name: undefined, image: undefined },
-        formState.inputs.email.isValid && formState.inputs.password.isValid
+        {
+          ...formState.inputs,
+          name: undefined,
+          image: undefined,
+          userType: undefined,
+        },
+        formState?.inputs?.email?.isValid &&
+          formState?.inputs?.password?.isValid
       );
     } else {
+      // Switching from login to sign-up mode
       setFormData(
         {
           ...formState.inputs,
           name: { value: "", isValid: false },
           userType: { value: "teacher", isValid: true },
-        },
-        {
           image: { value: null, isValid: false },
         },
-        false
+        formState?.inputs?.email?.isValid &&
+          formState?.inputs?.password?.isValid &&
+          formState?.inputs?.name?.isValid &&
+          formState?.inputs?.image?.isValid
       );
     }
     setIsLoginMode((prev) => !prev);
@@ -140,6 +139,7 @@ const Auth = () => {
           buffetStartDate,
           buffetEndDate,
           userType,
+          theme,
         } = response;
 
         auth.login(
@@ -156,6 +156,7 @@ const Auth = () => {
             buffetStartDate: buffetStartDate,
             buffetEndDate: buffetEndDate,
             userType: userType,
+            theme: theme,
           },
           token
         );
@@ -188,6 +189,7 @@ const Auth = () => {
           coverLetter,
           incomeDirectory,
           userType,
+          theme,
         } = response;
 
         auth.login(
@@ -200,6 +202,7 @@ const Auth = () => {
             resume: resume,
             coverLetter: coverLetter,
             incomeDirectory: incomeDirectory,
+            theme: theme,
           },
           token
         );
@@ -213,12 +216,6 @@ const Auth = () => {
   const userTypeHandler = (event) => {
     inputHandler("userType", event.target.value, true);
   };
-
-  //UNCOMMENT FOR LOGGING FORM INPUTS
-  // useEffect(() => {
-  //   console.log("Auth is set:", auth.user);
-  //   console.log("Form State:", formState);
-  // }, [auth.user, formState]);
 
   return (
     <PageContainer>

@@ -27,6 +27,7 @@ import {
 } from "@mui/material";
 
 import { useContent } from "../../../shared/hooks/content-hook";
+import { useInvalidateQuery } from "../../../shared/hooks/invalidate-query";
 import UpdateUsersPostForm from "./UpdateUsersPostForm";
 
 const UsersContent = ({
@@ -41,6 +42,7 @@ const UsersContent = ({
   const [postToDelete, setPostToDelete] = useState(null);
   const [page, setPage] = useState(blogPosts?.page);
   const [totalPages, setTotalPages] = useState(1);
+  const { invalidateQuery } = useInvalidateQuery();
 
   const { deleteContentPost, isDeleting } = useContent();
 
@@ -59,6 +61,11 @@ const UsersContent = ({
     await deleteContentPost(postToDelete);
     setPostToDelete(null);
     setOpenDeleteWarning(false);
+    await invalidateQuery("userBlogPosts");
+    if (page !== 1) {
+      setPage(1);
+      onBlogPageChange(1, 5);
+    }
   };
 
   const cancelDeleteHandler = () => {
@@ -102,6 +109,7 @@ const UsersContent = ({
             </TableHead>
             <TableBody>
               {!isLoading &&
+                !isDeleting &&
                 blogPosts &&
                 blogPosts?.blogPost?.map((post, i) => (
                   <TableRow key={post?._id}>
@@ -144,13 +152,15 @@ const UsersContent = ({
                             reversed.
                           </DialogContent>
                           <DialogActions sx={{}}>
+                            <Button onClick={cancelDeleteHandler}>
+                              Cancel
+                            </Button>
                             <Button
+                              color="error"
+                              variant="contained"
                               onClick={() => confirmDeleteHandler(post?._id)}
                             >
                               Confirm Delete
-                            </Button>
-                            <Button onClick={cancelDeleteHandler}>
-                              Cancel
                             </Button>
                           </DialogActions>
                         </Dialog>

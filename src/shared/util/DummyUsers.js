@@ -1,9 +1,3 @@
-import John from '../../assets/cdc-GDokEYnOfnE-unsplash.jpg';
-import Janitha
-  from '../../assets/christina-wocintechchat-com-7JGjoSVfIDM-unsplash.jpg';
-import Bob from '../../assets/sebastien-bonneval-UIpFY1Umamw-unsplash.jpg';
-import MichaelHunter from '../../assets/thisIsMe.jpg';
-
 export const SINGLE_DUMMY_USERS = [
   {
     id: "u1",
@@ -55,7 +49,7 @@ export const DUMMY_USERS_LIST = [
   {
     id: "u1",
     name: "John Doe",
-    image: John,
+
     profession: "English Teacher",
     credits: 0,
     location: "Phuket",
@@ -94,7 +88,7 @@ export const DUMMY_USERS_LIST = [
   {
     id: "u2",
     name: "Michael Hunter",
-    image: MichaelHunter,
+
     profession: "unicornist",
     credits: 0,
     location: "Bangkok",
@@ -105,7 +99,8 @@ export const DUMMY_USERS_LIST = [
     highestCertification: "master's degree",
     about: "hello, my name is Michael and I love teaching and coding!",
     skill: ["student-centered", "PPP", "lesson planning"],
-    coverLetter: 'Dear Hiring Manager, I have been teaching English in Thailand for over 9 years now and I can say with certainty that I still learning new thing today. I find that that adaptability...',
+    coverLetter:
+      "Dear Hiring Manager, I have been teaching English in Thailand for over 9 years now and I can say with certainty that I still learning new thing today. I find that that adaptability...",
     resume: [
       {
         resumeId: 1,
@@ -122,7 +117,7 @@ export const DUMMY_USERS_LIST = [
   {
     id: "u3",
     name: "Bob McFarland",
-    image: Bob,
+
     profession: "English Teacher",
     credits: 1,
     location: "Bangkok",
@@ -160,7 +155,6 @@ export const DUMMY_USERS_LIST = [
   {
     id: "u4",
     name: "Janitha Willdubs",
-    image: Janitha,
     profession: "Art Teacher",
     credits: 0,
     location: "Chiang Mai",
