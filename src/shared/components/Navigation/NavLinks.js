@@ -1,14 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 
-import {
-  NavLink,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import LightModeIcon from '@mui/icons-material/LightMode';
-import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
-import ModeNightIcon from '@mui/icons-material/ModeNight';
+import LightModeIcon from "@mui/icons-material/LightMode";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import ModeNightIcon from "@mui/icons-material/ModeNight";
 import {
   Avatar,
   Box,
@@ -17,11 +13,11 @@ import {
   ListItemIcon,
   Tooltip,
   Typography,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import { AuthContext } from '../../context/auth-context';
-import { useThemeToggle } from '../../context/theme-context';
+import { AuthContext } from "../../context/auth-context";
+import { useThemeToggle } from "../../context/theme-context";
 
 const NavLinks = (props) => {
   const { isDarkMode, toggleTheme } = useThemeToggle();
@@ -222,6 +218,7 @@ const StyledNavLinks = styled("ul")`
   a:active {
     background: ${({ theme }) => theme.palette.background.paper};
     color: ${({ theme }) => theme.palette.text.secondary};
+    border-radius: 10px;
   }
 
   button {

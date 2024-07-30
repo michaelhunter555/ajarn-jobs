@@ -385,7 +385,7 @@ const NewJob = () => {
                     <Chip
                       color="info"
                       variant="outlined"
-                      label="Terms Of Service"
+                      label="Job Posting Guidelines"
                       clickable
                       onClick={handleTermsModal}
                     />

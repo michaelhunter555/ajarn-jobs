@@ -65,7 +65,11 @@ const MainNavigation = (props) => {
         <MainNavTitleStyle>
           <MainNavigationTitleStyle to="/">
             <CardMedia
-              sx={{ height: 45, width: 200, margin: "0 5rem" }}
+              sx={{
+                height: navIsScrolled ? 25 : 45,
+                width: navIsScrolled ? 125 : 200,
+                margin: "0 5rem",
+              }}
               component="img"
               image={isDarkMode ? ajarnJobsDark : ajarnJobsLight}
               alt="Ajarn-jobs"

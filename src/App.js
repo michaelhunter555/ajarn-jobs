@@ -38,6 +38,9 @@ const TermsAndConditions = lazy(() =>
 const AjarnJobsExperience = lazy(() =>
   import("./introduction/HowToUseOurSite")
 );
+
+const PageNotFound = lazy(() => import("./PageNotFound"));
+const Feedback = lazy(() => import("./Feedback/page/Feedback"));
 //Lazily loaded components
 const AlternateUserJobs = lazy(() => import("./jobs/pages/AlternateUserJobs"));
 const Teachers = lazy(() => import("./users/pages/Teachers"));
@@ -161,6 +164,9 @@ function App() {
           element={<AjarnJobsExperience />}
         />
         <Route path="/about-us" element={<About />} />
+        <Route path="/feedback" element={<Feedback />} />
+        <Route path="/404" element={<PageNotFound />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     );
   } else {
@@ -187,6 +193,9 @@ function App() {
           path="/how-to-use-ajarn-jobs"
           element={<AjarnJobsExperience />}
         />
+        <Route path="/feedback" element={<Feedback />} />
+        <Route path="/404" element={<PageNotFound />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     );
   }

@@ -60,7 +60,13 @@ const DummyPreviewComponent = () => {
     >
       <Grid container direction="column" spacing={1}>
         {/* Grid item 1 */}
-        <Stack direction="row" spacing={2}>
+        <Stack
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: { xs: "center" },
+          }}
+          spacing={2}
+        >
           <Grid item>
             <Avatar
               variant="circular"

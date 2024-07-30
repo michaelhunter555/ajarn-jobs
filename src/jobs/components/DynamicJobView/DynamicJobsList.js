@@ -49,16 +49,15 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                       isDarkMode && job?.jobType === "featured"
                         ? "#303f42"
                         : !isDarkMode && job?.jobType === "featured"
-                        ? "#f5f2e4"
+                        ? "#fffdea"
                         : "",
                     ...(isDarkMode && job?.jobType === "featured"
                       ? { boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)" }
                       : {}),
                     ...(!isDarkMode && job?.jobType === "featured"
-                      ? { boxShadow: "0 0 20px rgb(255 245 202)" }
+                      ? { boxShadow: "0 0 20px rgb(247 221 112 / 50%)" }
                       : {}),
                   }}
-                  component={Link}
                   key={job?._id}
                   onClick={() => selectJobHandler(job, i)}
                   selected={i === selectedJobIndex}
@@ -87,7 +86,7 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                               />
                             }
                             sx={{
-                              fontSize: 14,
+                              fontSize: { xs: 12, md: 14 },
                             }}
                             size="small"
                             label={job?.location}
@@ -95,7 +94,7 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                           <Typography
                             variant="subtitle2"
                             component="span"
-                            sx={{ fontSize: 14 }}
+                            sx={{ fontSize: { xs: 12, md: 14 } }}
                           >
                             {getTimeDifference(job?.datePosted)}
                           </Typography>
@@ -150,6 +149,18 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                             allowedTags: [],
                             allowedAttributes: {},
                           })?.substring(0, 40) + "..."}
+                          <Typography
+                            component="span"
+                            sx={{
+                              color: isDarkMode
+                                ? "#95e6ff"
+                                : (theme) => theme.palette.primary.main,
+                              fontSize: 12,
+                              textDecoration: "underline",
+                            }}
+                          >
+                            read more
+                          </Typography>
                         </Typography>
                       </Stack>
                     }
@@ -167,7 +178,7 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                         isDarkMode && job?.jobType === "featured"
                           ? "#303f42"
                           : !isDarkMode && job?.jobType === "featured"
-                          ? "#f5f2e4"
+                          ? "#fffdea"
                           : "",
                       ...(isDarkMode && job?.jobType === "featured"
                         ? { boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)" }
@@ -202,7 +213,7 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                                 />
                               }
                               sx={{
-                                fontSize: 14,
+                                fontSize: { xs: 11, md: 14 },
                               }}
                               size="small"
                               label={job?.location}
@@ -210,7 +221,7 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                             <Typography
                               variant="subtitle2"
                               component="span"
-                              sx={{ fontSize: 14 }}
+                              sx={{ fontSize: { xs: 11, md: 14 } }}
                             >
                               {getTimeDifference(job?.datePosted)}
                             </Typography>
@@ -265,6 +276,18 @@ const DynamicJobsList = ({ jobs, onSelectedJob, isLoading }) => {
                               allowedTags: [],
                               allowedAttributes: {},
                             })?.substring(0, 40) + "..."}
+                            <Typography
+                              component="span"
+                              sx={{
+                                color: isDarkMode
+                                  ? "#95e6ff"
+                                  : (theme) => theme.palette.primary.main,
+                                fontSize: 12,
+                                textDecoration: "underline",
+                              }}
+                            >
+                              read more
+                            </Typography>
                           </Typography>
                         </Stack>
                       }

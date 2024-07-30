@@ -45,11 +45,7 @@ const MainFeaturedJob = ({
   return (
     <>
       {/*featured post */}
-      <StyledPaper
-        sx={{
-          borderRadius: "5px",
-        }}
-      >
+      <StyledPaper elevation={2}>
         <Grid container>
           <Grid item xs={12} md={4.5} order={{ xs: 2, md: 1 }}>
             <Alert severity="info">
@@ -60,7 +56,7 @@ const MainFeaturedJob = ({
                   startIcon={<ViewListIcon />}
                   size="small"
                   component={Link}
-                  to="/modern-view/jobs"
+                  to="/jobs"
                   sx={{ fontSize: 10 }}
                 >
                   All Jobs

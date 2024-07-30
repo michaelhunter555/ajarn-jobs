@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
+  Alert,
   Box,
   Card,
+  Chip,
   CircularProgress,
   FormControl,
   FormControlLabel,
@@ -57,8 +59,11 @@ const StyledBoxForButtons = styled(Box)({
 });
 
 const Auth = () => {
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const queryValue = queryParams.get("name");
   const auth = useContext(AuthContext);
-  const { user } = auth;
+
   const navigate = useNavigate();
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isPostLoading, error, sendRequest, clearError } = useHttpClient();
@@ -75,6 +80,12 @@ const Auth = () => {
     },
     false
   );
+
+  useEffect(() => {
+    if (isLoginMode && queryValue === "signUp") {
+      setIsLoginMode(false);
+    }
+  }, [isLoginMode, queryValue]);
 
   //switch from login to sign-up
   const signUpOrLoginHandler = () => {
@@ -140,6 +151,7 @@ const Auth = () => {
           buffetEndDate,
           userType,
           theme,
+          name,
         } = response;
 
         auth.login(
@@ -157,6 +169,7 @@ const Auth = () => {
             buffetEndDate: buffetEndDate,
             userType: userType,
             theme: theme,
+            name,
           },
           token
         );
@@ -190,6 +203,7 @@ const Auth = () => {
           incomeDirectory,
           userType,
           theme,
+          name,
         } = response;
 
         auth.login(
@@ -203,6 +217,7 @@ const Auth = () => {
             coverLetter: coverLetter,
             incomeDirectory: incomeDirectory,
             theme: theme,
+            name: name,
           },
           token
         );
@@ -222,6 +237,24 @@ const Auth = () => {
       <Content>
         <ErrorModal onClear={clearError} error={error} />
         <StyledFormCard>
+          {auth?.isLoggedIn && (
+            <Alert
+              action={
+                <Chip
+                  color="warning"
+                  variant="outlined"
+                  label="Go back to Home"
+                  size="small"
+                  clickable
+                  component="button"
+                  onClick={() => navigate("/")}
+                />
+              }
+              severity="warning"
+            >
+              You are logged in already.
+            </Alert>
+          )}
           {isPostLoading && <CircularProgress />}
           <form onSubmit={authSubmitHandler}>
             {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} />}
@@ -230,7 +263,7 @@ const Auth = () => {
                 <FormLabel component="legend">User Type</FormLabel>
                 <RadioGroup
                   row
-                  value={formState.inputs.userType.value}
+                  value={formState?.inputs?.userType?.value}
                   onChange={userTypeHandler}
                 >
                   <FormControlLabel
@@ -285,7 +318,10 @@ const Auth = () => {
               onInput={inputHandler}
             />
             <StyledBoxForButtons>
-              <Button type="submit" disabled={!formState.isValid}>
+              <Button
+                type="submit"
+                disabled={!formState.isValid || auth?.isLoggedIn}
+              >
                 {isLoginMode ? "Login" : "Sign-up"}
               </Button>
             </StyledBoxForButtons>

@@ -62,7 +62,7 @@ const jobsImg =
 const contentImg =
   "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613144/8_rlkoly.svg";
 const incomeImg =
-  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613145/9_qy3wbj.svg";
+  "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721999250/baht-income_1_a7xuzd.svg";
 const teachersImg =
   "https://res.cloudinary.com/dtqbxfe7r/image/upload/v1721613143/5_aceftu.svg";
 const userDashImg =
@@ -118,7 +118,8 @@ const SiteFeatures = ({ isLoading }) => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "center",
             gap: "1rem",
             width: { xs: "100%", md: "60%" },
           }}
@@ -140,9 +141,6 @@ const SiteFeatures = ({ isLoading }) => {
                     component="img"
                     image={img}
                     alt={`${label}-card#-${i}`}
-                    sx={{
-                      backgroundColor: isDarkMode ? "#404040" : "transparent",
-                    }}
                   />
                   <Divider />
                   <CardContent

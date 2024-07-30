@@ -103,6 +103,7 @@ const TeacherPrivelages = () => {
             }}
             key={t.id}
             sx={{
+              cursor: "pointer",
               padding: 2,
               borderRadius: 10,
               maxWidth: { sx: "100%", md: 300 },
@@ -151,9 +152,13 @@ const TeacherPrivelages = () => {
         ))}
       </Stack>
       <Stack sx={{ padding: 2, borderRadius: 10, minHeight: 250 }}>
-        <Typography variant="h3">{actionText}</Typography>
+        <Typography variant="h3" color="text.secondary">
+          {actionText}
+        </Typography>
         <Divider />
-        <RenderExplanationText component={component} />
+        <Typography color="text.secondary" variant="subtitle2">
+          <RenderExplanationText component={component} />
+        </Typography>
       </Stack>
     </List>
   );

@@ -57,10 +57,10 @@ const DemoJobCard = ({ featured }) => {
         <Typography fontWeight={700} align="center">
           Cost: {featured ? "10 Credits" : "5 Credits"}
         </Typography>
-        <Typography color="text.secondary" gutterBottom>
+        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
           {featured
-            ? "featured posts are prominently displayed on the jobs page list. This makes your job post distinctive and eye-catching."
-            : "Basic job posts carry all necessary information regarding the employer and details regarding the job where users can visit the job page."}
+            ? "Featured posts are distinctively designed with the aim to make the listing stand out. Feature jobs are also found on the homepage, teacher dashboard, jobs page (& dynamic view)."
+            : "Basic job posts carry all necessary information regarding the employer and details regarding the job where users can visit the job page and get more information before applying."}
         </Typography>
       </Grid>
       <Grid item xs={12} md={9}>
@@ -70,10 +70,13 @@ const DemoJobCard = ({ featured }) => {
               isDarkMode && featured
                 ? "#303f42"
                 : !isDarkMode && featured
-                ? "#f5f2e4"
+                ? "#fffdea"
                 : "",
             ...(isDarkMode && featured
               ? { boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)" }
+              : {}),
+            ...(!isDarkMode && featured
+              ? { boxShadow: "0 0 20px rgb(247 221 112 / 50%)" }
               : {}),
           }}
         >
@@ -145,7 +148,10 @@ const DemoJobCard = ({ featured }) => {
                     />
                   </StyledChipDiv>
                   <Typography variant="body2" color="text.secondary">
-                    {truncatedJobDescrition}
+                    {featured
+                      ? job?.description?.substring(0, 175)
+                      : job?.description?.substring(0, 70)}
+                    ...read more
                   </Typography>
                 </Grid>
               </Grid>

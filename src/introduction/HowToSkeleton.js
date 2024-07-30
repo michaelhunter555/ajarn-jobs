@@ -24,7 +24,7 @@ const RenderSkeleton = () => (
       justifyContent="center"
       sx={{ width: { xs: "100%", md: "50%" } }}
     >
-      {[1, 2, 3].map((item) => (
+      {[1, 2].map((item) => (
         <Card key={item} sx={{ width: 200, height: 250 }}>
           <Skeleton variant="rectangular" width="100%" height={140} />
           <CardContent sx={{ display: "flex", justifyContent: "center" }}>

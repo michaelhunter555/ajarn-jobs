@@ -48,9 +48,17 @@ const UserBilling = ({ user }) => {
 
   //temp fix - add credits received to billing model
   const creditsReceived = {
+    700: 15,
     750: 5,
     1200: 15,
+    1300: 30,
     1800: 30,
+  };
+
+  const convertTime = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    return d.toLocaleString();
   };
 
   return (
@@ -59,7 +67,7 @@ const UserBilling = ({ user }) => {
         <TableHead>
           <TableRow>
             <TableCell>Package</TableCell>
-            <TableCell>Credits Amount</TableCell>
+            <TableCell>Credits/Amount</TableCell>
             <TableCell>Purchase Date</TableCell>
             <TableCell>Credits Received</TableCell>
           </TableRow>
@@ -71,7 +79,7 @@ const UserBilling = ({ user }) => {
               <TableRow key={userBilling?._id}>
                 <TableCell>{userBilling?.productName}</TableCell>
                 <TableCell>{userBilling?.purchaseAmount / 100}</TableCell>
-                <TableCell>{userBilling?.purchaseDate}</TableCell>
+                <TableCell>{convertTime(userBilling?.purchaseDate)}</TableCell>
                 <TableCell>
                   {creditsReceived[userBilling?.purchaseAmount / 100]
                     ? creditsReceived[userBilling?.purchaseAmount / 100]

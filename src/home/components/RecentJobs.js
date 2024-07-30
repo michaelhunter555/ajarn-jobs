@@ -3,13 +3,13 @@ import React from "react";
 import { MdOutlineFiberNew } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-import { Divider, Paper } from "@mui/material";
+import { Divider, Paper, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { getTimeDifference } from "../../shared/util/getTimeDifference";
 import RecentJobItems from "./RecentJobItems";
 
-const StyledTitle = styled("h2")(({ theme }) => ({
+const StyledTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
@@ -60,7 +60,7 @@ const RecentJobs = (props) => {
 
   return (
     <>
-      <StyledTitle>
+      <StyledTitle color="text.secondary" variant="h5">
         Recent Jobs
         <MdOutlineFiberNew style={{ color: "green" }} />
       </StyledTitle>

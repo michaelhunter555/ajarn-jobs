@@ -49,7 +49,10 @@ const Applications = ({ applications, isLoading, onApplicationPageChange }) => {
   }, [totalPages, applications?.totalPages]);
 
   useEffect(() => {
-    if (totalApplications !== applications?.totalApplications) {
+    if (
+      totalApplications !== applications?.totalApplications &&
+      applications?.totalApplications !== undefined
+    ) {
       setTotalApplications(applications?.totalApplications);
     }
   }, [totalApplications, applications?.totalApplications]);

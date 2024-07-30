@@ -86,6 +86,7 @@ const CustomModal = (props) => {
                 variant={props.buttonVariant}
                 component={Link}
                 to={`/users/${auth.user._id}`}
+                clickable
               />
 
               <Chip

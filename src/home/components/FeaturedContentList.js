@@ -2,13 +2,13 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { Divider, Paper } from "@mui/material";
+import { Divider, Paper, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import Sponsors from "./Sponsors";
 
 const StyledPaper = styled(Paper)({
-  maxHeight: 440,
+  maxHeight: 430,
   width: "100%",
   overflowY: "auto",
   pointerEvents: "auto",
@@ -45,7 +45,7 @@ const StyledLink = styled(Link)({
   textDecoration: "none",
 });
 
-const StyledTitle = styled("h2")(({ theme }) => ({
+const StyledTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
@@ -54,7 +54,9 @@ const FeaturedContentList = (props) => {
 
   return (
     <>
-      <StyledTitle>User Content</StyledTitle>
+      <StyledTitle variant="h5" color="text.secondary">
+        User Content
+      </StyledTitle>
       <Divider />
       <StyledPaper elevation={0}>
         {posts &&

@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, CircularProgress, Grid, Paper, Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import {
+  Box,
+  Chip,
+  CircularProgress,
+  Grid,
+  Pagination,
+  Paper,
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import BottomFeatured from "../../home/components/BottomFeatured";
 import MainFeaturedJob from "../../home/components/MainFeaturedJob";
+import MobileJobsAccordion from "../../home/components/MobileJobsAccordion";
 import Footer, {
   Content,
   PageContainer,
@@ -34,9 +48,14 @@ const StyledFilterStack = styled(Stack)(({ theme }) => ({
 }));
 
 const AlternateUserJobs = () => {
+  const theme = useTheme();
+  const isMobileOrTablet = useMediaQuery(
+    theme.breakpoints.down("sm") || theme.breakpoints.down("md")
+  );
+  const navigate = useNavigate();
   const [dynamicPage, setDynamicPage] = useState({
     page: 1,
-    limit: 12,
+    limit: isMobileOrTablet ? 6 : 12,
   });
 
   const [filter, setFilter] = useState({
@@ -123,12 +142,21 @@ const AlternateUserJobs = () => {
         <StyledGridContainer container id="dynaJobs">
           <Grid item xs={12} md={9}>
             <Stack spacing={2}>
+              <Stack alignItems="flex-start">
+                <Chip
+                  component="button"
+                  clickable
+                  onClick={() => navigate("/jobs")}
+                  label="Go Classic"
+                  icon={<ArrowBackIcon />}
+                />
+              </Stack>
               <Paper elevation={2} sx={{ padding: 2, borderRadius: 5 }}>
                 <StyledFilterStack>
                   <DynamicJobFilter onFilterChange={handleFilterChange} />
                 </StyledFilterStack>
               </Paper>
-              {isLoading && <CircularProgress />}
+              {!isMobileOrTablet && isLoading && <CircularProgress />}
               {/* {<DynamicJobSkeleton isLoading={isLoading} height={500} />} */}
 
               {jobs && !isLoading && (
@@ -137,19 +165,27 @@ const AlternateUserJobs = () => {
                   onPageChange={handleJobPageChange}
                   totalPages={totalPages}
                   fontSize={14}
-                  height={500}
+                  height={600}
                   featured={false}
                   jobs={jobs?.job}
                   filter={filter}
                 />
               )}
+              <MobileJobsAccordion jobs={jobs?.job} jobsIsLoading={isLoading} />
+              {isMobileOrTablet && (
+                <Pagination
+                  count={totalPages}
+                  page={dynamicPage.page}
+                  onChange={(event, page) => handleJobPageChange(page)}
+                />
+              )}
             </Stack>
             {/*isLoading && <LinearProgress />*/}
+            <Box sx={{ margin: "3rem auto" }}>
+              <BottomFeatured />
+            </Box>
           </Grid>
         </StyledGridContainer>
-        <Box sx={{ margin: "3rem auto" }}>
-          <BottomFeatured />
-        </Box>
       </Content>
       <Footer />
     </PageContainer>

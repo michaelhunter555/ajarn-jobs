@@ -16,11 +16,12 @@ const imageUrl =
 const AjarnHowToHelper = () => {
   return (
     <Paper
+      elevation={0}
       sx={{
-        borderRadius: 10,
+        background: "transparent",
+        borderRadius: 5,
         padding: 2,
         margin: "0 auto 1rem",
-        width: { xs: "100%", md: "60%" },
       }}
     >
       <Stack

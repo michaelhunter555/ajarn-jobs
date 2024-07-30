@@ -14,8 +14,12 @@ import {
   Chip,
   Grid,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useThemeToggle } from "../../context/theme-context";
 
 const StyledMediaCard = styled(CardMedia)({
   width: "75%",
@@ -34,7 +38,7 @@ const StyledChipDiv = styled(Typography)(({ theme }) => ({
   flexWrap: "wrap",
   gap: "5px",
   color: theme.palette.text.secondary,
-  marginBottom: "0.5rem",
+  marginBottom: "0",
 }));
 
 const StyledChip = styled(Chip)({
@@ -42,6 +46,9 @@ const StyledChip = styled(Chip)({
 });
 
 const JobAd = (props) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { isDarkMode } = useThemeToggle();
   const { job } = props;
 
   const sanitizedJobAd = sanitizeHtml(job?.description, {
@@ -49,10 +56,11 @@ const JobAd = (props) => {
     allowedAttributes: {},
   });
 
-  const truncatedJobDescrition =
-    sanitizedJobAd.length > 120
-      ? sanitizedJobAd.substring(0, 120)
-      : sanitizedJobAd;
+  const truncatedJobDescription = isMobile
+    ? ""
+    : sanitizedJobAd.length > 200
+    ? sanitizedJobAd.substring(0, 200) + "..."
+    : sanitizedJobAd;
 
   return (
     <Link
@@ -77,38 +85,54 @@ const JobAd = (props) => {
                 <Typography
                   gutterBottom
                   sx={{ color: "text.secondary" }}
-                  variant="h6"
+                  variant={isMobile ? "subtitle2" : "subtitle1"}
+                  fontWeight={isMobile ? "normal" : "bold"}
                   component="div"
                 >
                   {job?.creator?.company} -{" "}
-                  {job?.title?.length > 25
+                  {isMobile && job?.title?.length > 25
                     ? job?.title.substring(0, 40) + "..."
                     : job?.title}
                 </Typography>
 
                 <StyledChipDiv variant="body2" component="div">
                   <StyledChip
+                    sx={{ fontSize: isMobile ? 9 : 14 }}
                     variant="outlined"
                     label={job?.location}
                     size={"small"}
                     icon={<PlaceIcon style={{ color: "#47acbb" }} />}
                   />
                   <StyledChip
+                    sx={{ fontSize: isMobile ? 9 : 14 }}
                     variant="outlined"
                     label={job?.salary}
                     size={"small"}
                     icon={<PaymentsTwoToneIcon style={{ color: "#1e8d41" }} />}
                   />
-                  <StyledChip
-                    variant="outlined"
-                    label={job?.hours}
-                    size={"small"}
-                    icon={<PunchClockIcon style={{ color: "#514949" }} />}
-                  />
+                  {!isMobile && (
+                    <StyledChip
+                      sx={{ fontSize: isMobile ? 9 : 14 }}
+                      variant="outlined"
+                      label={job?.hours}
+                      size={"small"}
+                      icon={<PunchClockIcon style={{ color: "#514949" }} />}
+                    />
+                  )}
                 </StyledChipDiv>
-                <Typography variant="body2" color="text.secondary">
-                  {truncatedJobDescrition}
-                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      truncatedJobDescription +
+                      `<span style=${
+                        (isDarkMode ? "color:#95e6ff;" : "color:#128cb1;") +
+                        "font-size:12px; text-decoration: underline;"
+                      }>
+                    ${isMobile ? "" : "read more"}</span>`,
+                  }}
+                />
               </Grid>
             </Grid>
           </CardContent>

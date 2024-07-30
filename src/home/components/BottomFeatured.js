@@ -25,7 +25,7 @@ const StyledBoxContainer = styled(Box)(({ theme }) => ({
   display: "grid",
   alignItems: "center",
   justifyContent: "center",
-  gridTemplateColumns: " 35% 35%",
+  gridTemplateColumns: "50% 50%",
   gridAutoRows: "auto",
   gap: "3rem;",
   marginBottom: "2rem",
@@ -88,7 +88,7 @@ const BottomFeatured = ({ isLoading }) => {
               src={userContentImg}
             />
           </CardContent>
-          <StyledText>
+          <StyledText color="text.secondary" variant="subtitle2">
             A discussion for anyone who wants to ask a question, share advice or
             give their professional take on a topic.
           </StyledText>
@@ -118,7 +118,7 @@ const BottomFeatured = ({ isLoading }) => {
               src={userIncomeImg}
             />
           </CardContent>
-          <StyledText>
+          <StyledText color="text.secondary" variant="subtitle2">
             See what other teachers are making, where they are living and what
             their daily expenses are. Get a better idea...
           </StyledText>

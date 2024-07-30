@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-import { Link as RouterLink } from "react-router-dom";
-
-import { Button } from "@mui/material";
+import WorkIcon from "@mui/icons-material/Work";
+//import { Link } from 'react-router-dom';
+import {
+  Divider,
+  Grid,
+  Pagination,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 import AjarnHowToHelper from "../../introduction/HowToLead";
@@ -17,25 +25,25 @@ import BottomFeatured from "../components/BottomFeatured";
 import BottomFeaturedAdsList from "../components/BottomFeaturedAdsList";
 import FeaturedContentList from "../components/FeaturedContentList";
 import JobContent from "../components/JobContent";
+import MobileJobsAccordion from "../components/MobileJobsAccordion";
 import RecentJobs from "../components/RecentJobs";
 import SiteFeatures from "../components/SiteFeatures";
-import Tefl from "../components/Tefl";
-import UrgentJobs from "../components/UrgentJobs";
+import WelcomeCard from "../components/WelcomeCard";
 import {
   StyledGridContainer,
   StyledHomeFeaturedContent,
-  StyledHomeFeaturedContentList,
-  StyledHomeFeaturedJobs,
   StyledHomeFeaturedTop,
-  StyledTeflWrapper,
-  StyledUrgentJobsWrapper,
 } from "./HomeStyles";
 
 const Home = () => {
+  const theme = useTheme();
+  const isMobileOrTablet = useMediaQuery(
+    theme.breakpoints.down("sm") || theme.breakpoints.down("md")
+  );
   //featured jobs page, limit & total pages
   const [featuredPage, setFeaturedPage] = useState({
     page: 1,
-    limit: 10,
+    limit: isMobileOrTablet ? 6 : 10,
   });
   const [totalFeaturedPages, setTotalFeaturedPages] = useState(1);
 
@@ -73,7 +81,7 @@ const Home = () => {
   //GET Jobs for API Cache
   const getJobsData = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_JOBS}?isHome=true&page=5&limit=10`
+      `${process.env.REACT_APP_JOBS}?isHome=false&page=1&limit=5`
     );
 
     if (!response.ok) {
@@ -123,81 +131,122 @@ const Home = () => {
     <PageContainer>
       <Content>
         <StyledGridContainer>
-          {/* top-left column*/}
-          <StyledTeflWrapper>
-            {!homepageIsLoading && <Tefl />}
-            {homepageIsLoading && (
-              <JobAdSkeleton
-                sx={{
-                  height: "126px",
-                  borderRadius: "6px",
-                }}
-                num={1}
-                variant="rectangular"
-              />
-            )}
-          </StyledTeflWrapper>
-
+          {/* top-middle column */}
           <StyledHomeFeaturedTop>
-            {homepageIsLoading && (
-              <JobAdSkeleton
-                sx={{
-                  height: "126px",
-                  borderRadius: "6px",
-                }}
-                num={1}
-                variant="rectangular"
-              />
-            )}
-            {!homepageIsLoading && randomFeaturedJob && (
-              <JobAd key={randomFeaturedJob?._id} job={randomFeaturedJob} />
-            )}
+            <Stack sx={{ width: "100%" }}>
+              {homepageIsLoading && (
+                <Grid
+                  container
+                  sx={{
+                    flexDirection: { xs: "column", md: "row" },
+                    justifyContent: { md: "center" },
+                  }}
+                  spacing={2}
+                >
+                  <Grid item xs={12} md={2}>
+                    <JobAdSkeleton
+                      sx={{
+                        fontSize: 11,
+                        width: "100%",
+                        borderRadius: "6px",
+                      }}
+                      num={1}
+                      variant="text"
+                    />
+                    <JobAdSkeleton
+                      sx={{
+                        fontSize: 11,
+                        width: "80%",
+                        borderRadius: "6px",
+                      }}
+                      num={1}
+                      variant="text"
+                    />
+                    <JobAdSkeleton
+                      sx={{
+                        fontSize: 11,
+                        width: "70%",
+                        borderRadius: "6px",
+                      }}
+                      num={1}
+                      variant="text"
+                    />
+                  </Grid>
+                  <Divider
+                    orientation="vertical"
+                    flexItem
+                    sx={{ margin: "0.5rem" }}
+                  />
+                  <Grid item xs={12} md={9}>
+                    <JobAdSkeleton
+                      sx={{
+                        height: "5.5rem",
 
-            {/* top-middle column */}
+                        borderRadius: "6px",
+                      }}
+                      num={1}
+                      variant="rectangular"
+                    />
+                  </Grid>
+                </Grid>
+              )}
+            </Stack>
+            {!homepageIsLoading && randomFeaturedJob && (
+              <Grid
+                container
+                sx={{
+                  flexDirection: { xs: "column", md: "row" },
+                  justifyContent: { md: "center" },
+                }}
+                spacing={2}
+              >
+                <Grid item xs={12} md={2}>
+                  <Typography
+                    color="text.secondary"
+                    component="h2"
+                    variant="h6"
+                  >
+                    Find Teaching Jobs
+                  </Typography>
+                  <Typography
+                    color="text.secondary"
+                    component="h3"
+                    variant="subtitle2"
+                  >
+                    Welcome to AjarnJobs.com a resource for finding teaching
+                    jobs in Thailand & Asia.
+                  </Typography>
+                </Grid>
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{ margin: "0.5rem" }}
+                />
+                <Grid item xs={12} md={9}>
+                  <JobAd key={randomFeaturedJob?._id} job={randomFeaturedJob} />
+                </Grid>
+              </Grid>
+            )}
           </StyledHomeFeaturedTop>
 
-          {/* top-right column*/}
-          <StyledUrgentJobsWrapper>
-            {homepageIsLoading && (
-              <JobAdSkeleton
-                sx={{
-                  height: "130px",
-                  borderRadius: "6px",
-                }}
-                num={1}
-                variant="rectangular"
-              />
-            )}
-            {!homepageIsLoading && <UrgentJobs job={homeJobs} />}
-          </StyledUrgentJobsWrapper>
-
-          {/*lower-left column */}
-          <StyledHomeFeaturedJobs>
-            {homepageIsLoading && (
-              <JobAdSkeleton
-                sx={{
-                  height: "95px",
-                }}
-                num={5}
-                variant="rectangular"
-              />
-            )}
-            {!homepageIsLoading && <RecentJobs homeJobs={homeJobs} />}
-
-            <Button component={RouterLink} to="/jobs">
-              View All Jobs
-            </Button>
-          </StyledHomeFeaturedJobs>
-
           {/* lower middle-column*/}
-          <StyledHomeFeaturedContent id="jobsTop">
-            {homepageIsLoading && (
+          <StyledHomeFeaturedContent
+            id="jobsTop"
+            sx={{
+              ...(!homepageIsLoading && {
+                boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
+              }),
+            }}
+          >
+            {/* only load for desktop */}
+            {homepageIsLoading && !isMobileOrTablet && (
               <JobAdSkeleton
                 num={1}
-                sx={{ height: 500, width: "100%" }}
+                sx={{ height: 500 }}
                 variant="rectangular"
               />
             )}
+
             {!homepageIsLoading && (
               <JobContent
                 page={featuredPage}
@@ -206,36 +255,92 @@ const Home = () => {
                 featuredJobs={featuredJobs?.jobs}
               />
             )}
-          </StyledHomeFeaturedContent>
 
-          {/* lower-right column*/}
-          <StyledHomeFeaturedContentList>
-            {homepageIsLoading && (
-              <JobAdSkeleton
-                sx={{
-                  height: "95px",
-                }}
-                num={5}
-                variant="rectangular"
+            <MobileJobsAccordion
+              jobs={featuredJobs?.jobs}
+              jobsIsLoading={homepageIsLoading}
+            />
+            {isMobileOrTablet && totalFeaturedPages > 1 && (
+              <Pagination
+                count={totalFeaturedPages}
+                page={featuredPage.page}
+                onChange={(event, page) => handleFeaturedPageChange(page)}
               />
             )}
-            {!homepageIsLoading && <FeaturedContentList posts={contentList} />}
-            <Button component={RouterLink} to="/content">
-              Make a post
-            </Button>
-          </StyledHomeFeaturedContentList>
+          </StyledHomeFeaturedContent>
+
+          <Divider sx={{ margin: "0.5rem auto", width: "95%" }} />
+          <div>
+            <SiteFeatures isLoading={homepageIsLoading} />
+          </div>
+
+          <Grid
+            container
+            sx={{
+              width: { xs: "100%", md: "100%" },
+              flexDirection: { xs: "column", md: "row" },
+              justifyContent: { md: "center" },
+              alignItems: { md: "stretch" },
+            }}
+            spacing={2}
+          >
+            <Grid item xs={12} md={3}>
+              {homepageIsLoading && (
+                <JobAdSkeleton
+                  sx={{
+                    height: "95px",
+                  }}
+                  num={5}
+                  variant="rectangular"
+                />
+              )}
+              {!homepageIsLoading && <RecentJobs homeJobs={homeJobs} />}
+            </Grid>
+            <Grid item xs={12} md={5}>
+              {homepageIsLoading && (
+                <JobAdSkeleton
+                  sx={{
+                    height: "95px",
+                  }}
+                  num={5}
+                  variant="rectangular"
+                />
+              )}
+              {!homepageIsLoading && (
+                <FeaturedContentList posts={contentList} />
+              )}
+            </Grid>
+            <Grid item xs={12} md={4}>
+              {homepageIsLoading && (
+                <JobAdSkeleton
+                  sx={{
+                    height: "95px",
+                    borderRadius: "6px",
+                  }}
+                  num={5}
+                  variant="rectangular"
+                />
+              )}
+
+              {!homepageIsLoading && <WelcomeCard />}
+            </Grid>
+          </Grid>
+
+          <div>
+            <Divider />
+            <AjarnHowToHelper />
+            <Divider />
+          </div>
+          <div>
+            <BottomFeatured isLoading={homepageIsLoading} />
+          </div>
+          <Divider flexItem />
         </StyledGridContainer>
         <div>
-          <SiteFeatures isLoading={homepageIsLoading} />
-        </div>
-        <div style={{ margin: "1rem auto" }}>
-          <AjarnHowToHelper />
-        </div>
-        <div>
-          <BottomFeatured isLoading={homepageIsLoading} />
-        </div>
-        <div>
-          <h2 style={{ textAlign: "center" }}>Jobs You may like:</h2>{" "}
+          <Typography align="center" variant="h6" color="text.secondary">
+            Jobs you may like <WorkIcon sx={{ fontSize: 14 }} />
+          </Typography>
+
           <BottomFeaturedAdsList
             isLoading={homepageIsLoading}
             footerJobs={homeJobs}

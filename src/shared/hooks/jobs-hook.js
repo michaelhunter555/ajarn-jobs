@@ -319,3 +319,38 @@ export const useJob = () => {
     clearError,
   };
 };
+
+export const useJobViolation = () => {
+  const auth = useContext(AuthContext);
+  const { isPostLoading, error, sendRequest, clearError } = useHttpClient();
+
+  const sendJobViolation = useCallback(
+    async (jobViolation) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_JOBS}/job-post-violation`,
+          "POST",
+          JSON.stringify({ jobViolation }),
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth?.token,
+          }
+        );
+        if (!response.ok) {
+          throw new Error(response.error);
+        }
+        return response.message;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [sendRequest, auth.token]
+  );
+
+  return {
+    isPostLoading,
+    sendJobViolation,
+    error,
+    clearError,
+  };
+};

@@ -3,7 +3,7 @@ import React from "react";
 import { Chip, Divider, Modal, Paper, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const BoxContent = styled(Paper)(({ theme }) => ({
+export const BoxContent = styled(Paper)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",

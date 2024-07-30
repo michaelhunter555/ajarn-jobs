@@ -3,14 +3,20 @@ import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 
-export const StyledPaper = styled(Paper)({
+export const StyledPaper = styled(Paper)(({ theme }) => ({
   position: "relative",
   height: "auto",
   objectFit: "contain",
   backgroundRepeat: "no-repeat",
   backgroundPosition: "center",
   verticalAlign: "bottom",
-});
+  [theme.breakpoints.down("md")]: {
+    display: "none",
+  },
+  [theme.breakpoints.down("sm")]: {
+    display: "none",
+  },
+}));
 
 export const StyledBoxContent = styled(Box)(({ theme }) => ({
   // display: "flex",

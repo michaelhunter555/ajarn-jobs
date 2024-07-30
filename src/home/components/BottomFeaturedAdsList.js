@@ -1,6 +1,5 @@
 import React from "react";
 
-import { RiAdvertisementLine } from "react-icons/ri";
 import { Link as RouterLink } from "react-router-dom";
 
 import { Link, List, ListItem } from "@mui/material";
@@ -10,13 +9,13 @@ import { JobAdSkeleton } from "../../shared/components/UIElements/LoadingSkeleto
 import BottomFeaturedAds from "./BottomFeaturedAds";
 
 const StyledList = styled(List)(({ theme }) => ({
-  display: "flex",
   flexDirection: "row",
+  display: "flex",
   justifyContent: "center",
-  marginBottom: "5em",
+  marginBottom: "2em",
   [theme.breakpoints.down("md")]: {
     flexDirection: "column",
-    mindWidth: "100%",
+    minWidth: "100%",
   },
   [theme.breakpoints.down("sm")]: {
     flexDirection: "column",
@@ -28,7 +27,6 @@ const BottomFeaturedAdsList = (props) => {
   const { footerJobs, isLoading } = props;
   return (
     <StyledList>
-      <RiAdvertisementLine style={{ color: "gray" }} size={20} />
       {isLoading &&
         Array.from(new Array(4)).map((_, i) => (
           <ListItem
@@ -54,7 +52,7 @@ const BottomFeaturedAdsList = (props) => {
           </ListItem>
         ))}
       {footerJobs &&
-        footerJobs?.slice(0, 4)?.map((job, i) => (
+        footerJobs?.slice(0, 5)?.map((job, i) => (
           <Link
             sx={{ textDecoration: "none" }}
             component={RouterLink}
@@ -63,7 +61,9 @@ const BottomFeaturedAdsList = (props) => {
               ?.replace(/\s+/g, "-")
               ?.toLowerCase()}`}
           >
-            <ListItem>
+            <ListItem
+              sx={{ display: "flex", alignItems: "stretch", height: "100%" }}
+            >
               <BottomFeaturedAds
                 image={`${job?.image}`}
                 id={job?._id}

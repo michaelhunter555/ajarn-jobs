@@ -4,6 +4,7 @@ import debounce from "lodash/debounce";
 import { Link as RouterLink } from "react-router-dom";
 
 import ElectricBoltOutlinedIcon from "@mui/icons-material/ElectricBoltOutlined";
+import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ForwardOutlinedIcon from "@mui/icons-material/ForwardOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
@@ -14,7 +15,6 @@ import {
   Chip,
   Divider,
   Grid,
-  Paper,
   Skeleton,
   Stack,
   Typography,
@@ -23,6 +23,7 @@ import { styled } from "@mui/material/styles";
 
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import SuccessModal from "../../shared/components/UIElements/SuccessModal";
+import ViolationModal from "../../shared/components/UIElements/ViolationModal";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useInvalidateQuery } from "../../shared/hooks/invalidate-query";
 import { useUser } from "../../shared/hooks/user-hook";
@@ -40,23 +41,6 @@ const mergeRefs = (...refs) => {
     }
   };
 };
-
-const StyledBoxModal = styled(Paper)(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 450,
-  height: "auto",
-  bgcolor: "background.paper",
-  border: "2px solid #fff",
-  borderRadius: "15px",
-  boxShadow: 24,
-  padding: 14,
-  [theme.breakpoints.down("sm")]: {
-    width: "90%",
-  },
-}));
 
 const StyledGridItemContent = styled(Grid)(({ theme, dynamic }) => ({
   margin: "0 0 0 0.5rem",
@@ -135,6 +119,8 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   const [success, setSuccess] = useState(false);
   const { invalidateQuery } = useInvalidateQuery();
 
+  const [openViolation, setOpenViolation] = useState(false);
+
   useEffect(() => {
     if (boxRef.current) {
       boxRef.current.scrollTop = 0;
@@ -192,6 +178,8 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
       setOpen(false);
       setSuccess(true);
       await invalidateQuery("userApplications");
+      await invalidateQuery("featuredJobs");
+      await invalidateQuery("alternateJobs");
     } catch (err) {
       setOpen(false);
       console.log(err);
@@ -259,6 +247,10 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
       </Button>
     );
   }
+
+  const handleViolationModal = () => {
+    setOpenViolation((prev) => !prev);
+  };
   return (
     <>
       <SuccessModal
@@ -266,6 +258,11 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
         clearModalHandler={() => setSuccess(false)}
       />
       <ErrorModal error={error} onClear={clearError} />
+      <ViolationModal
+        open={openViolation}
+        onClose={handleViolationModal}
+        jobId={job?._id}
+      />
       <Stack sx={{ minHeight: 35 }}>
         <Stack
           spacing={2}
@@ -480,7 +477,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                             About:
                           </Typography>
                           <Typography
-                            color="text.primary"
+                            color="text.secondary"
                             variant="subtitle2"
                             sx={{ fontSize: 14 }}
                           >
@@ -526,13 +523,14 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                   )}
                 </Grid>
               )}
-
+              <Divider sx={{ margin: "0.5rem auto", width: "100%" }} flexItem />
               <Grid item>
                 {!isPostLoading && (
                   <Box
                     sx={{
                       display: "flex",
                       flexDirection: "row",
+                      justifyContent: "space-between",
                       alignItems: "center",
                       width: "100%",
                       flexWrap: "wrap",
@@ -540,21 +538,43 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                       marginBottom: "1rem",
                     }}
                   >
-                    {job?.creator?.presence?.map((item, i) => (
-                      <Chip key={i} clickable label={item} variant="outlined" />
-                    ))}
-                    <Button
-                      sx={{ borderRadius: "17px" }}
-                      endIcon={<ForwardOutlinedIcon />}
-                      size="small"
-                      variant="outlined"
-                      component={RouterLink}
-                      to={`/jobs/${job?._id}/${job?.title
-                        ?.replace(/\s+/g, "-")
-                        ?.toLowerCase()}`}
-                    >
-                      View Job{" "}
-                    </Button>
+                    <Box sx={{ display: "flex", gap: "5px" }}>
+                      {job?.creator?.presence?.map((item, i) => (
+                        <Chip
+                          key={i}
+                          clickable
+                          label={item}
+                          variant="outlined"
+                        />
+                      ))}
+                      <Button
+                        sx={{ borderRadius: "17px" }}
+                        endIcon={<ForwardOutlinedIcon />}
+                        size="small"
+                        variant="outlined"
+                        component={RouterLink}
+                        to={`/jobs/${job?._id}/${job?.title
+                          ?.replace(/\s+/g, "-")
+                          ?.toLowerCase()}`}
+                      >
+                        View Job{" "}
+                      </Button>
+                    </Box>
+                    <Box>
+                      <Button
+                        onClick={handleViolationModal}
+                        endIcon={<EmojiFlagsIcon fontSize="small" />}
+                        sx={{
+                          fontSize: 9,
+                          color: "gray",
+                          "&:hover": {
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                      >
+                        report this ad
+                      </Button>
+                    </Box>
                   </Box>
                 )}
               </Grid>
@@ -728,9 +748,8 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                             About:
                           </Typography>
                           <Typography
-                            color="text.primary"
                             variant="subtitle2"
-                            sx={{ fontSize: 16 }}
+                            color="text.secondary"
                           >
                             {job?.creator?.about}
                           </Typography>
@@ -770,7 +789,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                   )}
                 </Grid>
               )}
-
+              <Divider sx={{ margin: "0.5rem auto", width: "100%" }} flexItem />
               <Grid item>
                 {!isPostLoading && (
                   <Box
@@ -778,27 +797,51 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
+                      justifyContent: "space-between",
                       width: "100%",
                       flexWrap: "wrap",
                       gap: "6px",
                       marginBottom: "1rem",
                     }}
                   >
-                    {job?.creator?.presence?.map((item, i) => (
-                      <Chip key={i} clickable label={item} variant="outlined" />
-                    ))}
-                    <Button
-                      sx={{ borderRadius: "17px" }}
-                      endIcon={<ForwardOutlinedIcon />}
-                      size="small"
-                      variant="outlined"
-                      component={RouterLink}
-                      to={`/jobs/${job?._id}/${job?.title
-                        ?.replace(/\s+/g, "-")
-                        ?.toLowerCase()}`}
-                    >
-                      View Job{" "}
-                    </Button>
+                    <Box sx={{ display: "flex", gap: "5px" }}>
+                      {job?.creator?.presence?.map((item, i) => (
+                        <Chip
+                          key={i}
+                          clickable
+                          label={item}
+                          variant="outlined"
+                        />
+                      ))}
+                      <Button
+                        sx={{ borderRadius: "17px" }}
+                        endIcon={<ForwardOutlinedIcon />}
+                        size="small"
+                        variant="outlined"
+                        component={RouterLink}
+                        to={`/jobs/${job?._id}/${job?.title
+                          ?.replace(/\s+/g, "-")
+                          ?.toLowerCase()}`}
+                      >
+                        View Job{" "}
+                      </Button>
+                    </Box>
+
+                    <Box>
+                      <Button
+                        onClick={handleViolationModal}
+                        endIcon={<EmojiFlagsIcon fontSize="small" />}
+                        sx={{
+                          fontSize: 9,
+                          color: "gray",
+                          "&:hover": {
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                      >
+                        report this ad
+                      </Button>
+                    </Box>
                   </Box>
                 )}
               </Grid>

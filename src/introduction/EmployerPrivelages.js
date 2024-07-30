@@ -105,6 +105,7 @@ const EmployerPrivelages = () => {
             }}
             key={t.id}
             sx={{
+              cursor: "pointer",
               padding: 2,
               borderRadius: 10,
               maxWidth: { sx: "100%", md: 300 },

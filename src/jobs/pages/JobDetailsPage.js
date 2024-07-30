@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -18,6 +18,7 @@ const JobDetailsPage = () => {
   const auth = useContext(AuthContext);
   const jobId = useParams().jid;
   const { error, clearError } = useJob();
+  const navigate = useNavigate();
   // useEffect(() => {
   //   getJobById(jobId);
   // });
@@ -42,6 +43,12 @@ const JobDetailsPage = () => {
   const userAppliedAlready = jobs?.applicants?.some(
     (applicant) => applicant?.userId?._id === auth?.user?._id
   );
+
+  useEffect(() => {
+    if (!isLoading && !jobs) {
+      navigate("/404");
+    }
+  }, [jobs, navigate, isLoading]);
 
   return (
     <PageContainer>

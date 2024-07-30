@@ -1,17 +1,18 @@
 import { styled } from "@mui/material/styles";
 
 export const StyledGridContainer = styled("div")(({ theme }) => ({
-  display: "grid",
   justifyContent: "center",
-  alignItems: "start",
-  gridTemplateColumns: "20% 60% 20%",
-  gridAutoRows: "auto",
-  margin: "0rem 0 2rem 0",
+  display: "flex",
+  flexDirection: "column",
+  margin: "1.5rem auto",
+  alignItems: "center",
+  width: "75%",
   gap: "15px",
 
   [theme.breakpoints.down("md")]: {
     // gridTemplateColumns: "1fr",
     // gridAutoColumns: "auto",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     gap: "15px",
@@ -19,6 +20,7 @@ export const StyledGridContainer = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     // gridTemplateColumns: "1fr",
     // gridAutoColumns: "auto",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     gap: "15px",
@@ -26,11 +28,7 @@ export const StyledGridContainer = styled("div")(({ theme }) => ({
 }));
 
 export const StyledHomeFeaturedTop = styled("div")(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gridAutoRows: "auto",
-  alignItems: "stretch",
-  gap: "5px",
+  width: "100%",
   [theme.breakpoints.down("md")]: {
     // gridColumn: 1,
     // gridRow: 1,
@@ -45,10 +43,11 @@ export const StyledHomeFeaturedTop = styled("div")(({ theme }) => ({
 
 export const StyledHomeFeaturedContent = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
-  boxShadow: "0 0 20px rgba(112, 180, 247, 0.5)",
   gridColumn: "2/3",
   borderRadius: "15px",
+  gap: "1rem",
   overflow: "auto",
+  width: "100%",
   [theme.breakpoints.down("md")]: {
     // gridColumn: 1,
     // gridRow: 2,

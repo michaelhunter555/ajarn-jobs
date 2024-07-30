@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { useLocation } from "react-router-dom";
+
 import {
   Card,
   CardContent,
@@ -37,6 +39,10 @@ const userTypes = [
 ];
 
 const AjarnJobsExperience = () => {
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const queryValue = queryParams.get("type");
+
   const [userType, setUserType] = useState("Teacher"); // || employer
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,6 +60,13 @@ const AjarnJobsExperience = () => {
       clearTimeout(timeout);
     };
   }, []);
+
+  useEffect(() => {
+    if (queryValue && queryValue === "employer") {
+      setSelectedIndex(1);
+      setUserType("Employer");
+    }
+  }, [queryValue]);
 
   return (
     <PageContainer>
@@ -165,8 +178,10 @@ const AjarnJobsExperience = () => {
                   You can also recruit teachers by activing a teacher buffet.
                 </Typography>
                 <Stack
-                  sx={{ flexDirection: { xs: "column", md: "row" } }}
-                  alignItems="start"
+                  sx={{
+                    flexDirection: { xs: "column", md: "row" },
+                    alignItems: { xs: "center", md: "start" },
+                  }}
                 >
                   <Stack sx={{ maxWidth: { xs: "100%", md: "40%" } }}>
                     <Typography variant="subtitle1" color="text.secondary">
