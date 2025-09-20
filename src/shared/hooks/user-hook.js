@@ -118,7 +118,7 @@ export const useUser = () => {
     async (idsArray) => {
       try {
         const response = sendRequest(
-          `${process.env.REACT_APP_USERS}/remove-applicants/`,
+          `${process.env.REACT_APP_USERS}/remove-applicants`,
           "DELETE",
           JSON.stringify({ userApplicants: idsArray }),
           {
@@ -336,6 +336,29 @@ export const useUser = () => {
     [auth.user, updateUser, sendRequest, auth.token]
   );
 
+    //DELETE - remove applicants
+    const deleteUserById = useCallback(
+      async (id) => {
+        try {
+          const response = sendRequest(
+            `${process.env.REACT_APP_USERS}/delete-user-by-id`,
+            "DELETE",
+            JSON.stringify({ userId: id }),
+            {
+              "Content-type": "application/json",
+              Authorization: "Bearer " + auth.token,
+            }
+          );
+  
+          if (!response.ok) {
+            throw new Error(response.message);
+          }
+          return response.message;
+        } catch (err) {}
+      },
+      [sendRequest, auth.token]
+    );
+
   return {
     users,
     getAllUsers,
@@ -354,6 +377,7 @@ export const useUser = () => {
     removeApplicantsById,
     removeRecruitsById,
     removeApplicationFromJob,
+    deleteUserById,
     isLoading,
     isPostLoading,
     error,

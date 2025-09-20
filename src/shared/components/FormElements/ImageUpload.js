@@ -5,8 +5,8 @@ import { Box, Button, FormHelperText, styled } from "@mui/material";
 import { AuthContext } from "../../context/auth-context";
 
 const StyledImageUpload = styled(Box)({
-  width: "13rem",
-  height: "13rem",
+  width: "5rem",
+  height: "5rem",
   border: "1px solid #ccc",
   borderRadius: "50%",
   display: "flex",
@@ -35,7 +35,7 @@ const ImageUpload = (props) => {
   const filePickerRef = useRef();
 
   const authHasImage =
-    user?.image !== "" && user?.image?.includes("cloudinary");
+    user?.image !== "" && user?.image?.includes("cloudinary") || user?.image?.includes("google");
 
   useEffect(() => {
     if (!file) {
@@ -103,7 +103,7 @@ const ImageUpload = (props) => {
           <StyledImageUpload>
             {filePreviewUrl && <img src={filePreviewUrl} alt="preview" />}
             {!filePreviewUrl && auth.isLoggedIn && authHasImage && (
-              <img src={`${auth.user?.image}`} alt="preview" />
+              <img src={`${auth.user?.image}`} alt="preview" width={100} height={100} />
             )}
             {!filePreviewUrl && !authHasImage && (
               <p>{props.text || "Please add an image"}</p>

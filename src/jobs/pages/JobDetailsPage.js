@@ -30,25 +30,29 @@ const JobDetailsPage = () => {
         throw new Error("There was an error with the request");
       }
       const data = await response.json();
-      return data.job;
+      return {
+        job: data.job,
+        otherJobs: data.otherJobs || [],
+        otherJobsCount: data.otherJobsCount || 0
+      };
     } catch (err) {
       console.log("Error in jobDetails:", err);
     }
   };
 
-  const { data: jobs, isLoading } = useQuery(["jobDetailsPage", jobId], () =>
+  const { data: jobData, isLoading } = useQuery(["jobDetailsPage", jobId], () =>
     getJobDetails(jobId)
   );
 
-  const userAppliedAlready = jobs?.applicants?.some(
+  const userAppliedAlready = jobData?.job?.applicants?.some(
     (applicant) => applicant?.userId?._id === auth?.user?._id
   );
 
   useEffect(() => {
-    if (!isLoading && !jobs) {
+    if (!isLoading && !jobData?.job) {
       navigate("/404");
     }
-  }, [jobs, navigate, isLoading]);
+  }, [jobData, navigate, isLoading]);
 
   return (
     <PageContainer>
@@ -57,7 +61,9 @@ const JobDetailsPage = () => {
         <JobDetails
           userAppliedAlready={userAppliedAlready}
           isLoading={isLoading}
-          job={jobs}
+          job={jobData?.job}
+          otherJobs={jobData?.otherJobs}
+          otherJobsCount={jobData?.otherJobsCount}
         />
       </Content>
       <Footer />

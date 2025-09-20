@@ -11,6 +11,7 @@ import { JobAbout } from "./JobAbout";
 import { JobData } from "./JobData";
 import { JobDescription } from "./JobDescription";
 import { JobInformation } from "./JobInformation";
+import OtherJobsFromEmployer from "./OtherJobsFromEmployer";
 
 const StyledBoxContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -47,7 +48,7 @@ const JobDetails = (props) => {
   const [success, setSuccess] = useState(false);
   const { invalidateQuery } = useInvalidateQuery();
   const { applyToJob, error, clearError, isPostLoading } = useUser();
-  const { job, isLoading, userAppliedAlready } = props;
+  const { job, isLoading, userAppliedAlready, otherJobs, otherJobsCount } = props;
 
   const applyToJobHandler = () => {
     applyToJob(auth.user?._id, job?._id)
@@ -131,7 +132,18 @@ const JobDetails = (props) => {
             {!isLoading && !isPostLoading && <JobDescription job={job} />}
           </Grid>
         </Grid>
+        
       </StyledBoxContainer>
+      <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+        {/* Other Jobs from Same Employer */}
+        {!isLoading && !isPostLoading && otherJobs && otherJobs.length > 0 && (
+          <OtherJobsFromEmployer 
+            otherJobs={otherJobs}
+            otherJobsCount={otherJobsCount}
+            currentJobId={job?._id}
+          />
+        )}
+      </Box>
     </>
   );
 };

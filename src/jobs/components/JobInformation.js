@@ -6,6 +6,8 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import {
   Avatar,
   Box,
+  Card,
+  CardContent,
   Chip,
   Divider,
   Grid,
@@ -30,7 +32,14 @@ const StyledGridContainer = styled(Grid)(({ theme }) => ({
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   height: 175,
   width: 175,
-  border: "1px solid #e5e5e5",
+  border: "3px solid",
+  borderColor: theme.palette.primary.main,
+  boxShadow: theme.shadows[4],
+  transition: "all 0.3s ease-in-out",
+  "&:hover": {
+    transform: "scale(1.05)",
+    boxShadow: theme.shadows[8],
+  },
   [theme.breakpoints.down("md")]: {
     height: 150,
     width: 150,
@@ -39,6 +48,57 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     height: 170,
     width: 170,
   },
+}));
+
+const ModernCard = styled(Card)(({ theme }) => ({
+  borderRadius: theme.spacing(3),
+  background: theme.palette.mode === "dark"
+    ? "rgba(255, 255, 255, 0.08)"
+    : "rgba(255, 255, 255, 0.15)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  border: theme.palette.mode === "dark"
+    ? "1px solid rgba(255, 255, 255, 0.2)"
+    : "1px solid rgba(255, 255, 255, 0.3)",
+  boxShadow: theme.palette.mode === "dark"
+    ? `
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.05)
+      `
+    : `
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1)
+      `,
+  position: "relative",
+  overflow: "hidden",
+  transition: "all 0.3s ease-in-out",
+  "&:hover": {
+    transform: "translateY(-4px)",
+    boxShadow: theme.palette.mode === "dark"
+      ? `
+          0 12px 40px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15)
+        `
+      : `
+          0 12px 40px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6)
+        `,
+  },
+}));
+
+const GradientCompanyChip = styled(Chip)(({ theme }) => ({
+  background: "linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)",
+  color: "white",
+  fontWeight: 600,
+  fontSize: "16px",
+  padding: theme.spacing(1),
+  "&:hover": {
+    background: "linear-gradient(45deg, #1976d2 30%, #2196f3 90%)",
+    transform: "scale(1.05)",
+  },
+  transition: "all 0.3s ease-in-out",
 }));
 
 const createJobInfo = (job) => {
@@ -50,9 +110,7 @@ const createJobInfo = (job) => {
           component: "h3",
 
           text: (
-            <Chip
-              color="primary"
-              sx={{ fontSize: 15 }}
+            <GradientCompanyChip
               label={job?.creator?.company}
             />
           ),
@@ -61,21 +119,21 @@ const createJobInfo = (job) => {
           variant: "subtitle1",
           component: "h3",
           note: `${job?.creator?.company} is located in ${job?.creator?.headquarters}, Thailand`,
-          icon: <LocationOnIcon color="primary" />,
+          icon: <LocationOnIcon />,
           text: job?.creator?.headquarters + ", Thailand",
         },
         {
           variant: "subtitle1",
           component: "h3",
           note: `${job?.creator?.company} current company size.`,
-          icon: <BusinessIcon color="primary" />,
+          icon: <BusinessIcon />,
           text: job?.creator?.companySize + " employees",
         },
         {
           variant: "subtitle1",
           component: "h3",
           note: `${job?.creator?.company} launched in ${job?.creator?.established}`,
-          icon: <VerifiedUserIcon color="primary" />,
+          icon: <VerifiedUserIcon />,
           text: "Established in " + job?.creator?.established,
         },
       ]
@@ -100,14 +158,8 @@ export const JobInformation = (props) => {
   const jobInformation = createJobInfo(job);
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        padding: { xs: 1, md: "5px 25px" },
-        borderRadius: "15px",
-        border: "1px solid #bdbdbd",
-      }}
-    >
+    <ModernCard>
+      <CardContent sx={{ p: 3 }}>
       <StyledGridContainer
         container
         direction="row"
@@ -118,14 +170,22 @@ export const JobInformation = (props) => {
         <Grid item>
           <Stack>
             <Typography
-              variant="subtitle1"
+              variant="h4"
               fontWeight={700}
               align="center"
-              component="h5"
-              color="text.secondary"
-              sx={{ fontSize: 20 }}
+              component="h2"
+              color="text.primary"
+              sx={{ 
+                fontSize: { xs: 24, md: 28 },
+                mb: 2,
+                //background: "linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)",
+                backgroundClip: "text",
+                // WebkitBackgroundClip: "text",
+                // WebkitTextFillColor: "transparent",
+                textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              }}
             >
-              {jobInformation[0]?.text}
+               {jobInformation[0]?.text}
             </Typography>
             <Stack
               sx={{
@@ -141,26 +201,33 @@ export const JobInformation = (props) => {
                 alt={`${job?.id}--${job?.creator?.company}`}
                 sx={{ border: "1px solid #bdbdbd" }}
               />
-              <Stack spacing={1} alignItems="start">
+              <Stack spacing={2} alignItems="start">
                 {jobInformation
                   ?.slice(1)
                   ?.map(({ variant, component, icon, text, note }, i) => (
-                    <Stack key={i} direction="row" alignItems="start">
+                    <Stack key={i} direction="row" alignItems="center" spacing={2}>
                       <Box>
                         <Tooltip title={note ? note : ""}>
-                          <Typography
-                            color="text.secondary"
-                            variant={variant}
-                            component={component}
-                            sx={{ cursor: "pointer" }}
-                          >
+                          <Box sx={{ 
+                            p: 1, 
+                            borderRadius: "50%", 
+                            backgroundColor: "primary.main",
+                            color: "white",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center"
+                          }}>
                             {icon && <>{icon}</>}
-                          </Typography>
+                          </Box>
                         </Tooltip>
                       </Box>
 
                       <Box>
-                        <Typography color="text.secondary" variant={variant}>
+                        <Typography 
+                          color="text.primary" 
+                          variant="body1"
+                          sx={{ fontWeight: 500 }}
+                        >
                           {text}
                         </Typography>
                       </Box>
@@ -171,7 +238,7 @@ export const JobInformation = (props) => {
           </Stack>
         </Grid>
 
-        <Divider flexItem sx={{ margin: "0.5rem 0", width: "100%" }} />
+        <Divider flexItem sx={{ margin: "1.5rem 0", width: "100%" }} />
 
         <Stack alignItems="center" sx={{ width: "100%" }}>
           {!isLoading && !isPostLoading && (
@@ -189,6 +256,7 @@ export const JobInformation = (props) => {
           )}
         </Stack>
       </StyledGridContainer>
-    </Paper>
+      </CardContent>
+    </ModernCard>
   );
 };

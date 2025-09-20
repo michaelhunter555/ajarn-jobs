@@ -21,8 +21,55 @@ const StyledProfileContainer = styled(Paper)(({ theme }) => ({
   flexDirection: "column",
   justifyContent: "flex-start",
   marginBottom: theme.spacing(5),
+  padding: theme.spacing(2),
+  borderRadius: theme.spacing(2.5),
+  background: theme.palette.mode === "dark"
+    ? "rgba(255, 255, 255, 0.08)"
+    : "rgba(255, 255, 255, 0.15)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  border: theme.palette.mode === "dark"
+    ? "1px solid rgba(255, 255, 255, 0.2)"
+    : "1px solid rgba(255, 255, 255, 0.3)",
+  boxShadow: theme.palette.mode === "dark"
+    ? `
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+        inset 0 0 20px 10px rgba(255, 255, 255, 0.02)
+      `
+    : `
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 0 20px 10px rgba(255, 255, 255, 0.1)
+      `,
+  position: "relative",
+  overflow: "hidden",
   [theme.breakpoints.down("sm")]: {
     marginBottom: theme.spacing(1),
+  },
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: "1px",
+    background: theme.palette.mode === "dark"
+      ? "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)"
+      : "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent)",
+  },
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "1px",
+    height: "100%",
+    background: theme.palette.mode === "dark"
+      ? "linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent, rgba(255, 255, 255, 0.1))"
+      : "linear-gradient(180deg, rgba(255, 255, 255, 0.8), transparent, rgba(255, 255, 255, 0.3))",
   },
 }));
 
@@ -32,12 +79,14 @@ const StyledBackgroundBox = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   alignItems: "center",
   width: "100%",
-  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(2, 2, 3),
+  borderRadius: theme.spacing(2),
+  background: "transparent",
 }));
 
 const StyledProfileAvatar = styled(Avatar)(({ theme }) => ({
-  width: theme.spacing(25),
-  height: theme.spacing(25),
+  width: theme.spacing(15),
+  height: theme.spacing(15),
   marginBottom: theme.spacing(2),
   marginTop: theme.spacing(2),
 }));
@@ -84,34 +133,105 @@ const ProfileInformation = ({ user }) => {
           </Typography>
         );
       case "skills":
-        return (
-          <Stack
-            direction="row"
-            spacing={1}
-            justifyContent="center"
-            sx={{ margin: "1rem" }}
+        return userHasSkill ? (
+          <Box sx={{ margin: "1.5rem" }}>
+            <Typography variant="h6" gutterBottom sx={{ textAlign: "center", mb: 2 }}>
+              Skills & Expertise
+            </Typography>
+            <Stack
+              direction="row"
+              spacing={1}
+              justifyContent="center"
+              sx={{ 
+                flexWrap: "wrap",
+                gap: 1,
+                justifyContent: "center"
+              }}
+            >
+              {skill?.split(",")?.map((item, i) => (
+                <Chip
+                  key={i}
+                  label={item.trim()}
+                  color="primary"
+                  variant="outlined"
+                  sx={{ 
+                    fontWeight: 500,
+                    "&:hover": {
+                      backgroundColor: "primary.main",
+                      color: "white"
+                    }
+                  }}
+                />
+              ))}
+            </Stack>
+          </Box>
+        ) : (
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            sx={{ margin: "1.5rem", textAlign: "center" }}
           >
-            {skill?.split(",")?.map((item, i) => (
-              <Chip
-                key={i}
-                label={item}
-                sx={{ color: "white", backgroundColor: "green" }}
-              />
-            ))}
-          </Stack>
+            No skills added yet. Visit settings to add your skills.
+          </Typography>
         );
       case "resume":
         return <CollapsibleTable teacherResume={resume} />;
       case "education":
-        return (
-          <Stack alignItems="center">
-            <Typography paragraph sx={{ margin: "1.5rem" }}>
-              You have a {highestCertification} from{" "}
-              {education?.slice(0, 1).toUpperCase() +
-                education?.slice(1).split(".")[0]}
-              .
+        return userHasEducation ? (
+          <Box sx={{ margin: "1.5rem" }}>
+            <Typography variant="h6" gutterBottom sx={{ textAlign: "center", mb: 2 }}>
+              Education & Certifications
             </Typography>
-          </Stack>
+            {highestCertification && (
+              <Typography 
+                variant="body1" 
+                sx={{ textAlign: "center", mb: 3, color: "text.secondary" }}
+              >
+                Highest Certification: <strong>{highestCertification}</strong>
+              </Typography>
+            )}
+            <Stack
+              direction="row"
+              spacing={1}
+              justifyContent="center"
+              sx={{ 
+                flexWrap: "wrap",
+                gap: 1,
+                justifyContent: "center"
+              }}
+            >
+              {education?.split(",")?.map((uni, i) => (
+                <Chip
+                  key={i}
+                  label={uni.trim()}
+                  color="secondary"
+                  variant="outlined"
+                  avatar={
+                    <Avatar
+                      alt={`${uni} logo`}
+                      src={`https://logo.clearbit.com/${uni?.trim().toLowerCase()}`}
+                      sx={{ width: 24, height: 24 }}
+                    />
+                  }
+                  sx={{ 
+                    fontWeight: 500,
+                    "&:hover": {
+                      backgroundColor: "secondary.main",
+                      color: "white"
+                    }
+                  }}
+                />
+              ))}
+            </Stack>
+          </Box>
+        ) : (
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            sx={{ margin: "1.5rem", textAlign: "center" }}
+          >
+            No education information added yet. Visit settings to add your education.
+          </Typography>
         );
       default:
         return <Typography paragraph>{about}</Typography>;
@@ -132,41 +252,73 @@ const ProfileInformation = ({ user }) => {
               <Typography variant="subtitle1">{location}</Typography>
             </Stack>
           </Stack>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {education &&
-              education?.split(",").map((uni, i) => (
-                <Chip
+          {education && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                flexWrap: "wrap",
+                gap: 1,
+                mb: 2
+              }}
+            >
+              {education.split(",").map((uni, i) => (
+                <Tooltip
                   key={i}
-                  sx={{ backgroundColor: "transparent" }}
-                  avatar={
-                    <Tooltip
-                      title={`Degree from ${uni?.trim()?.split(".")[0]}`}
-                      placement="top"
-                    >
-                      <Avatar
-                        alt={`${uni}--${name}`}
-                        src={`https://logo.clearbit.com/${uni
-                          ?.trim()
-                          .toLowerCase()}`}
-                      />
-                    </Tooltip>
-                  }
-                />
+                  title={`Degree from ${uni?.trim()?.split(".")[0]}`}
+                  placement="top"
+                >
+                  <Avatar
+                    alt={`${uni} logo`}
+                    src={`https://logo.clearbit.com/${uni?.trim().toLowerCase()}`}
+                    sx={{ 
+                      width: 40, 
+                      height: 40,
+                      border: "2px solid",
+                      borderColor: "primary.main",
+                      "&:hover": {
+                        transform: "scale(1.1)",
+                        transition: "transform 0.2s ease-in-out"
+                      }
+                    }}
+                  />
+                </Tooltip>
               ))}
-          </Box>
-          <Typography variant="body1">{WorkExperience}</Typography>
-          <Box sx={{ display: "flex", flexDirection: "row" }}>
-            {interests?.split(",").map((interest, i) => {
-              return <Chip key={i} label={interest} sx={{ margin: 0.5 }} />;
-            })}
-          </Box>
+            </Box>
+          )}
+          <Typography variant="body1" sx={{ mb: 2 }}>{WorkExperience}</Typography>
+          {interests && (
+            <Box sx={{ 
+              display: "flex", 
+              flexDirection: "row", 
+              flexWrap: "wrap",
+              gap: 0.5,
+              justifyContent: "center",
+              maxWidth: "80%"
+            }}>
+              {interests.split(",").map((interest, i) => {
+                return (
+                  <Chip 
+                    key={i} 
+                    label={interest.trim()} 
+                    size="small"
+                    color="info"
+                    variant="outlined"
+                    sx={{ 
+                      margin: 0.25,
+                      fontWeight: 500,
+                      "&:hover": {
+                        backgroundColor: "info.main",
+                        color: "white"
+                      }
+                    }} 
+                  />
+                );
+              })}
+            </Box>
+          )}
         </StyledBackgroundBox>
 
         <Divider flexItem sx={{ marginTop: "1rem" }} />

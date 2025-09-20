@@ -6,6 +6,9 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PaymentsTwoToneIcon from "@mui/icons-material/PaymentsTwoTone";
 import {
   Avatar,
+  Box,
+  Card,
+  CardContent,
   Chip,
   CircularProgress,
   Divider,
@@ -15,13 +18,45 @@ import {
   ListItemAvatar,
   ListItemText,
   Pagination,
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
 import TeflBanner from "../../shared/components/UIElements/TeflBanner";
 import UserContributionForm from "./UserContributionForm";
+
+// Styled Components
+const StyledCard = styled(Card)(({ theme }) => ({
+  borderRadius: theme.spacing(2),
+  boxShadow: theme.shadows[2],
+  transition: 'all 0.3s ease-in-out',
+  '&:hover': {
+    boxShadow: theme.shadows[4],
+    transform: 'translateY(-2px)'
+  }
+}));
+
+const IncomeCard = styled(Card)(({ theme }) => ({
+  borderRadius: theme.spacing(1.5),
+  marginBottom: theme.spacing(2),
+  border: `1px solid ${theme.palette.divider}`,
+  transition: 'all 0.2s ease-in-out',
+  '&:hover': {
+    borderColor: theme.palette.primary.main,
+    boxShadow: theme.shadows[2]
+  }
+}));
+
+const HeaderSection = styled(Box)(({ theme }) => ({
+  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+  color: theme.palette.primary.contrastText,
+  padding: theme.spacing(3),
+  borderRadius: theme.spacing(2),
+  marginBottom: theme.spacing(3)
+}));
 
 const UserContributions = () => {
   const [incomePage, setIncomePage] = useState({
@@ -79,128 +114,131 @@ const UserContributions = () => {
   };
 
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="center"
-      spacing={2}
-      sx={{ maxWidth: { xs: "100%", md: "90%" }, mb: "2rem" }}
-    >
-      <Grid item xs={12} sm={6}>
-        <Stack direction="column" spacing={2}>
-          <Typography variant="h4" color="text.primary">
-            {" "}
-            Welcome To The Income Directory
-          </Typography>
-          <Typography variant="subtitle2" color="text.secondary">
-            See what other teachers are earning and how they're living.
-          </Typography>
-          <Typography variant="subtitle2" color="text.secondary">
-            This is a user contributed section of our website and would advise
-            to do your own due dilligent research before settling on an salary
-            that is ideal for you.
-          </Typography>
-          <UserContributionForm onSubmit={getFreshData} />
-        </Stack>
-      </Grid>
+    <Box sx={{ maxWidth: { xs: "100%", lg: "1200px" }, mx: "auto", p: 2 }}>
+      {/* Header Section */}
+      <HeaderSection>
+        <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
+          Welcome To The Income Directory
+        </Typography>
+        <Typography variant="h6" sx={{ opacity: 0.9, mb: 2 }}>
+          See what other teachers are earning and how they're living.
+        </Typography>
+        <Typography variant="body1" sx={{ opacity: 0.8 }}>
+          This is a user-contributed section. Please do your own research before 
+          settling on a salary that's ideal for you.
+        </Typography>
+      </HeaderSection>
 
-      <Grid item xs={12} sm={6}>
-        <Stack>
-          <TeflBanner />
-          {isLoading && <CircularProgress />}
-          {!isLoading &&
-            userIncomeData &&
-            userIncomeData?.incomes?.map((val, i) => (
-              <List
-                key={val._id}
-                sx={{ width: "100%", bgcolor: "background.paper" }}
-              >
-                <ListItem alignItems="flex-start">
-                  <ListItemAvatar>
-                    <Avatar
-                      alt={val.jobTitle}
-                      src={`/static/images/avatar/${i + 1}.jpg`}
-                    />
-                  </ListItemAvatar>
+      <Grid container spacing={3}>
+        {/* Left Column - Form */}
+        <Grid item xs={12} md={5}>
+          <StyledCard>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                Share Your Experience
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Help other teachers by sharing your income and lifestyle details.
+              </Typography>
+              <UserContributionForm onSubmit={getFreshData} />
+            </CardContent>
+          </StyledCard>
+          
+          <Box sx={{ mt: 2 }}>
+            <TeflBanner />
+          </Box>
+        </Grid>
 
-                  <ListItemText
-                    primary={
-                      <Stack component="span" direction="column">
-                        <Stack
-                          component="span"
-                          direction="row"
-                          alignItems="center"
-                          spacing={1}
-                        >
-                          {val?.userId?.location && (
+        {/* Right Column - Income Listings */}
+        <Grid item xs={12} md={7}>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+              Recent Income Reports
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {userIncomeData?.totalIncomes || 0} total reports
+            </Typography>
+          </Box>
+
+          {isLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Stack spacing={2}>
+              {userIncomeData?.incomes?.map((income, i) => (
+                <IncomeCard key={income._id} component={Link} to={`/income-details/${income._id}`} sx={{ textDecoration: 'none' }}>
+                  <CardContent sx={{ p: 2 }}>
+                    <Stack direction="row" spacing={2} alignItems="flex-start">
+                      <Avatar
+                        alt={income.jobTitle}
+                        src={`/static/images/avatar/${i + 1}.jpg`}
+                        sx={{ width: 50, height: 50 }}
+                      />
+                      
+                      <Box sx={{ flex: 1 }}>
+                        <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
+                          {income?.userId?.location && (
                             <Chip
                               variant="outlined"
                               size="small"
-                              component="span"
-                              label={val?.userId?.location}
-                              icon={
-                                <LocationOnOutlinedIcon
-                                  style={{ color: "#47acbb" }}
-                                />
-                              }
+                              label={income.userId.location}
+                              icon={<LocationOnOutlinedIcon />}
+                              color="info"
                             />
                           )}
                           <Chip
                             variant="outlined"
                             size="small"
-                            component="span"
-                            label={`${val?.monthlySalary} p/m`}
-                            icon={
-                              <PaymentsTwoToneIcon
-                                style={{ color: "#1e8d41" }}
-                              />
-                            }
+                            label={`฿${income?.monthlySalary?.toLocaleString()}/month`}
+                            icon={<PaymentsTwoToneIcon />}
+                            color="success"
                           />
                         </Stack>
 
-                        <Typography component="span">
-                          {val?.jobTitle}
+                        <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                          {income.jobTitle}
                         </Typography>
-                      </Stack>
-                    }
-                    secondary={
-                      <>
-                        <Typography
-                          sx={{ display: "inline" }}
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          {val?.postDate?.split("T")[0]}
-                        </Typography>
-                        {" — " + val?.lifestyle?.substring(0, 40) + "..."}
-                      </>
-                    }
-                  />
-                  <Stack justifyContent="flex-end">
-                    <Chip
-                      label="Read Post"
-                      component={Link}
-                      clickable
-                      color="primary"
-                      to={`/income-details/${val?._id}`}
-                    />
-                  </Stack>
-                </ListItem>
 
-                {i - userIncomeData?.incomes?.length - 1 && (
-                  <Divider variant="inset" light />
-                )}
-              </List>
-            ))}
-        </Stack>
-        <Pagination
-          page={incomePage.page}
-          count={totalPages}
-          onChange={handleIncomePageChange}
-        />
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                          Posted {income.postDate?.split("T")[0]}
+                        </Typography>
+
+                        <Typography variant="body2" color="text.primary" sx={{ lineHeight: 1.4 }}>
+                          {income.lifestyle?.substring(0, 100)}
+                          {income.lifestyle?.length > 100 && "..."}
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ alignSelf: 'center' }}>
+                        <Chip
+                          label="Read Full Report"
+                          color="primary"
+                          variant="outlined"
+                          clickable
+                        />
+                      </Box>
+                    </Stack>
+                  </CardContent>
+                </IncomeCard>
+              ))}
+            </Stack>
+          )}
+
+          {userIncomeData?.incomes?.length > 0 && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+              <Pagination
+                page={incomePage.page}
+                count={totalPages}
+                onChange={handleIncomePageChange}
+                color="primary"
+                size="large"
+              />
+            </Box>
+          )}
+        </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 };
 

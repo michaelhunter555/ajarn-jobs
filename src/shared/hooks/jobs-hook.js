@@ -98,7 +98,7 @@ export const useJob = () => {
       }
       const data = await response.json();
 
-      return data.jobs;
+      return data.jobs || [];
     } catch (err) {
       console.log("There was an error getting the job ads - Msg: " + err);
     }

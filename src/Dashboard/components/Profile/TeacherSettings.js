@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
+  Box,
   Card,
   CardContent,
   CircularProgress,
@@ -18,6 +19,8 @@ import {
 } from "@mui/material";
 
 import ImageUpload from "../../../shared/components/FormElements/ImageUpload";
+import SkillsChipInput from "../../../shared/components/FormElements/SkillsChipInput";
+import ChipInput from "../../../shared/components/FormElements/ChipInput";
 import { useForm } from "../../../shared/hooks/form-hook";
 import {
   coreJobRequirements,
@@ -25,13 +28,18 @@ import {
   thaiCities,
   yearsOfExperience,
 } from "../../../shared/util/ThaiData";
+import { useUser } from "../../../shared/hooks/user-hook";
+import { AuthContext } from "../../../shared/context/auth-context";
 
 //const uniRegex = /^[a-zA-Z]+(\.[a-zA-Z]+)*\.(edu|ac\.uk|co\.uk|edu\.uk)$/;
 
 const TeacherSettings = (props) => {
+  const auth = useContext(AuthContext);
   const [isTeacher, setIsTeacher] = useState(props.isTeacher);
   const [isHidden, setIsHidden] = useState(props.isHidden);
   const user = props.user;
+  const { deleteUserById, isPostLoading, error, clearError } = useUser();
+  const navigate = useNavigate();
   const [formState, inputHandler] = useForm(
     {
       name: {
@@ -64,7 +72,7 @@ const TeacherSettings = (props) => {
       },
       education: {
         value: user.education,
-        isValid: false,
+        isValid: true,
       },
       highestCertification: {
         value: user.highestCertification,
@@ -79,24 +87,16 @@ const TeacherSettings = (props) => {
         isValid: true,
       },
     },
-    true
+    false
   );
 
   const updateProfileHandler = (event) => {
     event.preventDefault();
-    // const updatedUser = {
-    //   ...user,
-    //   name: formState.inputs.name.value,
-    //   nationality: formState.inputs.nationality.value,
-    //   location: formState.inputs.location.value,
-    //   about: formState.inputs.about.value,
-    //   skill: formState.inputs.skill.value,
-    //   interests: formState.inputs.interests.value,
-    //   education: formState.inputs.education.value,
-    //   highestCertification: formState.inputs.highestCertification.value,
-    //   workExperience: formState.inputs.workExperience.value,
-    //   image: formState.inputs.image.value,
-    // };
+    
+    // Check if form is valid (has changes)
+    if (!formState.isValid) {
+      return; // Don't make API call if no changes
+    }
 
     const formData = new FormData();
     formData.append("name", formState.inputs.name.value);
@@ -134,6 +134,17 @@ const TeacherSettings = (props) => {
 
   const emailIsValid = (email) => /^\S+@\S+\.\S+$/.test(email);
 
+  const handleDeleteAccount = async (userId) => {
+    try {
+     await deleteUserById(userId).then(() => {
+        auth.logout();
+        navigate("/");
+      })
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   return (
     <Card sx={{}}>
       {user?.userType === "teacher" && (
@@ -158,6 +169,12 @@ const TeacherSettings = (props) => {
             : "Your profile is public to schools, agencies & recruiters"}
         </Typography>
       )}
+      <Box sx={{ padding: "1rem" }}>
+      <Button color="error" variant="outlined" onClick={() =>  handleDeleteAccount(auth?.user?._id)}>
+        Delete Account
+      </Button>
+      </Box>
+
       <CardContent>
         <Typography variant="h4" sx={{ margin: "1rem auto" }}>
           Update your profile
@@ -263,24 +280,20 @@ const TeacherSettings = (props) => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <FormControl>
-              <TextField
-                multiline
-                fullWidth
-                helperText="Enter university domain only separated by commas (i.e. Harvard.edu, Liverpool.ac.uk, etc.)"
-                label="Add University Badges"
-                variant="outlined"
-                id="education"
-                defaultValue={formState.inputs.education.value}
-                onChange={(event) =>
-                  userArrayHandler(
-                    "education",
-                    event.target.value,
-                    event.target.value !== ""
-                  )
-                }
-              />
-            </FormControl>
+            <ChipInput
+              label="My Education / Certifications"
+              helperText="Enter university domains (e.g., Harvard.edu, Liverpool.ac.uk)"
+              value={formState.inputs.education.value}
+              onChange={(value) =>
+                userArrayHandler(
+                  "education",
+                  value,
+                  value !== ""
+                )
+              }
+              id="education"
+              multiline={true}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} md={5}>
@@ -288,18 +301,12 @@ const TeacherSettings = (props) => {
               <InputLabel htmlFor="my-input">Email address</InputLabel>
               <Input
                 value={formState?.inputs?.email?.value}
-                onChange={(event) => {
-                  inputHandler(
-                    "email",
-                    event.target.value,
-                    emailIsValid(event.target.value)
-                  );
-                }}
+                disabled
                 id="email"
                 aria-describedby="e-mail-address"
               />
               <FormHelperText id="e-mail-address">
-                Edit your email (*you may need to re-verfiy)
+                Email is managed by your authentication provider (Google/Firebase)
               </FormHelperText>
             </FormControl>
           </Grid>
@@ -330,40 +337,34 @@ const TeacherSettings = (props) => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
-              multiline
-              fullWidth
-              helperText="separate each skill by a comma."
+            <SkillsChipInput
               label="Skills"
-              variant="outlined"
-              id="skill"
-              defaultValue={formState.inputs.skill.value}
-              onChange={(event) =>
+              helperText="Type a skill and press Enter to add it"
+              value={formState.inputs.skill.value}
+              onChange={(value) =>
                 userArrayHandler(
                   "skill",
-                  event.target.value,
+                  value,
                   (array) => array.length > 0
                 )
               }
+              id="skill"
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
-              multiline
-              fullWidth
-              helperText="separate each interest by a comma."
-              label="Interest"
-              variant="outlined"
-              id="interest"
-              defaultValue={formState.inputs.interests.value}
-              onChange={(event) =>
+            <SkillsChipInput
+              label="Interests"
+              helperText="Type an interest and press Enter to add it"
+              value={formState.inputs.interests.value}
+              onChange={(value) =>
                 userArrayHandler(
                   "interests",
-                  event.target.value,
+                  value,
                   (array) => array.length > 0
                 )
               }
+              id="interests"
             />
           </Grid>
         </Grid>
@@ -390,6 +391,7 @@ const TeacherSettings = (props) => {
           {props.isPostLoading && <CircularProgress />}
           {!props.isLoading && (
             <Button
+            disabled={!formState.isValid}
               variant="outlined"
               onClick={updateProfileHandler}
               type="submit"

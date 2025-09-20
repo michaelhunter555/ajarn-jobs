@@ -11,6 +11,8 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
+  CardContent,
   Chip,
   Divider,
   FormHelperText,
@@ -67,7 +69,8 @@ const StyledBoxContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  width: "80%",
+  width: "90%",
+  maxWidth: "1200px",
   margin: "0 auto 3rem",
   [theme.breakpoints.down("md")]: {
     width: "100%",
@@ -102,6 +105,44 @@ const StyledStack = styled(Stack)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     flexWrap: "wrap",
     gap: "5px",
+  },
+}));
+
+const ModernCard = styled(Card)(({ theme }) => ({
+  borderRadius: theme.spacing(3),
+  background: theme.palette.mode === "dark"
+    ? "rgba(255, 255, 255, 0.08)"
+    : "rgba(255, 255, 255, 0.15)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  border: theme.palette.mode === "dark"
+    ? "1px solid rgba(255, 255, 255, 0.2)"
+    : "1px solid rgba(255, 255, 255, 0.3)",
+  boxShadow: theme.palette.mode === "dark"
+    ? `
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.05)
+      `
+    : `
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1)
+      `,
+  position: "relative",
+  overflow: "hidden",
+  transition: "all 0.3s ease-in-out",
+  "&:hover": {
+    transform: "translateY(-4px)",
+    boxShadow: theme.palette.mode === "dark"
+      ? `
+          0 12px 40px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15)
+        `
+      : `
+          0 12px 40px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.6)
+        `,
   },
 }));
 
@@ -147,21 +188,15 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
               />
             )}
             {!isLoading && (
-              <Paper
-                elevation={0}
-                sx={{
-                  borderRadius: "15px",
-                  padding: "1rem",
-                  border: " 1px solid #bdbdbd",
-                }}
-              >
+              <ModernCard>
+                <CardContent sx={{ p: 3 }}>
                 <StyledGridContainer container direction="row" spacing={1}>
                   {/**grid item 1 */}
                   <Grid item>
                     <Avatar
                       variant="circular"
                       src={`${teacher?.image}`}
-                      sx={{ height: 175, width: 175 }}
+                      sx={{ height: 100, width: 100 }}
                       alt={`${teacher?._id}--${teacher?.name}`}
                     />
                   </Grid>
@@ -219,43 +254,48 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                       </Box>
                     </Stack>
 
-                    <Stack direction="row" alignItems="center">
-                      <Box>
+                    <Stack direction="column" spacing={1}>
+                      <Stack direction="row" alignItems="center" spacing={1}>
                         <SchoolIcon size="inherit" sx={{ color: "#646464" }} />
-                      </Box>
-                      <Box sx={{ display: "flex", flexDirection: "row" }}>
                         <Typography
                           color="text.secondary"
                           variant="subtitle2"
                           component="div"
                         >
-                          Education: {teacher?.highestCertification}
+                          Education:
                         </Typography>
-                      </Box>
-                      <Box>
+                      </Stack>
+                      <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", gap: 0.5 }}>
+                        {teacher?.highestCertification && (
+                          <Chip
+                            label={teacher.highestCertification}
+                            size="small"
+                            color="primary"
+                            variant="outlined"
+                            sx={{ fontWeight: 500 }}
+                          />
+                        )}
                         {teacher?.education &&
                           teacher?.education?.split(",")?.map((uni, i) => (
                             <Chip
                               key={i}
-                              sx={{ backgroundColor: "transparent" }}
+                              label={uni?.trim()?.split(".")[0] || uni?.trim()}
+                              size="small"
+                              color="secondary"
+                              variant="outlined"
                               avatar={
-                                <Tooltip
-                                  title={`Degree from ${
-                                    uni?.trim()?.split(".")[0]
-                                  }`}
-                                  placement="top"
-                                >
-                                  <Avatar
-                                    alt={`${uni?.trim()}--${teacher?.name}`}
-                                    src={`https://logo.clearbit.com/${uni
-                                      ?.trim()
-                                      ?.toLowerCase()}`}
-                                  />
-                                </Tooltip>
+                                <Avatar
+                                  alt={`${uni?.trim()} logo`}
+                                  src={`https://logo.clearbit.com/${uni
+                                    ?.trim()
+                                    ?.toLowerCase()}`}
+                                  sx={{ width: 20, height: 20 }}
+                                />
                               }
+                              sx={{ fontWeight: 500 }}
                             />
                           ))}
-                      </Box>
+                      </Stack>
                     </Stack>
 
                     <Stack direction="row" alignItems="center">
@@ -281,26 +321,43 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                       color="text.secondary"
                       variant="subtitle2"
                       component="div"
+                      sx={{ mb: 1, fontWeight: 600 }}
                     >
                       Skills:
                     </Typography>
                     <StyledStack
-                      spacing={2}
+                      spacing={1}
                       direction="row"
-                      alignItems="center"
+                      alignItems="flex-start"
+                      sx={{ flexWrap: "wrap", rowGap: 0.5, columnGap: 0.5 }}
                     >
-                      {teacher?.skill?.split(",").map((skills, i) => (
-                        <Chip
-                          sx={{ margin: "0.3rem 0" }}
-                          clickable
-                          key={i}
-                          label={skills}
-                        />
-                      ))}
+                      {(teacher?.skill?.split(",") || [])
+                        .map((s) => s.trim())
+                        .filter((s) => !!s)
+                        .map((skills, i) => (
+                          <Chip
+                            sx={{ 
+                              margin: 0,
+                              fontWeight: 500,
+                              "&:hover": {
+                                backgroundColor: "primary.main",
+                                color: "white",
+                                transform: "scale(1.05)"
+                              },
+                              transition: "all 0.2s ease-in-out"
+                            }}
+                            size="small"
+                            color="primary"
+                            variant="outlined"
+                            clickable
+                            key={i}
+                            label={skills}
+                          />
+                        ))}
                     </StyledStack>
                   </Stack>
                 </StyledGridContainer>
-                <Divider flexItem sx={{ margin: "0.5rem 0" }} />
+                <Divider flexItem sx={{ margin: "1.5rem 0" }} />
                 <Stack
                   direction="column"
                   sx={{ width: "100%" }}
@@ -309,7 +366,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   <Button
                     onClick={openModalHandler}
                     disabled={recruitmentSentAlready || !isPaidUser}
-                    variant="outlined"
+                    variant="contained"
                     endIcon={
                       recruitmentSentAlready ? (
                         <CheckIcon color="success" />
@@ -317,14 +374,31 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                         <SendIcon />
                       )
                     }
-                    sx={{ borderRadius: "17px" }}
+                    sx={{ 
+                      borderRadius: "25px",
+                      px: 3,
+                      py: 1,
+                      fontWeight: 600,
+                      textTransform: "none",
+                      background: recruitmentSentAlready 
+                        ? "linear-gradient(45deg, #4caf50 30%, #66bb6a 90%)"
+                        : "linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)",
+                      "&:hover": {
+                        background: recruitmentSentAlready 
+                          ? "linear-gradient(45deg, #388e3c 30%, #4caf50 90%)"
+                          : "linear-gradient(45deg, #1976d2 30%, #2196f3 90%)",
+                        transform: "translateY(-2px)",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                      },
+                      transition: "all 0.3s ease-in-out"
+                    }}
                   >
                     {recruitmentSentAlready
-                      ? "Offer Sent"
-                      : `recruit ${teacher?.name}`}
+                      ? "✨ Offer Sent"
+                      : `🚀 Recruit ${teacher?.name}`}
                   </Button>
                   {recruitmentSentAlready && (
-                    <FormHelperText>
+                    <FormHelperText sx={{ mt: 1, textAlign: "center" }}>
                       Please wait for the user to reply.
                     </FormHelperText>
                   )}
@@ -343,7 +417,8 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                     </StyledBoxModal>
                   </Modal>
                 </Stack>
-              </Paper>
+                </CardContent>
+              </ModernCard>
             )}
 
             {isLoading && (
@@ -359,36 +434,44 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
             )}
             {!isLoading && (
               <Grid item>
-                <Paper
-                  sx={{
-                    padding: 2,
-                    borderRadius: "15px",
-                    border: " 1px solid #bdbdbd",
-                  }}
-                  elevation={0}
-                >
-                  <Typography variant="h6" component="h4">
-                    A little about {teacher?.name}:
-                  </Typography>
-                  <Typography variant="subtitle1" paragraph>
-                    {teacher?.about}
-                  </Typography>
-                  <Divider
-                    flexItem
-                    variant="left"
-                    sx={{ margin: "0 0 0.5rem 0" }}
-                  />
-                  <StyledStack direction="row" alignItems="center" spacing={1}>
-                    {teacher?.interests?.split(",").map((interest, i) => (
-                      <Chip
-                        clickable
-                        key={i}
-                        label={interest}
-                        variant="outlined"
-                      />
-                    ))}
-                  </StyledStack>
-                </Paper>
+                <ModernCard>
+                  <CardContent sx={{ p: 3 }}>
+                    <Typography variant="h6" component="h4" sx={{ mb: 2, fontWeight: 600 }}>
+                      💭 A little about {teacher?.name}:
+                    </Typography>
+                    <Typography variant="body1" paragraph sx={{ lineHeight: 1.6, mb: 2 }}>
+                      {teacher?.about}
+                    </Typography>
+                    <Divider sx={{ mb: 2 }} />
+                    <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, color: "text.secondary" }}>
+                      Interests:
+                    </Typography>
+                    <StyledStack direction="row" alignItems="center" spacing={1} sx={{ flexWrap: "wrap", gap: 0.5 }}>
+                      {(teacher?.interests?.split(",") || [])
+                        .map((s) => s.trim())
+                        .filter((s) => !!s)
+                        .map((interest, i) => (
+                          <Chip
+                            clickable
+                            key={i}
+                            size="small"
+                            label={interest}
+                            color="info"
+                            variant="outlined"
+                            sx={{ 
+                              fontWeight: 500,
+                              "&:hover": {
+                                backgroundColor: "info.main",
+                                color: "white",
+                                transform: "scale(1.05)"
+                              },
+                              transition: "all 0.2s ease-in-out"
+                            }}
+                          />
+                        ))}
+                    </StyledStack>
+                  </CardContent>
+                </ModernCard>
               </Grid>
             )}
           </Stack>
@@ -410,15 +493,8 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                 />
               )}
               {!isLoading && (
-                <Paper
-                  elevation={0}
-                  sx={{
-                    padding: "2rem",
-                    borderRadius: "17px",
-                    margin: "0rem auto",
-                    border: " 1px solid #bdbdbd",
-                  }}
-                >
+                <ModernCard>
+                  <CardContent sx={{ p: 3 }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -488,11 +564,18 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                       endIcon={<PostAddIcon />}
                       size="small"
                       onClick={handleReadMoreCoverLetter}
+                      sx={{ 
+                        mt: 2,
+                        borderRadius: "20px",
+                        textTransform: "none",
+                        fontWeight: 500
+                      }}
                     >
-                      {!readMore.open ? "Read More" : "Read Less"}
+                      {!readMore.open ? "📖 Read More" : "📖 Read Less"}
                     </Button>
                   )}
-                </Paper>
+                  </CardContent>
+                </ModernCard>
               )}
             </Grid>
 

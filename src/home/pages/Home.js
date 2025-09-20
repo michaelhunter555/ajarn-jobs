@@ -204,7 +204,8 @@ const Home = () => {
                   <Typography
                     color="text.secondary"
                     component="h2"
-                    variant="h6"
+                    variant="subtitle1"
+                    fontWeight={600}
                   >
                     Find Teaching Jobs
                   </Typography>
@@ -212,6 +213,7 @@ const Home = () => {
                     color="text.secondary"
                     component="h3"
                     variant="subtitle2"
+                    sx={{ fontSize: 12 }}
                   >
                     Welcome to AjarnJobs.com a resource for finding teaching
                     jobs in Thailand & Asia.

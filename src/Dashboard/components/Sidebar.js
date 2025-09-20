@@ -37,7 +37,7 @@ const VerticalSideBar = styled("div")(({ theme }) => ({
   borderRadius: 10,
   maxWidth: "100%",
   background: theme.palette.background.paper,
-  border: "1px solid #bdbdbd",
+  border: "1px solid rgb(88, 88, 88)",
   [theme.breakpoints.down("md")]: {
     display: "none",
   },

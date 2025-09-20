@@ -619,7 +619,7 @@ const TeacherDashboard = () => {
                 gap: "5px",
               }}
             >
-              <Grid item xs={12} sm={6}>
+             {jobAd[0] && <Grid item xs={12}>
                 {jobAdIsLoading && (
                   <Skeleton
                     sx={{
@@ -631,7 +631,7 @@ const TeacherDashboard = () => {
                     height={114}
                   />
                 )}
-                {!jobAdIsLoading && (
+                {!jobAdIsLoading &&  (
                   <UserProfileJobAd
                     id={jobAd[0]?._id}
                     logo={`${jobAd[0]?.image}`}
@@ -642,9 +642,9 @@ const TeacherDashboard = () => {
                     })}
                   />
                 )}
-              </Grid>
+              </Grid>}
 
-              <Grid item xs={12} sm={6}>
+              {jobAd[1] && <Grid item xs={12}>
                 {jobAdIsLoading && (
                   <Skeleton
                     sx={{
@@ -656,7 +656,7 @@ const TeacherDashboard = () => {
                     height={114}
                   />
                 )}
-                {!jobAdIsLoading && (
+                {!jobAdIsLoading && jobAd[1] && (
                   <UserProfileJobAd
                     id={jobAd[1]?._id}
                     logo={`${jobAd[1]?.image}`}
@@ -667,7 +667,7 @@ const TeacherDashboard = () => {
                     })}
                   />
                 )}
-              </Grid>
+              </Grid>}
             </JobAdGridContainer>
           )}
 

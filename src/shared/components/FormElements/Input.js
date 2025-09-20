@@ -120,6 +120,9 @@ const Input = (props) => {
         onChange={changeHandler}
         onBlur={touchHandler}
         value={inputState.value}
+        InputProps={{
+          endAdornment: props.endAdornment
+        }}
       />
     ) : props.element === "textarea" ? (
       <TextField

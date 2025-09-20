@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { LinearProgress } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
@@ -18,6 +19,9 @@ import JobDetailsPage from "./jobs/pages/JobDetailsPage";
 import UserJobs from "./jobs/pages/UserJobs";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
+import OnboardingFlow from "./shared/components/Onboarding/OnboardingFlow";
+import EmployerOnboarding from "./users/components/EmployerOnboarding";
+import EmailVerification from "./users/pages/EmailVerification";
 import {
   ADD_CREDITS,
   LOGIN,
@@ -38,6 +42,7 @@ const TermsAndConditions = lazy(() =>
 const AjarnJobsExperience = lazy(() =>
   import("./introduction/HowToUseOurSite")
 );
+const WorkWithUs = lazy(() => import("./introduction/WorkWithUs"));
 
 const PageNotFound = lazy(() => import("./PageNotFound"));
 const Feedback = lazy(() => import("./Feedback/page/Feedback"));
@@ -157,12 +162,14 @@ function App() {
         <Route path="/teachers/" element={<Teachers />} />
         <Route path="/teachers/:uid" element={<TeacherDetails />} />
         <Route path="/auth" element={<Login />} />
+        <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route
           path="/how-to-use-ajarn-jobs"
           element={<AjarnJobsExperience />}
         />
+        <Route path="/work-with-us" element={<WorkWithUs />} />
         <Route path="/about-us" element={<About />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/404" element={<PageNotFound />} />
@@ -187,12 +194,14 @@ function App() {
         <Route path="/jobs/:jid/:jobName" element={<JobDetailsPage />} />
         <Route path="/teachers" element={<Teachers />} />
         <Route path="/auth" element={<Login />} />
+        <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route
           path="/how-to-use-ajarn-jobs"
           element={<AjarnJobsExperience />}
         />
+        <Route path="/work-with-us" element={<WorkWithUs />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/404" element={<PageNotFound />} />
         <Route path="*" element={<PageNotFound />} />
@@ -204,32 +213,56 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthContext.Provider
-        value={{
-          isLoggedIn: !!state.token,
-          token: state.token,
-          user: state.user,
-          login: login,
-          logout: logout,
-          addCredits: addCredits,
-          useCredits: useCredits,
-          updateUser: updatedUser,
-        }}
-      >
-        <Router>
-          <ScrollToTop />
-          <MainNavigation />
-          <Suspense
-            fallback={
-              <>
-                <LinearProgress />
-              </>
-            }
-          >
-            <main className="main">{routes}</main>
-          </Suspense>
-        </Router>
-      </AuthContext.Provider>
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+        <AuthContext.Provider
+          value={{
+            isLoggedIn: !!state.token,
+            token: state.token,
+            user: state.user,
+            login: login,
+            logout: logout,
+            addCredits: addCredits,
+            useCredits: useCredits,
+            updateUser: updatedUser,
+          }}
+        >
+          <Router>
+            <ScrollToTop />
+            <MainNavigation />
+            <Suspense
+              fallback={
+                <>
+                  <LinearProgress />
+                </>
+              }
+            >
+              <main className="main">
+                {/* Check if user needs onboarding */}
+                {state.isLoggedIn && state.user?.needsOnboarding ? (
+                  state.user?.userType === 'employer' ? (
+                    <EmployerOnboarding 
+                      onComplete={() => {
+                        // Update user to mark onboarding as complete
+                        updatedUser({ ...state.user, needsOnboarding: false });
+                      }} 
+                    />
+                  ) : (
+                    <OnboardingFlow 
+                      user={state.user} 
+                      onComplete={() => {
+                        // Update user to mark onboarding as complete
+                        updatedUser({ ...state.user, needsOnboarding: false });
+                      }} 
+                    />
+                  )
+                ) : (
+                  routes
+                )}
+              </main>
+            </Suspense>
+          </Router>
+        </AuthContext.Provider>
+      </GoogleOAuthProvider>
     </QueryClientProvider>
   );
 }

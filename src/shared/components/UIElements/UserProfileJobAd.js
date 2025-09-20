@@ -17,7 +17,7 @@ const StyledJobAdCard = styled(
   "div"
 )(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
-  border: "1px solid #faea92",
+  border: "1px solid rgb(104, 104, 104)",
 }));
 
 const StyledMediaCard = styled(CardMedia)({
@@ -51,6 +51,9 @@ const UserProfileJobAd = (props) => {
               </Grid>
 
               <Grid item xs={8} sm={8} md={8} lg={9} xl={8}>
+                <Typography sx={{ fontSize: 10 }} variant="subtitle2" color="text.secondary">
+                  sponsored 
+                </Typography>
                 <Typography
                   gutterBottom
                   color="primary"

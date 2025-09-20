@@ -232,7 +232,7 @@ const UserRecruitmentTable = () => {
 
             {!recruitDataLoading && jobs?.recruitments?.length === 0 && (
               <Box sx={{ padding: "1rem" }}>
-                <Typography variant="h5" color="text.secondary">
+                <Typography variant="subtitle2" color="text.secondary">
                   No recruit offers yet. Please check back later.
                 </Typography>
               </Box>
