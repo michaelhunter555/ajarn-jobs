@@ -1,4 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import EmployerOnboarding from '../../../users/components/EmployerOnboarding';
 import {
   Box,
   Stepper,
@@ -51,6 +53,7 @@ const ButtonContainer = styled(Box)(({ theme }) => ({
 }));
 
 const steps = [
+  'Role Selection',
   'Personal Information',
   'Professional Details',
   'Location & Education',
@@ -59,19 +62,26 @@ const steps = [
 
 const OnboardingFlow = ({ user, onComplete }) => {
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
   const { sendRequest, isPostLoading, error } = useHttpClient();
   
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
+    userType: user?.userType || 'teacher', // Default to teacher, but allow change
     nationality: '',
     workExperience: '',
     education: '',
     university: '',
     location: '',
-    image: null
+    image: user?.image || null
   });
 
   const handleNext = () => {
+    // If user selects employer in step 0, just continue to next step
+    if (activeStep === 0 && formData.userType === 'employer') {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      return;
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -86,6 +96,7 @@ const OnboardingFlow = ({ user, onComplete }) => {
     }));
   };
 const formState = formData;
+console.log("user", user);
   const handleComplete = async () => {
     try {
       console.log('Onboarding completion - user object:', user);
@@ -121,7 +132,7 @@ const formState = formData;
         ...formState,
         name: user.name,
         email: user.email,
-        userType: user.userType || 'teacher',
+        userType: formState.userType || user.userType || 'teacher', // Use form data userType if available
         firebaseUid: user.firebaseUid
       };
       
@@ -143,6 +154,11 @@ const formState = formData;
           formData.append(key, requestData[key]);
         }
       });
+
+      for (let [key, val] of formData.entries()) {
+        console.log("🚚 Sending:", key, val);
+      }
+      
 
       const response = await sendRequest(
         `${process.env.REACT_APP_USERS}/complete-onboarding/${endpointId}`,
@@ -182,8 +198,7 @@ const formState = formData;
           response.token
         );
         
-        onComplete();
-        // Don't navigate here - let the parent handle it
+        navigate('/');
       }
     } catch (err) {
       console.error('Onboarding completion error:', err);
@@ -193,12 +208,14 @@ const formState = formData;
   const isStepValid = (step) => {
     switch (step) {
       case 0:
-        return formData.nationality && formData.workExperience;
+        return formData.userType; // Role selection is required
       case 1:
-        return formData.education && formData.university;
+        return formData.nationality && formData.workExperience;
       case 2:
-        return formData.location;
+        return formData.education && formData.university;
       case 3:
+        return formData.location;
+      case 4:
         return true; // Image is optional
       default:
         return false;
@@ -208,6 +225,30 @@ const formState = formData;
   const renderStepContent = (step) => {
     switch (step) {
       case 0:
+        return (
+          <Box>
+            <Typography variant="h6" gutterBottom>
+              Choose Your Role
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              Are you looking for teaching jobs or posting them?
+            </Typography>
+            
+            <FormControl fullWidth>
+              <InputLabel>I am a...</InputLabel>
+              <Select
+                value={formData.userType}
+                label="I am a(n)..."
+                onChange={(e) => handleInputChange('userType', e.target.value)}
+              >
+                <MenuItem value="teacher">Teacher - Looking for jobs</MenuItem>
+                <MenuItem value="employer">Employer - Posting jobs</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        );
+
+      case 1:
         return (
           <Box>
             <Typography variant="h6" gutterBottom>
@@ -249,7 +290,7 @@ const formState = formData;
           </Box>
         );
 
-      case 1:
+      case 2:
         return (
           <Box>
             <Typography variant="h6" gutterBottom>
@@ -284,7 +325,7 @@ const formState = formData;
           </Box>
         );
 
-      case 2:
+      case 3:
         return (
           <Box>
             <Typography variant="h6" gutterBottom>
@@ -311,7 +352,7 @@ const formState = formData;
           </Box>
         );
 
-      case 3:
+      case 4:
         return (
           <Box>
             <Typography variant="h6" gutterBottom>
@@ -332,6 +373,11 @@ const formState = formData;
         return 'Unknown step';
     }
   };
+
+  // If user selected employer, render EmployerOnboarding directly
+  if (formData.userType === 'employer' && activeStep > 0) {
+    return <EmployerOnboarding user={user} />;
+  }
 
   return (
     <OnboardingContainer>

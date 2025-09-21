@@ -340,7 +340,7 @@ export const useUser = () => {
     const deleteUserById = useCallback(
       async (id) => {
         try {
-          const response = sendRequest(
+          const response = await sendRequest(
             `${process.env.REACT_APP_USERS}/delete-user-by-id`,
             "DELETE",
             JSON.stringify({ userId: id }),
@@ -354,7 +354,10 @@ export const useUser = () => {
             throw new Error(response.message);
           }
           return response.message;
-        } catch (err) {}
+        } catch (err) {
+          console.error("Delete user error:", err);
+          throw err;
+        }
       },
       [sendRequest, auth.token]
     );

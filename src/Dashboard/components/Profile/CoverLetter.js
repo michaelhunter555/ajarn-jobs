@@ -154,7 +154,7 @@ const CoverLetter = () => {
                     {auth.user?.email}
                   </Typography>
                 </Stack>
-                <Grid item sx={{ margin: "1rem auto" }}>
+                <Grid item sx={{ margin: "1rem auto", width: "100%" }}>
                   <Typography
                     color="text.secondary"
                     variant="h5"
@@ -162,17 +162,43 @@ const CoverLetter = () => {
                   >
                     Cover Letter:
                   </Typography>
-                  <Typography
-                    component="div"
-                    sx={{
-                      border: "1px solid #bdbdbd",
-                      padding: "2rem",
-                      borderRadius: "15px",
-                    }}
-                    variant="body1"
-                    color="text.secondary"
-                    dangerouslySetInnerHTML={{ __html: auth.user?.coverLetter }}
-                  />
+                  {auth.user?.coverLetter ? (
+                    <Typography
+                      component="div"
+                      sx={{
+                        border: "1px solid #bdbdbd",
+                        padding: "2rem",
+                        borderRadius: "15px",
+                        width: "100%",
+                        minHeight: "200px",
+                      }}
+                      variant="body1"
+                      color="text.secondary"
+                      dangerouslySetInnerHTML={{ __html: auth.user?.coverLetter }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        border: "1px solid #bdbdbd",
+                        padding: "2rem",
+                        borderRadius: "15px",
+                        width: "100%",
+                        minHeight: "200px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "#f5f5f5",
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        color="text.secondary"
+                        sx={{ fontStyle: "italic" }}
+                      >
+                        No Cover Letter! Add one!
+                      </Typography>
+                    </Box>
+                  )}
                 </Grid>
               </Grid>
             </Grid>

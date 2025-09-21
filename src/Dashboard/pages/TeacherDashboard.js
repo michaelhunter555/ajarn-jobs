@@ -13,7 +13,13 @@ import {
   Skeleton,
   Stack,
   Typography,
+  Box,
+  Chip,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import SendIcon from '@mui/icons-material/Send';
 import { styled } from "@mui/material/styles";
 import { useQuery } from "@tanstack/react-query";
 
@@ -82,6 +88,8 @@ const TeacherDashboard = () => {
   const queryParams = new URLSearchParams(location.search);
   const [currentComponent, setCurrentComponent] = useState("profile");
   const [recruitmentOffers, setRecruitmentOffers] = useState(0);
+  const [showPdfUpload, setShowPdfUpload] = useState(false);
+  const [selectedPdfFile, setSelectedPdfFile] = useState(null);
 
   const [userCardPage, setUserCardPage] = useState({
     page: 1,
@@ -150,6 +158,7 @@ const TeacherDashboard = () => {
     //isLoading: jobAdIsLoading,
     error: jobAdError,
     clearError: clearJobAdError,
+    sendRequest,
   } = useHttpClient();
 
   const { getBlogPostByUserId } = useContent();
@@ -316,6 +325,44 @@ const TeacherDashboard = () => {
     });
   };
 
+  // Handle PDF resume upload
+  const handlePdfResumeUpload = async () => {
+    if (!selectedPdfFile) return;
+    
+    try {
+      const formData = new FormData();
+      formData.append('pdfResume', selectedPdfFile);
+      formData.append('resumeType', 'pdf');
+      
+      const response = await sendRequest(
+        `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
+        "PATCH",
+        formData,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
+      );
+      
+      // Update user with PDF resume URL
+      auth.updateUser({
+        ...auth.user,
+        pdfResume: response.user.pdfResume
+      });
+      
+      // Reset form
+      setSelectedPdfFile(null);
+      setShowPdfUpload(false);
+      
+      // Reset the file input
+      const fileInput = document.getElementById('pdf-resume-upload');
+      if (fileInput) {
+        fileInput.value = '';
+      }
+    } catch (err) {
+      console.error("PDF upload error:", err);
+    }
+  };
+
   //Add creator profile
   const addCreatorItem = () => {
     const creatorItem = {
@@ -375,6 +422,48 @@ const TeacherDashboard = () => {
       limit: limit,
     });
   };
+
+  console.log("pdfResume:", auth.user?.pdfResume);
+  // https://res.cloudinary.com/dtqbxfe7r/image/upload/v1758373961/nzbrjdoreucrmggcaaxn.pdf
+  // https://res.cloudinary.com/demo/image/upload/pg_2/w_300,h_300,c_crop,g_north,y_270/r_max/b_black/multi_page_pdf.png
+
+  const convertPdfToImage = async () => {
+    if (!auth.user?.pdfResume) {
+      return null;
+    }
+   
+    const cloudinaryUrl = auth.user?.pdfResume.split("/");
+    const cloudName = cloudinaryUrl[3];
+    const pdfName = cloudinaryUrl[cloudinaryUrl.length - 1];
+    const extension = pdfName.replace(/\.pdf$/, "");
+
+    const page1 = `https://res.cloudinary.com/${cloudName}/image/upload/pg_1/w_500,f_auto/${extension}.png`;
+    const page2 = `https://res.cloudinary.com/${cloudName}/image/upload/pg_2/w_500,f_auto/${extension}.png`;
+
+    // Try fetching page 2 to see if it exists
+    try {
+      const res = await fetch(page2, { method: "HEAD" });
+      if (res.ok) {
+        return [page1, page2]; // return array if 2 pages exist
+      } else {
+        return [page1]; // only page 1 exists
+      }
+    } catch (err) {
+      console.error("Error fetching PDF page:", err);
+      return [page1]; // fallback
+    }
+  };
+
+  const [pdfImages, setPdfImages] = useState([]);
+
+  // Load PDF images when user data changes
+  useEffect(() => {
+    if (auth.user?.pdfResume) {
+      convertPdfToImage().then(setPdfImages);
+    } else {
+      setPdfImages([]);
+    }
+  }, [auth.user?.pdfResume]);
 
   //Sidebar component rendering
   const renderComponent = () => {
@@ -438,22 +527,136 @@ const TeacherDashboard = () => {
         case RESUME:
           return (
             <>
-              {!updatingUserResume &&
-                auth.user?.resume?.map((resumeItem) => (
-                  <UpdateResumeItem
-                    key={resumeItem?._id}
-                    resumeItem={resumeItem}
-                    onUpdate={handleResumeUpdate}
-                    onDelete={() => handleResumeDelete(resumeItem)}
-                    onCancel={(canceledResumeItem) =>
-                      clearResumeItem(canceledResumeItem)
-                    }
-                  />
-                ))}
+              {/* Resume Type Selection */}
+              <Paper elevation={1} sx={{ padding: "1rem", marginBottom: "1rem" }}>
+                <Typography variant="h6" gutterBottom>
+                  Resume Options
+                </Typography>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={showPdfUpload}
+                      onChange={(e) => setShowPdfUpload(e.target.checked)}
+                      size="small"
+                    />
+                  }
+                  label="Upload PDF Resume"
+                />
+                {/* Display PDF Resume Preview */}
+                {pdfImages.length > 0 && (
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+                      Current PDF Resume {pdfImages.length > 1 && `(${pdfImages.length} pages)`}
+                    </Typography>
+                    {pdfImages.map((imageUrl, index) => (
+                      <Box key={index} sx={{ mb: 2 }}>
+                        <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>
+                          Page {index + 1}
+                        </Typography>
+                        <Box 
+                          component="img" 
+                          src={imageUrl} 
+                          alt={`PDF Resume Preview - Page ${index + 1}`}
+                          sx={{ 
+                            border: '1px solid #e0e0e0', 
+                            borderRadius: '8px', 
+                            padding: '10px',
+                            maxWidth: '100%',
+                            height: 'auto',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                          }} 
+                        />
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+                  
+                {showPdfUpload ? (
+                  <Box sx={{ mt: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 
-              {!updatingUserResume && (
-                <Button onClick={addNewResumeItem}>{authHasResume}</Button>
+                    <input
+                      key={selectedPdfFile ? 'file-selected' : 'no-file'}
+                      type="file"
+                      accept=".pdf"
+                      onChange={(event) => {
+                        const file = event.target.files[0];
+                        setSelectedPdfFile(file);
+                      }}
+                      style={{ display: 'none' }}
+                      id="pdf-resume-upload"
+                    />
+                    <label htmlFor="pdf-resume-upload">
+                      <Button 
+                        endIcon={<PictureAsPdfIcon />} 
+                        variant="outlined" 
+                        component="span" 
+                        size="small"
+                        sx={{ mr: 1 }}
+                      >
+                        Choose PDF File
+                      </Button>
+                    </label>
+                    {selectedPdfFile && (
+                      
+                        <Chip
+                          label={selectedPdfFile.name}
+                          onDelete={() => {
+                            setSelectedPdfFile(null);
+                            // Reset the file input
+                            const fileInput = document.getElementById('pdf-resume-upload');
+                            if (fileInput) {
+                              fileInput.value = '';
+                            }
+                          }}
+                          sx={{ mr: 1 }}
+                          size="small"
+                        />
+                       
+                    
+                    )}
+                    </Box>
+                    {selectedPdfFile && (
+                      <Box sx={{ mt: 2 }}>
+                      <Button 
+                      endIcon={<SendIcon />} 
+                      onClick={handlePdfResumeUpload} 
+                      variant="contained">
+                        Upload Resume
+                      </Button>
+                    </Box>
+                    )}
+                  </Box>
+                ) : (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Add work history items manually
+                    </Typography>
+                    {!updatingUserResume && (
+                      <Button onClick={addNewResumeItem}>{authHasResume}</Button>
+                    )}
+                  </Box>
+                )}
+              </Paper>
+
+              {/* Manual Resume Items */}
+              {!showPdfUpload && (
+                <>
+                  {!updatingUserResume &&
+                    auth.user?.resume?.map((resumeItem) => (
+                      <UpdateResumeItem
+                        key={resumeItem?._id}
+                        resumeItem={resumeItem}
+                        onUpdate={handleResumeUpdate}
+                        onDelete={() => handleResumeDelete(resumeItem)}
+                        onCancel={(canceledResumeItem) =>
+                          clearResumeItem(canceledResumeItem)
+                        }
+                      />
+                    ))}
+                </>
               )}
+
               {updatingUserResume && (
                 <Stack justifyContent="flex-End">
                   <Skeleton height={80} variant="rectangular" />
@@ -619,7 +822,7 @@ const TeacherDashboard = () => {
                 gap: "5px",
               }}
             >
-             {jobAd[0] && <Grid item xs={12}>
+             {jobAd && <Grid item xs={12}>
                 {jobAdIsLoading && (
                   <Skeleton
                     sx={{
@@ -644,7 +847,7 @@ const TeacherDashboard = () => {
                 )}
               </Grid>}
 
-              {jobAd[1] && <Grid item xs={12}>
+              {jobAd && <Grid item xs={12}>
                 {jobAdIsLoading && (
                   <Skeleton
                     sx={{

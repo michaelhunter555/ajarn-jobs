@@ -232,122 +232,126 @@ const UpdateResumeItem = ({ resumeItem, onUpdate, onDelete, onCancel }) => {
       )}
       {isEditing && (
         <form onSubmit={handleSubmit}>
+
           <TextField
-            sx={{ margin: "0 0 0.5rem 0" }}
-            fullWidth
-            name="jobTitle"
-            label="Job Title"
-            value={formState.inputs.jobTitle.value}
-            onChange={(event) =>
-              inputHandler(
-                "jobTitle",
-                event.target.value,
-                event.target.value !== ""
-              )
-            }
-          />
-          <Grid
-            container
-            alignItems="center"
-            direction="row"
-            sx={{ margin: "0 0 0.5rem 0" }}
-          >
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                name="schoolName"
-                label="School Name"
-                value={formState.inputs.schoolName.value}
-                onChange={(event) =>
-                  inputHandler(
-                    "schoolName",
-                    event.target.value,
-                    event.target.value !== ""
-                  )
-                }
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              sx={{ display: "flex", justifyContent: "center" }}
-            >
-              <TextField
-                name="company"
-                label="Company"
-                value={formState.inputs.company.value}
-                onChange={(event) =>
-                  inputHandler(
-                    "company",
-                    event.target.value,
-                    event.target.value !== ""
-                  )
-                }
-              />
-            </Grid>
-          </Grid>
-          <FormControl sx={{ width: 200, margin: "0 0.5rem 0.5rem 0" }}>
-            <InputLabel id="location-select">Location</InputLabel>
-            <Select
-              labelId="location"
-              id="location"
-              value={formState.inputs.location.value}
-              label="Location"
+              sx={{ margin: "0 0 0.5rem 0" }}
+              fullWidth
+              name="jobTitle"
+              label="Job Title"
+              value={formState.inputs.jobTitle.value}
               onChange={(event) =>
                 inputHandler(
-                  "location",
+                  "jobTitle",
                   event.target.value,
                   event.target.value !== ""
                 )
               }
+            />
+            
+            <Grid
+              container
+              alignItems="center"
+              direction="row"
+              sx={{ margin: "0 0 0.5rem 0" }}
             >
-              {thaiCities.map((item, i) => (
-                <MenuItem key={i} value={item}>
-                  {item}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <TextField
-            sx={{ margin: "0 0.5rem 0 0" }}
-            name="from"
-            label="From"
-            value={formState.inputs.from.value}
-            onChange={(event) =>
-              inputHandler(
-                "from",
-                event.target.value,
-                event.target.value !== ""
-              )
-            }
-          />
-          <TextField
-            name="to"
-            label="To"
-            value={formState.inputs.to.value}
-            onChange={(event) =>
-              inputHandler("to", event.target.value, event.target.value !== "")
-            }
-          />
-          <TextField
-            sx={{ margin: "0.5rem 0" }}
-            fullWidth
-            multiline={true}
-            rows={4}
-            helperText="describe your role at this job"
-            name="role"
-            label="Role"
-            value={formState.inputs.role.value}
-            onChange={(event) =>
-              inputHandler(
-                "role",
-                event.target.value,
-                event.target.value !== ""
-              )
-            }
-          />
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  name="schoolName"
+                  label="School Name"
+                  value={formState.inputs.schoolName.value}
+                  onChange={(event) =>
+                    inputHandler(
+                      "schoolName",
+                      event.target.value,
+                      event.target.value !== ""
+                    )
+                  }
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                <TextField
+                  name="company"
+                  label="Company"
+                  value={formState.inputs.company.value}
+                  onChange={(event) =>
+                    inputHandler(
+                      "company",
+                      event.target.value,
+                      event.target.value !== ""
+                    )
+                  }
+                />
+              </Grid>
+            </Grid>
+            <FormControl sx={{ width: 200, margin: "0 0.5rem 0.5rem 0" }}>
+              <InputLabel id="location-select">Location</InputLabel>
+              <Select
+                labelId="location"
+                id="location"
+                value={formState.inputs.location.value}
+                label="Location"
+                onChange={(event) =>
+                  inputHandler(
+                    "location",
+                    event.target.value,
+                    event.target.value !== ""
+                  )
+                }
+              >
+                {thaiCities.map((item, i) => (
+                  <MenuItem key={i} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+  
+            <TextField
+              sx={{ margin: "0 0.5rem 0 0" }}
+              name="from"
+              label="From"
+              value={formState.inputs.from.value}
+              onChange={(event) =>
+                inputHandler(
+                  "from",
+                  event.target.value,
+                  event.target.value !== ""
+                )
+              }
+            />
+            <TextField
+              name="to"
+              label="To"
+              value={formState.inputs.to.value}
+              onChange={(event) =>
+                inputHandler("to", event.target.value, event.target.value !== "")
+              }
+            />
+            <TextField
+              sx={{ margin: "0.5rem 0" }}
+              fullWidth
+              multiline={true}
+              rows={4}
+              helperText="describe your role at this job"
+              name="role"
+              label="Role"
+              value={formState.inputs.role.value}
+              onChange={(event) =>
+                inputHandler(
+                  "role",
+                  event.target.value,
+                  event.target.value !== ""
+                )
+              }
+             />
+          
+         
           <Stack direction="row" spacing={2}>
             <Button variant="contained" type="submit">
               Save

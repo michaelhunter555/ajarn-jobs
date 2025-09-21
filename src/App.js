@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 
 import { LinearProgress } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -163,6 +163,7 @@ function App() {
         <Route path="/teachers/:uid" element={<TeacherDetails />} />
         <Route path="/auth" element={<Login />} />
         <Route path="/verify-email" element={<EmailVerification />} />
+        <Route path="/employer-onboarding" element={<EmployerOnboarding onComplete={() => window.location.href = "/"} />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route
@@ -195,6 +196,7 @@ function App() {
         <Route path="/teachers" element={<Teachers />} />
         <Route path="/auth" element={<Login />} />
         <Route path="/verify-email" element={<EmailVerification />} />
+        <Route path="/employer-onboarding" element={<EmployerOnboarding />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route
@@ -239,22 +241,13 @@ function App() {
               <main className="main">
                 {/* Check if user needs onboarding */}
                 {state.isLoggedIn && state.user?.needsOnboarding ? (
-                  state.user?.userType === 'employer' ? (
-                    <EmployerOnboarding 
-                      onComplete={() => {
-                        // Update user to mark onboarding as complete
-                        updatedUser({ ...state.user, needsOnboarding: false });
-                      }} 
-                    />
-                  ) : (
-                    <OnboardingFlow 
-                      user={state.user} 
-                      onComplete={() => {
-                        // Update user to mark onboarding as complete
-                        updatedUser({ ...state.user, needsOnboarding: false });
-                      }} 
-                    />
-                  )
+                  <OnboardingFlow 
+                    user={state.user} 
+                    onComplete={() => {
+                      // Update user to mark onboarding as complete
+                      updatedUser({ ...state.user, needsOnboarding: false });
+                    }} 
+                  />
                 ) : (
                   routes
                 )}

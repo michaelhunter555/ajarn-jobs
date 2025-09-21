@@ -39,10 +39,19 @@ const ProfileProgress = ({ user, isLoading }) => {
         <Grid item sx={{ display: "flex", flexDirection: "row", gap: "5px" }}>
           <Stack>
             <CheckCircleIcon
-              color={user?.resume.length > 0 ? "success" : "action"}
+              color={user?.resume.length > 0 || user?.pdfResume ? "success" : "action"}
             />
           </Stack>
           <Stack>Added a Resume</Stack>
+        </Grid>
+
+        <Grid item sx={{ display: "flex", flexDirection: "row", gap: "5px" }}>
+          <Stack>
+            <CheckCircleIcon
+              color={user?.coverLetter ? "success" : "action"}
+            />
+          </Stack>
+          <Stack>Added a Cover Letter</Stack>
         </Grid>
         <Stack alignItems="center">
           <Button component={Link} to={`/teachers/${user?._id}`}>

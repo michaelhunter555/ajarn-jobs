@@ -12,16 +12,36 @@ export const useResume = () => {
   const updateUserResume = useCallback(
     async (userId, update) => {
       try {
+        // Check if there's a PDF file to upload
+        const hasPdfFile = update.pdfResume && update.pdfResume instanceof File;
+        
+        let requestData;
+        let headers;
+        
+        if (hasPdfFile) {
+          // Use FormData for file upload
+          requestData = new FormData();
+          requestData.append('resume', JSON.stringify(update));
+          requestData.append('resumeId', update._id);
+          requestData.append('pdfResume', update.pdfResume);
+          headers = {
+            Authorization: "Bearer " + auth.token,
+          };
+        } else {
+          // Use JSON for regular updates
+          requestData = JSON.stringify({ resume: update });
+          headers = {
+            "Content-type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          };
+        }
+        
         const response = await sendRequest(
           //We expect dynamic userId
           `${process.env.REACT_APP_USERS}/update-profile/${userId}`,
           "PATCH",
-          //property to be updated "resume" on user object
-          JSON.stringify({ resume: update }),
-          {
-            "Content-type": "application/json",
-            Authorization: "Bearer " + auth.token,
-          }
+          requestData,
+          headers
         );
         //create object with copy of existing user data and updated response.
         //if _id matches then we update, otherwise new resumeItem

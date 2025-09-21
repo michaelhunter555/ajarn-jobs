@@ -28,6 +28,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
         auth.login(
           {
             _id: data.userId,
+            email: data.email,
             image: data.image,
             buffetIsActive: data.buffetIsActive,
             blogPosts: data.blogPosts,
@@ -46,8 +47,11 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
           data.token
         );
         
-        // Don't navigate if user needs onboarding
-        if (!data.needsOnboarding) {
+        // Handle onboarding flow for new Google users
+        if (data.needsOnboarding) {
+          console.log('🔄 Google user needs onboarding, redirecting...');
+          navigate('/onboarding');
+        } else {
           navigate('/');
         }
         

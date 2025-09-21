@@ -1,8 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import CheckIcon from "@mui/icons-material/Check";
 import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import LockIcon from "@mui/icons-material/Lock";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import SchoolIcon from "@mui/icons-material/School";
 import SendIcon from "@mui/icons-material/Send";
@@ -151,12 +153,73 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
   const isPaidUser =
     auth?.user?.userType === "employer" && auth?.user?.buffetIsActive;
   const [open, setOpen] = useState(false);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
   const openModalHandler = () => setOpen(true);
   const closeModalHandler = () => setOpen(false);
   const [readMore, setReadMore] = useState({
     open: false,
     length: 500,
   });
+
+  // Resume visibility logic
+  const canViewResume = 
+    auth?.user?._id === teacher?._id || // User viewing their own profile
+    (auth?.user?.userType === "employer" && auth?.user?.buffetIsActive); // Employer with active buffet
+
+  // Check if teacher has any resume content
+  const hasResumeContent = 
+    teacher?.pdfResume || // Has PDF resume
+    (teacher?.resume && teacher?.resume.length > 0); // Has manual resume items
+
+  // Convert PDF to image for preview
+  const convertPdfToImage = async () => {
+    if (!teacher?.pdfResume) {
+      return null;
+    }
+    
+    const cloudinaryUrl = teacher.pdfResume.split("/");
+    const cloudName = cloudinaryUrl[3];
+    const pdfName = cloudinaryUrl[cloudinaryUrl.length - 1];
+    const extension = pdfName.replace(/\.pdf$/, "");
+
+    const page1 = `https://res.cloudinary.com/${cloudName}/image/upload/pg_1/w_500,f_auto/${extension}.png`;
+    const page2 = `https://res.cloudinary.com/${cloudName}/image/upload/pg_2/w_500,f_auto/${extension}.png`;
+
+    // Try fetching page 2 to see if it exists
+    try {
+      const res = await fetch(page2, { method: "HEAD" });
+      if (res.ok) {
+        return [page1, page2]; // return array if 2 pages exist
+      } else {
+        return [page1]; // only page 1 exists
+      }
+    } catch (err) {
+      console.error("Error fetching PDF page:", err);
+      return [page1]; // fallback
+    }
+  };
+
+  const [pdfImages, setPdfImages] = useState([]);
+
+  // Load PDF images when teacher data changes
+  useEffect(() => {
+    if (teacher?.pdfResume) {
+      convertPdfToImage().then(setPdfImages);
+    } else {
+      setPdfImages([]);
+    }
+  }, [teacher?.pdfResume]);
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setImageModalOpen(true);
+  };
+
+  const handleImageModalClose = () => {
+    setImageModalOpen(false);
+    setSelectedImage('');
+  };
 
   const recruitmentSentAlready =
     teacher &&
@@ -591,13 +654,155 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                   }}
                 />
               )}
-              {!isLoading && (
-                <CollapsibleTable teacherResume={teacher?.resume} />
+              {!isLoading && hasResumeContent && (
+                <ModernCard>
+                  <CardContent sx={{ p: 3 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                      <Typography variant="h6" component="h4" sx={{ fontWeight: 600, mr: 1 }}>
+                        📄 Resume
+                      </Typography>
+                      {!canViewResume && (
+                        <Tooltip title="Activate buffet to view resume">
+                          <LockIcon color="disabled" fontSize="small" />
+                        </Tooltip>
+                      )}
+                    </Box>
+                    
+                    {canViewResume ? (
+                      <Box>
+                        {/* PDF Resume Section */}
+                        {teacher?.pdfResume && (
+                          <Box sx={{ mb: 3 }}>
+                            <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
+                              📎 PDF Resume {pdfImages.length > 1 && `(${pdfImages.length} pages)`}
+                            </Typography>
+                            {pdfImages.length > 0 && (
+                              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center', flexWrap: 'wrap', mb: 2 }}>
+                                {pdfImages.map((imageUrl, index) => (
+                                  <Box key={index} sx={{ textAlign: "center", position: 'relative' }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block", fontWeight: 600 }}>
+                                      Page {index + 1}
+                                    </Typography>
+                                    <Box
+                                      component="img"
+                                      src={imageUrl}
+                                      alt={`PDF Resume Preview - Page ${index + 1}`}
+                                      sx={{
+                                        width: '120px',
+                                        height: '160px',
+                                        objectFit: 'cover',
+                                        border: '2px solid #e0e0e0',
+                                        borderRadius: 2,
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.3s ease-in-out',
+                                        '&:hover': {
+                                          boxShadow: '0 8px 25px rgba(0,0,0,0.3)',
+                                          transform: 'scale(1.1)',
+                                          border: '2px solid #2196f3',
+                                          zIndex: 1
+                                        }
+                                      }}
+                                      onClick={() => handleImageClick(imageUrl)}
+                                    />
+                                    <Typography variant="caption" sx={{ mt: 1, display: 'block', color: '#666', fontSize: '0.7rem' }}>
+                                      Click to enlarge
+                                    </Typography>
+                                  </Box>
+                                ))}
+                              </Box>
+                            )}
+                           
+                          </Box>
+                        )}
+
+                        {/* Manual Resume Items Section */}
+                        {teacher?.resume && teacher?.resume.length > 0 && (
+                          <Box>
+                            {teacher?.pdfResume && <Divider sx={{ mb: 3 }} />}
+                            <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
+                              💼 Work History
+                            </Typography>
+                            <CollapsibleTable teacherResume={teacher?.resume} />
+                          </Box>
+                        )}
+                      </Box>
+                    ) : (
+                      <Box sx={{ textAlign: "center", py: 4 }}>
+                        <LockIcon sx={{ fontSize: 48, color: "text.disabled", mb: 2 }} />
+                        <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
+                          Resume is locked
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Activate buffet to view teacher's resume
+                        </Typography>
+                      </Box>
+                    )}
+                  </CardContent>
+                </ModernCard>
               )}
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+
+      {/* Image Enlargement Modal */}
+      <Modal
+        open={imageModalOpen}
+        onClose={handleImageModalClose}
+        disableScrollLock={true}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Paper
+          sx={{
+            position: 'relative',
+            width: '90vw',
+            height: '90vh',
+            maxWidth: '1000px',
+            maxHeight: '800px',
+            overflow: 'auto',
+            p: 2,
+            borderRadius: 2,
+            boxShadow: 24,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, width: '100%' }}>
+            <Typography variant="h6" component="h2">
+              📄 Resume Preview
+            </Typography>
+            <Button
+              onClick={handleImageModalClose}
+              variant="outlined"
+              size="small"
+              sx={{ minWidth: 'auto', px: 2 }}
+            >
+              Close
+            </Button>
+          </Box>
+          
+          <Box
+            component="img"
+            src={selectedImage}
+            alt="PDF Resume Preview"
+            sx={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+              height: 'auto',
+              border: '1px solid #e0e0e0',
+              borderRadius: 2,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+            }}
+          />
+        </Paper>
+      </Modal>
     </StyledBoxContainer>
   );
 };

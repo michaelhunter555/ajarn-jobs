@@ -25,9 +25,8 @@ import { useForm } from "../../../shared/hooks/form-hook";
 import {
   coreJobRequirements,
   nationalities,
-  thaiCities,
-  yearsOfExperience,
 } from "../../../shared/util/ThaiData";
+import { thaiProvinces, experienceYears } from "../../../shared/data/thaiLocations";
 import { useUser } from "../../../shared/hooks/user-hook";
 import { AuthContext } from "../../../shared/context/auth-context";
 
@@ -80,14 +79,14 @@ const TeacherSettings = (props) => {
       },
       workExperience: {
         value: user.workExperience,
-        isvalid: true,
+        isValid: true,
       },
       image: {
         value: user.image,
         isValid: true,
       },
     },
-    false
+    true // Start with form as valid since all fields have default values
   );
 
   const updateProfileHandler = (event) => {
@@ -189,12 +188,12 @@ const TeacherSettings = (props) => {
               label="Full name"
               variant="outlined"
               id="name"
-              defaultValue={formState.inputs.name.value}
+              value={formState.inputs.name.value || ""}
               onChange={(event) =>
                 inputHandler(
                   "name",
                   event.target.value,
-                  event.target.value !== ""
+                  !!event.target.value
                 )
               }
             />
@@ -206,13 +205,13 @@ const TeacherSettings = (props) => {
               <Select
                 labelId="update-nationality"
                 id="nationality"
-                defaultValue={formState.inputs.nationality.value}
+                value={formState.inputs.nationality.value || ""}
                 label="Nationality"
                 onChange={(event) =>
                   inputHandler(
                     "nationality",
                     event.target.value,
-                    event.target.value !== ""
+                    !!event.target.value
                   )
                 }
               >
@@ -233,17 +232,17 @@ const TeacherSettings = (props) => {
               <Select
                 labelId="update-workExperience"
                 id="workExperience"
-                defaultValue={formState.inputs.workExperience.value}
+                value={formState.inputs.workExperience.value || ""}
                 label="Years of Experience"
                 onChange={(event) =>
                   inputHandler(
                     "workExperience",
                     event.target.value,
-                    event.target.value !== ""
+                    !!event.target.value
                   )
                 }
               >
-                {yearsOfExperience.map((item, i) => (
+                {experienceYears.map((item, i) => (
                   <MenuItem key={i} value={item}>
                     {item}
                   </MenuItem>
@@ -260,13 +259,13 @@ const TeacherSettings = (props) => {
               <Select
                 labelId="update-highestCertification"
                 id="highestCertification"
-                defaultValue={formState.inputs.highestCertification.value}
+                value={formState.inputs.highestCertification.value || ""}
                 label="Highest Certification"
                 onChange={(event) =>
                   inputHandler(
                     "highestCertification",
                     event.target.value,
-                    event.target.value !== ""
+                    !!event.target.value
                   )
                 }
               >
@@ -288,7 +287,7 @@ const TeacherSettings = (props) => {
                 userArrayHandler(
                   "education",
                   value,
-                  value !== ""
+                  !!value
                 )
               }
               id="education"
@@ -317,17 +316,17 @@ const TeacherSettings = (props) => {
               <Select
                 labelId="update-location"
                 id="location"
-                defaultValue={formState.inputs.location.value}
+                value={formState.inputs.location.value || ""}
                 label="Location"
                 onChange={(event) =>
                   inputHandler(
                     "location",
                     event.target.value,
-                    event.target.value !== ""
+                    !!event.target.value
                   )
                 }
               >
-                {thaiCities.map((item, i) => (
+                {thaiProvinces.map((item, i) => (
                   <MenuItem key={i} value={item}>
                     {item}
                   </MenuItem>
@@ -345,7 +344,7 @@ const TeacherSettings = (props) => {
                 userArrayHandler(
                   "skill",
                   value,
-                  (array) => array.length > 0
+                  !!value
                 )
               }
               id="skill"
@@ -361,7 +360,7 @@ const TeacherSettings = (props) => {
                 userArrayHandler(
                   "interests",
                   value,
-                  (array) => array.length > 0
+                  !!value
                 )
               }
               id="interests"
@@ -377,12 +376,12 @@ const TeacherSettings = (props) => {
             label="About"
             variant="outlined"
             id="about"
-            defaultValue={formState.inputs.about.value}
+            value={formState.inputs.about.value || ""}
             onChange={(event) =>
               inputHandler(
                 "about",
                 event.target.value,
-                event.target.value !== ""
+                !!event.target.value
               )
             }
           />

@@ -52,6 +52,7 @@ const TeacherList = ({ teachers, isLoading }) => {
                 image={`${teacher?.image}`}
                 degree={teacher?.highestCertification}
                 about={teacher?.about}
+                pdfResume={teacher?.pdfResume}
               />
             );
 

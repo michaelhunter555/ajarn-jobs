@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -36,6 +37,14 @@ const ModernCard = styled(Card)(({ theme }) => ({
 const EmployerOnboarding = ({ onComplete, user }) => {
   const auth = useContext(AuthContext);
   const { isPostLoading, sendRequest } = useHttpClient();
+  const navigate = useNavigate();
+  
+  // Get userType from localStorage (set by OnboardingFlow when employer is selected)
+  const selectedUserType = localStorage.getItem('selectedUserType') || 'employer';
+  
+  console.log('🏢 EmployerOnboarding rendered!');
+  console.log('  - user:', user);
+  console.log('  - selectedUserType:', selectedUserType);
 
   const [form, setForm] = useState({
     company: "",
@@ -76,7 +85,7 @@ const EmployerOnboarding = ({ onComplete, user }) => {
         const userData = {
           name: user?.name || 'User',
           email: user?.email,
-          userType: 'employer',
+          userType: selectedUserType, // Use the selected userType from localStorage
           image: form.image || user?.image || '',
           firebaseUid: user?.firebaseUid,
           company: form.company,
@@ -101,8 +110,8 @@ const EmployerOnboarding = ({ onComplete, user }) => {
             formData.append(key, userData[key]);
           }
         });
-        console.log("formData", formData);
-
+        formData.append('isRegistration', 'true');
+        
         const response = await sendRequest(
           `${process.env.REACT_APP_USERS}/complete-onboarding/${user?.firebaseUid}`,
           "POST",
@@ -111,6 +120,8 @@ const EmployerOnboarding = ({ onComplete, user }) => {
             Authorization: "Bearer " + tokenToUse,
           }
         );
+
+        console.log("response", response);
         
         // Login the user with the new data
         auth.login(
@@ -134,19 +145,47 @@ const EmployerOnboarding = ({ onComplete, user }) => {
           response.token
         );
         
-        if (onComplete) onComplete();
+        // Clean up localStorage
+        localStorage.removeItem('selectedUserType');
+        
+        // Navigate to home page
+       navigate('/');
       } else {
-        // Regular user - just update creator
-        await sendRequest(
+        console.log("updating creator")
+        // Regular user - just update creator with FormData for image upload
+        const formData = new FormData();
+        Object.keys(form).forEach(key => {
+          if (form[key] instanceof File) {
+            // If image is a file object, append it directly
+            formData.append('image', form[key]);
+          } else if(form[key] !== undefined && form[key] !== null) {
+            formData.append(key, form[key]);
+          }
+        });
+        
+        // Add isRegistration flag
+        formData.append('isRegistration', 'true');
+        console.log("sending request");
+       const res = await sendRequest(
           `${process.env.REACT_APP_USERS}/update-creator/${auth.user._id}`,
           "PATCH",
-          JSON.stringify(form),
+          formData,
           {
-            "Content-Type": "application/json",
             Authorization: "Bearer " + auth.token,
           }
         );
-        if (onComplete) onComplete();
+        console.log("Request ok!")
+        if(res.ok) {
+        auth?.updateUser({
+          ...auth.user,
+          userType: "employer",
+          needsOnboarding: false,
+          creator: res.creator,
+        });
+        console.log("User updated")
+    }
+    localStorage.removeItem('selectedUserType');
+        navigate('/');
       }
     } catch (err) {
       console.error("❌ Employer onboarding error:", err);
