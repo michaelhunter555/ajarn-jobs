@@ -23,7 +23,7 @@ const PromotionSidebar = () => {
   return (
     <Paper elevation={1}>
       <Stack alignItems="center">
-        <Typography variant="h6" fontWeight={700}>
+        <Typography align="center" variant="h6" fontWeight={700}>
           Find Teachers Affordably
         </Typography>
         <CardMedia component="img" src={image} alt="promo_offer" />

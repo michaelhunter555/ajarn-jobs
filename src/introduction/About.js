@@ -100,7 +100,7 @@ const About = () => {
 
               <br />
 
-              <Typography color="text.secondary">-Michael Hunter</Typography>
+              <Typography color="text.secondary">-MH</Typography>
             </Stack>
           )}
         </Paper>

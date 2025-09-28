@@ -56,7 +56,7 @@ const NavLinks = (props) => {
         </NavLink>
       </ListItem>
 
-      <ListItem>
+     {auth?.user?.userType === "employer" && <ListItem>
         <NavLink to="/teachers">
           <Typography
             sx={{
@@ -67,7 +67,7 @@ const NavLinks = (props) => {
             Teachers
           </Typography>
         </NavLink>
-      </ListItem>
+      </ListItem>}
 
       <ListItem>
         <NavLink to="/content">

@@ -210,6 +210,7 @@ const Auth = () => {
           buffetIsActive,
           blogPosts,
           resume,
+          pdfResume,
           coverLetter,
           incomeDirectory,
           applications,
@@ -229,6 +230,7 @@ const Auth = () => {
             buffetIsActive: buffetIsActive,
             blogPosts: blogPosts,
             resume: resume,
+            pdfResume: pdfResume,
             coverLetter: coverLetter,
             incomeDirectory: incomeDirectory,
             applications: applications,
@@ -252,9 +254,9 @@ const Auth = () => {
       }
     } else {
       try {
-        console.log("🔥 Starting Firebase signup process...");
-        console.log("📧 Email:", formState.inputs.email.value);
-        console.log("👤 User type:", formState.inputs.userType.value);
+        // console.log("🔥 Starting Firebase signup process...");
+        // console.log("📧 Email:", formState.inputs.email.value);
+        // console.log("👤 User type:", formState.inputs.userType.value);
         
         // Store signup data in localStorage before Firebase signup
         const signupData = {
@@ -265,8 +267,8 @@ const Auth = () => {
           timestamp: Date.now()
         };
         
-        console.log("💾 Storing signup data in localStorage:", signupData);
-        console.log("🏢 UserType being stored:", signupData.userType);
+        // console.log("💾 Storing signup data in localStorage:", signupData);
+        // console.log("🏢 UserType being stored:", signupData.userType);
         localStorage.setItem('pendingSignup', JSON.stringify(signupData));
 
         // Use Firebase Auth for manual signup
@@ -286,8 +288,8 @@ const Auth = () => {
         
         const firebaseUser = result.user;
         
-        console.log("✅ Firebase user created:", firebaseUser.uid);
-        console.log("📧 Firebase email verified:", firebaseUser.emailVerified);
+        // console.log("✅ Firebase user created:", firebaseUser.uid);
+        // console.log("📧 Firebase email verified:", firebaseUser.emailVerified);
 
         // Redirect to email verification page (don't create user in MongoDB yet)
         console.log("🔄 Redirecting to email verification...");

@@ -196,7 +196,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   );
 
   if (
-    auth.user?.resume?.length > 0 &&
+    (auth.user?.resume?.length > 0 || auth.user?.pdfResume) &&
     auth.user?.coverLetter?.length > 10 &&
     auth.user?.userType !== "employer"
   ) {
@@ -251,6 +251,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   const handleViolationModal = () => {
     setOpenViolation((prev) => !prev);
   };
+  console.log("auth", auth?.user);
   return (
     <>
       <SuccessModal

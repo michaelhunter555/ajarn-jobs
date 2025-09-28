@@ -59,7 +59,7 @@ const StyledBottomNav = styled(BottomNavigation)(({ theme }) => ({
 
 const menuItems = [
   {
-    text: "Profile",
+    text: "Dashboard",
     icon: <DashboardIcon />,
     componentName: "profile",
   },

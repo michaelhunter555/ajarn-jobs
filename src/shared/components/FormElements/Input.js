@@ -78,23 +78,33 @@ const Input = (props) => {
     //We will pass this to our custom form hook inputhandler function
     //please also view ../hooks/form-hooks.js to get 360 understanding.
     onInput(id, value, isValid);
+    console.log("requirement inputs: ",id, value, isValid);
   }, [id, value, isValid, onInput]);
 
   const changeHandler = (event) => {
     if (props.element === "checkbox") {
-      let newValues = [...inputState.value];
+      const currentValues =
+        typeof inputState.value === "string" && inputState.value.length > 0
+          ? inputState.value.split(", ").filter(Boolean)
+          : [];
+
+      let nextValues = currentValues;
       if (event.target.checked) {
-        newValues.push(event.target.value);
-        setCheckedCount((prev) => prev + 1);
+        if (!currentValues.includes(event.target.value)) {
+          nextValues = [...currentValues, event.target.value];
+          setCheckedCount((prev) => prev + 1);
+        }
       } else {
-        newValues = newValues.filter((val) => val !== event.target.value);
-        setCheckedCount((prev) => prev - 1);
+        nextValues = currentValues.filter((val) => val !== event.target.value);
+        setCheckedCount((prev) => (prev > 0 ? prev - 1 : 0));
       }
+
       dispatch({
         type: "CHANGE",
-        val: newValues.join(", "),
+        val: nextValues.join(", "),
         validators: props.validators,
       });
+      return;
     }
     dispatch({
       type: "CHANGE",

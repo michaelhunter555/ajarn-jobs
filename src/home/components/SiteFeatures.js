@@ -20,15 +20,14 @@ import { useThemeToggle } from "../../shared/context/theme-context";
 
 const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
-
   flexWrap: "nowrap",
   minWidth: 100,
   margin: "0 0 1rem 0",
   flexDirection: "row",
   justifyContent: "center",
   gap: "1rem",
-  overflowX: "auto",
-  whiteSpace: "nowrap",
+  overflowX: "visible",
+  whiteSpace: "normal",
   [theme.breakpoints.down("md")]: {
     display: "flex",
     flexDirection: "row",
@@ -46,6 +45,7 @@ const ModernFeatureCard = styled(Card)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
+  flex: "0 0 auto",
   minWidth: 200,
   borderRadius: theme.spacing(3),
   background: theme.palette.mode === "dark"
@@ -187,10 +187,11 @@ const SiteFeatures = ({ isLoading }) => {
           sx={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "center",
+            justifyContent: { xs: "flex-start", md: "center" },
             gap: "1.5rem",
             width: "100%",
             overflowX: "auto",
+            pl: { xs: 1, md: 0 },
             pb: 1,
           }}
         >

@@ -666,6 +666,21 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                           <LockIcon color="disabled" fontSize="small" />
                         </Tooltip>
                       )}
+                      <Box sx={{ flexGrow: 1 }} />
+                      {canViewResume && teacher?.pdfResume && (
+                        <Button
+                          component="a"
+                          href={teacher?.pdfResume}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          variant="outlined"
+                          size="small"
+                          startIcon={<PictureAsPdfIcon />}
+                          sx={{ textTransform: "none", fontWeight: 500 }}
+                        >
+                          View PDF
+                        </Button>
+                      )}
                     </Box>
                     
                     {canViewResume ? (
@@ -760,10 +775,9 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
         <Paper
           sx={{
             position: 'relative',
-            width: '90vw',
-            height: '90vh',
+          
             maxWidth: '1000px',
-            maxHeight: '800px',
+            //maxHeight: '900px',
             overflow: 'auto',
             p: 2,
             borderRadius: 2,

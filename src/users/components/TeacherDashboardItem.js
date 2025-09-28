@@ -103,6 +103,16 @@ const ActiveTeachersDashboardList = (props) => {
     );
   }
 
+  // Education summary
+  const firstUniversity = props?.education
+    ? props.education
+        ?.split(",")
+        ?.map((s) => s.trim())
+        ?.filter(Boolean)?.[0]
+        ?.split(".")[0]
+    : "";
+  const highestAchievement = props?.highestCertification || props?.degree || "";
+
   return (
     <BlurContentWraper buffetIsActive={props?.buffetIsActive}>
       <StyledPaper
@@ -130,8 +140,8 @@ const ActiveTeachersDashboardList = (props) => {
                 sx={{
                   borderRadius: "15px",
                   border: "1px solid #e5e5e5",
-                  height: 75,
-                  width: 75,
+                  height: 55,
+                  width: 55,
                   margin: "0 auto",
                 }}
               />
@@ -148,31 +158,7 @@ const ActiveTeachersDashboardList = (props) => {
               >
                 {nameText}
 
-                {/*new Result should be mapped over */}
-                {props?.education &&
-                  props?.education
-                    ?.split(",")
-                    ?.slice(0, 2)
-                    ?.map((uni, i) => (
-                      <Chip
-                        size="small"
-                        key={i}
-                        sx={{ backgroundColor: "transparent" }}
-                        avatar={
-                          <Tooltip
-                            title={`Degree from ${uni?.trim()?.split(".")[0]}`}
-                            placement="top"
-                          >
-                            <Avatar
-                              alt={`${uni?.trim()}--${props?.name}`}
-                              src={`https://logo.clearbit.com/${uni
-                                ?.trim()
-                                ?.toLowerCase()}`}
-                            />
-                          </Tooltip>
-                        }
-                      />
-                    ))}
+                {/* Education chip list removed; summarized next to icon below */}
                 {/**add stuff here */}
                 {props?.workExperience > 5 && (
                   <Tooltip
@@ -201,6 +187,7 @@ const ActiveTeachersDashboardList = (props) => {
                     component="h3"
                     color="text.secondary"
                     variant="subtitle2"
+                    sx={{ fontSize: '11px'}}
                   >
                     <PublicIcon fontSize="inherit" />
                     {props?.nationality}
@@ -210,10 +197,10 @@ const ActiveTeachersDashboardList = (props) => {
                     component="h3"
                     color="text.secondary"
                     variant="subtitle2"
+                    sx={{ fontSize: '11px'}}
                   >
                     <AssuredWorkloadIcon fontSize="inherit" />{" "}
-                    {props?.workExperience}{" "}
-                    {props?.workExperience > 1 ? "Years" : "Year"}
+                    {props?.workExperience}
                   </Typography>
                 </Grid>
                 {/*2 x 2 */}
@@ -222,22 +209,25 @@ const ActiveTeachersDashboardList = (props) => {
                     component="h3"
                     color="text.secondary"
                     variant="subtitle2"
+                    sx={{ fontSize: '11px'}}
                   >
                     <PlaceIcon fontSize="inherit" /> {props?.currentLocation}
                   </Typography>
 
-                  {/* <Typography
+                  <Typography
                     component="h3"
                     color="text.secondary"
                     variant="subtitle2"
+                    sx={{ fontSize: '11px'}}
                   >
-                    <WorkspacePremiumIcon fontSize="inherit" /> {props?.degree}
-                  </Typography> */}
-                  <Chip
-                    size="small"
-                    icon={<WorkspacePremiumIcon fontSize="inherit" />}
-                    label={props?.degree}
-                  />
+                    <WorkspacePremiumIcon fontSize="inherit" /> {(
+                      firstUniversity || highestAchievement
+                    )
+                      ? firstUniversity && highestAchievement
+                        ? `${highestAchievement} from ${firstUniversity}`
+                        : highestAchievement || firstUniversity
+                      : ''}
+                  </Typography>
                 </Grid>
               </Grid>
             </CardContent>

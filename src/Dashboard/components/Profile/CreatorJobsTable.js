@@ -5,14 +5,19 @@ import { Link as RouterLink } from "react-router-dom";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import VisibilityTwoToneIcon from "@mui/icons-material/VisibilityTwoTone";
+import SettingsTwoToneIcon from "@mui/icons-material/SettingsTwoTone";
+import { keyframes } from "@emotion/react";
 import {
   Button,
-  ButtonGroup,
   Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
   Pagination,
   Skeleton,
   Stack,
@@ -22,7 +27,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from "@mui/material";
 
@@ -33,6 +37,16 @@ import CheckboxButtonActions, {
 import { useInvalidateQuery } from "../../../shared/hooks/invalidate-query";
 import { useJob } from "../../../shared/hooks/jobs-hook";
 
+const rotateOpen = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(180deg); }
+`;
+
+const rotateClose = keyframes`
+  from { transform: rotate(180deg); }
+  to { transform: rotate(0deg); }
+`;
+
 const tableRows = [
   {
     text: "Posted",
@@ -41,7 +55,7 @@ const tableRows = [
     style: { fontWeight: 700 },
   },
   {
-    text: "View/Edit",
+    text: "Job",
     variant: "button",
     color: "text.secondary",
     style: { fontWeight: 700 },
@@ -65,7 +79,7 @@ const tableRows = [
     style: { fontWeight: 700 },
   },
   {
-    text: "Applicants",
+    text: "Applied",
     variant: "button",
     color: "text.secondary",
     style: { fontWeight: 700 },
@@ -94,6 +108,19 @@ const CreatorJobsTable = ({
   const { invalidateQuery } = useInvalidateQuery();
 
   const { deleteJobById, isDeleting, deleteManyJobsById } = useJob();
+
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [menuJobId, setMenuJobId] = useState(null);
+
+  const handleOpenMenu = (event, jobId) => {
+    setMenuAnchorEl(event.currentTarget);
+    setMenuJobId(jobId);
+  };
+
+  const handleCloseMenu = () => {
+    setMenuAnchorEl(null);
+    setMenuJobId(null);
+  };
 
   useEffect(() => {
     if (totalPages !== jobs?.totalPages) {
@@ -202,14 +229,14 @@ const CreatorJobsTable = ({
                 </TableRow>
               ) : !isLoading && !creatorHasJobs ? (
                 <TableRow>
-                  <TableCell colSpan={5}>
+                  <TableCell colSpan={7}>
                     <Typography variant="subtitle2" color="text.secondary">
                       No active jobs for this account.
                     </Typography>
                   </TableCell>
                 </TableRow>
               ) : (
-                jobs?.jobs?.map((job, i) => (
+                jobs?.jobs?.map((job) => (
                   <TableRow key={job?._id}>
                     <TableCell>
                       <Checkbox
@@ -219,67 +246,49 @@ const CreatorJobsTable = ({
                         value={rowSelection[job?._id]}
                       />
                     </TableCell>
-                    <TableCell>{job?.datePosted?.split("T")[0]}</TableCell>
                     <TableCell>
-                      <ButtonGroup
-                        size="small"
-                        variant="contained"
-                        disableElevation
-                      >
-                        <Button
-                          to={`/jobs/${job?._id}/${job?.title
-                            ?.replace(/\s+/g, "-")
-                            ?.toLowerCase()}`}
-                          component={RouterLink}
-                        >
-                          <VisibilityTwoToneIcon />
-                        </Button>
-                        {/*auth.user._id === job._id to={`/jobs/${job?._id}/update`}*/}
-                        <Button
-                          sx={{ backgroundColor: "#2c6399" }}
-                          onClick={() => editJobHandler(job?._id)}
-                          disabled={job?.applicants?.length > 0}
-                        >
-                          <EditTwoToneIcon />
-                        </Button>
-                        <Tooltip title="Delete" placement="top">
-                          <Button
-                            color="error"
-                            onClick={() => deleteJobWarningHandler(job?._id)}
-                          >
-                            <DeleteForeverTwoToneIcon />
-                          </Button>
-                        </Tooltip>
-                        <Dialog
-                          disableScrollLock={true}
-                          open={openWarning}
-                          onClose={deleteJobWarningHandler}
-                          aria-labelledby="delete-your-job"
-                          aria-describedby="confirm deletion"
-                        >
-                          <DialogTitle>Delete this job?</DialogTitle>
-                          <DialogContent>
-                            You are about to delete a jobId. This action cannot
-                            be reversed.
-                          </DialogContent>
-                          <DialogActions>
-                            <Button onClick={deleteJobWarningHandler}>
-                              Cancel
-                            </Button>
-                            <Button
-                              color="error"
-                              onClick={() => deleteJobHandler(job?._id)}
-                            >
-                              Confirm Delete
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
-                      </ButtonGroup>
+                      <Typography sx={{ fontSize: 11 }}>
+                        {job?.datePosted?.split("T")[0]}
+                      </Typography>
                     </TableCell>
-                    <TableCell>{job?.location}</TableCell>
-                    <TableCell>{job?.salary}</TableCell>
-                    <TableCell>{job?.hours}</TableCell>
-                    <TableCell>{job?.applicants?.length}</TableCell>
+                    <TableCell>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Typography variant="body2" noWrap sx={{ fontWeight: 700, fontSize: 11 }}>
+                          {job?.title}
+                        </Typography>
+                        <IconButton size="small" onClick={(e) => handleOpenMenu(e, job?._id)}>
+                          <SettingsTwoToneIcon
+                            fontSize="small"
+                            sx={{
+                              animation: Boolean(menuAnchorEl)
+                                ? `${(Boolean(menuAnchorEl) && menuJobId === job?._id) ? rotateOpen : rotateClose} 200ms ease`
+                                : "none",
+                              transform: `rotate(${(Boolean(menuAnchorEl) && menuJobId === job?._id) ? 180 : 0}deg)`
+                            }}
+                          />
+                        </IconButton>
+                      </Stack>
+                    </TableCell>
+                    <TableCell>
+                      <Typography sx={{ fontSize: 11 }}>
+                        {job?.location}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography sx={{ fontSize: 11 }}>
+                        {job?.salary}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography sx={{ fontSize: 11 }}>
+                        {job?.hours}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography sx={{ fontSize: 11 }}>
+                        {job?.applicants?.length}
+                      </Typography>
+                    </TableCell>
                   </TableRow>
                 ))
               )}
@@ -301,6 +310,60 @@ const CreatorJobsTable = ({
           </Stack>
         </TableContainer>
       )}
+      {/* Global action menu for selected job */}
+      <Menu
+        anchorEl={menuAnchorEl}
+        open={Boolean(menuAnchorEl)}
+        onClose={handleCloseMenu}
+      >
+        {(() => {
+          const current = jobs?.jobs?.find((j) => j?._id === menuJobId);
+          const to = current
+            ? `/jobs/${current?._id}/${current?.title?.replace(/\s+/g, "-")?.toLowerCase()}`
+            : '#';
+          const editDisabled = current?.applicants?.length > 0;
+          return (
+            <>
+              <MenuItem component={RouterLink} to={to} onClick={handleCloseMenu}>
+                <ListItemIcon>
+                  <VisibilityTwoToneIcon fontSize="small" />
+                </ListItemIcon>
+                View
+              </MenuItem>
+              <MenuItem onClick={() => { handleCloseMenu(); editJobHandler(menuJobId); }} disabled={!!editDisabled}>
+                <ListItemIcon>
+                  <EditTwoToneIcon fontSize="small" />
+                </ListItemIcon>
+                Edit
+              </MenuItem>
+              <MenuItem onClick={() => { handleCloseMenu(); deleteJobWarningHandler(menuJobId); }}>
+                <ListItemIcon>
+                  <DeleteForeverTwoToneIcon fontSize="small" />
+                </ListItemIcon>
+                Delete
+              </MenuItem>
+            </>
+          );
+        })()}
+      </Menu>
+
+      {/* Delete confirmation dialog */}
+      <Dialog
+        disableScrollLock={true}
+        open={openWarning}
+        onClose={deleteJobWarningHandler}
+        aria-labelledby="delete-your-job"
+        aria-describedby="confirm deletion"
+      >
+        <DialogTitle>Delete this job?</DialogTitle>
+        <DialogContent>
+          You are about to delete a jobId. This action cannot be reversed.
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={deleteJobWarningHandler}>Cancel</Button>
+          <Button color="error" onClick={() => deleteJobHandler(jobToDelete)}>Confirm Delete</Button>
+        </DialogActions>
+      </Dialog>
       {editJob && (
         <UpdateJob jobId={editJobById} toggleEdit={closeEditJobHandler} />
       )}

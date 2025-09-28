@@ -87,6 +87,7 @@ const NewJob = () => {
   const auth = useContext(AuthContext);
   const { invalidateQuery } = useInvalidateQuery();
   const [isFullTime, setIsFullTime] = useState(true);
+  const [requirements, setRequirements] = useState([]);
   const [jobIsBasic, setJobIsBasic] = useState(true);
   const [jobCost, setJobCost] = useState(5);
   const [success, setSuccess] = useState(false);
@@ -513,7 +514,7 @@ const NewJob = () => {
                 }}
               >
                 <Typography variant="subtitle1" color="text.secondary">
-                  Item: {formState?.inputs?.jobType?.value} Job Post - 20 days
+                  Item: {formState?.inputs?.jobType?.value} Job Post - 60 days
                 </Typography>
                 <Divider />
                 <Typography variant="h5">{jobCost} - Credits</Typography>

@@ -10,6 +10,7 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Box,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
@@ -40,6 +41,7 @@ const Home = () => {
   const isMobileOrTablet = useMediaQuery(
     theme.breakpoints.down("sm") || theme.breakpoints.down("md")
   );
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   //featured jobs page, limit & total pages
   const [featuredPage, setFeaturedPage] = useState({
     page: 1,
@@ -272,9 +274,9 @@ const Home = () => {
           </StyledHomeFeaturedContent>
 
           <Divider sx={{ margin: "0.5rem auto", width: "95%" }} />
-          <div>
+          <Box sx={{width: {xs: '100%', sm: '100%', md: 'auto'}, overflowX: { xs: 'auto', sm: 'auto', md: 'visible'}}}>
             <SiteFeatures isLoading={homepageIsLoading} />
-          </div>
+          </Box>
 
           <Grid
             container

@@ -16,6 +16,10 @@ import {
   Switch,
   TextField,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 
 import ImageUpload from "../../../shared/components/FormElements/ImageUpload";
@@ -36,6 +40,7 @@ const TeacherSettings = (props) => {
   const auth = useContext(AuthContext);
   const [isTeacher, setIsTeacher] = useState(props.isTeacher);
   const [isHidden, setIsHidden] = useState(props.isHidden);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const user = props.user;
   const { deleteUserById, isPostLoading, error, clearError } = useUser();
   const navigate = useNavigate();
@@ -169,9 +174,24 @@ const TeacherSettings = (props) => {
         </Typography>
       )}
       <Box sx={{ padding: "1rem" }}>
-      <Button color="error" variant="outlined" onClick={() =>  handleDeleteAccount(auth?.user?._id)}>
-        Delete Account
-      </Button>
+        <Button color="error" variant="outlined" onClick={() => setDeleteOpen(true)}>
+          Delete Account
+        </Button>
+        <FormHelperText>
+          This will permanently delete your account and all associated data.
+        </FormHelperText>
+        <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)} disableScrollLock={true}>
+          <DialogTitle>Delete your account?</DialogTitle>
+          <DialogContent>
+            This action cannot be undone. All your data will be permanently removed.
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteOpen(false)}>Cancel</Button>
+            <Button color="error" onClick={() => { setDeleteOpen(false); handleDeleteAccount(auth?.user?._id); }}>
+              Confirm Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
 
       <CardContent>
@@ -224,76 +244,81 @@ const TeacherSettings = (props) => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={5}>
-            <FormControl fullWidth>
-              <InputLabel id="workExperience-select">
-                Work Experience
-              </InputLabel>
-              <Select
-                labelId="update-workExperience"
-                id="workExperience"
-                value={formState.inputs.workExperience.value || ""}
-                label="Years of Experience"
-                onChange={(event) =>
-                  inputHandler(
-                    "workExperience",
-                    event.target.value,
-                    !!event.target.value
-                  )
-                }
-              >
-                {experienceYears.map((item, i) => (
-                  <MenuItem key={i} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+          {/* Teacher-only fields */}
+          {user?.userType === "teacher" && (
+            <>
+              <Grid item xs={12} sm={6} md={5}>
+                <FormControl fullWidth>
+                  <InputLabel id="workExperience-select">
+                    Work Experience
+                  </InputLabel>
+                  <Select
+                    labelId="update-workExperience"
+                    id="workExperience"
+                    value={formState.inputs.workExperience.value || ""}
+                    label="Years of Experience"
+                    onChange={(event) =>
+                      inputHandler(
+                        "workExperience",
+                        event.target.value,
+                        !!event.target.value
+                      )
+                    }
+                  >
+                    {experienceYears.map((item, i) => (
+                      <MenuItem key={i} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-          <Grid item xs={12} sm={6} md={6}>
-            <FormControl fullWidth>
-              <InputLabel id="highestCertification-select">
-                Highest Certification
-              </InputLabel>
-              <Select
-                labelId="update-highestCertification"
-                id="highestCertification"
-                value={formState.inputs.highestCertification.value || ""}
-                label="Highest Certification"
-                onChange={(event) =>
-                  inputHandler(
-                    "highestCertification",
-                    event.target.value,
-                    !!event.target.value
-                  )
-                }
-              >
-                {coreJobRequirements.map((item, i) => (
-                  <MenuItem key={i} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+              <Grid item xs={12} sm={6} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="highestCertification-select">
+                    Highest Certification
+                  </InputLabel>
+                  <Select
+                    labelId="update-highestCertification"
+                    id="highestCertification"
+                    value={formState.inputs.highestCertification.value || ""}
+                    label="Highest Certification"
+                    onChange={(event) =>
+                      inputHandler(
+                        "highestCertification",
+                        event.target.value,
+                        !!event.target.value
+                      )
+                    }
+                  >
+                    {coreJobRequirements.map((item, i) => (
+                      <MenuItem key={i} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <ChipInput
-              label="My Education / Certifications"
-              helperText="Enter university domains (e.g., Harvard.edu, Liverpool.ac.uk)"
-              value={formState.inputs.education.value}
-              onChange={(value) =>
-                userArrayHandler(
-                  "education",
-                  value,
-                  !!value
-                )
-              }
-              id="education"
-              multiline={true}
-            />
-          </Grid>
+              <Grid item xs={12} sm={6}>
+                <ChipInput
+                  label="My Education / Certifications"
+                  helperText="Enter university domains (e.g., Harvard.edu, Liverpool.ac.uk)"
+                  value={formState.inputs.education.value}
+                  onChange={(value) =>
+                    userArrayHandler(
+                      "education",
+                      value,
+                      !!value
+                    )
+                  }
+                  id="education"
+                  multiline={true}
+                />
+              </Grid>
+            </>
+          )}
 
           <Grid item xs={12} sm={6} md={5}>
             <FormControl fullWidth>
@@ -310,82 +335,91 @@ const TeacherSettings = (props) => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={7}>
-            <FormControl fullWidth>
-              <InputLabel id="location-select">Location</InputLabel>
-              <Select
-                labelId="update-location"
-                id="location"
-                value={formState.inputs.location.value || ""}
-                label="Location"
-                onChange={(event) =>
-                  inputHandler(
-                    "location",
-                    event.target.value,
-                    !!event.target.value
-                  )
-                }
-              >
-                {thaiProvinces.map((item, i) => (
-                  <MenuItem key={i} value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+          {user?.userType === "teacher" && (
+            <Grid item xs={12} sm={6} md={7}>
+              <FormControl fullWidth>
+                <InputLabel id="location-select">Location</InputLabel>
+                <Select
+                  labelId="update-location"
+                  id="location"
+                  value={formState.inputs.location.value || ""}
+                  label="Location"
+                  onChange={(event) =>
+                    inputHandler(
+                      "location",
+                      event.target.value,
+                      !!event.target.value
+                    )
+                  }
+                >
+                  {thaiProvinces.map((item, i) => (
+                    <MenuItem key={i} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
 
-          <Grid item xs={12} sm={6}>
-            <SkillsChipInput
-              label="Skills"
-              helperText="Type a skill and press Enter to add it"
-              value={formState.inputs.skill.value}
-              onChange={(value) =>
-                userArrayHandler(
-                  "skill",
-                  value,
-                  !!value
-                )
-              }
-              id="skill"
-            />
-          </Grid>
+          {user?.userType === "teacher" && (
+            <>
+              <Grid item xs={12} sm={6}>
+                <SkillsChipInput
+                  label="Skills"
+                  helperText="Type a skill and press Enter to add it"
+                  value={formState.inputs.skill.value}
+                  onChange={(value) =>
+                    userArrayHandler(
+                      "skill",
+                      value,
+                      !!value
+                    )
+                  }
+                  id="skill"
+                />
+              </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <SkillsChipInput
-              label="Interests"
-              helperText="Type an interest and press Enter to add it"
-              value={formState.inputs.interests.value}
-              onChange={(value) =>
-                userArrayHandler(
-                  "interests",
-                  value,
-                  !!value
-                )
-              }
-              id="interests"
-            />
-          </Grid>
+              <Grid item xs={12} sm={6}>
+                <SkillsChipInput
+                  label="Interests"
+                  helperText="Type an interest and press Enter to add it"
+                  value={formState.inputs.interests.value}
+                  onChange={(value) =>
+                    userArrayHandler(
+                      "interests",
+                      value,
+                      !!value
+                    )
+                  }
+                  id="interests"
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
 
-        <Grid item xs={12} sx={{ margin: "0.5rem 0 0.5rem 0" }}>
-          <TextField
-            multiline
-            rows={3}
-            fullWidth
-            label="About"
-            variant="outlined"
-            id="about"
-            value={formState.inputs.about.value || ""}
-            onChange={(event) =>
-              inputHandler(
-                "about",
-                event.target.value,
-                !!event.target.value
-              )
-            }
-          />
-        </Grid>
+        {user?.userType === "teacher" && (
+          <Grid item xs={12} sx={{ margin: "0.5rem 0 0.5rem 0" }}>
+            <TextField
+              multiline
+              rows={3}
+              fullWidth
+              label="About"
+              variant="outlined"
+              id="about"
+              value={formState.inputs.about.value || ""}
+              onChange={(event) =>
+                inputHandler(
+                  "about",
+                  event.target.value,
+                  !!event.target.value
+                )
+              }
+            />
+          </Grid>
+        )}
+        
         <FormControl>
           {props.isPostLoading && <CircularProgress />}
           {!props.isLoading && (

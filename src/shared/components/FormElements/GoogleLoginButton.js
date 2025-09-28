@@ -7,13 +7,38 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
   const auth = React.useContext(AuthContext);
   const navigate = useNavigate();
 
+  const decodeJwt = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      return null;
+    }
+  };
+
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
+      // Extract user fields from credential on client to match backend expectations
+      const token = credentialResponse?.credential;
+      const payload = token ? decodeJwt(token) : null;
+      const email = payload?.email;
+      const name = payload?.name;
+      const picture = payload?.picture;
+      const sub = payload?.sub;
+
       const response = await fetch(`${process.env.REACT_APP_USERS}/google-auth`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          credential: credentialResponse.credential 
+        body: JSON.stringify({
+          email,
+          name,
+          picture,
+          sub,
+          googleId: sub
         })
       });
       
@@ -33,6 +58,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
             buffetIsActive: data.buffetIsActive,
             blogPosts: data.blogPosts,
             resume: data.resume,
+            pdfResume: data.pdfResume,
             coverLetter: data.coverLetter,
             incomeDirectory: data.incomeDirectory,
             applications: data.applications,

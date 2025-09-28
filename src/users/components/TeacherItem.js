@@ -131,6 +131,15 @@ const TeacherItem = (props) => {
     );
   }
 
+  const firstUniversity = props?.education
+    ? props.education
+        ?.split(",")
+        ?.map((s) => s.trim())
+        ?.filter(Boolean)?.[0]
+        ?.split(".")[0]
+    : "";
+  const highestAchievement = props?.highestCertification || props?.degree || "";
+
   return (
     <>
       <Grid container direction="row" justifyContent="center">
@@ -156,31 +165,27 @@ const TeacherItem = (props) => {
               justifyContent="flex-start"
             >
               {nameText}
-              {/*new Result should be mapped over */}
-              {props?.education &&
-                props?.education
-                  ?.split(",")
-                  ?.slice(0, 2)
-                  ?.map((uni, i) => (
-                    <Chip
-                      size="small"
-                      key={i}
-                      sx={{ backgroundColor: "transparent" }}
-                      avatar={
-                        <Tooltip
-                          title={`Degree from ${uni?.trim()?.split(".")[0]}`}
-                          placement="top"
-                        >
-                          <Avatar
-                            alt={`${uni?.trim()}--${props?.name}`}
-                            src={`https://logo.clearbit.com/${uni
-                              ?.trim()
-                              ?.toLowerCase()}`}
-                          />
-                        </Tooltip>
-                      }
-                    />
-                  ))}
+              {/* Education summary as compact Chip with tooltip */}
+              {(firstUniversity || highestAchievement) && (
+                <Tooltip
+                  title={
+                    highestAchievement && firstUniversity
+                      ? `${highestAchievement} from ${firstUniversity}`
+                      : highestAchievement || firstUniversity
+                  }
+                  placement="top"
+                >
+                  <IconButton
+                    size="small"
+                    sx={{
+                      padding: "2px",
+                      backgroundColor: "rgba(33, 150, 243, 0.1)", // TEMP: Make it very visible
+                    }}
+                  >
+                    <WorkspacePremiumIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              )}
               {/**add stuff here */}
               {props?.workExperience > 5 && (
                 <Tooltip title={`Has over 5 years experience.`} placement="top">
@@ -202,13 +207,10 @@ const TeacherItem = (props) => {
                 <Tooltip title={`Has PDF Resume (${pdfImages.length} page${pdfImages.length > 1 ? 's' : ''})`} placement="top">
                   <IconButton
                     size="small"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevent card click
-                      handlePdfModalOpen();
-                    }}
+                   
                     sx={{
                       padding: "2px",
-                      backgroundColor: "red", // TEMP: Make it very visible
+                      backgroundColor: "rgba(33, 150, 243, 0.1)", // TEMP: Make it very visible
                       "&:hover": {
                         backgroundColor: "rgba(33, 150, 243, 0.1)"
                       }
@@ -228,6 +230,7 @@ const TeacherItem = (props) => {
                   component="h3"
                   color="text.secondary"
                   variant="subtitle2"
+                  sx={{ fontSize: '11px'}}
                 >
                   <PublicIcon fontSize="inherit" /> {props?.nationality}
                 </Typography>
@@ -235,10 +238,10 @@ const TeacherItem = (props) => {
                   component="h3"
                   color="text.secondary"
                   variant="subtitle2"
+                  sx={{ fontSize: '11px'}}
                 >
                   <AssuredWorkloadIcon fontSize="inherit" />{" "}
-                  {props?.workExperience}{" "}
-                  {props?.workExperience > 1 ? "Years" : "Year"}
+                  {props?.workExperience}
                 </Typography>
               </Grid>
               {/*2 x 2 */}
@@ -247,6 +250,7 @@ const TeacherItem = (props) => {
                   component="h3"
                   color="text.secondary"
                   variant="subtitle2"
+                  sx={{ fontSize: '11px'}}
                 >
                   <PlaceIcon fontSize="inherit" /> {props?.currentLocation}
                 </Typography>
@@ -255,8 +259,13 @@ const TeacherItem = (props) => {
                   component="h3"
                   color="text.secondary"
                   variant="subtitle2"
+                  sx={{ fontSize: '11px'}}
                 >
-                  <WorkspacePremiumIcon fontSize="inherit" /> {props?.degree}
+                  <WorkspacePremiumIcon fontSize="inherit" /> 
+                  {(firstUniversity || highestAchievement) ? 
+                  firstUniversity && highestAchievement ? 
+                  `${highestAchievement} from ${firstUniversity}` 
+                  : highestAchievement || firstUniversity : ''}
                 </Typography>
               </Grid>
             </Grid>
