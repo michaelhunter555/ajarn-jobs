@@ -175,7 +175,7 @@ const AjarnJobsExperience = () => {
                 <BasicTable />
                 <Divider />
                 <Typography variant="h5" color="text.secondary">
-                  You can also recruit teachers by activing a teacher buffet.
+                  You can also recruit teachers by activating a teacher buffet.
                 </Typography>
                 <Stack
                   sx={{

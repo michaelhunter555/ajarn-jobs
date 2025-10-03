@@ -111,15 +111,18 @@ const CreatorJobsTable = ({
 
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [menuJobId, setMenuJobId] = useState(null);
+  const [selectedJobIndex, setSelectedJobIndex] = useState(null);
 
-  const handleOpenMenu = (event, jobId) => {
+  const handleOpenMenu = (event, jobId, i) => {
     setMenuAnchorEl(event.currentTarget);
     setMenuJobId(jobId);
+    setSelectedJobIndex(i);
   };
 
   const handleCloseMenu = () => {
     setMenuAnchorEl(null);
     setMenuJobId(null);
+    setSelectedJobIndex(null);
   };
 
   useEffect(() => {
@@ -236,7 +239,7 @@ const CreatorJobsTable = ({
                   </TableCell>
                 </TableRow>
               ) : (
-                jobs?.jobs?.map((job) => (
+                jobs?.jobs?.map((job, i) => (
                   <TableRow key={job?._id}>
                     <TableCell>
                       <Checkbox
@@ -256,11 +259,11 @@ const CreatorJobsTable = ({
                         <Typography variant="body2" noWrap sx={{ fontWeight: 700, fontSize: 11 }}>
                           {job?.title}
                         </Typography>
-                        <IconButton size="small" onClick={(e) => handleOpenMenu(e, job?._id)}>
+                        <IconButton size="small" onClick={(e) => handleOpenMenu(e, job?._id, i)}>
                           <SettingsTwoToneIcon
                             fontSize="small"
                             sx={{
-                              animation: Boolean(menuAnchorEl)
+                              animation: Boolean(menuAnchorEl) && selectedJobIndex === i
                                 ? `${(Boolean(menuAnchorEl) && menuJobId === job?._id) ? rotateOpen : rotateClose} 200ms ease`
                                 : "none",
                               transform: `rotate(${(Boolean(menuAnchorEl) && menuJobId === job?._id) ? 180 : 0}deg)`

@@ -5,7 +5,7 @@ import { Box, Paper, Typography } from "@mui/material";
 const privacyPolicyContent = [
   {
     title: "1. Introduction",
-    content: `Welcome to Ajarn Jobs, operated by AjarnJobs.com ("we", "us", or "our"). 
+    content: `Welcome to Ajarn Jobs, operated by Elevated Apps L.L.C. ("we", "us", or "our"). 
     We are committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. 
     This Privacy Policy outlines how we collect, use, and protect your information when you use our website and services.`,
   },

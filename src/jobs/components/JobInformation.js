@@ -30,8 +30,8 @@ const StyledGridContainer = styled(Grid)(({ theme }) => ({
 }));
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  height: 175,
-  width: 175,
+  height: 170,
+  width: 170,
   border: "3px solid",
   borderColor: theme.palette.primary.main,
   boxShadow: theme.shadows[4],
@@ -89,14 +89,23 @@ const ModernCard = styled(Card)(({ theme }) => ({
 }));
 
 const GradientCompanyChip = styled(Chip)(({ theme }) => ({
-  background: "linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)",
-  color: "white",
+  background: "transparent",
+  color: theme.palette.text.primary,
+  border: `1px solid ${theme.palette.divider}`,
   fontWeight: 600,
+  height: "auto",
   fontSize: "16px",
   padding: theme.spacing(1),
+  maxWidth: "100%",
+  marginBottom: "1rem",
+  '& .MuiChip-label': {
+    whiteSpace: 'normal',
+    wordBreak: 'break-word',
+    overflowWrap: 'anywhere',
+    lineHeight: 1.2,
+  },
   "&:hover": {
-    background: "linear-gradient(45deg, #1976d2 30%, #2196f3 90%)",
-    transform: "scale(1.05)",
+    backgroundColor: theme.palette.action.hover,
   },
   transition: "all 0.3s ease-in-out",
 }));
@@ -119,21 +128,21 @@ const createJobInfo = (job) => {
           variant: "subtitle1",
           component: "h3",
           note: `${job?.creator?.company} is located in ${job?.creator?.headquarters}, Thailand`,
-          icon: <LocationOnIcon />,
+          icon: <LocationOnIcon fontSize="small" />,
           text: job?.creator?.headquarters + ", Thailand",
         },
         {
           variant: "subtitle1",
           component: "h3",
           note: `${job?.creator?.company} current company size.`,
-          icon: <BusinessIcon />,
+          icon: <BusinessIcon fontSize="small" />,
           text: job?.creator?.companySize + " employees",
         },
         {
           variant: "subtitle1",
           component: "h3",
           note: `${job?.creator?.company} launched in ${job?.creator?.established}`,
-          icon: <VerifiedUserIcon />,
+          icon: <VerifiedUserIcon fontSize="small" />,
           text: "Established in " + job?.creator?.established,
         },
       ]
@@ -182,11 +191,20 @@ export const JobInformation = (props) => {
                 backgroundClip: "text",
                 // WebkitBackgroundClip: "text",
                 // WebkitTextFillColor: "transparent",
-                textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                textShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+                overflowWrap: 'anywhere',
               }}
             >
                {jobInformation[0]?.text}
             </Typography>
+            <Divider flexItem sx={{ margin: "0.5rem 0", width: "100%" }} />
+           
+            <GradientCompanyChip
+              label={job?.creator?.company}
+            />
+       
             <Stack
               sx={{
                 flexDirection: { xs: "column", md: "column", lg: "row" },
@@ -196,17 +214,17 @@ export const JobInformation = (props) => {
               alignItems="center"
             >
               <StyledAvatar
-                variant="circular"
+                variant="rounded"
                 src={`${job?.image}`}
                 alt={`${job?.id}--${job?.creator?.company}`}
                 sx={{ border: "1px solid #bdbdbd" }}
               />
               <Stack spacing={2} alignItems="start">
                 {jobInformation
-                  ?.slice(1)
+                  ?.slice(2)
                   ?.map(({ variant, component, icon, text, note }, i) => (
                     <Stack key={i} direction="row" alignItems="center" spacing={2}>
-                      <Box>
+                      {icon &&<Box>
                         <Tooltip title={note ? note : ""}>
                           <Box sx={{ 
                             p: 1, 
@@ -217,16 +235,16 @@ export const JobInformation = (props) => {
                             alignItems: "center",
                             justifyContent: "center"
                           }}>
-                            {icon && <>{icon}</>}
+                            {icon}
                           </Box>
                         </Tooltip>
-                      </Box>
+                      </Box>}
 
                       <Box>
                         <Typography 
                           color="text.primary" 
-                          variant="body1"
-                          sx={{ fontWeight: 500 }}
+                          variant="body2"
+                          sx={{ fontWeight: 500, fontSize: 13 }}
                         >
                           {text}
                         </Typography>

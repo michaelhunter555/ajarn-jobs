@@ -33,14 +33,18 @@ const UpdateJobStylesForm = styled("form")({
 });
 
 const styledRichJobUpdateJobText = {
-  height: "auto",
-  padding: " 0 20px",
+  padding: "0 20px",
   borderRadius: "0 0 8px 8px",
   border: "2px solid #dbdbdb",
   boxSizing: "border-box",
   marginBottom: "1rem",
+  ".rdw-editor-main": {
+    minHeight: 150,
+    padding: "8px 0",
+  },
   ".public-DraftStyleDefault-block": {
-    height: "5rem",
+    margin: "0 0 0.75em",
+    lineHeight: 1.6,
   },
 };
 

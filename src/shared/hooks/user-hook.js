@@ -187,7 +187,7 @@ export const useUser = () => {
     async (userId, recruitmentResponse, recruitmentId) => {
       try {
         const response = await sendRequest(
-          `${process.env.REACT_APP_USERS}/recruitment-offfer-response/${userId}`,
+          `${process.env.REACT_APP_USERS}/recruitment-offer-response/${userId}`,
           "POST",
           JSON.stringify({ recruitmentResponse, recruitmentId }),
           {

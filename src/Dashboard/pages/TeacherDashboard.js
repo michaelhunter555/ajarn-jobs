@@ -17,7 +17,10 @@ import {
   Chip,
   Switch,
   FormControlLabel,
+  Divider,
 } from "@mui/material";
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import CloseIcon from '@mui/icons-material/Close';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import SendIcon from '@mui/icons-material/Send';
 import { styled } from "@mui/material/styles";
@@ -63,6 +66,7 @@ import UpdateResumeItem from "../components/Profile/UpdateResumeItem";
 import UserRecruitmentTable from "../components/Profile/UserRecruitmentTable";
 import UsersContent from "../components/Profile/UsersContent";
 import Sidebar, { BottomMobileNav } from "../components/Sidebar";
+import Contact from "../../shared/components/UIElements/Contact";
 
 const JobAdGridContainer = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -90,6 +94,7 @@ const TeacherDashboard = () => {
   const [recruitmentOffers, setRecruitmentOffers] = useState(0);
   const [showPdfUpload, setShowPdfUpload] = useState(false);
   const [selectedPdfFile, setSelectedPdfFile] = useState(null);
+  const [showContact, setShowContact] = useState(false);
 
   const [userCardPage, setUserCardPage] = useState({
     page: 1,
@@ -548,6 +553,21 @@ const TeacherDashboard = () => {
                     <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
                       Current PDF Resume {pdfImages.length > 1 && `(${pdfImages.length} pages)`}
                     </Typography>
+                    <Button variant="contained" color="error" onClick={async () => {
+                      try {
+                        await sendRequest(
+                          `${process.env.REACT_APP_USERS}/delete-pdf-resume/${auth.user._id}`,
+                          "DELETE",
+                          null,
+                          { Authorization: "Bearer " + auth.token }
+                        );
+                        // Update local auth state
+                        auth.updateUser({ ...auth.user, pdfResume: "" });
+                        setPdfImages([]);
+                      } catch (err) {
+                        console.error("Delete PDF error:", err);
+                      }
+                    }}>Delete PDF Resume</Button>
                     {pdfImages.map((imageUrl, index) => (
                       <Box key={index} sx={{ mb: 2 }}>
                         <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>
@@ -884,6 +904,39 @@ const TeacherDashboard = () => {
               marginBottom: 5,
             }}
           >
+           {auth?.user?.creator && <Box sx={{
+              
+             
+            
+              alignItems: "center",
+              border: "1px solid gold", 
+              borderRadius: "10px", 
+              padding: "1rem",
+              background: "linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)",
+              color: "white",
+              mb:1,
+               }}>
+                <Box >
+
+                <Typography variant="h6">
+                  Welcome back {auth?.user?.name}!
+                </Typography>
+                <Typography variant="subtitle2">
+                  Need support? Email us at info@ajarnjobs.com. We respond quickly, but please allow up to 24 hours.
+                </Typography>
+
+                {showContact && <>
+                <Divider variant="inset" />
+                <Contact />
+                </>}
+                </Box>
+
+                <Box >
+                  <Chip icon={showContact ? <CloseIcon /> : <SupportAgentIcon />} color={showContact ? "error" : "primary"} onClick={() => setShowContact(prev => !prev)} clickable label={showContact ? "Close" : "Contact Support"} variant="contained" />
+                </Box>
+                
+              </Box>}
+               
             {userProfileLoading && (
               <Stack justifyContent="flex-End">
                 <Skeleton height={80} variant="rectangular" />

@@ -104,7 +104,7 @@ const JobDataTable = (props) => {
                   <Chip
                     icon={<ArrowCircleDownIcon sx={{ width: "15px" }} />}
                     label="📋 Job Specifications"
-                    size="small"
+                    size="medium"
                     color="primary"
                     variant="outlined"
                   />

@@ -81,14 +81,14 @@ const Footer = () => {
           justifyContent="flex-start"
           spacing={3}
         >
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
             <Stack spacing={1}>
-              <Stack alignItems="center">
+              <Stack alignItems="flex-start">
                 <CardMedia
                   component="img"
                   src={isDarkMode ? imageDark : imageLight}
                   alt="site-logo"
-                  sx={{ width: "40%" }}
+                  sx={{ width: "40%", }}
                 />
               </Stack>
               <Divider flexItem sx={{ width: "90%" }} />
@@ -153,20 +153,7 @@ const Footer = () => {
               </Stack>
             </Stack>
           </Grid>
-          <Grid item xs={12} md={2}>
-            <Stack direction="column" alignItems="center">
-              <Typography
-                variant="subtitle1"
-                fontWeight={700}
-                color="text.secondary"
-              >
-                Work with us
-              </Typography>
-              <RouterLink component={Link} to={`/work-with-us`}>
-                Jobs
-              </RouterLink>
-            </Stack>
-          </Grid>
+         
           <Grid item xs={12} md={2}>
             <Stack direction="column" alignItems="center">
               <Typography
@@ -176,14 +163,15 @@ const Footer = () => {
               >
                 Partnerships
               </Typography>
-              <RouterLink component={Link} to={`/media-partnerships`}>
-                Media
-              </RouterLink>
+            
               <RouterLink
                 component={Link}
                 to={`/how-to-use-ajarn-jobs?type=employer`}
               >
                 Site Feature
+              </RouterLink>
+              <RouterLink component={Link} to={`/work-with-us`}>
+                Jobs
               </RouterLink>
             </Stack>
           </Grid>
