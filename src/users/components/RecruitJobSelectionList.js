@@ -24,7 +24,7 @@ const RecruitJobSelectionList = ({ jobs, onSelectedJob }) => {
           key={job?._id}
           value={job?.title}
         >
-          <Stack direction="row" alignItems="center" spacing={1}>
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ flexWrap: 'wrap' }}>
             <Typography sx={{ fontSize: { xs: 12, md: 14 } }}>
               {job?.title} - {job?.location}
             </Typography>

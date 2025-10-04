@@ -97,9 +97,9 @@ const OtherJobsFromEmployer = ({ otherJobs, otherJobsCount, currentJobId }) => {
         More Jobs from {otherJobs[0]?.creator?.company || "This Employer"} ({otherJobsCount})
       </SectionTitle>
       
-      <Grid container spacing={2}>
+      <Grid container spacing={2} direction="row" justifyContent="flex-start" alignItems="center">
         {otherJobs.map((job) => (
-          <Grid item xs={12} sm={6} md={6} key={job._id}>
+          <Grid item xs={12} sm={6} md={4} key={job._id}>
             <Link
               to={`/jobs/${job._id}/${job?.title?.replace(/\s+/g, "-")?.toLowerCase()}`}
               style={{ textDecoration: "none" }}
