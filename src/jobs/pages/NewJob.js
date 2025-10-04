@@ -2,6 +2,8 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "draft-js/dist/Draft.css";
 
 import React, { useContext, useEffect, useState } from "react";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import XIcon from "@mui/icons-material/X";
 
 import DOMPurify from "dompurify";
 import { convertToRaw, EditorState } from "draft-js";
@@ -516,6 +518,30 @@ const NewJob = () => {
                 <Typography variant="subtitle1" color="text.secondary">
                   Item: {formState?.inputs?.jobType?.value} Job Post - 60 days
                 </Typography>
+               <Stack spacing={1}>
+               {formState?.inputs?.jobType?.value === 'featured' && <>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    
+                  <FacebookIcon sx={{ color: '#1877F2'}} fontSize="10px" />
+                  <Typography sx={{ fontSize: '11px' }} variant="subtitle2" color="text.secondary">Ajarn Jobs Facebook Post</Typography> 
+                  </Stack>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+
+                  <XIcon fontSize="10px" />
+                  <Typography sx={{ fontSize: '11px' }} variant="subtitle2" color="text.secondary">Ajarn Jobs X Post</Typography> 
+                  </Stack>
+                <Stack direction="row" alignItems="center" spacing={1}>
+
+                  <Typography>&bull;</Typography>
+                  <Typography sx={{ fontSize: '11px' }} variant="subtitle2" color="text.secondary">Homepage Featured & Teacher Dashboard</Typography> 
+                  </Stack>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+
+                  <Typography>&bull;</Typography>
+                  <Typography sx={{ fontSize: '11px' }} variant="subtitle2" color="text.secondary">Distinctive Highlight & "Featured" tag</Typography> 
+                  </Stack>
+                </>}
+                </Stack>
                 <Divider />
                 <Typography variant="h5">{jobCost} - Credits</Typography>
               </Stack>
