@@ -20,7 +20,7 @@ export const auth = getAuth(app);
 // Configure action code settings for email verification
 export const actionCodeSettings = {
   // Don't redirect - handle verification in app
-  url: window.location.origin,
+  url: 'https://ajarnjobs.com/verify-email',
   // This must be true.
   handleCodeInApp: true,
 };

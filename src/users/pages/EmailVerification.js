@@ -19,7 +19,7 @@ import { useFirebaseAuth } from '../../shared/hooks/firebase-auth-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import { auth as firebaseAuth } from '../../shared/config/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, applyActionCode } from 'firebase/auth';
 import OnboardingFlow from '../../shared/components/Onboarding/OnboardingFlow';
 import EmployerOnboarding from '../components/EmployerOnboarding';
 
@@ -56,6 +56,38 @@ const EmailVerification = () => {
   const [signInPassword, setSignInPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Handle Firebase action link (verifyEmail) when arriving with mode/oobCode
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    const oobCode = params.get('oobCode');
+
+    if (!oobCode) return;
+    // Firebase uses mode=verifyEmail; accept generic 'action' just in case
+    if (mode !== 'verifyEmail' && mode !== 'action') return;
+
+    (async () => {
+      try {
+        setIsCheckingVerification(true);
+        await applyActionCode(firebaseAuth, oobCode);
+        // If a user is signed in, refresh their state to reflect verification
+        try {
+          await firebaseAuth.currentUser?.reload();
+        } catch (_) {
+          // no-op: user may not be signed in yet
+        }
+      } catch (e) {
+        // Intentionally minimal handling; UI already shows generic errors
+        // and users can resend verification
+        // console.error('Error applying action code:', e);
+      } finally {
+        setIsCheckingVerification(false);
+        // Clean the URL to avoid re-processing the code
+        navigate('/verify-email', { replace: true });
+      }
+    })();
+  }, [location.search, navigate]);
 
   // Load pending signup data from localStorage
   useEffect(() => {
