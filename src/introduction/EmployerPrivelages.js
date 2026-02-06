@@ -8,6 +8,8 @@ import {
   Paper,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 const employerPrivelages = [
@@ -63,6 +65,8 @@ const RenderExplanationText = ({ component }) => {
 };
 
 const EmployerPrivelages = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [component, setComponent] = useState("buildProfile");
   const [actionText, setActionText] = useState("Get More Exposure");
   const [index, setIndex] = useState(0);
@@ -79,7 +83,7 @@ const EmployerPrivelages = () => {
       }}
     >
       <Stack>
-        <Typography variant="h3">
+        <Typography variant="h3" sx={{ fontSize: isMobile ? 30 : "normal" }}>
           Employer - (em·​ploy·​er /im-ˈplȯi-ər/)
         </Typography>
         <Typography gutterBottom>
@@ -90,8 +94,11 @@ const EmployerPrivelages = () => {
       <Divider flexItem />
       <Stack
         sx={{
-          justifyContent: "center",
-          flexDirection: { xs: "column", md: "row" },
+          justifyContent: { xs: "flex-start", md: "center" },
+          flexDirection: "row",
+          ...(isMobile && {
+            overflowX: "auto",
+          }),
           gap: "10px",
           width: "100%",
         }}
@@ -109,18 +116,20 @@ const EmployerPrivelages = () => {
               padding: 2,
               borderRadius: 10,
               maxWidth: { sx: "100%", md: 300 },
-              minHeight: 400,
+              minHeight: { xs: 300, md: 400 },
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               border: i === index ? "1px solid gray" : "none",
               backgroundColor: index === i ? "#f2fdff" : "bg.paper",
+              ...(isMobile && { marginBottom: 1 }),
             }}
           >
             <Typography
               sx={{
                 fontWeight: index === i ? 700 : "normal",
                 color: index === i ? "#000" : "text.secondary",
+                ...(isMobile && { fontSize: 14 }),
               }}
               variant="h5"
               color="text.secondary"
@@ -145,6 +154,7 @@ const EmployerPrivelages = () => {
               <Typography
                 sx={{
                   color: index === i ? "#000" : "text.secondary",
+                  ...(isMobile && { fontSize: 11 }),
                 }}
               >
                 {t.description}
@@ -154,7 +164,13 @@ const EmployerPrivelages = () => {
         ))}
       </Stack>
       <Stack sx={{ padding: 2, borderRadius: 10, minHeight: 200 }}>
-        <Typography variant="h3">{actionText}</Typography>
+        <Typography
+          variant="h3"
+          color="text.secondary"
+          sx={{ fontSize: isMobile ? 30 : "normal" }}
+        >
+          {actionText}
+        </Typography>
         <Divider />
         <RenderExplanationText component={component} />
       </Stack>

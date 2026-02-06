@@ -11,6 +11,8 @@ import {
   Link,
   Skeleton,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -26,7 +28,6 @@ const StyledBoxWrapper = styled(Box)(({ theme }) => ({
   flexDirection: "row",
   justifyContent: "center",
   gap: "1rem",
-  overflowX: "auto",
   whiteSpace: "nowrap",
   [theme.breakpoints.down("md")]: {
     display: "flex",
@@ -41,7 +42,7 @@ const StyledBoxWrapper = styled(Box)(({ theme }) => ({
 }));
 
 const StyledCardBackground = styled(Card)(({ theme }) => ({
-  margin: "0.2rem",
+  //margin: "0.2rem",
   display: "flex",
 
   flexDirection: "column",
@@ -83,6 +84,8 @@ const createItems = (auth) => {
 };
 
 const SiteFeatures = ({ isLoading }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const auth = useContext(AuthContext);
   const { isDarkMode } = useThemeToggle();
   //arrange items in array of objects
@@ -118,10 +121,11 @@ const SiteFeatures = ({ isLoading }) => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            justifyContent: "center",
-            gap: "1rem",
-            width: { xs: "100%", md: "60%" },
+            flexDirection: "row",
+            justifyContent: { xs: "flex-start", md: "center" },
+            overflowX: "auto",
+            gap: { xs: "1rem", md: "0" },
+            width: "100%",
           }}
         >
           {items.map(({ label, img, link }, i) => {
@@ -135,6 +139,7 @@ const SiteFeatures = ({ isLoading }) => {
                         ? "0 4px 30px rgb(36 211 223 / 20%)"
                         : "0 4px 30px rgba(0, 0, 0, 0.1)",
                     },
+                    ...(!isMobile && { width: "60%" }),
                   }}
                 >
                   <CardMedia

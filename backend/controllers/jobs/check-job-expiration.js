@@ -6,8 +6,8 @@ const checkJobExpiration = async () => {
   //if the value exceeds 20 days
   // from time posted until today
   // job should be deleted.
-  const maxPostDuration = 20 * 24 * 60 * 60 * 1000;
-  //i.e today - 20 days (ms)
+  const maxPostDuration = 60 * 24 * 60 * 60 * 1000;
+  //i.e today - 60 days (ms)
   const breakPoint = today.getTime() - maxPostDuration;
 
   try {

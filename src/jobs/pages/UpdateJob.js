@@ -13,6 +13,8 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -29,7 +31,7 @@ const UpdateJobStylesForm = styled("form")({
   maxWidth: "40rem",
   boxShadow: "0 2px 8px rgba(0, 0, 0, 0.26)",
   borderRadius: "6px",
-  background: "white",
+  // background: "white",
 });
 
 const styledRichJobUpdateJobText = {
@@ -45,6 +47,8 @@ const styledRichJobUpdateJobText = {
 };
 
 const UpdateJob = ({ jobId, toggleEdit }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const auth = useContext(AuthContext);
   const { user } = auth;
   //const jobId = useParams().jid;
@@ -144,9 +148,10 @@ const UpdateJob = ({ jobId, toggleEdit }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: 100,
+          height: isMobile ? "100%" : 100,
           flexDirection: "column",
           gap: "10px",
+          ...(isMobile && { padding: 1 }),
         }}
       >
         <Grid>
@@ -160,7 +165,8 @@ const UpdateJob = ({ jobId, toggleEdit }) => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            maxWidth: "50%",
+            maxWidth: isMobile ? "100%" : "50%",
+            ...(isMobile && { padding: 1 }),
           }}
         >
           <Typography variant="subtitle2" color="text.secondary">
@@ -171,7 +177,9 @@ const UpdateJob = ({ jobId, toggleEdit }) => {
       </Box>
       <UpdateJobStylesForm onSubmit={jobUpdateHandler}>
         <TextField
-          sx={{ margin: "1rem auto" }}
+          sx={{
+            margin: "1rem auto",
+          }}
           fullWidth
           id="title"
           label="Title"
@@ -180,7 +188,12 @@ const UpdateJob = ({ jobId, toggleEdit }) => {
             inputHandler("title", event.target.value, event.target.value !== "")
           }
         />
-        <Box sx={{ width: "100%", ...styledRichJobUpdateJobText }}>
+        <Box
+          sx={{
+            width: "100%",
+            ...styledRichJobUpdateJobText,
+          }}
+        >
           <Editor
             id="description"
             editorState={editorState}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import WorkIcon from "@mui/icons-material/Work";
 //import { Link } from 'react-router-dom';
 import {
+  Box,
   Divider,
   Grid,
   Pagination,
@@ -270,9 +271,14 @@ const Home = () => {
           </StyledHomeFeaturedContent>
 
           <Divider sx={{ margin: "0.5rem auto", width: "95%" }} />
-          <div>
+          <Box
+            sx={{
+              width: "100%",
+              ...(isMobileOrTablet && { overflowX: "auto" }),
+            }}
+          >
             <SiteFeatures isLoading={homepageIsLoading} />
-          </div>
+          </Box>
 
           <Grid
             container

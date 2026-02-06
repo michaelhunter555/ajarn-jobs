@@ -7,6 +7,8 @@ import {
   Modal,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material/";
 
 import { StyledBoxContainer } from "../shared/components/UIElements/CustomModal";
@@ -35,7 +37,7 @@ const jobPostingGuidelines = [
 
   {
     id: 6,
-    rule: "Zero-tolrance for use of profanity, slurs and other types of offensive language that is likely to offend others. Your job post will be removed and account suspended.",
+    rule: "Zero-tolerance for use of profanity, slurs and other types of offensive language that is likely to offend others. Your job post will be removed and account suspended.",
   },
   {
     id: 7,
@@ -44,9 +46,17 @@ const jobPostingGuidelines = [
 ];
 
 const JobPostingGuidelinesModal = ({ open, onClose }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Modal open={open} onClose={onClose} disableScrollLock={true}>
-      <StyledBoxContainer sx={{ width: 600, padding: "2rem" }}>
+      <StyledBoxContainer
+        sx={{
+          width: isMobile ? "100%" : 600,
+          padding: "2rem",
+          ...(isMobile && { overflowY: "auto", height: "100%" }),
+        }}
+      >
         <Stack>
           <Alert severity="warning">
             Violating our guidlines will see your job removed.

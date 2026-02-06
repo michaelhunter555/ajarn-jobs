@@ -127,7 +127,7 @@ export const OutlinedButton = (props) => {
           to="/auth"
           variant="outlined"
         >
-          login/join
+          login/join to apply
         </Button>
       </Stack>
     );

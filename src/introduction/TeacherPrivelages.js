@@ -8,6 +8,8 @@ import {
   Paper,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 const teacherPrivelages = [
@@ -63,6 +65,8 @@ const RenderExplanationText = ({ component }) => {
 };
 
 const TeacherPrivelages = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [component, setComponent] = useState("buildProfile");
   const [actionText, setActionText] = useState("Build out your profile");
   const [index, setIndex] = useState(0);
@@ -79,7 +83,9 @@ const TeacherPrivelages = () => {
       }}
     >
       <Stack>
-        <Typography variant="h3">Teacher - (teach·er /ˈtēCHər/)</Typography>
+        <Typography sx={{ fontSize: isMobile ? 30 : "normal" }} variant="h3">
+          Teacher - (teach·er /ˈtēCHər/)
+        </Typography>
         <Typography gutterBottom>
           User Type <code>Teacher</code> is for those who are looking to apply
           for teaching jobs in Thailand.
@@ -88,8 +94,11 @@ const TeacherPrivelages = () => {
       <Divider flexItem />
       <Stack
         sx={{
-          justifyContent: "center",
-          flexDirection: { xs: "column", md: "row" },
+          justifyContent: { xs: "flex-start", md: "center" },
+          flexDirection: "row",
+          ...(isMobile && {
+            overflowX: "auto",
+          }),
           gap: "10px",
           width: "100%",
         }}
@@ -107,18 +116,20 @@ const TeacherPrivelages = () => {
               padding: 2,
               borderRadius: 10,
               maxWidth: { sx: "100%", md: 300 },
-              minHeight: 400,
+              minHeight: { xs: 300, md: 400 },
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               border: i === index ? "1px solid gray" : "none",
               backgroundColor: index === i ? "#f2fdff" : "bg.paper",
+              ...(isMobile && { marginBottom: 1 }),
             }}
           >
             <Typography
               sx={{
                 fontWeight: index === i ? 700 : "normal",
                 color: index === i ? "#000" : "text.secondary",
+                ...(isMobile && { fontSize: 14 }),
               }}
               variant="h5"
               color="text.secondary"
@@ -143,6 +154,7 @@ const TeacherPrivelages = () => {
               <Typography
                 sx={{
                   color: index === i ? "#000" : "text.secondary",
+                  ...(isMobile && { fontSize: 11 }),
                 }}
               >
                 {t.description}
@@ -152,7 +164,11 @@ const TeacherPrivelages = () => {
         ))}
       </Stack>
       <Stack sx={{ padding: 2, borderRadius: 10, minHeight: 250 }}>
-        <Typography variant="h3" color="text.secondary">
+        <Typography
+          sx={{ fontSize: isMobile ? 30 : "normal" }}
+          variant="h3"
+          color="text.secondary"
+        >
           {actionText}
         </Typography>
         <Divider />

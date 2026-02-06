@@ -18,7 +18,9 @@ const StyledList = styled(List)(({ theme }) => ({
     minWidth: "100%",
   },
   [theme.breakpoints.down("sm")]: {
-    flexDirection: "column",
+    flexDirection: "row",
+    overflowX: "auto",
+    justifyContent: "flex-start",
     minWidth: "100%",
   },
 }));

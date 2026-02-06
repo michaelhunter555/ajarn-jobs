@@ -44,7 +44,7 @@ const BottomFeaturedAds = (props) => {
       sx={{
         padding: 1,
 
-        width: { xs: "100%", md: 250 },
+        width: { xs: 250, md: 250 },
         borderRadius: 5,
         ...(!isDarkMode && props?.featured
           ? {

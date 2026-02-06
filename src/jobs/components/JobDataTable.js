@@ -72,7 +72,7 @@ const JobDataTable = (props) => {
                   component={Link}
                   sx={{ margin: "0 auto" }}
                   to="/auth"
-                  label="Login/Sign-up"
+                  label="Apply"
                   variant="outlined"
                 />
                 // <Button
