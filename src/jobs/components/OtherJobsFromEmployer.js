@@ -92,7 +92,7 @@ const OtherJobsFromEmployer = ({ otherJobs, otherJobsCount, currentJobId }) => {
   }
 
   return (
-    <Box sx={{ marginTop: 4 }}>
+    <Box sx={{ marginTop: 4, width: '100%' }}>
       <SectionTitle variant="h5">
         More Jobs from {otherJobs[0]?.creator?.company || "This Employer"} ({otherJobsCount})
       </SectionTitle>

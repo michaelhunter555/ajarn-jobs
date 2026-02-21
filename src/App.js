@@ -58,6 +58,7 @@ const IncomeDirectory = lazy(() => import("./blog/pages/IncomeDirectory"));
 const IncomeDirectoryDetails = lazy(() =>
   import("./blog/pages/IncomeDirectoryDetails")
 );
+const PasswordResetPage = lazy(() => import("./users/pages/PasswordReset"));
 
 const queryClient = new QueryClient();
 
@@ -197,6 +198,7 @@ function App() {
         <Route path="/auth" element={<Login />} />
         <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/employer-onboarding" element={<EmployerOnboarding />} />
+        <Route path="/password-reset" element={<PasswordResetPage />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route

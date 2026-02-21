@@ -6,7 +6,7 @@ export const StyledGridContainer = styled("div")(({ theme }) => ({
   flexDirection: "column",
   margin: "1.5rem auto",
   alignItems: "center",
-  width: "75%",
+  width: "85%",
   gap: "15px",
 
   [theme.breakpoints.down("md")]: {

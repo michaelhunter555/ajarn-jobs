@@ -48,18 +48,21 @@ const StyledBottomNav = styled(BottomNavigation)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     display: "flex",
     alignItems: "center",
-    position: "sticky",
+    position: "fixed",
     justifyContent: "center",
     bottom: 0,
+    left: 0,
+    right: 0,
+    width: "100%",
     zIndex: 11,
     marginTop: "1rem",
-    padding: "0.5rem",
+    padding: "0.5rem 0",
   },
 }));
 
 const menuItems = [
   {
-    text: "Dashboard",
+    text: "Dash",
     icon: <DashboardIcon />,
     componentName: "profile",
   },

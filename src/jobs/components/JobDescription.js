@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import { Box, Button, Card, CardContent, Divider, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import SchoolIcon from '@mui/icons-material/School';
 
 import { FadeContentBox } from "../../users/components/TeacherDetailsItem";
 
@@ -82,7 +83,7 @@ export const JobDescription = (props) => {
               textAlign: "center"
             }}
           >
-            📝 {job?.title}
+            <SchoolIcon /> {job?.title}
           </Typography>
           <Typography 
             variant="subtitle1" 

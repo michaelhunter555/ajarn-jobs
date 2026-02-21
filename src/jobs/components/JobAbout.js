@@ -2,6 +2,7 @@ import React from "react";
 
 import { Box, Card, CardContent, Chip, Divider, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import BusinessIcon from '@mui/icons-material/Business';
 
 const ModernCard = styled(Card)(({ theme }) => ({
   borderRadius: theme.spacing(3),
@@ -66,7 +67,7 @@ export const JobAbout = (props) => {
             color: "text.primary"
           }}
         >
-          🏢 A little about {job?.creator?.company}:
+          <BusinessIcon /> A little about {job?.creator?.company}:
         </Typography>
         <Divider variant="middle" sx={{ margin: "0 0 1rem 0" }} />
         <Typography 

@@ -136,17 +136,12 @@ const Footer = () => {
                   Follow us
                 </Typography>
                 <SocialIcons>
-                  <SocialIcon>
+                  <SocialIcon onClick={() => window.open("https://www.facebook.com/profile.php?id=61581742589691", "_blank")}>
                     <FacebookIcon fontSize="large" />
                   </SocialIcon>
-                  <SocialIcon>
-                    <LinkedInIcon fontSize="large" />
-                  </SocialIcon>
 
-                  <SocialIcon>
-                    <HelpOutlineIcon fontSize="large" />
-                  </SocialIcon>
-                  <SocialIcon>
+                 
+                  <SocialIcon onClick={() => window.open("https://x.com/ajarnjob", "_blank")}>
                     <XIcon fontSize="large" />
                   </SocialIcon>
                 </SocialIcons>

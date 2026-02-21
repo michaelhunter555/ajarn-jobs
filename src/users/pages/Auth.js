@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth as firebaseAuth } from "../../shared/config/firebase";
 import {
   Alert,
   Box,
@@ -18,6 +19,7 @@ import {
   Divider,
   IconButton,
   InputAdornment,
+  FormHelperText,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
@@ -32,11 +34,13 @@ import { useForm } from "../../shared/hooks/form-hook";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { useFirebaseAuth } from "../../shared/hooks/firebase-auth-hook";
 import {
+  validate,
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
 import GoogleLoginButton from "../../shared/components/FormElements/GoogleLoginButton";
 import EmployerOnboarding from "../components/EmployerOnboarding";
+import PasswordResetModal from "../../shared/components/UIElements/PasswordResetModal";
 
 const PageContainer = styled("div")({
   minHeight: "90vh",
@@ -94,6 +98,7 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { isPostLoading, error, sendRequest, clearError } = useHttpClient();
   const { createUser, signInUser } = useFirebaseAuth();
+  const [showPasswordResetModal, setShowPasswordResetModal] = useState(false);
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -107,7 +112,8 @@ const Auth = () => {
     },
     false
   );
-
+  const [passwordResetLoading, setPasswordResetLoading] = useState(false);
+  const [passwordResetSuccess, setPasswordResetSuccess] = useState(false);
   // Employer onboarding gate after manual signup
   const [showEmployerOnboarding, setShowEmployerOnboarding] = useState(false);
 
@@ -307,8 +313,39 @@ const Auth = () => {
 
   const isEmployer = formState?.inputs?.userType?.value === "employer";
 
+  const passwordResetModalHandler = () => {
+    setShowPasswordResetModal((prev) => !prev);
+    setPasswordResetSuccess(false);
+  };
+
+  const submitPasswordResetEmailHandler = async(email) => {
+    if(!email) {
+      return;
+    };
+    setPasswordResetLoading(true);
+     try {
+      await sendPasswordResetEmail(firebaseAuth, email, {
+        url: `${window.location.origin}/password-reset`,
+        handleCodeInApp: true,
+      });
+      console.log("✅ Password reset email sent:", email);
+      setPasswordResetSuccess(true);
+      setPasswordResetLoading(false);
+     } catch (err) {
+      setPasswordResetLoading(false);
+        console.error("❌ Password reset email failed:", err);
+     }
+
+  }
+
   return (
     <PageContainer>
+      <PasswordResetModal
+      isSuccess={passwordResetSuccess}
+      isLoading={passwordResetLoading}
+      open={showPasswordResetModal} 
+      onClose={passwordResetModalHandler} 
+      onSubmitEmail={submitPasswordResetEmailHandler} />
       <Content>
         <ErrorModal onClear={clearError} error={error} />
         <StyledFormCard>
@@ -449,6 +486,8 @@ const Auth = () => {
                     </InputAdornment>
                   }
                 />
+                
+              
                 <StyledBoxForButtons>
                   <Button
                     type="submit"
@@ -456,6 +495,12 @@ const Auth = () => {
                   >
                     {isLoginMode ? "Login" : "Sign-up"}
                   </Button>
+                </StyledBoxForButtons>
+
+                <StyledBoxForButtons sx={{ cursor: 'pointer'}} onClick={passwordResetModalHandler}>
+                  <FormHelperText sx={{ color: 'primary.main', fontWeight: 600 }}>
+                    Reset your password?
+                  </FormHelperText>
                 </StyledBoxForButtons>
               </form>
               )}

@@ -1,6 +1,11 @@
 import React, { useContext } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
+import WorkIcon from '@mui/icons-material/Work';
+import ArticleIcon from '@mui/icons-material/Article';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import SchoolIcon from '@mui/icons-material/School';
+import PersonIcon from '@mui/icons-material/Person';
 
 import {
   Box,
@@ -50,7 +55,7 @@ const ModernFeatureCard = styled(Card)(({ theme }) => ({
   borderRadius: theme.spacing(3),
   background: theme.palette.mode === "dark"
     ? "rgba(255, 255, 255, 0.08)"
-    : "rgba(255, 255, 255, 0.15)",
+    : "rgb(255, 255, 255)",
   backdropFilter: "blur(20px)",
   WebkitBackdropFilter: "blur(20px)",
   border: theme.palette.mode === "dark"
@@ -120,35 +125,35 @@ const createItems = (auth) => {
   return [
     { 
       label: "Jobs", 
-      emoji: "💼",
+      emoji: <WorkIcon />,
       description: "Find your dream job",
       img: jobsImg, 
       link: `/jobs` 
     },
     { 
       label: "Content", 
-      emoji: "📝",
+      emoji: <ArticleIcon />,
       description: "Read & share insights",
       img: contentImg, 
       link: `/content` 
     },
     { 
       label: "Incomes", 
-      emoji: "💰",
+      emoji: <AttachMoneyIcon />,
       description: "Salary transparency",
       img: incomeImg, 
       link: `/income-directory` 
     },
     { 
       label: "Teachers", 
-      emoji: "👨‍🏫",
+      emoji: <SchoolIcon />,
       description: "Connect with educators",
       img: teachersImg, 
       link: `/teachers` 
     },
     {
       label: "Dashboard",
-      emoji: "📊",
+      emoji: <PersonIcon />,
       description: "Manage your profile",
       img: userDashImg,
       link: auth?.isLoggedIn ? `/users/${auth.user?._id}` : "/auth",
@@ -221,7 +226,8 @@ const SiteFeatures = ({ isLoading }) => {
                     }}
                   >
                     <FeatureChip
-                      label={`${emoji} ${label}`}
+                      icon={emoji}
+                      label={`${label}`}
                       size="small"
                     />
                     <Typography

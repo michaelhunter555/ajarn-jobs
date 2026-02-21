@@ -103,7 +103,7 @@ const JobDataTable = (props) => {
                 >
                   <Chip
                     icon={<ArrowCircleDownIcon sx={{ width: "15px" }} />}
-                    label="📋 Job Specifications"
+                    label="Job Specifications"
                     size="medium"
                     color="primary"
                     variant="outlined"
@@ -122,7 +122,7 @@ const JobDataTable = (props) => {
                       component={Button}
                       sx={{ margin: "0 auto" }}
                       onClick={props.modal}
-                      label={appliedAlready ? "✅ Applied" : "🚀 Apply Now"}
+                      label={appliedAlready ? "Applied" : "Apply Now"}
                     />
                   )}
                   {!auth.isLoggedIn && (

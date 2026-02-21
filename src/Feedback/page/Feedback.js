@@ -112,7 +112,6 @@ const Feedback = () => {
           container
           direction="column"
           spacing={4}
-          sx={{ width: { xs: "100%", md: "50%" } }}
         >
           <Grid item xs={12} md={6}>
             <FeedbackCards

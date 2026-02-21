@@ -38,7 +38,7 @@ const StyleCreditsModal = styled(Paper)({
 
 const tiers = [
   {
-    priceId: "price_1PNxKlRpnv4ckgZhXsKjq8Yw",
+    priceId:  "price_1T2Bh5Rpnv4ckgZhJgt8hYXp",// test-"price_1PNxKlRpnv4ckgZhXsKjq8Yw", 
     title: "starter",
     price: "฿750",
     credits: 5,
@@ -47,7 +47,7 @@ const tiers = [
     buttonVariant: "outlined",
   },
   {
-    priceId: "price_1PNxLvRpnv4ckgZhMFUfhKqZ",
+    priceId: "price_1T2BhlRpnv4ckgZhMthFDiLR",// test-"price_1PNxLvRpnv4ckgZhMFUfhKqZ",
     title: "Agency",
     price: "฿1,200",
     subheader: "Most Popular",
@@ -57,7 +57,7 @@ const tiers = [
     buttonVariant: "contained",
   },
   {
-    priceId: "price_1PNxMiRpnv4ckgZhTjkWZrsD",
+    priceId: "price_1T2BinRpnv4ckgZh8KbsopoA",// test-"price_1PNxMiRpnv4ckgZhTjkWZrsD",
     title: "Enterprise",
     price: "฿1,800",
     credits: 30,

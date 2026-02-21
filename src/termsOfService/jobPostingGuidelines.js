@@ -28,25 +28,12 @@ const jobPostingGuidelines = [
     id: 4,
     rule: "All job posts must completely and coherently explain the job, it's requirements, location, benefits (if any) and length of contract.",
   },
-  {
-    id: 5,
-    rule: "Zero-tolerance for racism or discrimination. Your job post will be removed and your account banned.",
-  },
-
-  {
-    id: 6,
-    rule: "Zero-tolrance for use of profanity, slurs and other types of offensive language that is likely to offend others. Your job post will be removed and account suspended.",
-  },
-  {
-    id: 7,
-    rule: "Stick to the point and only include relevant information to job and/or company.",
-  },
 ];
 
 const JobPostingGuidelinesModal = ({ open, onClose }) => {
   return (
     <Modal open={open} onClose={onClose} disableScrollLock={true}>
-      <StyledBoxContainer sx={{ width: 600, padding: "2rem" }}>
+      <StyledBoxContainer sx={{ overflowY: "auto", height: { xs: "400px" }, width: 600, padding: "2rem", }}>
         <Stack>
           <Alert severity="warning">
             Violating our guidlines will see your job removed.

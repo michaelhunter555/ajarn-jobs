@@ -905,9 +905,6 @@ const TeacherDashboard = () => {
             }}
           >
            {auth?.user?.creator && <Box sx={{
-              
-             
-            
               alignItems: "center",
               border: "1px solid gold", 
               borderRadius: "10px", 

@@ -160,7 +160,7 @@ const IncomeDirectoryDetails = () => {
           }}
         >
           {/* Main Content */}
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={7}>
             <StyledCard>
               <CardContent sx={{ p: 3 }}>
                 {/* Header */}
