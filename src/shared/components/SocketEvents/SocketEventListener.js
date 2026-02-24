@@ -21,7 +21,7 @@ const SocketEventListener = () => {
         socket.on(NotificationsList.newMessage, (data) => {
             const { message, senderId, chatId, userData } = data;
             const { name, image, userType, id } = userData;
-            console.log('New message received:', data);
+
             invalidateQuery('dashboard-chat-messages');
             invalidateQuery('dashboard-chats');
             const text = message.slice(0,100) + (message.length > 100 ? '...' : '');
@@ -35,8 +35,15 @@ const SocketEventListener = () => {
         });
 
         socket.on(NotificationsList.newJobApplications, (data) => {
-            console.log('New job applications received:', data);
-            invalidateQuery('jobApplications');
+            const { applicantName, image, jobName } = data;
+            invalidateQuery("userApplications");
+            showSnackbar({
+                message: `Application from ${applicantName} for ${jobName}`,
+                severity: 'info',
+                path: `/users/${auth?.user?._id}`,
+                image: image ?? "",
+                name: applicantName,
+            })
         });
 
         socket.on(NotificationsList.newRecruitmentOffer, (data) => {

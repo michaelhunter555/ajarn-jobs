@@ -386,10 +386,10 @@ export const useUser = () => {
     }, [sendRequest, auth.token]);
 
     //GET all chats
-    const getAllChats = useCallback(async (userId) => {
+    const getAllChats = useCallback(async (userId, page, limit, searchValue) => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_USERS}/get-all-chats/${userId}`,
+          `${process.env.REACT_APP_USERS}/get-all-chats/${userId}?page=${page}&limit=${limit}&search=${searchValue}`,
           { headers: { Authorization: "Bearer " + auth.token } }
         );
         const data = await response.json();
@@ -450,12 +450,12 @@ export const useUser = () => {
     }, [sendRequest, auth.token]);
 
     // Leave Chat
-    const leaveChat = useCallback(async (userId, chatId) => {
+    const leaveChat = useCallback(async (userId, chatId, userType) => {
       try {
         const response = await sendRequest(
           `${process.env.REACT_APP_USERS}/leave-chat/${userId}`,
           "POST",
-          JSON.stringify({ chatId }),
+          JSON.stringify({ chatId, userType }),
           {
             "Content-Type": "application/json",
             Authorization: "Bearer " + auth.token,
