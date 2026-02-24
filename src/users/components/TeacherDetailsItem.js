@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -9,6 +9,7 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import SchoolIcon from "@mui/icons-material/School";
 import SendIcon from "@mui/icons-material/Send";
 import WorkIcon from "@mui/icons-material/Work";
+import { IoChatbubble } from "react-icons/io5";
 import {
   Avatar,
   Box,
@@ -234,6 +235,10 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
     }));
   };
 
+  const handleSendMessageLink = () => {
+
+  }
+
   return (
     <StyledBoxContainer>
       <Grid spacing={2} container direction="row">
@@ -277,10 +282,24 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                       {teacher?.name}
                     </Typography>
 
-                    <Typography variant="subtitle2" component="div">
+                    <Stack direction="row" alignItems="center" spacing={1}>
                       <Chip label={teacher?.userType} size="small" />
-                    </Typography>
-
+                      {auth?.user?.userType === 'employer' && (
+                      <Link 
+                      to={`/users/${auth?.user?._id}?sendMessage=true`}
+                      state={{ teacherId: teacher?._id, name: teacher?.name, image: teacher?.image, userType: teacher?.userType }}
+                      >
+                      <Chip 
+                      variant="contained" 
+                      color="primary" 
+                      clickable 
+                      label={"send message"} 
+                      icon={<IoChatbubble size={18} />} 
+                      size="small" />
+                      </Link>
+                      )}
+                    </Stack>
+                      
                     <Stack direction="row" alignItems="center">
                       <Box>
                         <LocationOnIcon

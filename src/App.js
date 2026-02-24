@@ -12,6 +12,9 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-route
 import { LinearProgress } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { SocketProvider } from "./shared/context/socket-io-context";
+import SocketEventListener from "./shared/components/SocketEvents/SocketEventListener";
+import { SnackbarProvider } from "./shared/context/snackbar-context";
 
 import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
 import Home from "./home/pages/Home";
@@ -230,32 +233,37 @@ function App() {
             updateUser: updatedUser,
           }}
         >
-          <Router>
-            <ScrollToTop />
-            <MainNavigation />
-            <Suspense
-              fallback={
-                <>
-                  <LinearProgress />
-                </>
-              }
-            >
-              <main className="main">
-                {/* Check if user needs onboarding */}
-                {state.isLoggedIn && state.user?.needsOnboarding ? (
-                  <OnboardingFlow 
-                    user={state.user} 
-                    onComplete={() => {
-                      // Update user to mark onboarding as complete
-                      updatedUser({ ...state.user, needsOnboarding: false });
-                    }} 
-                  />
-                ) : (
-                  routes
-                )}
-              </main>
-            </Suspense>
-          </Router>
+          <SocketProvider>
+            <Router>
+              <SnackbarProvider>
+                <ScrollToTop />
+                <MainNavigation />
+                <Suspense
+                  fallback={
+                    <>
+                      <LinearProgress />
+                    </>
+                  }
+                >
+                  <main className="main">
+                    {/* Check if user needs onboarding */}
+                    {state.isLoggedIn && state.user?.needsOnboarding ? (
+                      <OnboardingFlow 
+                        user={state.user} 
+                        onComplete={() => {
+                          // Update user to mark onboarding as complete
+                          updatedUser({ ...state.user, needsOnboarding: false });
+                        }} 
+                      />
+                    ) : (
+                      routes
+                    )}
+                  </main>
+                </Suspense>
+                <SocketEventListener />
+              </SnackbarProvider>
+            </Router>
+          </SocketProvider>
         </AuthContext.Provider>
       </GoogleOAuthProvider>
     </QueryClientProvider>

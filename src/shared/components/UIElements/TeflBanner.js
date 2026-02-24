@@ -17,6 +17,7 @@ const StyledGlassTeflAd = styled(Card)(({ theme }) => ({
   padding: "0 20px 0 0",
   borderRadius: "6px",
   overflow: "hidden",
+  gap: 2,
 
   background:
     "linear-gradient(135deg, hsla(0, 100%, 100%, 0), hsla(0, 100%, 100%, 0) 9.37%, hsla(0, 100%, 100%, 0) 54.69%, hsla(0, 100%, 100%, 0) 66.15%, hsla(0, 1000%, 100%, 0))",
@@ -64,23 +65,22 @@ const TeflBanner = () => {
       alignItems="center"
       sx={{ margin: "1rem auto" }}
     >
-      <StyledGlassTeflAd>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          sx={{ display: "flex", alignItems: "center", borderRadius: "8px" }}
-        >
+      <StyledGlassTeflAd sx={{ width: '100%', padding: 1, cursor: 'pointer' }}>
+        <Stack direction="row" alignItems="start">
+
           <CardMedia
-            sx={{ padding: 1 }}
+            sx={{ padding: 1, width: "100px", height: "100px" }}
             component="img"
             image={RemoteLifestyleImg}
             alt="temp-lifestyle-tefl"
+           
           />
-        </Grid>
-        <Grid item xs={12} sm={8} sx={{ margin: "0 0.5rem", padding: 1 }}>
-          <Stack direction="row" alignItems="start">
+        </Stack>
+            
+       
+       <Stack>
+
+          <Stack direction="row" alignItems="start" gap={1}>
             <Typography
               component="div"
               variant="body1"
@@ -98,7 +98,8 @@ const TeflBanner = () => {
           <Typography variant="subtitle2" color="text.secondary">
             Get Qualified, find work, earn more.
           </Typography>
-        </Grid>
+       </Stack>
+       
       </StyledGlassTeflAd>
     </Grid>
   );

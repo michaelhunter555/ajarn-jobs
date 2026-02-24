@@ -11,6 +11,7 @@ import {
   useMediaQuery,
   useTheme,
   Box,
+  Button,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
@@ -35,6 +36,7 @@ import {
   StyledHomeFeaturedContent,
   StyledHomeFeaturedTop,
 } from "./HomeStyles";
+import { useSnackbar } from "../../shared/context/snackbar-context";
 
 const Home = () => {
   const theme = useTheme();

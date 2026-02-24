@@ -5,6 +5,8 @@ import LocalPoliceTwoToneIcon from "@mui/icons-material/LocalPoliceTwoTone";
 import PlaceIcon from "@mui/icons-material/Place";
 import PublicIcon from "@mui/icons-material/Public";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+import ChatIcon from '@mui/icons-material/Chat';
+import { IoChatbubble } from "react-icons/io5";
 import {
   Avatar,
   Box,
@@ -160,7 +162,7 @@ const ActiveTeachersDashboardList = (props) => {
 
                 {/* Education chip list removed; summarized next to icon below */}
                 {/**add stuff here */}
-                {props?.workExperience > 5 && (
+                {props?.workExperience?.split("-")[0] > 5 && (
                   <Tooltip
                     title={`Has over 5 years experience.`}
                     placement="top"
@@ -179,6 +181,8 @@ const ActiveTeachersDashboardList = (props) => {
                     </Box>
                   </Tooltip>
                 )}
+
+
               </Stack>
               {/*2 x 2 */}
               <Grid container spacing={2} direction="row">

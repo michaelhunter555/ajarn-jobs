@@ -66,7 +66,7 @@ const searchDates = [
 const BlogFilter = ({ onDataChange }) => {
   const [search, setSearch] = useState("");
   const [date, setDate] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("Any");
 
   const inputChangeHandler = (event) => {
     setSearch(event.target.value);
@@ -109,10 +109,10 @@ const BlogFilter = ({ onDataChange }) => {
             fullWidth
             sx={{ borderRadius: 20, minWidth: 200 }}
             id="category"
-            value={category}
+            value={category || "Any"}
             onChange={categoryChangeHandler}
           >
-            <MenuItem>Any</MenuItem>
+            <MenuItem value="Any">Any</MenuItem>
             {blogCategories.map((category, i) => (
               <MenuItem key={i} value={category}>
                 {category}

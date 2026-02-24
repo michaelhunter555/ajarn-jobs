@@ -40,7 +40,7 @@ const styledComments = {
   },
 };
 
-const BlogPostForm = ({ onBlogPostCreated, hideButton }) => {
+const BlogPostForm = ({ onBlogPostCreated, hideButton, onCancel }) => {
   const auth = useContext(AuthContext);
   const { user } = auth;
   const [toggleForm, setToggleForm] = useState(true);
@@ -115,6 +115,7 @@ const BlogPostForm = ({ onBlogPostCreated, hideButton }) => {
 
   const toggleContentFormHandler = () => {
     setToggleForm((prev) => !prev);
+    onCancel();
   };
 
   const handleEditorChange = (newEditorState) => {

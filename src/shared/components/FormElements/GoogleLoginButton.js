@@ -45,10 +45,6 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
       const data = await response.json();
       
       if (response.ok) {
-        // Debug logging
-        console.log('Google auth response:', data);
-        console.log('User image URL:', data.image);
-        
         // Login user with your existing auth system
         auth.login(
           {

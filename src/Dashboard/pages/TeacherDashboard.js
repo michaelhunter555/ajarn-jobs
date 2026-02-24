@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
 
 import {
@@ -41,6 +41,8 @@ import Applications from "../components/Profile/Applications";
 import UserBilling from "../components/Profile/BillingDataTable";
 import CoverLetter from "../components/Profile/CoverLetter";
 import Creator from "../components/Profile/Creator";
+import MessageList from "../components/messages/MessageList";
+import ScreeningsList from "../components/screenings/ScreeningsList";
 import {
   APPLICATIONS,
   CONTENT,
@@ -54,6 +56,8 @@ import {
   RESUME,
   SETTINGS,
   TEACHER,
+  MESSAGES,
+  SCREENINGS,
 } from "../components/Profile/dashboardValues";
 import EmployerRecruitmentTable from "../components/Profile/EmployerRecruitmentTables";
 import FeaturedCard from "../components/Profile/FeaturedCard";
@@ -82,6 +86,7 @@ const StyledGridContainerForProfile = styled(Grid)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {},
   [theme.breakpoints.down("sm")]: {
     maxWidth: "100%",
+    marginBottom: 100,
   },
 }));
 
@@ -89,8 +94,12 @@ const TeacherDashboard = () => {
   const userId = useParams().id;
   const auth = useContext(AuthContext);
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const { teacherId, name, image, userType } = location.state || {};
+  const chatId = searchParams.get("chatId");
+  const shouldOpenChat = searchParams.get("sendMessage") === "true";
   const queryParams = new URLSearchParams(location.search);
-  const [currentComponent, setCurrentComponent] = useState("profile");
+  const [currentComponent, setCurrentComponent] = useState(shouldOpenChat ? "messages" : "profile");
   const [recruitmentOffers, setRecruitmentOffers] = useState(0);
   const [showPdfUpload, setShowPdfUpload] = useState(false);
   const [selectedPdfFile, setSelectedPdfFile] = useState(null);
@@ -428,7 +437,6 @@ const TeacherDashboard = () => {
     });
   };
 
-  console.log("pdfResume:", auth.user?.pdfResume);
   // https://res.cloudinary.com/dtqbxfe7r/image/upload/v1758373961/nzbrjdoreucrmggcaaxn.pdf
   // https://res.cloudinary.com/demo/image/upload/pg_2/w_300,h_300,c_crop,g_north,y_270/r_max/b_black/multi_page_pdf.png
 
@@ -716,7 +724,16 @@ const TeacherDashboard = () => {
           return <UserRecruitmentTable />;
         case RECRUITMENT_SENT:
           return <EmployerRecruitmentTable />;
-
+        case MESSAGES:
+          return <MessageList 
+          teacherId={teacherId}
+          name={name}
+          image={image}
+          userType={userType}
+          chatId={chatId}
+          />;
+        case SCREENINGS:
+          return <ScreeningsList />;
         case CONTENT:
           return (
             <UsersContent
@@ -807,6 +824,7 @@ const TeacherDashboard = () => {
         sx={{
           maxWidth: "100%",
           margin: "0 auto",
+          
         }}
       >
         <Grid item xs={12} md={2}>
@@ -820,6 +838,7 @@ const TeacherDashboard = () => {
           {!userProfileLoading && (
             <Stack spacing={2}>
               <Sidebar
+              index={shouldOpenChat ? 1 : 0}
                 onMenuItemClick={handleMenuItemClick}
                 notifications={auth?.user?.recruitmentReceived?.length}
               />

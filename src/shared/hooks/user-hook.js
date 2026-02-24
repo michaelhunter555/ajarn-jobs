@@ -362,6 +362,109 @@ export const useUser = () => {
       [sendRequest, auth.token]
     );
 
+    // POST create chat
+    const createChat = useCallback(async (employerData, teacherData, message) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/create-chat/${employerData._id}`,
+          "POST",
+          JSON.stringify({
+            teacherData,
+            employerData,
+            message: message,
+           }),
+           {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+           }
+        )
+        return response;
+      } catch (err) {
+        console.log("Error with the request: " + err);
+        throw err;
+      }
+    }, [sendRequest, auth.token]);
+
+    //GET all chats
+    const getAllChats = useCallback(async (userId) => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_USERS}/get-all-chats/${userId}`,
+          { headers: { Authorization: "Bearer " + auth.token } }
+        );
+        const data = await response.json();
+        if (!data.ok) {
+          throw new Error(data.message);
+        }
+        return {
+          chats: data.chats ?? [],
+          page: data.pageNum,
+          totalPages: data.totalPages,
+          totalChats: data.totalChats,
+        }
+      } catch (err) {
+        console.log("Error with the request: " + err);
+      }
+    }, [sendRequest, auth.token]);
+
+    // Get Chat Messages by ChatId
+    const getAllChatMessages = useCallback(async (userId, chatId, page, limit) => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_USERS}/get-all-chat-messages/${userId}?chatId=${chatId}&page=${page}&limit=${limit}`, {
+            headers: { Authorization: "Bearer " + auth.token }
+          }
+        )
+        const data = await response.json();
+        if (!data.ok) {
+          throw new Error(data.message);
+        }
+        return {
+          messages: data.messages ?? [],
+          page: data.pageNum,
+          totalPages: data.totalPages,
+          totalMessages: data.totalMessages,
+        }
+      } catch (err) {
+        console.log("Error with the request: " + err);
+        throw err;
+      }
+    }, [sendRequest, auth.token]);
+
+    // Send Message to Chat
+    const updateChat = useCallback(async (senderId, chatId, message) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/update-chat/${senderId}`,
+          "PATCH",
+          JSON.stringify({
+            chatId,
+            text: message,
+          }),
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        )
+      } catch (err) {}
+    }, [sendRequest, auth.token]);
+
+    // Leave Chat
+    const leaveChat = useCallback(async (userId, chatId) => {
+      try {
+        const response = await sendRequest(
+          `${process.env.REACT_APP_USERS}/leave-chat/${userId}`,
+          "POST",
+          JSON.stringify({ chatId }),
+          {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth.token,
+          }
+        )
+        return response;
+      } catch (err) {}
+    }, [sendRequest, auth.token]);
+   
   return {
     users,
     getAllUsers,
@@ -386,5 +489,10 @@ export const useUser = () => {
     error,
     clearError,
     client,
+    getAllChats,
+    getAllChatMessages,
+    updateChat,
+    leaveChat,
+    createChat,
   };
 };

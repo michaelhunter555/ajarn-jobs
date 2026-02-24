@@ -11,3 +11,5 @@ export const SETTINGS = "settings";
 export const INVOICES = "invoices";
 export const RECRUITMENT_OFFER = "recruitment-offers";
 export const RECRUITMENT_SENT = "recruitment-sent";
+export const MESSAGES = "messages";
+export const SCREENINGS = "screenings";

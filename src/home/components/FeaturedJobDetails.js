@@ -251,7 +251,7 @@ const FeaturedJobDetails = ({ job, featured, height, fontSize }) => {
   const handleViolationModal = () => {
     setOpenViolation((prev) => !prev);
   };
-  console.log("auth", auth?.user);
+  
   return (
     <>
       <SuccessModal

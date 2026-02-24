@@ -10,6 +10,8 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SettingsIcon from "@mui/icons-material/Settings";
 import WorkIcon from "@mui/icons-material/Work";
+import MessageIcon from "@mui/icons-material/Message";
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import {
   BottomNavigation,
   BottomNavigationAction,
@@ -65,6 +67,16 @@ const menuItems = [
     text: "Dash",
     icon: <DashboardIcon />,
     componentName: "profile",
+  },
+  {
+    text: "Messages",
+    icon: <MessageIcon />,
+    componentName: "messages",
+  },
+  {
+    text: "Screenings",
+    icon: <EditNoteIcon />,
+    componentName: "screenings",
   },
   {
     text: "Cover Letter",
@@ -127,6 +139,10 @@ const Sidebar = ({ onMenuItemClick, notifications }) => {
     }
 
     if (val.componentName === "recruitment-offers" && userType === "employer") {
+      return false;
+    }
+
+    if (val.componentName === "screenings" && userType === "teacher") {
       return false;
     }
 
