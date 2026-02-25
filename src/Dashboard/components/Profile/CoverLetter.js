@@ -19,6 +19,8 @@ import {
   Skeleton,
   Stack,
   Typography,
+  Alert,
+  Chip,
 } from "@mui/material";
 
 import { AuthContext } from "../../../shared/context/auth-context";
@@ -49,6 +51,11 @@ const CoverLetter = () => {
   const { generateCoverLetter } = useUser();
   const { showSnackbar } = useSnackbar();
   let initialEditorState = EditorState.createEmpty();
+  const [consent, setConsent] = useState({
+    didAnswer: false,
+    didConsent: false,
+  });
+  const [showConsent, setShowConsent] = useState(false);
 
   if (user?.coverLetter) {
     const htmlBlocks = htmlToDraft(user?.coverLetter);
@@ -154,6 +161,10 @@ const CoverLetter = () => {
     await mutateGeneratedCoverLetter.mutateAsync(auth.user?._id);
   };
 
+  const handleConsent = (didConsent) => {
+    setConsent({ didAnswer: true, didConsent });
+  }
+
   return (
     <>
       {isLoading && <Skeleton sx={{ width: "100%", height: 382 }} />}
@@ -257,11 +268,32 @@ const CoverLetter = () => {
           direction="column"
           sx={{ padding: "1rem" }}
         >
+              <Alert icon={false}
+              action={<Chip clickable label="Get Started!" color="primary" onClick={() => setShowConsent(true)} />}
+                severity="info" 
+                variant="outlined" 
+                sx={{ marginBottom: "5px" }}>
+                  You can generate up to 3 cover letters per day.
+              </Alert>
+
+             {showConsent && !consent.didAnswer && <Alert action={
+                <Stack direction="row" spacing={2}>
+                  <Chip clickable label="close" color="error" onClick={() => {
+                    handleConsent(false);
+                  }} />
+                  <Chip clickable label="I understand and consent" onClick={() => handleConsent(true)} />
+                </Stack>
+            
+          } severity="error" variant="outlined" sx={{ marginBottom: "5px" }}>
+           We share your work experience, skills, education, location, and nationality from `Settings` with AI to generate a cover letter.
+          </Alert>}
+
             <Stack direction="row" spacing={2}>
               {mutateGeneratedCoverLetter.isLoading ? (
                 <CircularProgress size={16} />
               ) : (
-                <Button 
+                <Button
+                  disabled={!consent.didConsent || !consent.didAnswer}
                   startIcon={<AssistantIcon />} 
                   variant="outlined" 
                   onClick={handleGenerateCoverLetter}>Generate Cover Letter</Button>
@@ -295,7 +327,7 @@ const CoverLetter = () => {
                   Cover Letter:
                 </Typography>
 
-                <Box sx={{ ...styledRichCoverLetterText, width: "100%" }}>
+                <Box sx={{ ...styledRichCoverLetterText, width: "100%", maxHeight: "500px", overflowY: "auto" }}>
                   <Editor
                     editorState={editorState}
                     onEditorStateChange={handleEditorChange}
