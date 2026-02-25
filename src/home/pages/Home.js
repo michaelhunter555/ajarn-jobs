@@ -212,7 +212,7 @@ const Home = () => {
                     fontWeight={600}
                   >
                     Find Teaching Jobs
-                  </Typography>
+                  </Typography>               
                   <Typography
                     color="text.secondary"
                     component="h3"

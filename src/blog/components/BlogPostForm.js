@@ -132,23 +132,12 @@ const BlogPostForm = ({ onBlogPostCreated, hideButton, onCancel }) => {
     <>
       <ErrorModal error={error} header={error} onClear={clearError} />
       <Box>
-        <Typography>
-          Add a Post or Ask a Question! Get the perspectives of others.
-        </Typography>
-
-        <Button
-          disabled={toggleForm || !auth.isLoggedIn}
-          variant="contained"
-          onClick={toggleContentFormHandler}
-        >
-          {!auth.isLoggedIn ? "login to post" : "Add a post"}
-        </Button>
 
         {isPostLoading && <CircularProgress />}
 
         {toggleForm && !isPostLoading && (
           <Paper
-            elevation={1}
+            elevation={0}
             sx={{ margin: "2rem auto", padding: 2, borderRadius: "18px" }}
           >
             <form onSubmit={submitContentPostHandler}>

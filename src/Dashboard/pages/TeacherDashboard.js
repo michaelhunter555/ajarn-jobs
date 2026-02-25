@@ -861,30 +861,7 @@ const TeacherDashboard = () => {
                 gap: "5px",
               }}
             >
-             {jobAd && <Grid item xs={12}>
-                {jobAdIsLoading && (
-                  <Skeleton
-                    sx={{
-                      margin: "0 auto",
-                      borderRadius: "6px",
-                      width: "100%",
-                    }}
-                    variant="rectangular"
-                    height={114}
-                  />
-                )}
-                {!jobAdIsLoading &&  (
-                  <UserProfileJobAd
-                    id={jobAd[0]?._id}
-                    logo={`${jobAd[0]?.image}`}
-                    title={jobAd[0]?.title}
-                    description={sanitizeHtml(jobAd[0]?.description, {
-                      allowedTags: [],
-                      allowedAttributes: {},
-                    })}
-                  />
-                )}
-              </Grid>}
+           
 
               {jobAd && <Grid item xs={12}>
                 {jobAdIsLoading && (
@@ -1018,7 +995,7 @@ const TeacherDashboard = () => {
                     currentLocation={user?.location}
                     nationality={user?.nationality}
                     workExperience={user?.workExperience}
-                    image={`${user?.image}`}
+                    image={user?.image}
                     degree={user?.highestCertification}
                     about={user?.about}
                     width={500}

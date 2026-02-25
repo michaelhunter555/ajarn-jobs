@@ -51,7 +51,7 @@ const StyledBottomNav = styled(BottomNavigation)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     position: "fixed",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     bottom: 0,
     left: 0,
     right: 0,
@@ -59,6 +59,16 @@ const StyledBottomNav = styled(BottomNavigation)(({ theme }) => ({
     zIndex: 11,
     marginTop: "1rem",
     padding: "0.5rem 0",
+    overflowX: "auto",
+    overflowY: "hidden",
+    WebkitOverflowScrolling: "touch",
+    whiteSpace: "nowrap",
+    "& .MuiBottomNavigationAction-root": {
+      flex: "0 0 auto",
+      minWidth: 72,
+      paddingLeft: 8,
+      paddingRight: 8,
+    },
   },
 }));
 
@@ -73,11 +83,11 @@ const menuItems = [
     icon: <MessageIcon />,
     componentName: "messages",
   },
-  {
-    text: "Screenings",
-    icon: <EditNoteIcon />,
-    componentName: "screenings",
-  },
+  // {
+  //   text: "Screenings",
+  //   icon: <EditNoteIcon />,
+  //   componentName: "screenings",
+  // },
   {
     text: "Cover Letter",
     icon: <WorkIcon />,

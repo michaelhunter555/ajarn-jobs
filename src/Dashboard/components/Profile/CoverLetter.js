@@ -5,6 +5,9 @@ import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
+import { useMutation } from "@tanstack/react-query";
+import { useSnackbar } from "../../../shared/context/snackbar-context";
+import AssistantIcon from '@mui/icons-material/Assistant';
 
 import {
   Box,
@@ -12,6 +15,7 @@ import {
   Divider,
   Grid,
   Paper,
+  CircularProgress,
   Skeleton,
   Stack,
   Typography,
@@ -19,6 +23,7 @@ import {
 
 import { AuthContext } from "../../../shared/context/auth-context";
 import { useForm } from "../../../shared/hooks/form-hook";
+import { useUser } from "../../../shared/hooks/user-hook";
 
 const styledRichCoverLetterText = {
   height: "auto",
@@ -41,7 +46,8 @@ const CoverLetter = () => {
   const { user, updateUser } = auth;
   const [isEditing, setIsEditing] = useState(user?.coverLetter === "");
   const [isLoading, setIsLoading] = useState(false);
-
+  const { generateCoverLetter } = useUser();
+  const { showSnackbar } = useSnackbar();
   let initialEditorState = EditorState.createEmpty();
 
   if (user?.coverLetter) {
@@ -109,10 +115,43 @@ const CoverLetter = () => {
 
   const handleEditorChange = (content) => {
     setEditorState(content);
-    const currentContent = editorState.getCurrentContent();
+    const currentContent = content.getCurrentContent();
     const rawContent = convertToRaw(currentContent);
     const postData = rawContent.blocks[0].text;
     inputHandler("coverLetter", postData, postData.length >= 5);
+  };
+
+  const mutateGeneratedCoverLetter = useMutation({
+    mutationKey: ["generate-cover-letter"],
+    mutationFn: async (userId) => await generateCoverLetter(userId),
+    onSuccess: (data) => {
+      const htmlBlocks = htmlToDraft(data);
+      const { contentBlocks, entityMap } = htmlBlocks;
+      const contentState = ContentState.createFromBlockArray(
+        contentBlocks,
+        entityMap
+      );
+      const newEditorState = EditorState.createWithContent(contentState);
+      const rawContent = convertToRaw(contentState);
+      const postData = rawContent.blocks[0]?.text || "";
+      inputHandler("coverLetter", postData, postData.length >= 5);
+      setEditorState(newEditorState);
+      showSnackbar({
+        message: "Cover letter generated successfully",
+        severity: "success",
+      });
+    },
+    onError: (error) => {
+      console.log("Error with the request: " + error);
+      showSnackbar({
+        message: "Error with the request: " + error,
+        severity: "error",
+      });
+    },
+  });
+
+  const handleGenerateCoverLetter = async() => {
+    await mutateGeneratedCoverLetter.mutateAsync(auth.user?._id);
   };
 
   return (
@@ -154,6 +193,7 @@ const CoverLetter = () => {
                     {auth.user?.email}
                   </Typography>
                 </Stack>
+              
                 <Grid item sx={{ margin: "1rem auto", width: "100%" }}>
                   <Typography
                     color="text.secondary"
@@ -217,6 +257,16 @@ const CoverLetter = () => {
           direction="column"
           sx={{ padding: "1rem" }}
         >
+            <Stack direction="row" spacing={2}>
+              {mutateGeneratedCoverLetter.isLoading ? (
+                <CircularProgress size={16} />
+              ) : (
+                <Button 
+                  startIcon={<AssistantIcon />} 
+                  variant="outlined" 
+                  onClick={handleGenerateCoverLetter}>Generate Cover Letter</Button>
+              )}
+                </Stack>
           <Grid item xs={12}>
             <Stack justifyContent="center" alignItems="center">
               <Grid>

@@ -217,9 +217,7 @@ const AddNewBlogPost = () => {
                   bgcolor: "background.paper",
                 }}
               >
-                <Typography id="create-post-modal-title" variant="subtitle1" sx={{ mb: 1.5 }}>
-                  Create a post
-                </Typography>
+             
                 <BlogPostForm onBlogPostCreated={incomingBlogPostHandler} onCancel={() => setIsCreatePostModalOpen(false)} />
               </Box>
 

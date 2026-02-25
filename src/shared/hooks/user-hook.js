@@ -446,7 +446,9 @@ export const useUser = () => {
             Authorization: "Bearer " + auth.token,
           }
         )
-      } catch (err) {}
+      } catch (err) {
+        throw err;
+      }
     }, [sendRequest, auth.token]);
 
     // Leave Chat
@@ -464,7 +466,25 @@ export const useUser = () => {
         return response;
       } catch (err) {}
     }, [sendRequest, auth.token]);
-   
+
+    // POST Generate Cover Letter
+    const generateCoverLetter = useCallback(async (userId) => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_USERS}/generate-ai-cover-letter/${userId}`,
+          { headers: { Authorization: "Bearer " + auth.token } }
+        )
+        const data = await response.json();
+        if (!data.ok) {
+          throw new Error(data.message);
+        }
+        return data.coverLetter;
+      } catch (err) {
+        console.log("Error with the request: " + err);
+        throw err;
+      }
+    }, [sendRequest, auth.token]);
+
   return {
     users,
     getAllUsers,
@@ -494,5 +514,6 @@ export const useUser = () => {
     updateChat,
     leaveChat,
     createChat,
+    generateCoverLetter,
   };
 };

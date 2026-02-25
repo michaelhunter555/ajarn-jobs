@@ -1,6 +1,7 @@
 // SnackbarContext.tsx
 import React, { createContext, useContext, useState } from "react";
 import { Snackbar, Alert, Avatar, Button, Box, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 // type SnackbarOptions = {
 //   message: string;
 //   severity?: AlertColor;
@@ -21,20 +22,23 @@ export const useSnackbar = () => {
 };
 
 export const SnackbarProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("info");
   const [path, setPath] = useState("");
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
+  const [onClick, setOnClick] = useState(null);
 
-  const showSnackbar = ({ message, severity = "info", path, image, name }) => {
+  const showSnackbar = ({ message, severity = "info", path, image, name, onClick }) => {
     setMessage(message);
     setSeverity(severity);
     setPath(path || "");
     setImage(image || "");
     setName(name || "");
     setOpen(true);
+    setOnClick(() => onClick || null);
   };
 
   const handleClose = () => {
@@ -42,10 +46,11 @@ export const SnackbarProvider = ({ children }) => {
   };
 
   const handleView = () => {
-    handleClose();
+    if (onClick) onClick();
     if (path) {
-      window.location.href = path;
+      navigate(path);
     }
+    handleClose();
   };
 
   return (
@@ -70,8 +75,11 @@ export const SnackbarProvider = ({ children }) => {
           View
         </Button>
       ) : (
-        <Button size="small" color="inherit" onClick={handleClose}>
-          Close
+        <Button size="small" color="inherit" onClick={() => {
+            if(onClick) onClick();
+            handleClose();
+        }}>
+          {onClick ? "View" : "Close"}
         </Button>
       )
     }

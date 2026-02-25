@@ -283,7 +283,7 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                     </Typography>
 
                     <Stack direction="row" alignItems="center" spacing={1}>
-                      <Chip label={teacher?.userType} size="small" />
+                      <Chip label={teacher?.userType.slice(0,1).toUpperCase() + teacher?.userType.slice(1)} size="small" />
                       {auth?.user?.userType === 'employer' && (
                       <Link 
                       to={`/users/${auth?.user?._id}?sendMessage=true`}
@@ -476,8 +476,8 @@ const TeacherDetailsItem = ({ teacher, isLoading }) => {
                     }}
                   >
                     {recruitmentSentAlready
-                      ? "✨ Offer Sent"
-                      : `🚀 Recruit ${teacher?.name}`}
+                      ? "Offer Sent"
+                      : `Recruit ${teacher?.name}`}
                   </Button>
                   {recruitmentSentAlready && (
                     <FormHelperText sx={{ mt: 1, textAlign: "center" }}>

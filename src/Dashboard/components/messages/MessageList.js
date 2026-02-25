@@ -218,6 +218,14 @@ const MessageList = ({ teacherId, name, image, userType, chatId }) => {
     const shouldCreateNewConversation =
       Boolean(teacherId) && !isExistingConversation && !selectedChatId;
 
+      if(auth?.user?.userType === "employer" && !auth?.user?.buffetIsActive) {
+        showSnackbar({
+            message: "You need to activate your buffet to send messages.",
+            severity: "error",
+        });
+        return;
+    }
+
     if (shouldCreateNewConversation) {
         if(chats?.length >= 10) {
             showSnackbar({
@@ -226,6 +234,8 @@ const MessageList = ({ teacherId, name, image, userType, chatId }) => {
             });
             return;
         }
+
+  
         const teacherData = {
             _id: teacherId,
             name: name,
@@ -241,6 +251,13 @@ const MessageList = ({ teacherId, name, image, userType, chatId }) => {
         setCurrentTeacherId("");
         newMessageMutation.mutate({ employerData, teacherData, text: cleanText });
     } else {
+        if(auth?.user?.userType === "employer" && !auth?.user?.buffetIsActive) {
+            showSnackbar({
+                message: "You need to activate your buffet to send messages.",
+                severity: "error",
+            });
+            return;
+        }
         const targetChatId = selectedChatId || existingConversation?._id;
         if (!targetChatId) return;
         sendMessageMutation.mutate({ chatId: targetChatId, text: cleanText });
