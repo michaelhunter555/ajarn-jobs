@@ -56,14 +56,17 @@ const EmailVerification = () => {
   const [signInPassword, setSignInPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const params = new URLSearchParams(location.search);
+  const mode = params.get('mode');
+  const oobCode = params.get('oobCode');
 
   // Handle Firebase action link (verifyEmail) when arriving with mode/oobCode
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const mode = params.get('mode');
-    const oobCode = params.get('oobCode');
-
     if (!oobCode) return;
+    if(mode === 'resetPassword') {
+      navigate(`/password-reset?mode=resetPassword&oobCode=${encodeURIComponent(oobCode)}`, { replace: true,});
+      return;
+    }
     // Firebase uses mode=verifyEmail; accept generic 'action' just in case
     if (mode !== 'verifyEmail' && mode !== 'action') return;
 
@@ -95,7 +98,7 @@ const EmailVerification = () => {
     if (storedSignupData) {
       try {
         const parsedData = JSON.parse(storedSignupData);
-        console.log("💾 Found pending signup data:", parsedData);
+      // console.log("💾 Found pending signup data:", parsedData);
         
         // Check if data is not too old (24 hours)
         const isDataValid = Date.now() - parsedData.timestamp < 24 * 60 * 60 * 1000;
@@ -118,7 +121,7 @@ const EmailVerification = () => {
   // Generate and store temp token for Firebase-verified users
   const generateAndStoreTempToken = async (email, firebaseUid) => {
     try {
-      console.log("🎫 Generating temp token for:", email);
+      // console.log("🎫 Generating temp token for:", email);
       const response = await sendRequest(
         `${process.env.REACT_APP_USERS}/generate-temp-token`,
         "POST",
@@ -131,7 +134,7 @@ const EmailVerification = () => {
         }
       );
       
-      console.log("✅ Temp token generated:", response.token ? "Token received" : "No token");
+      // console.log("✅ Temp token generated:", response.token ? "Token received" : "No token");
       
       // Store the temp token in localStorage while preserving all original signup data
       const updatedPendingData = {
@@ -141,12 +144,12 @@ const EmailVerification = () => {
         firebaseUid: response.firebaseUid
       };
       
-      console.log("💾 Updated pending data:", updatedPendingData);
+      // console.log("💾 Updated pending data:", updatedPendingData);
       
       localStorage.setItem('pendingSignup', JSON.stringify(updatedPendingData));
       setPendingSignupData(updatedPendingData);
       
-      console.log("💾 Temp token stored in localStorage");
+      // console.log("💾 Temp token stored in localStorage");
     } catch (err) {
       console.error("❌ Error generating temp token:", err);
       throw err;
@@ -155,7 +158,7 @@ const EmailVerification = () => {
 
   // Handle continue signup for Firebase-verified users
   const handleContinueSignup = async () => {
-    console.log("🔄 User wants to complete signup - generating temp token and showing onboarding");
+    // console.log("🔄 User wants to complete signup - generating temp token and showing onboarding");
     
     if (!user || !pendingSignupData) {
       console.error("❌ Missing user or pendingSignupData");
@@ -173,11 +176,14 @@ const EmailVerification = () => {
   };
 
   useEffect(() => {
-    console.log("📧 EmailVerification component mounted");
+    if(mode === 'resetPassword') {
+      return;
+    }
+    // console.log("📧 EmailVerification component mounted");
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (currentUser) => {
-      console.log("🔥 Firebase auth state changed:", currentUser ? "User logged in" : "No user");
+      // console.log("🔥 Firebase auth state changed:", currentUser ? "User logged in" : "No user");
       if (currentUser) {
-        console.log("👤 Current user:", currentUser.email, "Verified:", currentUser.emailVerified);
+        // console.log("👤 Current user:", currentUser.email, "Verified:", currentUser.emailVerified);
         setUser(currentUser);
         
         // If email is already verified, generate temp token and show onboarding

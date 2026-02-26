@@ -8,6 +8,8 @@ const NotificationsList = {
     newMessage: 'newMessage',
     newJobApplications: 'newJobApplications',
     newRecruitmentOffer: 'newRecruitmentOffer',
+    newRecruitmentResponse: 'newRecruitmentResponse',
+    newCreditPurchase: 'newCreditPurchase',
 }
 
 const SocketEventListener = () => {
@@ -47,14 +49,39 @@ const SocketEventListener = () => {
         });
 
         socket.on(NotificationsList.newRecruitmentOffer, (data) => {
-            console.log('New recruitment offer received:', data);
-            invalidateQuery('recruitmentOffers');
+            const { jobTitle, salary, location, employerName, employerImage, recruitmentId } = data;
+            invalidateQuery('RecruitmentData');
+            showSnackbar({
+                message: `Recruitment Offer! ${jobTitle} - ${salary} - ${location}`,
+                severity: 'info',
+                path: `/users/${auth?.user?._id}`,
+                image: employerImage ?? "",
+                name: employerName,
+            })
+            auth.updateUser({
+                ...auth.user,
+                recruitmentReceived: [...auth.user.recruitmentReceived, recruitmentId]
+            })
+        });
+
+        socket.on(NotificationsList.newRecruitmentResponse, async(data) => {
+            const { teacherName, teacherImage, teacherResponse } = data;
+            await invalidateQuery('employerRecruits');
+            showSnackbar({
+                message: `${teacherName} has responded with - "${teacherResponse}"`,
+                severity: 'info',
+                path: `/users/${auth?.user?._id}`,
+                image: teacherImage ?? "",
+                name: teacherName,
+            })
+           
         });
 
         return () => {
             socket.off(NotificationsList.newMessage);
             socket.off(NotificationsList.newJobApplications);
             socket.off(NotificationsList.newRecruitmentOffer);
+            socket.off(NotificationsList.newRecruitmentResponse);
         };
     }, [socket]);
 }

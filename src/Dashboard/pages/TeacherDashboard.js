@@ -71,6 +71,7 @@ import UserRecruitmentTable from "../components/Profile/UserRecruitmentTable";
 import UsersContent from "../components/Profile/UsersContent";
 import Sidebar, { BottomMobileNav } from "../components/Sidebar";
 import Contact from "../../shared/components/UIElements/Contact";
+import { useSnackbar } from "../../shared/context/snackbar-context";
 
 const JobAdGridContainer = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -98,9 +99,9 @@ const TeacherDashboard = () => {
   const { teacherId, name, image, userType } = location.state || {};
   const chatId = searchParams.get("chatId");
   const shouldOpenChat = searchParams.get("sendMessage") === "true";
-  const queryParams = new URLSearchParams(location.search);
+  const stripeSuccess = searchParams.get("stripe") === "success";
+  const { showSnackbar } = useSnackbar();
   const [currentComponent, setCurrentComponent] = useState(shouldOpenChat ? "messages" : "profile");
-  const [recruitmentOffers, setRecruitmentOffers] = useState(0);
   const [showPdfUpload, setShowPdfUpload] = useState(false);
   const [selectedPdfFile, setSelectedPdfFile] = useState(null);
   const [showContact, setShowContact] = useState(false);
@@ -176,6 +177,18 @@ const TeacherDashboard = () => {
   } = useHttpClient();
 
   const { getBlogPostByUserId } = useContent();
+
+  useEffect(() => {
+    if (!stripeSuccess) return;
+    const timeout = setTimeout(() => {
+      showSnackbar({
+        message: "Credits purchased successfully.",
+        severity: "success",
+      });
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [stripeSuccess]);
 
   //update auth object to reflect most current database
   const {

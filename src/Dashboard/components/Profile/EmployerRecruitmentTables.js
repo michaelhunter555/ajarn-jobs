@@ -190,11 +190,11 @@ const EmployerRecruitmentTable = () => {
 
             {!recruitsIsLoading &&
               employerRecruits?.recruitments?.length === 0 && (
-                <Box sx={{ padding: "2rem" }}>
-                  <Typography>No recruitments sent yet.</Typography>
+                <Box sx={{ padding: "2rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "5px" }}>
+                  <Typography variant="subtitle2" color="text.secondary">No recruitments sent.</Typography>
                   {auth?.user?.buffetIsActive ? (
                     <Button component={Link} to={`/teachers`}>
-                      Start Recruiting?
+                      View Teachers?
                     </Button>
                   ) : (
                     ""

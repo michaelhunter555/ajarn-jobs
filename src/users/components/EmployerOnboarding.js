@@ -42,9 +42,9 @@ const EmployerOnboarding = ({ onComplete, user }) => {
   // Get userType from localStorage (set by OnboardingFlow when employer is selected)
   const selectedUserType = localStorage.getItem('selectedUserType') || 'employer';
   
-  console.log('🏢 EmployerOnboarding rendered!');
-  console.log('  - user:', user);
-  console.log('  - selectedUserType:', selectedUserType);
+  // console.log('🏢 EmployerOnboarding rendered!');
+  // console.log('  - user:', user);
+  // console.log('  - selectedUserType:', selectedUserType);
 
   const [form, setForm] = useState({
     company: "",
@@ -121,7 +121,7 @@ const EmployerOnboarding = ({ onComplete, user }) => {
           }
         );
 
-        console.log("response", response);
+       // console.log("response", response);
         
         // Login the user with the new data
         auth.login(

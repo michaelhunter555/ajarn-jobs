@@ -363,6 +363,8 @@ const MessageList = ({ teacherId, name, image, userType, chatId }) => {
     });
   };
 
+  console.log("chats MessageList:", chats);
+
   // find other participant in chat
   const otherParticipant = chats?.find((p) => p._id === selectedChatId)?.participantInfo?.find((p) => String(p.id) !== String(userId));
 

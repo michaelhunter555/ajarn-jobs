@@ -16,6 +16,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 import { useInvalidateQuery } from "../../shared/hooks/invalidate-query";
 import { useJob } from "../../shared/hooks/jobs-hook";
 import RecruitJobSelectionList from "./RecruitJobSelectionList";
+import { useSnackbar } from "../../shared/context/snackbar-context";
 
 const MessageTeacher = (props) => {
   const [selectedJob, setSelectedJob] = useState();
@@ -25,6 +26,7 @@ const MessageTeacher = (props) => {
   const { invalidateQuery } = useInvalidateQuery();
   const auth = useContext(AuthContext);
   const { getJobsByUserId, sendRecruitmentOffer, isPostLoading } = useJob();
+  const { showSnackbar } = useSnackbar();
 
   const canRecruit =
     auth?.isLoggedIn &&
@@ -57,7 +59,13 @@ const MessageTeacher = (props) => {
       message: message,
     };
     //console.log("recruitment info", recruitmentInfo);
-    await sendRecruitmentOffer(recruitmentInfo);
+   const response = await sendRecruitmentOffer(recruitmentInfo);
+
+    showSnackbar({
+    message: response.message,
+    severity: (response.exists && response.ok) ? "error" : response.ok ? "success" : "error",
+   });
+
     invalidateQuery("teacherDetails");
     props.closeModal();
   };

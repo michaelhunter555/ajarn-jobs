@@ -16,14 +16,12 @@ import { SocketProvider } from "./shared/context/socket-io-context";
 import SocketEventListener from "./shared/components/SocketEvents/SocketEventListener";
 import { SnackbarProvider } from "./shared/context/snackbar-context";
 
-import TeacherDashboard from "./Dashboard/pages/TeacherDashboard";
+
 import Home from "./home/pages/Home";
 import JobDetailsPage from "./jobs/pages/JobDetailsPage";
 import UserJobs from "./jobs/pages/UserJobs";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
-import OnboardingFlow from "./shared/components/Onboarding/OnboardingFlow";
-import EmployerOnboarding from "./users/components/EmployerOnboarding";
 import EmailVerification from "./users/pages/EmailVerification";
 import {
   ADD_CREDITS,
@@ -38,6 +36,10 @@ import Login from "./users/pages/Auth";
 
 const About = lazy(() => import("./introduction/About"));
 const PrivacyPolicy = lazy(() => import("./termsOfService/privacyPolicy"));
+
+const TeacherDashboard = lazy(() => import("./Dashboard/pages/TeacherDashboard"));
+const EmployerOnboarding = lazy(() => import("./users/components/EmployerOnboarding"));
+const OnboardingFlow = lazy(() => import("./shared/components/Onboarding/OnboardingFlow"));
 
 const TermsAndConditions = lazy(() =>
   import("./termsOfService/termsAndConditions")
@@ -168,6 +170,7 @@ function App() {
         <Route path="/auth" element={<Login />} />
         <Route path="/verify-email" element={<EmailVerification />} />
         <Route path="/employer-onboarding" element={<EmployerOnboarding onComplete={() => window.location.href = "/"} />} />
+        <Route path="/password-reset" element={<PasswordResetPage />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route

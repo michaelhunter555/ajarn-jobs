@@ -39,51 +39,11 @@ const CreatorForm = ({
             )
           }
         />
-        <Grid
-          container
-          alignItems="center"
-          direction="row"
-          sx={{ margin: "0 0 0.5rem 0" }}
-        >
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              name="logoUrl"
-              label="Company Logo"
-              defaultValue={formState.inputs.logoUrl.value}
-              onChange={(event) =>
-                inputHandler(
-                  "logoUrl",
-                  event.target.value,
-                  event.target.value !== ""
-                )
-              }
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            sx={{ display: "flex", justifyContent: "center" }}
-          >
-            <TextField
-              name="companySize"
-              id="companySize"
-              label="Company Size"
-              defaultValue={formState.inputs.companySize.value}
-              onChange={(event) =>
-                inputHandler(
-                  "companySize",
-                  event.target.value,
-                  event.target.value !== ""
-                )
-              }
-            />
-          </Grid>
-        </Grid>
-        <FormControl sx={{ width: 200, margin: "0 0.5rem 0.5rem 0" }}>
+
+<FormControl sx={{width: "100%", margin: "0 0.5rem 0.5rem 0" }}>
           <InputLabel id="location-select">Location</InputLabel>
           <Select
+          fullWidth
             labelId="headquarters"
             id="headquarters"
             defaultValue={formState.inputs.headquarters.value}
@@ -103,8 +63,23 @@ const CreatorForm = ({
             ))}
           </Select>
         </FormControl>
+        
+            <TextField
+            sx={{ margin: "0 0.5rem 0 0"}}
+              name="companySize"
+              id="companySize"
+              label="Company Size"
+              defaultValue={formState.inputs.companySize.value}
+              onChange={(event) =>
+                inputHandler(
+                  "companySize",
+                  event.target.value,
+                  event.target.value !== ""
+                )
+              }
+            />
 
-        <TextField
+         <TextField
           sx={{ margin: "0 0.5rem 0 0" }}
           name="established"
           helperText="year of launch (i.e. 2004)"
@@ -118,6 +93,7 @@ const CreatorForm = ({
             )
           }
         />
+
         <TextField
           name="presence"
           label="Presence"
@@ -148,27 +124,12 @@ const CreatorForm = ({
             }
           />
         </Grid>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" justifyContent="flex-end" spacing={2}>
+
+          <Button color="error"onClick={handleEditing}>Cancel</Button>
           <Button variant="contained" type="submit">
             Save
           </Button>
-          <Button onClick={handleEditing}>Cancel</Button>
-          <Stack
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              flexDirection: "row",
-              width: "100%",
-            }}
-          >
-            <Button
-              onClick={() => handleCreatorDelete(user)}
-              variant="outlined"
-              color="warning"
-            >
-              Delete
-            </Button>
-          </Stack>
         </Stack>
       </form>
     </Card>

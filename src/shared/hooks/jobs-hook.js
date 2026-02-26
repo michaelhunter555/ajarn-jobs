@@ -230,6 +230,7 @@ export const useJob = () => {
         return response;
       } catch (err) {
         console.log(err);
+        throw err;
       }
     },
     [sendRequest, auth.token]

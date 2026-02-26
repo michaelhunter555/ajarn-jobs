@@ -55,6 +55,8 @@ const StyledChip = styled(Chip)(({ theme }) => ({
 export const JobAbout = (props) => {
   const { job } = props;
 
+  const presence = job?.creator?.presence[0]?.includes(",") ? job?.creator?.presence[0]?.split(",") : job?.creator?.presence;
+console.log("jobAbout.js", job?.creator?.presence)
   return (
     <ModernCard>
       <CardContent sx={{ p: 3 }}>
@@ -90,11 +92,11 @@ export const JobAbout = (props) => {
             flexWrap: "wrap",
           }}
         >
-          {job?.creator?.presence?.map((item, i) => (
+          {presence?.map((item, i) => (
             <StyledChip
               key={i}
               clickable
-              label={item}
+              label={item.trim()}
               variant="outlined"
               color="primary"
               size="small"

@@ -1,48 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { confirmPasswordReset } from "firebase/auth";
 import { auth as firebaseAuth } from "../../shared/config/firebase";
 import {
-  Alert,
-  Box,
   Card,
-  Chip,
-  CircularProgress,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  Switch,
   Typography,
-  Divider,
   IconButton,
   InputAdornment,
-  FormHelperText,
   Stack,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
-
 import Button from "../../shared/components/FormElements/Button";
-import ImageUpload from "../../shared/components/FormElements/ImageUpload";
 import Input from "../../shared/components/FormElements/Input";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import Footer from "../../shared/components/UIElements/Footer";
-import { AuthContext } from "../../shared/context/auth-context";
 import { useForm } from "../../shared/hooks/form-hook";
-import { useHttpClient } from "../../shared/hooks/http-hook";
-import { useFirebaseAuth } from "../../shared/hooks/firebase-auth-hook";
 import {
-  validate,
-    VALIDATOR_EMAIL,
     VALIDATOR_REQUIRE,
     VALIDATOR_MINLENGTH,
 } from "../../shared/util/validators";
-import GoogleLoginButton from "../../shared/components/FormElements/GoogleLoginButton";
-import EmployerOnboarding from "../components/EmployerOnboarding";
-import PasswordResetModal from "../../shared/components/UIElements/PasswordResetModal";
+
 import { useMutation } from "@tanstack/react-query";
 
 const PageContainer = styled("div")({

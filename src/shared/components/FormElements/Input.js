@@ -78,7 +78,6 @@ const Input = (props) => {
     //We will pass this to our custom form hook inputhandler function
     //please also view ../hooks/form-hooks.js to get 360 understanding.
     onInput(id, value, isValid);
-    console.log("requirement inputs: ",id, value, isValid);
   }, [id, value, isValid, onInput]);
 
   const changeHandler = (event) => {

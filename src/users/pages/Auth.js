@@ -194,7 +194,7 @@ const Auth = () => {
         
         // Check if user needs to complete signup (Firebase verified but not in MongoDB)
         if (response.needsSignupCompletion) {
-          console.log("🔄 User needs to complete signup process");
+          //console.log("🔄 User needs to complete signup process");
           // Store the Firebase UID, email, userType, and temporary token for signup completion
           localStorage.setItem('pendingSignup', JSON.stringify({
             email: response.email,
@@ -298,7 +298,7 @@ const Auth = () => {
         // console.log("📧 Firebase email verified:", firebaseUser.emailVerified);
 
         // Redirect to email verification page (don't create user in MongoDB yet)
-        console.log("🔄 Redirecting to email verification...");
+        //console.log("🔄 Redirecting to email verification...");
         navigate("/verify-email");
       } catch (err) {
         console.error("❌ Signup error:", err);
@@ -328,7 +328,7 @@ const Auth = () => {
         url: `${window.location.origin}/password-reset`,
         handleCodeInApp: true,
       });
-      console.log("✅ Password reset email sent:", email);
+     // console.log("✅ Password reset email sent:", email);
       setPasswordResetSuccess(true);
       setPasswordResetLoading(false);
      } catch (err) {
