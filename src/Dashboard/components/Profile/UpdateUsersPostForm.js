@@ -86,7 +86,7 @@ const UpdateUsersPostForm = ({ toggle, postId }) => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BLOG}/post/${postId}`,
+        `${process.env.REACT_APP_BLOG}/post/${postId}/${auth?.user?._id}`,
         {
           method: "PATCH",
           body: JSON.stringify({

@@ -122,8 +122,8 @@ const SideBlogList = ({ contentPosts }) => {
         {!isLoading && (
           <Paper elevation={0} sx={{ padding: "5px 5px" }}>
             <Typography
-              variant="h4"
-              color="text.primary"
+              variant="body1"
+              color="text.secondary"
               sx={{
                 textAlign: "center",
                 fontWeight: "bold",

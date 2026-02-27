@@ -60,10 +60,6 @@ const RecentJobs = (props) => {
 
   return (
     <>
-      <StyledTitle color="text.secondary" variant="h5">
-        Recent Jobs
-        <MdOutlineFiberNew style={{ color: "green" }} />
-      </StyledTitle>
       <Divider />
       <StyledPaper elevation={0}>
         {props.homeJobs &&
@@ -83,6 +79,7 @@ const RecentJobs = (props) => {
                 title={job?.title}
                 id={job?.id}
                 creationDate={getTimeDifference(job?.datePosted)}
+                description={job?.description}
               />
             </Link>
           ))}

@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
+import { AuthContext } from "../../shared/context/auth-context";
 import WorkIcon from "@mui/icons-material/Work";
-//import { Link } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 import {
+  Chip,
+  Container,
   Divider,
   Grid,
   Pagination,
@@ -36,9 +39,34 @@ import {
   StyledHomeFeaturedContent,
   StyledHomeFeaturedTop,
 } from "./HomeStyles";
-import { useSnackbar } from "../../shared/context/snackbar-context";
+import EmployerPromoCard from "../../shared/components/UIElements/EmployerPromo";
+
+const SectionHeading = ({ title, subtitle, action }) => {
+  return (
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      alignItems={{ xs: "flex-start", sm: "flex-end" }}
+      justifyContent="space-between"
+      spacing={1}
+      sx={{ width: "100%", mb: 1.5 }}
+    >
+      <Stack spacing={0.25}>
+        <Typography variant="h6" sx={{ fontWeight: 900 }}>
+          {title}
+        </Typography>
+        {subtitle ? (
+          <Typography variant="body2" color="text.secondary">
+            {subtitle}
+          </Typography>
+        ) : null}
+      </Stack>
+      {action ? <Box sx={{ flex: "0 0 auto" }}>{action}</Box> : null}
+    </Stack>
+  );
+};
 
 const Home = () => {
+  const auth = useContext(AuthContext);
   const theme = useTheme();
   const isMobileOrTablet = useMediaQuery(
     theme.breakpoints.down("sm") || theme.breakpoints.down("md")
@@ -134,6 +162,109 @@ const Home = () => {
   return (
     <PageContainer>
       <Content>
+        <Box
+          sx={{
+            py: { xs: 4, md: 6 },
+            borderBottom: "1px solid",
+            borderColor: "divider",
+            background:
+              "radial-gradient(900px circle at 20% 10%, rgba(18,140,177,0.16), transparent 60%), radial-gradient(700px circle at 90% 0%, rgba(255,162,162,0.20), transparent 55%)",
+          }}
+        >
+          <Container sx={{ width: { xs: "100%", md: "85%" } }}>
+            <Grid container spacing={3} alignItems="center">
+              <Grid item xs={12} md={7}>
+                <Stack spacing={1.25}>
+                  <Chip
+                    size="small"
+                    color="primary"
+                    sx={{ width: "fit-content" }}
+                    label="AjarnJobs.com"
+                  />
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontWeight: 950,
+                      letterSpacing: -0.6,
+                      fontSize: { xs: 30, sm: 36, md: 44 },
+                      lineHeight: 1.08,
+                    }}
+                  >
+                    Find teaching jobs in Thailand & Asia
+                  </Typography>
+                  <Typography variant="subtitle1" color="text.secondary">
+                    Featured jobs, a content feed, and a dashboard built for teachers and
+                    employers. Explore with confidence—mobile friendly by default.
+                  </Typography>
+                  <Stack direction="row" spacing={1} flexWrap="wrap">
+                    <Chip size="small" variant="outlined" label="Featured jobs" />
+                    <Chip size="small" variant="outlined" label="Messaging" />
+                    <Chip size="small" variant="outlined" label="Recruiting" />
+                    <Chip size="small" variant="outlined" label="Content" />
+                  </Stack>
+                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1.25}>
+                    <Button
+                      variant="contained"
+                      onClick={() =>
+                        document
+                          .getElementById("jobsTop")
+                          ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                      }
+                    >
+                      Browse featured jobs
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      component={RouterLink}
+                      to="/how-to-use-ajarn-jobs"
+                    >
+                      How it works
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Grid>
+               <Grid item xs={12} md={5}>
+                <Stack
+                  spacing={1}
+                  sx={{
+                    p: 2,
+                    borderRadius: 3,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    bgcolor: "background.paper",
+                  }}
+                >
+                  <Typography sx={{ fontWeight: 900 }}>
+                    What you can do today
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    - Teachers: build your profile, apply, and engage in live chats with employers.
+                    <br />- Employers: post jobs, manage applicants, and recruit & message teachers.
+                  </Typography>
+                  {!auth?.isLoggedIn && <Stack direction="row" spacing={1} justifyContent="flex-end">
+                    <Button
+                      size="small"
+                      variant="text"
+                      component={RouterLink}
+                      to="/auth?name=signUp"
+                    >
+                      Create account
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="text"
+                      component={RouterLink}
+                      to="/auth"
+                    >
+                      Log In
+                    </Button>
+                  </Stack>}
+                </Stack>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+
         <StyledGridContainer>
           {/* top-middle column */}
           <StyledHomeFeaturedTop>
@@ -205,23 +336,10 @@ const Home = () => {
                 spacing={2}
               >
                 <Grid item xs={12} md={2}>
-                  <Typography
-                    color="text.secondary"
-                    component="h2"
-                    variant="subtitle1"
-                    fontWeight={600}
-                  >
-                    Find Teaching Jobs
-                  </Typography>               
-                  <Typography
-                    color="text.secondary"
-                    component="h3"
-                    variant="subtitle2"
-                    sx={{ fontSize: 12 }}
-                  >
-                    Welcome to AjarnJobs.com a resource for finding teaching
-                    jobs in Thailand & Asia.
-                  </Typography>
+                  <SectionHeading
+                    title="Today’s featured pick"
+                    subtitle="A quick preview from the featured feed."
+                  />
                 </Grid>
                 <Divider
                   orientation="vertical"
@@ -276,7 +394,15 @@ const Home = () => {
           </StyledHomeFeaturedContent>
 
           <Divider sx={{ margin: "0.5rem auto", width: "95%" }} />
-          <Box sx={{width: {xs: '100%', sm: '100%', md: 'auto'}, overflowX: { xs: 'auto', sm: 'auto', md: 'visible'}}}>
+          <EmployerPromoCard
+          userId={auth?.user?._id}
+          isLoggedIn={auth?.isLoggedIn} />
+          <Box
+            sx={{
+              width: { xs: "100%", sm: "100%", md: "auto" },
+              overflowX: { xs: "auto", sm: "auto", md: "visible" },
+            }}
+          >
             <SiteFeatures isLoading={homepageIsLoading} />
           </Box>
 
@@ -290,7 +416,11 @@ const Home = () => {
             }}
             spacing={2}
           >
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} md={8}>
+              <SectionHeading
+                title="Recent jobs"
+                subtitle="Fresh listings that are actively reviewing applicants."
+              />
               {homepageIsLoading && (
                 <JobAdSkeleton
                   sx={{
@@ -302,21 +432,12 @@ const Home = () => {
               )}
               {!homepageIsLoading && <RecentJobs homeJobs={homeJobs} />}
             </Grid>
-            <Grid item xs={12} md={5}>
-              {homepageIsLoading && (
-                <JobAdSkeleton
-                  sx={{
-                    height: "95px",
-                  }}
-                  num={5}
-                  variant="rectangular"
-                />
-              )}
-              {!homepageIsLoading && (
-                <FeaturedContentList posts={contentList} />
-              )}
-            </Grid>
+            
             <Grid item xs={12} md={4}>
+              <SectionHeading
+                title="Welcome"
+                subtitle="Quick links and getting-started info."
+              />
               {homepageIsLoading && (
                 <JobAdSkeleton
                   sx={{
@@ -338,6 +459,10 @@ const Home = () => {
             <Divider />
           </div>
           <div>
+            <SectionHeading
+              title="Featured extras"
+              subtitle="More ways to explore and discover."
+            />
             <BottomFeatured isLoading={homepageIsLoading} />
           </div>
           <Divider flexItem />

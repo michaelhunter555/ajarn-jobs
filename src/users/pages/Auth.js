@@ -227,6 +227,7 @@ const Auth = () => {
           theme,
           name,
           needsOnboarding,
+          credits,
         } = response;
 
         auth.login(
@@ -247,6 +248,7 @@ const Auth = () => {
             theme: theme,
             name,
             needsOnboarding,
+            credits,
           },
           token
         );

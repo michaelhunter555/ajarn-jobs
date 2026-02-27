@@ -9,8 +9,6 @@ import { useQuery } from "@tanstack/react-query";
 import BlogPageItem from "../components/BlogPageItem";
 import SideBlogList from "../components/SideBlogList";
 
-const StyledGridContainer = styled(Grid)(({ theme }) => ({}));
-
 const BlogPage = () => {
   const blogId = useParams().bid;
 

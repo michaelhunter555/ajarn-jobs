@@ -57,7 +57,6 @@ const MainNavigation = (props) => {
           <NavLinks />
         </MainNavigationDrawer>
       </SideDrawer>
-
       <MainHeader navIsScrolled={navIsScrolled}>
         <MainNavigationButtonStyles onClick={openDrawerHandler}>
           <MenuIcon style={{ fontSize: "2rem", color: "#128cb1" }} />

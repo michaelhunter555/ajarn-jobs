@@ -918,8 +918,7 @@ const TeacherDashboard = () => {
               border: "1px solid gold", 
               borderRadius: "10px", 
               padding: "1rem",
-              background: "linear-gradient(45deg, #2196f3 30%, #21cbf3 90%)",
-              color: "white",
+              background: "linear-gradient(135deg, rgba(18,140,177,0.12), rgba(255,162,162,0.10))",
               mb:1,
                }}>
                 <Box >

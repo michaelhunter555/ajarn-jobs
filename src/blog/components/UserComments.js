@@ -130,7 +130,7 @@ const UserComments = ({
           </Box>
         )}
         {!commentsIsLoading && usersComments?.length === 0 && (
-          <Typography variant="h4">No comments yet. Be the first!</Typography>
+          <Typography variant="body1" color="text.secondary">No comments yet. Be the first!</Typography>
         )}
         {!commentsIsLoading &&
           usersComments?.length !== 0 &&

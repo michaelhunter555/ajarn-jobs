@@ -83,7 +83,7 @@ const BlogContent = ({ content }) => {
           src={`${content?.author?.image}`}
         />
         <StyledStackWrapper>
-          <StyledTypography variant="h4" component="span">
+          <StyledTypography variant="h6" component="span">
             {content?.title}
           </StyledTypography>
           <Typography variant="subtitle2" component="span">

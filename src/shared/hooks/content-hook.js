@@ -133,8 +133,7 @@ export const useContent = () => {
     async (postId, updatedPost) => {
       try {
         const response = await sendRequest(
-          `
-                ${process.env.REACT_APP_BLOG}/post/${postId}`,
+          `${process.env.REACT_APP_BLOG}/post/${postId}/${auth?.user?._id}`,
           "PATCH",
           JSON.Strigify({ updatedPost: updatedPost }),
           {
@@ -231,7 +230,7 @@ export const useContent = () => {
         updateUser(deletedPost);
 
         const response = await sendRequest(
-          `${process.env.REACT_APP_BLOG}/post/${postId}`,
+          `${process.env.REACT_APP_BLOG}/post/${postId}/${auth?.user?._id}`,
           "DELETE",
           null,
           {
@@ -419,7 +418,7 @@ export const useComment = () => {
     async (commentId, blogId) => {
       try {
         const response = await sendRequest(
-          `${process.env.REACT_APP_BLOG}/delete-comment/${commentId}/post/${blogId}`,
+          `${process.env.REACT_APP_BLOG}/delete-comment/${commentId}/post/${blogId}/${auth?.user?._id}`,
           "DELETE",
           null,
           { Authorization: "Bearer " + auth.token }

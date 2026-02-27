@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import sanitizeHtml from "sanitize-html";
 
 const StyledList = styled(List)(({ theme }) => ({
   width: "100%",
@@ -37,6 +38,12 @@ const StyledAvatar = styled(Avatar)({
 });
 
 const RecentJobItems = (props) => {
+  const sanitizedDescription = sanitizeHtml(props.description, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
+
+  const truncatedDescription = sanitizedDescription.length > 100 ? sanitizedDescription.substring(0, 100) + "..." : sanitizedDescription;
   return (
     <StyledList>
       <ListItemButton alignItems="flex-start">
@@ -57,9 +64,18 @@ const RecentJobItems = (props) => {
               </>
             }
             secondary={
-              <>
+              <Stack>
+                <Typography variant="subtitle2" color="text.secondary">
+
                 {props.location} - {props.creationDate}
-              </>
+              </Typography>
+                <Typography
+                  sx={{ fontSize: 13 }}
+                  variant="subtitle2"
+                  color="text.secondary"
+                  dangerouslySetInnerHTML={{ __html: truncatedDescription }}
+                />
+              </Stack>
             }
           />
         </Stack>

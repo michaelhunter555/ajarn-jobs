@@ -13,7 +13,12 @@ import {
   Select,
   Stack,
   styled,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 import { blogCategories } from "../../shared/util/ThaiData";
 
@@ -56,17 +61,18 @@ const last14Days = moment().subtract(14, "days");
 const last30Days = moment().subtract(30, "days");
 
 const searchDates = [
-  { id: "All", date: null },
+  { id: "All", date: "" },
   { id: "Today", date: currentDate },
   { id: "7 Days", date: last7Days },
   { id: "14 Days", date: last14Days },
   { id: "30 Days", date: last30Days },
 ];
 
-const BlogFilter = ({ onDataChange }) => {
+const BlogFilter = ({ onDataChange, onQuerySelect, onClearAll }) => {
   const [search, setSearch] = useState("");
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("Any");
+  const [chipIndex, setChipIndex] = useState(0);
 
   const inputChangeHandler = (event) => {
     setSearch(event.target.value);
@@ -74,7 +80,13 @@ const BlogFilter = ({ onDataChange }) => {
   };
 
   const dateChangeHandler = (selectedDate) => {
-    const formattedDate = moment(selectedDate).startOf("day").toISOString();
+    if (!selectedDate) {
+      setDate("");
+      onDataChange({ search, date: "", category });
+      return;
+    }
+
+    const formattedDate = moment(selectedDate).startOf("day").toISOString() || "";
     setDate(formattedDate);
     onDataChange({
       search,
@@ -88,18 +100,48 @@ const BlogFilter = ({ onDataChange }) => {
     onDataChange({ search, date, category: event.target.value });
   };
 
+  const clearSearchHandler = () => {
+    setSearch("");
+    setDate("");
+    setCategory("Any");
+    onDataChange({ search: "", date: "", category: "Any" });
+    setChipIndex(0);
+    onClearAll();
+  };
+
+  const queryDbHandler = () => {
+    onQuerySelect();
+  }
+
+  const isClearAll =
+    (search?.length ?? 0) > 0 || (date?.length ?? 0) > 0 || category !== "Any";
+
   return (
     <Paper elevation={0} sx={{ padding: 2, borderRadius: "5px 5px 0 0" }}>
       <StyledStackContainer>
         <FormControl>
           <FormLabel>Search Content</FormLabel>
           <OutlinedInput
-            style={{ minWidth: 300 }}
+            sx={{ width: { xs: "100%", sm: 300, md: 400 }, borderRadius: 20 }}
             fullWidth
             id="search"
             type="text"
             value={search}
             onChange={inputChangeHandler}
+            placeholder="Search for content"
+          endAdornment={
+          <InputAdornment position="end">
+            <Stack direction="row" spacing={1}>
+            {search.length > 0 && <IconButton
+            color="primary"
+            onClick={queryDbHandler}
+            >
+              <ArrowCircleRightIcon />
+              </IconButton>}
+            </Stack>
+          </InputAdornment>
+          }
+            startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
           />
         </FormControl>
 
@@ -120,18 +162,30 @@ const BlogFilter = ({ onDataChange }) => {
             ))}
           </Select>
         </FormControl>
+
+        {isClearAll && <Chip label="clear All" onClick={clearSearchHandler} />}
       </StyledStackContainer>
 
       <StyledStackChipContainer>
         {searchDates.map(({ id, date }, i) => (
           <Chip
-            variant="outlined"
             sx={{ minWidth: 75 }}
+            variant={i === chipIndex ? "filled" : "outlined"}
             id={id}
             clickable={true}
             label={id}
             value={date}
-            onClick={() => dateChangeHandler(date)} // Convert date to ISO string before passing to handler
+            onClick={() => {
+              // Clicking the currently-selected chip toggles it back to "All"
+              if (i === chipIndex) {
+                setChipIndex(0);
+                dateChangeHandler("");
+                return;
+              }
+
+              setChipIndex(i);
+              dateChangeHandler(date);
+            }} // Convert date to ISO string before passing to handler
             key={i}
           />
         ))}

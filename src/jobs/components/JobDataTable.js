@@ -25,7 +25,7 @@ const ModernCard = styled(Card)(({ theme }) => ({
   borderRadius: theme.spacing(3),
   background: theme.palette.mode === "dark"
     ? "rgba(255, 255, 255, 0.08)"
-    : "rgba(255, 255, 255, 0.15)",
+    : "rgb(255, 255, 255)",
   backdropFilter: "blur(20px)",
   WebkitBackdropFilter: "blur(20px)",
   border: theme.palette.mode === "dark"
@@ -46,7 +46,6 @@ const ModernCard = styled(Card)(({ theme }) => ({
   overflow: "hidden",
   transition: "all 0.3s ease-in-out",
   "&:hover": {
-    transform: "translateY(-4px)",
     boxShadow: theme.palette.mode === "dark"
       ? `
           0 12px 40px rgba(0, 0, 0, 0.4),
@@ -132,7 +131,7 @@ const JobDataTable = (props) => {
                       component={Link}
                       sx={{ margin: "0 auto" }}
                       to="/auth"
-                      label="🔐 Login/Sign-up"
+                      label="Login/Sign-up"
                       variant="outlined"
                     />
                   )}

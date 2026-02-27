@@ -6,14 +6,6 @@ import { AuthContext } from "../../context/auth-context";
 import SendIcon from '@mui/icons-material/Send';
 import { useHttpClient } from "../../hooks/http-hook";
 
-const fieldColors = {
-        '& .MuiInputBase-input': { color: 'white' }, // enabled
-        '& .MuiInputBase-input.Mui-disabled': { WebkitTextFillColor: 'white' }, // disabled
-        // optional: label/placeholder
-        '& .MuiInputLabel-root': { color: 'white' },
-        '& .MuiInputLabel-root.Mui-disabled': { color: 'white' },
-        '& .MuiInputBase-input::placeholder': { color: 'white', opacity: 1 },
-};
 
 const Contact = () => {
     const auth = useContext(AuthContext);
@@ -105,7 +97,6 @@ const Contact = () => {
       <Typography variant="h6">{messageSent ? "Message Sent - Thank You! We will get back to you as soon as possible." : "Contact"}</Typography>
    {!messageSent && <>  
    <TextField
-      sx={fieldColors}
       disabled
       id="name"
         label="Name"
@@ -114,8 +105,6 @@ const Contact = () => {
       />
 
       <TextField
-      sx={fieldColors}
-      fullWidth
         disabled
         id="email"
         label="Email"
@@ -125,7 +114,6 @@ const Contact = () => {
      
       <TextField
       fullWidth
-      sx={fieldColors}
       multiline
       rows={5}
         id="message"

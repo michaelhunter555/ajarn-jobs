@@ -46,7 +46,16 @@ const StyledStackContent = styled(Stack)(({ theme }) => ({
 }));
 
 const AddNewBlogPost = () => {
-  const [filter, setFilter] = useState();
+  const [filter, setFilter] = useState({
+    search: "",
+    date: "",
+    category: "Any",
+  });
+  const [userQuery, setUserQuery] = useState({
+    search: "",
+    date: "",
+    category: "Any",
+  });
   const [totalPages, setTotalPages] = useState(1);
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
   const [blogPage, setBlogPage] = useState({
@@ -54,9 +63,9 @@ const AddNewBlogPost = () => {
     limit: 5,
   });
 
-  const getAllBlogPosts = async (page, limit) => {
+  const getAllBlogPosts = async (page, limit, searchQuery, date, category) => {
     const response = await fetch(
-      `${process.env.REACT_APP_BLOG}?page=${page}&limit=${limit}`
+      `${process.env.REACT_APP_BLOG}?page=${page}&limit=${limit}&searchQuery=${searchQuery}&date=${filter?.date}&category=${filter?.category}`
     );
 
     if (!response.ok) {
@@ -76,8 +85,8 @@ const AddNewBlogPost = () => {
     data: blogPosts,
     isLoading,
     refetch,
-  } = useQuery(["AllBlogPosts", blogPage.page, blogPage.limit], () =>
-    getAllBlogPosts(blogPage.page, blogPage.limit)
+  } = useQuery(["AllBlogPosts", blogPage.page, blogPage.limit, userQuery.search, filter.date, filter.category], () =>
+    getAllBlogPosts(blogPage.page, blogPage.limit, userQuery.search, filter.date ?? "", filter.category)
   );
 
   useEffect(() => {
@@ -92,31 +101,11 @@ const AddNewBlogPost = () => {
   };
 
   const handleFilterChange = (filterData) => {
+    const { search, date, category } = filterData;
     setFilter(filterData);
   };
 
-  const filteredContent =
-    blogPosts &&
-    blogPosts?.blogList?.filter((searchContent) => {
-      const postDate = moment(searchContent?.postDate); // Use postDate instead of date
-      const searchDate = moment(filter?.date); // Parse the string into a moment object
-
-      if(filter?.category === "Any") return true;
-
-      return (
-        (!filter?.category ||
-          searchContent?.category
-            ?.toLowerCase()
-            ?.includes(filter?.category?.toLowerCase())) &&
-        (!filter?.date ||
-          (searchDate.isSameOrBefore(postDate, "day") &&
-            postDate.isSameOrAfter(searchDate, "day"))) &&
-        (!filter?.search ||
-          searchContent.title
-            .toLowerCase()
-            .includes(filter.search.toLowerCase()))
-      );
-    });
+  const filteredContent = blogPosts && blogPosts?.blogList;
 
   const handleBlogPageChange = (page, limit) => {
     setBlogPage({
@@ -124,6 +113,16 @@ const AddNewBlogPost = () => {
       limit: limit,
     });
   };
+
+  const handleSendQuery = () => {
+    setUserQuery({ search: filter?.search, date: filter?.date, category: filter?.category });
+    setBlogPage({ page: 1, limit: 5 });
+  }
+
+  const handleClearAll = () => {
+    setUserQuery({ search: "", date: "", category: "Any" });
+    setBlogPage({ page: 1, limit: 5 });
+  }
 
   return (
     <PageContainer>
@@ -168,7 +167,11 @@ const AddNewBlogPost = () => {
                     bgcolor: "background.paper",
                   }}
                 >
-                  <BlogFilter onDataChange={handleFilterChange} />
+                  <BlogFilter
+                  onQuerySelect={handleSendQuery}
+                  onDataChange={handleFilterChange} 
+                  onClearAll={handleClearAll}
+                  />
                 </Box>
                 <ContentPostList
                   isLoading={isLoading}

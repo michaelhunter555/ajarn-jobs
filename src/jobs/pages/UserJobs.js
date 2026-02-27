@@ -28,6 +28,7 @@ import {
   UserJobListDiv,
   UsersJobFilterDiv,
 } from "../components/UserJobsStyle";
+import GradientCard from "../../shared/components/UIElements/GradientCard";
 
 const UserJobs = () => {
   const auth = useContext(AuthContext);
@@ -217,7 +218,7 @@ const UserJobs = () => {
         <ErrorModal error={error} onClear={clearError} />
         <StyledUserJobsDiv>
           <StyledAdJobDiv>
-            <Stack direction="row" alignItems="center" spacing={2}>
+            <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
               <StyledChip
                 variant="outlined"
                 component={RouterLink}
@@ -241,6 +242,11 @@ const UserJobs = () => {
                 </>
               )}
             </Stack>
+           {auth?.user?.userType === "employer" && auth?.user?.jobs?.length === 0 && <GradientCard 
+            title="Post Your First Job Free!" 
+            body={` ${auth?.user?.credits ? `You have ${auth?.user?.credits} credits remaining.` : ""} We'll help you find teachers.`} 
+            onClick={() => {}} 
+            />}
           </StyledAdJobDiv>
           <UsersJobFilterDiv>
             <JobFilters onFilterChange={handleFilterChange} />

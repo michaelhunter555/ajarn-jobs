@@ -43,11 +43,7 @@ const About = () => {
                 AjarnJobs.com is an English teaching job's board providing
                 solutions for both teachers and employers in Asia. We aim to
                 offer another perspective and experience as a go to job hunting
-                solution. "AjarnJobs.com" should not to be confused with the
-                popular website "Ajarn.com" or "Ajarn". We have no affiliations.
-                Aside from the word "teacher" being in the name, we focus less
-                on content and more primarily on the job and user experience
-                side.
+                solution.
               </Typography>
               <Typography variant="h5" color="text.secondary">
                 Purpose

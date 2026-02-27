@@ -18,9 +18,7 @@ const welcomeImg =
 const WelcomeCard = () => {
   return (
     <>
-      <Typography align="center" variant="h5" color="text.secondary">
-        Find Teaching Jobs
-      </Typography>
+     
       <Paper elevation={0} sx={{ borderRadius: 5 }}>
         <CardMedia
           sx={{

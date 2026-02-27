@@ -6,7 +6,7 @@ import React, { useContext, useState } from "react";
 import DOMPurify from "dompurify";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import CommentIcon from "@mui/icons-material/Comment";
 import { Button, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
@@ -21,6 +21,8 @@ import BlogPageLoadingSkeleton from "./BlogPageLoadingSkeleton";
 import CommentForm from "./CommentForm";
 import UserComments from "./UserComments";
 import UserInteractions from "./UserInteractions";
+import GradientCard from "../../shared/components/UIElements/GradientCard";
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 const StyledGridContainer = styled(Grid)(({ theme }) => ({
   maxWidth: "75%",
@@ -47,7 +49,7 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
     false
   );
   const { addComment, getComments, error } = useComment();
-
+  const navigate = useNavigate();
   const {
     data: usersComments,
     isLoading: commentsIsLoading,
@@ -105,6 +107,15 @@ const BlogPageItem = ({ content, refetchLikeState, isLoading }) => {
           <BlogPageLoadingSkeleton />
         ) : (
           <>
+            <GradientCard
+              title="Looking For a Job?"
+              body="Checkout our job listings and apply!"
+              buttonText="View Jobs"
+              onClick={() => { navigate("/jobs"); }}
+              sx={{
+                marginBottom: "2rem",
+              }}
+            />
             <Paper
               elevation={3}
               sx={{

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 import sanitizeHtml from "sanitize-html";
-
+import PushPinIcon from '@mui/icons-material/PushPin';
 import CommentIcon from "@mui/icons-material/Comment";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -91,13 +91,108 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
   //   (content) => content?._id === "66a1c7e9ed38feed3a3172c6"
   // );
 
+  const pinnedPostId = '66a1c7e9ed38feed3a3172c6';
+
+  const pinnedPost = filteredContent?.find((p) => p._id === pinnedPostId)
+
   return (
     <StyledGridContainer container>
       {isLoading && <CircularProgress />}
       {noPostsYet}
+      {!isLoading && pinnedPost && (
+        <>
+                 
+        <StyledListItemButton
+        sx={{ width: "100%", bgcolor: "rgb(255, 255, 226)" }}
+        direction="row"
+        component={Link}
+        to={`/content/${pinnedPost?._id}`}
+      >
+        <ListItemAvatar>
+          <Avatar alt={pinnedPost?.title} src={`${pinnedPost?.author?.image}`} />
+        </ListItemAvatar>
+
+        <ListItemText
+          component="div"
+          primary={
+            <>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography>{pinnedPost?.title}</Typography>
+                <CategoryChip category={pinnedPost?.category} />
+                <PushPinIcon color="primary" fontSize="small" />
+              </Stack>
+              <Chip
+                variant="outlined"
+                size="small"
+                label={getTimeDifference(pinnedPost?.postDate)}
+              />
+            </>
+          }
+          secondary={
+            <>
+              <Typography
+                sx={{ display: "inline" }}
+                component="span"
+                variant="subtitle2"
+                color="text.primary"
+              >
+                Posted By {pinnedPost?.name}
+              </Typography>
+              {" - "}
+              {sanitizeHtml(pinnedPost?.postContent, {
+                allowedTags: [],
+                allowedAttributes: {},
+              })?.substring(0, 40) + "..."}
+            </>
+          }
+        />
+
+        <Stack justifyContent="flex-end">
+          <Stack
+            direction="row"
+            justifyContent="space-evenly"
+            alignItems="center"
+            spacing={2}
+            sx={{ marginBottom: "2px" }}
+          >
+            <Stack>
+              <Typography color="text.secondary" variant="subtitle2">
+                {pinnedPost?.comments?.length}
+              </Typography>
+              <CommentIcon color="action" fontSize="small" />
+            </Stack>
+            <Stack>
+              <Typography color="text.secondary" variant="subtitle2">
+                {
+                  pinnedPost?.interactions?.filter(
+                    (action) => action?.like === true
+                  )?.length
+                }
+              </Typography>
+              <ThumbUpIcon color="action" fontSize="small" />
+            </Stack>
+            <Stack>
+              <Typography color="text.secondary" variant="subtitle2">
+                {
+                  pinnedPost?.interactions?.filter(
+                    (action) => action?.dislike === true
+                  )?.length
+                }
+              </Typography>
+              <ThumbDownIcon color="action" fontSize="small" />
+            </Stack>
+          </Stack>
+        </Stack>
+      </StyledListItemButton>
+
+      
+        <Divider variant="inset" light />
+        </>
+        
+      )}
       {!isLoading &&
         filteredContent &&
-        filteredContent?.map((val, i) => (
+        filteredContent?.filter((p) => p._id !== pinnedPostId).map((val, i) => (
           <List
             key={val?._id}
             sx={{ width: "100%", bgcolor: "background.paper" }}
