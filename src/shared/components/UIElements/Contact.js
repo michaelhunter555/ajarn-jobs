@@ -36,7 +36,7 @@ const Contact = () => {
     const sendSupportEmail = async () => {
         try {
             const response = await sendRequest(
-                `${process.env.REACT_APP_USERS}/support-email`,
+                `${process.env.REACT_APP_USERS}/support-email/${auth?.user?._id}`,
                 "POST",
                 JSON.stringify({ 
                     message: formState.inputs.message.value,

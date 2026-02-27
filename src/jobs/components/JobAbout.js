@@ -55,7 +55,6 @@ export const JobAbout = (props) => {
   const { job } = props;
 
   const presence = job?.creator?.presence[0]?.includes(",") ? job?.creator?.presence[0]?.split(",") : job?.creator?.presence;
-console.log("jobAbout.js", job?.creator?.presence)
   return (
     <ModernCard>
       <CardContent sx={{ p: 3 }}>

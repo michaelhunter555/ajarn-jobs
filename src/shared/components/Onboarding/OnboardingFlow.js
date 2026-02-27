@@ -96,26 +96,26 @@ const OnboardingFlow = ({ user, onComplete }) => {
     }));
   };
 const formState = formData;
-console.log("user", user);
+// console.log("user", user);
   const handleComplete = async () => {
     try {
-      console.log('Onboarding completion - user object:', user);
-      console.log('Onboarding completion - user._id:', user._id);
-      console.log('Onboarding completion - formData:', formState);
+      // console.log('Onboarding completion - user object:', user);
+      // console.log('Onboarding completion - user._id:', user._id);
+      // console.log('Onboarding completion - formData:', formState);
       
       // Check if this is Firebase-only signup (no real _id or _id is undefined)
       let tokenToUse = auth.token;
       if (!user._id || user._id === user.firebaseUid) {
-        console.log('🔥 Firebase-only signup detected - using temporary token from localStorage');
+       // console.log('🔥 Firebase-only signup detected - using temporary token from localStorage');
         const pendingSignupData = localStorage.getItem('pendingSignup');
         if (pendingSignupData) {
           const parsedData = JSON.parse(pendingSignupData);
           tokenToUse = parsedData.token;
-          console.log('🎫 Using temporary token:', tokenToUse ? 'Token found' : 'No token');
+         // console.log('🎫 Using temporary token:', tokenToUse ? 'Token found' : 'No token');
         }
       }
       
-      console.log('🔑 Token being used:', tokenToUse ? `Token: ${tokenToUse.substring(0, 20)}...` : 'NO TOKEN');
+     // console.log('🔑 Token being used:', tokenToUse ? `Token: ${tokenToUse.substring(0, 20)}...` : 'NO TOKEN');
       if (!tokenToUse) {
         console.error('❌ No token available for onboarding completion');
         throw new Error('No authentication token available');
@@ -123,7 +123,7 @@ console.log("user", user);
       
       // Validate token format (should start with eyJ)
       if (!tokenToUse.startsWith('eyJ')) {
-        console.error('❌ Invalid token format:', tokenToUse);
+       // console.error('❌ Invalid token format:', tokenToUse);
         throw new Error('Invalid authentication token format');
       }
       
@@ -136,13 +136,13 @@ console.log("user", user);
         firebaseUid: user.firebaseUid
       };
       
-      console.log('👤 User object passed to OnboardingFlow:', user);
-      console.log('📤 Request data being sent:', requestData);
-      console.log('🏢 UserType being sent:', requestData.userType);
+      // console.log('👤 User object passed to OnboardingFlow:', user);
+      // console.log('📤 Request data being sent:', requestData);
+      // console.log('🏢 UserType being sent:', requestData.userType);
 
       // Use firebaseUid as the endpoint parameter since _id is undefined
       const endpointId = user._id || user.firebaseUid;
-      console.log('🎯 Using endpoint ID:', endpointId);
+      //console.log('🎯 Using endpoint ID:', endpointId);
       
       // Create FormData for file upload
       const formData = new FormData();
@@ -155,9 +155,9 @@ console.log("user", user);
         }
       });
 
-      for (let [key, val] of formData.entries()) {
-        console.log("🚚 Sending:", key, val);
-      }
+      // for (let [key, val] of formData.entries()) {
+      //   console.log("🚚 Sending:", key, val);
+      // }
       
 
       const response = await sendRequest(
