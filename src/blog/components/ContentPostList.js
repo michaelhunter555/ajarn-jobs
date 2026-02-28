@@ -19,6 +19,7 @@ import {
   Paper,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -64,6 +65,8 @@ const StyledListItemButton = styled(ListItemButton)(({ theme }) => ({
 }));
 
 const ContentPostList = ({ isLoading, filteredContent }) => {
+  const theme = useTheme();
+  const isDarkMode = theme.palette.mode === "dark";
   let noPostsYet;
   if (filteredContent?.length === 0) {
     noPostsYet = (
@@ -100,10 +103,9 @@ const ContentPostList = ({ isLoading, filteredContent }) => {
       {isLoading && <CircularProgress />}
       {noPostsYet}
       {!isLoading && pinnedPost && (
-        <>
-                 
+        <>             
         <StyledListItemButton
-        sx={{ width: "100%", bgcolor: "rgb(255, 255, 226)" }}
+        sx={{ width: "100%", bgcolor: !isDarkMode ? "rgb(255, 255, 226)": undefined }}
         direction="row"
         component={Link}
         to={`/content/${pinnedPost?._id}`}

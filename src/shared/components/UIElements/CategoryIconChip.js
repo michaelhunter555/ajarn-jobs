@@ -29,13 +29,14 @@ const contentPostListIcons = {
   Question: <PsychologyAltTwoToneIcon style={{ color: "#0990a4" }} />,
 };
 
-const CategoryChip = ({ category }) => {
+const CategoryChip = ({ category, sx }) => {
   return (
     <Chip
       variant="outlined"
       size="small"
       label={category}
       icon={contentPostListIcons[category]}
+      sx={{ ...sx }}
     />
   );
 };

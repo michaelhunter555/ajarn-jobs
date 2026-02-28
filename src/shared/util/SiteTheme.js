@@ -89,6 +89,38 @@ const darkTheme = createTheme({
           margin: 6rem auto 0;
           background-color: #ededed;
         }
+        /* react-draft-wysiwyg toolbar dropdowns: dark background + light text in dark mode */
+        .rdw-dropdown-wrapper {
+          background-color: #424242 !important;
+          color: rgba(255, 255, 255, 0.87) !important;
+        }
+        .rdw-dropdown-wrapper .rdw-dropdown-selectedtext,
+        .rdw-dropdown-wrapper .rdw-dropdown-selectedtext span,
+        .rdw-dropdown-selectedtext {
+          color: rgba(255, 255, 255, 0.87) !important;
+        }
+        .rdw-dropdown-optionwrapper {
+          background-color: #424242 !important;
+          border: 1px solid #616161;
+        }
+        .rdw-dropdownoption-default,
+        .rdw-dropdown-option {
+          color: rgba(255, 255, 255, 0.87) !important;
+        }
+        .rdw-dropdown-option:hover,
+        .rdw-dropdownoption-highlighted {
+          background-color: #616161;
+          color: #000 !important;
+        }
+        .rdw-dropdownoption-active {
+          background-color: #757575;
+          color: #000 !important;
+        }
+        .rdw-dropdown-carettoclose,
+        .rdw-dropdown-carettoopen {
+          border-top-color: rgba(255, 255, 255, 0.87) !important;
+          border-bottom-color: rgba(255, 255, 255, 0.87) !important;
+        }
       `,
     },
 

@@ -47,12 +47,11 @@ const EmployerPromoCard = ({ isLoggedIn, userId}) => {
                     <Stack direction={isMobile ? "column" : "row"} spacing={2} alignItems="center">
 
                 <Typography
-                  sx={{ color: "black" }}
                   variant="body1"
                   fontWeight={"bold"}
                   
                 >
-                We're Growing! Employers Get Free Job Postings credits after signing up. No payment information required.
+                We're Growing! Employers get free job posting credits after signing up. No payment information required.
                 </Typography>
                     </Stack>
                 <Typography gutterBottom variant="subtitle2" color="text.secondary">
