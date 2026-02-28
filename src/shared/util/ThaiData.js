@@ -1,4 +1,6 @@
 //current list of cities
+import { educationLevels } from "../data/thaiLocations";
+
 export const thaiCities = [
   "Bangkok",
   "Chiang Mai",
@@ -71,20 +73,9 @@ export const partTimeSalaries = [
   "over THB 1000/hour",
 ];
 
-export const coreJobRequirements = [
-  "BA",
-  "Master's",
-  "BSc",
-  "Certificate",
-  "Diploma",
-  "PGCE",
-  "Phd",
-  "bEd",
-  "CELTA",
-  "DELTA",
-  "MBA",
-  "TEFL",
-];
+// Keep this list consistent with onboarding + profile settings filters.
+// Canonical source: `src/shared/data/thaiLocations.js`
+export const coreJobRequirements = educationLevels;
 
 export const yearsOfExperience = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,

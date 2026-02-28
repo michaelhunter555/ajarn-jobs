@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { educationLevels } from "../../shared/data/thaiLocations";
 import {
-  coreJobRequirements,
   nationalities,
   thaiCities,
 } from "../../shared/util/ThaiData";
@@ -93,7 +93,7 @@ const TeacherFilter = ({ onDataChange }) => {
           MenuProps={{ disableScrollLock: true }}
         >
           <MenuItem value="">any</MenuItem>
-          {coreJobRequirements.map((qualification, i) => (
+          {educationLevels.map((qualification, i) => (
             <MenuItem key={i} value={qualification}>
               {qualification}
             </MenuItem>
