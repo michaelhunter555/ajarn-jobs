@@ -446,10 +446,13 @@ const AjarnJobsExperience = () => {
                       <TipsAndUpdatesIcon fontSize="small" />
                       <Typography sx={{ fontWeight: 800 }}>Pro tip</Typography>
                     </Stack>
-                    <Typography variant="body2" color="text.secondary">
+                    {userType === "Teacher" && <Typography variant="body2" color="text.secondary">
                       Keep your profile “complete” (photo + experience + location). Better
                       profiles get better matches.
-                    </Typography>
+                    </Typography>}
+                   {userType === "Employer" && <Typography variant="body2" color="text.secondary">
+                     You can have recruit multiple teachers, and start active chats simultaneously.
+                    </Typography>}
                   </CardContent>
                 </Card>
                 <Card variant="outlined" sx={{ flex: 1 }}>
@@ -459,7 +462,7 @@ const AjarnJobsExperience = () => {
                       <Typography sx={{ fontWeight: 800 }}>Trust signal</Typography>
                     </Stack>
                     <Typography variant="body2" color="text.secondary">
-                      Verified email helps prevent junk accounts and makes messaging smoother.
+                      Every user is verified by email verification or Google sign in.
                     </Typography>
                   </CardContent>
                 </Card>

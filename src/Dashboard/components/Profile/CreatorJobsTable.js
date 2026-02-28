@@ -140,7 +140,12 @@ const CreatorJobsTable = ({
     try {
       await deleteJobById(jobToDelete).then(async () => {
         refetchCreatorJobs();
+
       });
+      invalidateQuery("jobs");
+      invalidateQuery("featuredJobs");
+      invalidateQuery("homePageJobs");
+      invalidateQuery("creatorJobs");
     } catch (err) {
       console.log("Error trying to delete a job");
     }
@@ -169,6 +174,9 @@ const CreatorJobsTable = ({
       onCreatorsPageChange(1, 5);
       setPage(1);
       invalidateQuery("creatorJobs");
+      invalidateQuery("jobs");
+      invalidateQuery("featuredJobs");
+      invalidateQuery("homePageJobs");
     }
   };
 

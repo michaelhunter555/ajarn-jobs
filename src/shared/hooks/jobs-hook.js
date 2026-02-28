@@ -297,6 +297,31 @@ export const useJob = () => {
     [sendRequest, auth.token]
   );
 
+  const aiGenerateJobDescription = useCallback(
+    async (hours, workPermit, title, salary, location, requirements) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_JOBS}/ai-generate-job-description/${auth?.user?._id}`,
+        {
+          method: "POST",
+          body: JSON.stringify({ hours, workPermit, title, salary, location, requirements }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + auth?.token,
+          }
+        }
+      )
+      if (!response.ok) {
+        throw new Error(response.message);
+      }
+      const data = await response.json();
+      return data.jobDescription;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }, [auth?.token])
+
   return {
     client,
     jobs,
@@ -318,6 +343,7 @@ export const useJob = () => {
     isDeleting,
     error,
     clearError,
+    aiGenerateJobDescription,
   };
 };
 

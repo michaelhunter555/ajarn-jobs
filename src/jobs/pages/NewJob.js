@@ -4,10 +4,12 @@ import "draft-js/dist/Draft.css";
 import React, { useContext, useEffect, useState } from "react";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 import DOMPurify from "dompurify";
-import { convertToRaw, EditorState } from "draft-js";
+import { convertToRaw, EditorState, ContentState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -20,12 +22,14 @@ import {
   Grid,
   Modal,
   Paper,
+  CircularProgress,
   Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
+import { useSnackbar } from "../../shared/context/snackbar-context";
+import { useMutation } from "@tanstack/react-query";
 import Button from "../../shared/components/FormElements/Button";
 import Input from "../../shared/components/FormElements/Input";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
@@ -87,6 +91,7 @@ const StyledGridContainer = styled(Grid)(({ theme }) => ({
 
 const NewJob = () => {
   const auth = useContext(AuthContext);
+  const { showSnackbar } = useSnackbar();
   const { invalidateQuery } = useInvalidateQuery();
   const [isFullTime, setIsFullTime] = useState(true);
   const [requirements, setRequirements] = useState([]);
@@ -104,7 +109,7 @@ const NewJob = () => {
   );
 
   const [workPermitOffered, setWorkPermitOffered] = useState(true);
-  const { addJobByUserId, isPostLoading, error, clearError } = useJob();
+  const { addJobByUserId, isPostLoading, error, clearError, aiGenerateJobDescription } = useJob();
   //our onInput props(1,2,3) takes 3 arguments(Refer to Input.js). these values will be used to locate the id, value and validate.
   // important! Avoid infinite loop! useCallback() with dependencies!
   const [formState, inputHandler] = useForm(
@@ -228,6 +233,13 @@ const NewJob = () => {
           console.log(err);
         });
       invalidateQuery("creatorJobs");
+      invalidateQuery("jobs");
+      if(newJob.jobType === "featured") {
+        invalidateQuery("featuredJobs");
+      } else {
+        invalidateQuery("homePageJobs");
+      }
+      
     } catch (err) {
       console.log(err);
     }
@@ -251,6 +263,62 @@ const NewJob = () => {
   const handleTermsModal = () => {
     setViewTerms((prev) => !prev);
   };
+
+  const mutateGenerateJobDescription = useMutation({
+    mutationKey: ["generate-job-description"],
+    mutationFn: async ({hours, workPermit, title, salary, location, requirements}) => await aiGenerateJobDescription(hours, workPermit, title, salary, location, requirements),
+    onSuccess: (data) => {
+      const htmlBlocks = htmlToDraft(data);
+      const { contentBlocks, entityMap } = htmlBlocks;
+      const contentState = ContentState.createFromBlockArray(
+        contentBlocks,
+        entityMap
+      );
+      const newEditorState = EditorState.createWithContent(contentState);
+      const rawContent = convertToRaw(contentState);
+      const postData = rawContent.blocks[0]?.text || "";
+      inputHandler("description", postData, postData.length >= 7);
+      setEditorState(newEditorState);
+      showSnackbar({
+        message: "Job description generated successfully",
+        severity: "success",
+      })
+    },
+    onError: (error) => {
+      console.log(error);
+      showSnackbar({
+        message: "Error with the request: " + error,
+        severity: "error",
+      })
+    }
+  })
+
+  const handleGenerateJobDescription = async () => {
+    const { hours, workPermit, title, salary, location, requirements } = formState.inputs;
+    const vals = [ hours, workPermit, title, salary, location ];
+    const valsAreValid = vals.every(val => val.isValid);
+    if (!valsAreValid) {
+      showSnackbar({
+        message: "Please fill in all the fields",
+        severity: "error",
+      })
+      return;
+    }
+    mutateGenerateJobDescription.mutate({ 
+      hours: hours.value, 
+      workPermit: workPermit.value, 
+      title: title.value, 
+      salary: salary.value, 
+      location: location.value, 
+      requirements: requirements.value 
+    });
+  }
+
+  const canGenerateJobDescription = formState.inputs.hours.isValid 
+  && formState.inputs.workPermit.isValid 
+  && formState.inputs.title.isValid 
+  && formState.inputs.salary.isValid 
+  && formState.inputs.location.isValid
 
   return (
     <>
@@ -547,6 +615,7 @@ const NewJob = () => {
               </Stack>
             </Grid>
             <Divider flexItem sx={{ width: "100%", margin: "0.75rem auto" }} />
+          
             <Grid item xs={12}>
               <Input
                 id="title"
@@ -596,6 +665,24 @@ const NewJob = () => {
               />
             </Grid>
             <Grid item xs={12} sx={{ margin: "0 0 1rem 0 " }}>
+            <Divider flexItem sx={{ width: "100%", margin: "0.75rem auto" }} />
+
+            <Stack direction="column" alignItems="flex-start" spacing={1}>
+            <Chip
+            disabled={!canGenerateJobDescription || mutateGenerateJobDescription.isLoading || auth?.user?.credits < 5}
+            onClick={handleGenerateJobDescription}
+            color={canGenerateJobDescription ? "primary" : "default"} 
+            label={mutateGenerateJobDescription.isLoading ? "Generating..." : "Generate Job Description"} 
+            clickable 
+            icon={mutateGenerateJobDescription.isLoading ? <CircularProgress size={16} /> : <AutoAwesomeIcon />}/>
+            <Typography variant="subtitle2" color="text.secondary">
+                Max 5 generations per day - This tool is in BETA~!
+              </Typography>
+              <Typography variant="subtitle2" color="text.secondary">
+                Craft a beautiful 250-word job description. Select Full-time/Part-time, work permit, title, salary, location and requirements (if any).
+              </Typography>
+            </Stack>
+            <Divider flexItem sx={{ width: "100%", margin: "0.75rem auto" }} />
               <Box sx={{ ...styledRichJobText, width: "100%" }}>
                 <Editor
                   id="description"
@@ -609,7 +696,7 @@ const NewJob = () => {
             </Grid>
           </StyledGridContainer>
           <Button type="submit" disabled={!formState.isValid}>
-            Add Job
+            Post Job
           </Button>
         </StyledForm>
       )}
